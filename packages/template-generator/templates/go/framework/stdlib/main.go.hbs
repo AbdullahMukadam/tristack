@@ -1,0 +1,35 @@
+// {{projectName}} - a Go backend scaffolded with TriStack.
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+)
+
+func main() {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	log.Printf("%s listening on :%s", appName(), port)
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func appName() string {
+	name := os.Getenv("APP_NAME")
+	if name == "" {
+		return "{{projectName}}"
+	}
+	return name
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@tristack/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "predev": "(cd ../types && bun run build)",
+    "dev": "convex dev",
+    "dev:setup": "convex dev --configure --until-success",
+    "predeploy": "(cd ../types && bun run build)",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "@convex-dev/crons": "^0.2.2",
+    "@erquhart/convex-oss-stats": "catalog:",
+    "convex": "catalog:",
+    "convex-helpers": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,38 @@
+"""FastAPI application entrypoint for {{projectName}}."""
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
+from .config import get_settings
+
+settings = get_settings()
+
+
+{{#if (and (ne database "none") (eq migrations "none"))}}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from .db import init_db
+
+    await init_db()
+    yield
+{{else}}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+{{/if}}
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
+
+{{#if (ne database "none")}}
+from .db import get_session  # noqa: E402
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+{{else}}
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+{{/if}}

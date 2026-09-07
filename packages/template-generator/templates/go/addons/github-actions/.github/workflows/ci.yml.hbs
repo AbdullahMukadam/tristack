@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: Install dependencies
+        run: go mod tidy
+      {{#if (includes addons "golangci-lint")}}
+      - name: Lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.61
+      {{/if}}
+      {{#if (includes addons "air")}}
+      - name: Check for unused
+        run: go vet ./...
+      {{/if}}
+      - name: Test
+        run: go test ./...

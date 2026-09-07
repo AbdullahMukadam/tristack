@@ -1,0 +1,32 @@
+// {{projectName}} - a Go backend scaffolded with TriStack.
+package main
+
+import (
+	"log"
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func main() {
+	app := fiber.New()
+
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"status": "ok"})
+	})
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	name := os.Getenv("APP_NAME")
+	if name == "" {
+		name = "{{projectName}}"
+	}
+
+	log.Printf("%s listening on :%s", name, port)
+	if err := app.Listen(":" + port); err != nil {
+		log.Fatal(err)
+	}
+}

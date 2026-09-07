@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: "sqlite" # Set to postgresql or mysql as needed
+    queries: "queries"
+    schema: "schema"
+    gen:
+      go:
+        package: "store"
+        out: "internal/store"
+        sql_package: "database/sql"

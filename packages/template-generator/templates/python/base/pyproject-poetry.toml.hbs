@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "{{project_slug}}"
+version = "0.1.0"
+description = "{{projectName}} - a {{framework}} backend"
+authors = []
+packages = [{ include = "{{project_slug}}" }]
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+pydantic-settings = "^2.7"
+{{#if (eq framework "fastapi")}}
+fastapi = "^0.115"
+uvicorn = { extras = ["standard"], version = "^0.34" }
+{{else if (eq framework "litestar")}}
+litestar = "^2.14"
+{{else if (eq framework "django")}}
+django = "^5.1"
+djangorestframework = "^3.15"
+django-cors-headers = "^4.6"
+{{else if (eq framework "flask")}}
+flask = "^3.1"
+{{/if}}
+{{#if (eq orm "sqlmodel")}}
+sqlmodel = "^0.0.22"
+{{else if (eq orm "sqlalchemy")}}
+sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
+{{else if (eq orm "tortoise")}}
+tortoise-orm = "^0.24"
+{{/if}}
+{{#if (eq migrations "alembic")}}
+alembic = "^1.14"
+{{/if}}
+{{#if (eq database "postgres")}}
+asyncpg = "^0.30"
+{{else if (eq database "mysql")}}
+asyncmy = "^0.2"
+{{else if (eq database "sqlite")}}
+aiosqlite = "^0.20"
+{{/if}}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

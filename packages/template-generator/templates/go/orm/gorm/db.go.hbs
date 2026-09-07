@@ -1,0 +1,34 @@
+// Package db provides GORM-based database access for {{projectName}}.
+package db
+
+import (
+	"os"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+)
+
+// Connect opens a GORM connection using the DATABASE_URL environment variable.
+func Connect() (*gorm.DB, error) {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	}
+
+{{#if (eq database "sqlite")}}
+	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+{{else if (eq database "postgres")}}
+	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
+{{else if (eq database "mysql")}}
+	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+{{else}}
+	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+{{/if}}
+}
+
+// AutoMigrate creates or updates the tables defined by the models.
+func AutoMigrate(db *gorm.DB) error {
+	return db.AutoMigrate(&Item{})
+}

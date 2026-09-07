@@ -1,0 +1,33 @@
+// {{projectName}} - a Go backend scaffolded with TriStack.
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/labstack/echo/v4"
+)
+
+func main() {
+	e := echo.New()
+
+	e.GET("/health", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
+	})
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	name := os.Getenv("APP_NAME")
+	if name == "" {
+		name = "{{projectName}}"
+	}
+
+	log.Printf("%s listening on :%s", name, port)
+	if err := e.Start(":" + port); err != nil {
+		log.Fatal(err)
+	}
+}

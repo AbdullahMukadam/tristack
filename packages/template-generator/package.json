@@ -1,0 +1,58 @@
+{
+  "name": "@tristack/template-generator",
+  "version": "0.1.0",
+  "description": "Virtual file system generator for TriStack templates - works in browsers and Node.js",
+  "keywords": [
+    "cli",
+    "go",
+    "python",
+    "rust",
+    "template-generator",
+    "tristack",
+    "virtual-fs"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "templates-binary"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./fs-writer": {
+      "types": "./dist/fs-writer.d.mts",
+      "default": "./dist/fs-writer.mjs"
+    },
+    "./template-reader": {
+      "types": "./dist/template-reader.d.mts",
+      "default": "./dist/template-reader.mjs"
+    }
+  },
+  "scripts": {
+    "generate-templates": "bun scripts/generate-templates.ts",
+    "prebuild": "bun run generate-templates",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tristack/types": "^0.1.0",
+    "better-result": "^3.0.0",
+    "handlebars": "^4.7.9",
+    "is-binary-path": "^3.0.0",
+    "memfs": "^4.64.0",
+    "pathe": "^2.0.3",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^26.1.2",
+    "fs-extra": "^11.4.0",
+    "tinyglobby": "^0.2.17",
+    "tsdown": "^0.22.14",
+    "typescript": "^6.0.3"
+  }
+}

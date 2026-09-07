@@ -1,0 +1,32 @@
+// Package db provides database/sql access for {{projectName}} via sqlc.
+package db
+
+import (
+	"database/sql"
+	"os"
+{{#if (eq database "sqlite")}}
+	_ "modernc.org/sqlite"
+{{else if (eq database "postgres")}}
+	_ "github.com/jackc/pgx/v5/stdlib"
+{{else if (eq database "mysql")}}
+	_ "github.com/go-sql-driver/mysql"
+{{/if}}
+)
+
+// Connect opens a database handle using the DATABASE_URL environment variable.
+func Connect() (*sql.DB, error) {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	}
+
+{{#if (eq database "sqlite")}}
+	return sql.Open("sqlite", dsn)
+{{else if (eq database "postgres")}}
+	return sql.Open("pgx", dsn)
+{{else if (eq database "mysql")}}
+	return sql.Open("mysql", dsn)
+{{else}}
+	return sql.Open("sqlite", dsn)
+{{/if}}
+}

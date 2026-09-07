@@ -1,0 +1,119 @@
+---
+title: Project Structure
+description: Understanding the structure of projects created by the TriStack CLI
+---
+
+## Overview
+
+This page documents the **Python (Phase 1)** project layout � what the CLI writes today. Go and Rust phases ship their own trees and will get their own structure pages. The exact tree depends on your selections � base files are always present, then framework, ORM, migrations, database, and add-on files are layered on top. This page mirrors what the CLI actually writes.
+
+## Root layout (default stack)
+
+The default stack (`fastapi` + `sqlmodel` + `alembic` + `sqlite` + `uv` + `docker, ruff, pytest`) looks like this:
+
+<Files>
+  <Folder name="/" defaultOpen>
+    <File name="README.md" />
+    <File name="tristack.jsonc" />
+    <File name="pyproject.toml" />
+    <File name=".env.example" />
+    <File name=".gitignore" />
+    <File name=".dockerignore" />
+    <File name="Dockerfile" />
+    <File name="docker-compose.yml" />
+    <File name="ruff.toml" />
+    <Folder name=".github">
+      <Folder name="workflows">
+        <File name="ci.yml" />
+      </Folder>
+    </Folder>
+    <Folder name="my_tristack_app">
+      <File name="__init__.py" />
+      <File name="config.py" />
+      <File name="main.py" />
+      <File name="db.py" />
+      <File name="models.py" />
+    </Folder>
+    <Folder name="migrations">
+      <File name="alembic.ini" />
+      <File name="env.py" />
+      <File name="script.py.mako" />
+      <Folder name="versions">
+        <File name="README.md" />
+      </Folder>
+    </Folder>
+    <Folder name="tests">
+      <File name="test_health.py" />
+    </Folder>
+  </Folder>
+</Files>
+
+Notes:
+
+- The import package is a snake_case version of your project name (`my_tristack_app` for `my-tristack-app`).
+- Docker/CI files exist only when the matching addon is selected; `tests/` only with the `pytest` addon.
+- `tristack.jsonc` records the stack and its reproducible command. See [`tristack.jsonc`](/docs/tristack-config).
+
+## How the tree is built
+
+Files come from these layers, in order:
+
+1. **Base** — always included (`README.md`, `tristack.jsonc`, `pyproject.toml`, `.env.example`, `.gitignore`, the import package with `__init__.py` and `config.py`)
+2. **Framework** — entrypoint per framework (see below)
+3. **ORM** — data-layer files (`db.py`, `models.py` with `sqlmodel`; `sqlalchemy`/`tortoise` scaffold later)
+4. **Migrations** — Alembic layout with `alembic`; nothing with `none`
+5. **Database** — database choice drives configuration/env today; per-provider template folders are placeholders for hosted-provider phases
+6. **Addons** — one directory per selected addon
+
+## Framework variations
+
+All Python frameworks share the base + import package, then differ in the entrypoint:
+
+- **FastAPI** — `main.py` with a `FastAPI` app (`uv run fastapi dev`)
+- **Litestar** — `main.py` with a `Litestar` app
+- **Flask** — `main.py` with a `Flask` app (`flask --app main run`)
+- **Django** — no `main.py`; instead `manage.py` and a project package with `settings.py`, `urls.py`, `asgi.py`, `wsgi.py`, plus a `core` app
+
+<Files>
+  <Folder name="django-project/" defaultOpen>
+    <File name="manage.py" />
+    <Folder name="django_project">
+      <File name="__init__.py" />
+      <File name="settings.py" />
+      <File name="urls.py" />
+      <File name="asgi.py" />
+      <File name="wsgi.py" />
+      <Folder name="core">
+        <File name="__init__.py" />
+        <File name="apps.py" />
+        <File name="urls.py" />
+        <File name="views.py" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+## ORM variations
+
+- **SQLModel** — adds `db.py` (engine/session) and `models.py` (models) to the import package
+- **SQLAlchemy / Tortoise** — the ORM template folders are in place for these; generated files land alongside the SQLModel rollout
+- **None** — no data-layer files
+
+## Migrations
+
+With `--migrations alembic`, the CLI writes a `migrations/` directory with `alembic.ini`, `env.py`, `script.py.mako`, and a `versions/` folder for your migration files.
+
+## Addons
+
+| Addon | Adds |
+| ----- | ---- |
+| `docker` | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
+| `ruff` | `ruff.toml` |
+| `mypy` | `mypy.ini` |
+| `pytest` | `tests/test_health.py` |
+| `github-actions` | `.github/workflows/ci.yml` |
+| `fumadocs` / `starlight` | docs-site folders land with the full docs addons rollout |
+
+## Config file
+
+`tristack.jsonc` at the project root captures the resolved stack and a `reproducibleCommand` that reproduces it. See [`tristack.jsonc`](/docs/tristack-config).

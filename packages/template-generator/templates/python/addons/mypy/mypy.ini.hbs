@@ -1,0 +1,9 @@
+[mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "{{project_slug}}.*"
+follow_imports = "normal"

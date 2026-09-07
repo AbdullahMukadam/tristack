@@ -1,0 +1,33 @@
+// {{projectName}} - a Go backend scaffolded with TriStack.
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	r := gin.Default()
+
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	app := os.Getenv("APP_NAME")
+	if app == "" {
+		app = "{{projectName}}"
+	}
+
+	log.Printf("%s listening on :%s", app, port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatal(err)
+	}
+}

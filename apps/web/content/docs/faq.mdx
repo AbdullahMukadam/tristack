@@ -1,0 +1,73 @@
+---
+title: Frequently Asked Questions
+description: Short answers to common beginner questions
+---
+
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+
+## General
+
+<Accordions type="single">
+  <Accordion
+    id="faq-1"
+    title="What is TriStack?">
+    A CLI that scaffolds backend projects for Python (Go and Rust coming later) and a matching web-based Stack Builder. It generates clean, ready-to-run FastAPI, Litestar, Django, or Flask projects with the ORM, migrations, database, package manager, and addons you choose. See the Quick Start on the docs home.
+  </Accordion>
+
+<Accordion id="faq-2" title="Do I need to install anything globally?">
+  No. The CLI is a standalone native binary. For Python, run it with `uvx tristack` (or `uv tool
+  install tristack` / `pipx install tristack`); the Go and Rust phases ship their own `tristack`
+  binary via curl/Homebrew. You only need the runtime of whatever language you scaffold (e.g. Python
+  + your chosen package manager for a generated Python project).
+</Accordion>
+
+<Accordion id="faq-3" title="Which package manager do generated projects use?">
+  For Python (Phase 1) it depends on your choice: `uv` (default), `poetry`, or `pip`. uv is
+  recommended for speed and modern conventions. Go and Rust phases use their own toolchains (`go`,
+  `cargo`).
+</Accordion>
+
+<Accordion id="faq-4" title="What Python version is required?">
+  Python (Phase 1) projects target Python 3.12+. Use 3.12+ to avoid runtime warnings and
+  version-gating issues.
+</Accordion>
+
+<Accordion id="faq-5" title="Can I use this with an existing project?">
+  The CLI scaffolds new projects into a fresh directory. It does not modify existing codebases in
+  Phase 1.
+</Accordion>
+
+  <Accordion id="faq-6" title="Where do generated files live?">
+    In a single top-level directory named after your project (e.g. `my-api/`). See [Project Structure](/docs/project-structure) for the layout.
+  </Accordion>
+</Accordions>
+
+## Choosing options
+
+<Accordions type="single">
+  <Accordion id="faq-7" title="Does the CLI recommend a stack?">
+    The default Python stack is FastAPI + SQLModel + Alembic + SQLite + uv with Docker, Ruff, and pytest. Pick anything else that fits your needs — the CLI validates that values match your chosen language. See [Compatibility](/docs/cli/compatibility).
+  </Accordion>
+
+  <Accordion id="faq-8" title="I'm unsure between FastAPI and Django, or SQLModel and SQLAlchemy">
+    See [Compatibility](/docs/cli/compatibility) and the option hints in the prompts. FastAPI + SQLModel is the Pydantic-native default; Django bundles batteries (ORM, admin, migrations) of its own.
+  </Accordion>
+</Accordions>
+
+## Common issues
+
+<Accordions type="single">
+  <Accordion id="faq-9" title="The CLI says uv (or poetry/pip) was not found">
+    Install your chosen package manager and make sure it is on your PATH, then rerun. See [Prerequisites](/docs#prerequisites).
+  </Accordion>
+
+  <Accordion id="faq-10" title="How do I disable telemetry?">
+    Pass `--disable-analytics` for a single run. The cross-tool `DO_NOT_TRACK=1` convention is honored too. See [Analytics & Telemetry](/docs/analytics).
+  </Accordion>
+</Accordions>
+
+## Getting help
+
+- Docs: Quick Start, CLI, Project Structure, Compatibility
+- Ask/Report: GitHub Issues & Discussions
+- Community: Discord

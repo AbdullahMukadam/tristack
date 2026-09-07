@@ -1,0 +1,165 @@
+---
+title: Programmatic API
+description: Use TriStack programmatically in your Node.js applications
+---
+
+## Overview
+
+You can call TriStack directly from TypeScript/JavaScript without shelling out to the CLI.
+
+The programmatic API is exported from `create-tristack` and is designed for automation tools, internal generators, and scripted workflows. It runs in silent mode by default — no interactive prompts, no CLI UI output — and returns typed `Result` objects instead of exiting the process.
+
+## Installation
+
+```npm
+npm i create-tristack
+```
+
+## Quick Start
+
+```typescript
+import { create } from "create-tristack";
+
+const result = await create("my-api", {
+  language: "python",
+  framework: "fastapi",
+  database: "sqlite",
+  orm: "sqlmodel",
+  migrations: "alembic",
+  packageManager: "uv",
+  install: false,
+});
+
+result.match({
+  ok: (data) => {
+    console.log(`Project created at: ${data.projectDirectory}`);
+    console.log(`Reproducible command: ${data.reproducibleCommand}`);
+  },
+  err: (error) => {
+    console.error(`Failed: ${error.message}`);
+  },
+});
+```
+
+## API Reference
+
+### `create(projectName?, options?)`
+
+Create a new project.
+
+```typescript
+function create(
+  projectName?: string,
+  options?: Partial<CreateInput>,
+): Promise<Result<CreateResult, CreateError>>;
+```
+
+Notes:
+
+- Uses the same option model as the CLI `create` command (`language`, `framework`, `orm`, `migrations`, `database`, `packageManager`, `addons`, `git`, `install`, etc.).
+- Supports `dryRun` for validation-only automation.
+- Validates JavaScript inputs at runtime using the same schemas as the CLI.
+- `directoryConflict` defaults to `error` (never prompts).
+- Runs in silent mode and returns a `Result` (`ok`/`err`) instead of exiting the process.
+
+### `createVirtual(options)`
+
+Generate a project in memory without writing to disk.
+
+```typescript
+import { createVirtual } from "create-tristack";
+
+const result = await createVirtual({
+  language: "python",
+  framework: "fastapi",
+  database: "sqlite",
+  orm: "sqlmodel",
+  migrations: "alembic",
+  addons: ["docker", "pytest"],
+});
+
+if (result.isErr()) {
+  console.error(result.error.message);
+}
+
+const tree = result.value; // { root, fileCount, directoryCount, config }
+```
+
+This is useful for previews, tests, and web-based builders (it powers the Stack Builder's live file tree). Invalid or incompatible configurations are returned as a `GeneratorError` with the `validation` phase.
+
+## Result Types
+
+### `CreateResult` (from `create` on `ok`)
+
+```typescript
+type CreateResult = {
+  success: boolean;
+  projectConfig: ProjectConfig;
+  reproducibleCommand: string;
+  timeScaffolded: string;
+  elapsedTimeMs: number;
+  projectDirectory: string;
+  relativePath: string;
+  error?: string;
+  warnings?: string[];
+};
+```
+
+### `CreateError`
+
+`create()` can return these error types in `Result.err(...)`:
+
+- `UserCancelledError`
+- `CLIError`
+- `DirectoryConflictError`
+- `ProjectCreationError`
+
+The `CreateInput`, `ProjectConfig`, and `CreateResult` types are exported from `create-tristack`, along with the virtual filesystem types (`VirtualFileSystem`, `VirtualFile`, `VirtualDirectory`, `VirtualNode`).
+
+## Error Handling Pattern
+
+```typescript
+import { create } from "create-tristack";
+
+const result = await create("existing-dir", {
+  directoryConflict: "error",
+});
+
+if (result.isErr()) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+console.log(result.value.projectDirectory);
+```
+
+## Mapping CLI to Programmatic
+
+CLI:
+
+```bash
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database postgres \
+  --package-manager uv \
+  --addons docker,ruff,pytest
+```
+
+Programmatic:
+
+```typescript
+const result = await create("my-api", {
+  language: "python",
+  framework: "fastapi",
+  orm: "sqlmodel",
+  migrations: "alembic",
+  database: "postgres",
+  packageManager: "uv",
+  addons: ["docker", "ruff", "pytest"],
+});
+```
+
+For the CLI-side JSON equivalent, see [Agent Workflows](/docs/cli/agent-workflows).

@@ -1,0 +1,71 @@
+---
+title: Compatibility Rules
+description: Understanding compatibility rules and restrictions between different CLI options
+---
+
+## Overview
+
+The CLI validates option combinations to ensure generated projects are coherent. Validation happens in two places:
+
+1. **Per-language value checks** — `framework`, `orm`, and `migrations` must belong to the selected language's option set.
+2. **Resolved-config checks** — after prompts (or with `--yes`), the fully-resolved stack is validated again.
+
+`--yolo` skips the compatibility checks entirely.
+
+## Per-language option sets
+
+Each language has its own option sets (`packages/types`), so a Go/Rust value can never leak into a Python stack:
+
+| Category         | Python (Phase 1)                                                                      | Go (Phase 2)                                                                        | Rust (Phase 3)                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `framework`      | `fastapi`, `litestar`, `django`, `flask`                                              | `gin`, `fiber`, `echo`, `chi`, `stdlib`                                             | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`                               |
+| `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                                          | `sqlc`, `gorm`, `sqlx`, `none`                                                      | `seaorm`, `diesel`, `sqlx-rust`, `none`                                              |
+| `migrations`     | `alembic`, `none`                                                                     | `goose`, `golang-migrate`, `none`                                                   | `none`                                                                               |
+| `database`       | `sqlite`, `postgres`, `mysql`, `none`                                                 | same                                                                                | same                                                                                 |
+| `packageManager` | `uv`, `poetry`, `pip`                                                                 | `go`                                                                                | `cargo`                                                                              |
+| `addons`         | `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `air`, `golangci-lint`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `cargo-watch`, `clippy`, `github-actions`, `fumadocs`, `starlight`, `none` |
+
+> **Phase 1 note:** Go and Rust option sets exist in the schema and prompts, but only Python scaffolds are generated today. Choosing `go` or `rust` produces a base scaffold only; full support lands in Phases 2–3.
+
+## What gets validated today
+
+- `framework` not in the language's set → error, e.g. `--language python --framework gin`
+- `orm` not in the language's set → error, e.g. `--language python --orm seaorm`
+- `migrations` not in the language's set → error, e.g. `--language python --migrations goose`
+- `addons` passed as a list must be valid enum values; `none` is normalized away
+- `database` must be one of `sqlite`, `postgres`, `mysql`, `none`
+
+```bash
+# ❌ Invalid - Gin is not a Python framework
+uvx tristack --language python --framework gin
+
+# ✅ Valid
+uvx tristack --language python --framework fastapi
+
+# ❌ Invalid - SeaORM is a Rust ORM
+uvx tristack --language python --orm seaorm
+
+# ✅ Valid
+uvx tristack --language python --orm sqlmodel
+```
+
+## Validation order
+
+The CLI validates resolved configs in this order:
+
+1. **Flag input validation**: valid enum values, project-name rules (see below)
+2. **Per-language value checks**: framework/orm/migrations belong to the language
+3. **Path checks**: target directory must be within the current directory and not a symlink (unless `--directory-conflict increment`)
+
+## Project name rules
+
+- Cannot be empty or longer than 255 characters
+- Cannot start with `.` (except `.` itself) or `-`
+- Cannot contain `<`, `>`, `:`, `"`, `|`, `?`, `*`
+- `node_modules` is reserved
+
+## Roadmap
+
+Cross-option rules are planned alongside each language's rollout — for example Django bundling its own ORM and migrations (hiding those prompts entirely), Loco narrowing Rust ORM choices, and Chi/stdlib surfacing assemble-it-yourself addons more prominently.
+
+Understanding these rules helps you create valid configurations and troubleshoot issues when the CLI reports compatibility errors.

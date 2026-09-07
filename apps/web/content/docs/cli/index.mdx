@@ -1,0 +1,111 @@
+---
+title: Commands
+description: Complete reference for all TriStack CLI commands
+---
+
+## Overview
+
+The TriStack CLI ships as a standalone native binary. It scaffolds Python backend projects directly: `uvx tristack` (or `uv tool install tristack` / `pipx install tristack`). It ships two commands today — `create` (the default) and `create-json` — plus a programmatic npm API for Node environments.
+
+## `create` (Default Command)
+
+Creates a new TriStack project.
+
+```bash
+uvx tristack [project-directory] [options]
+```
+
+### Parameters
+
+- `project-directory` (optional): Name or path for your project directory. Defaults to `my-tristack-app`.
+
+### Key Options
+
+- `--yes, -y`: Use default configuration, merging any provided flags (skips prompts)
+- `--dry-run`: Validate configuration and target directory without writing files
+- `--verbose`: Show detailed result information as JSON
+- `--yolo`: Bypass validations and compatibility checks
+- `--language <lang>`: `python` (Go and Rust are reserved for later phases)
+- `--framework <framework>` (Python): FastAPI (default), Litestar, Django, Flask
+- `--orm <orm>` (Python): `sqlmodel` (default), `sqlalchemy`, `tortoise`, `none`
+- `--migrations <tool>` (Python): `alembic` (default), `none`
+- `--database <db>`: `sqlite` (default), `postgres`, `mysql`, `none`
+- `--package-manager <pm>` (Python): `uv` (default), `poetry`, `pip`
+- `--addons <types...>`: comma-separated list or `none` (see [Options](/docs/cli/options#addons))
+- `--git / --no-git`: Initialize a Git repository (default on)
+- `--install / --no-install`: Install dependencies after creation (default on)
+- `--directory-conflict <strategy>`: `merge`, `overwrite`, `increment`, `error`
+- `--render-title / --no-render-title`: Show/hide the ASCII art title
+- `--disable-analytics`: Opt out of telemetry
+
+See the full reference in [Options](/docs/cli/options). Options are per language — see the [Compatibility reference](/docs/cli/compatibility) for the Go and Rust option sets.
+
+For JSON-first automation and agent usage, see [Agent Workflows](/docs/cli/agent-workflows).
+
+### Examples
+
+```bash
+# Interactive prompts
+uvx tristack my-api
+
+# Quick setup with defaults
+uvx tristack --yes
+
+# Fully specified stack
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database postgres \
+  --package-manager uv \
+  --addons docker,ruff,pytest,github-actions
+
+# Validate without writing files
+uvx tristack my-api --yes --dry-run
+```
+
+## `create-json`
+
+Create a project from a single JSON payload instead of many flags. This is the agent- and automation-friendly path.
+
+```bash
+uvx tristack create-json --input '{
+  "projectName": "my-api",
+  "language": "python",
+  "framework": "fastapi",
+  "orm": "sqlmodel",
+  "migrations": "alembic",
+  "database": "postgres",
+  "packageManager": "uv",
+  "addons": ["docker", "pytest"],
+  "git": true,
+  "install": false
+}'
+```
+
+The payload is validated against `CreateInputSchema` — the same schema that backs `--yes`. See [Agent Workflows](/docs/cli/agent-workflows) for details.
+
+## Programmatic Usage
+
+For advanced use cases, automation, or integration with other tools, you can use the [Programmatic API](/docs/cli/programmatic-api) to create projects from Node.js code:
+
+```typescript
+import { create } from "create-tristack";
+
+const result = await create("my-api", {
+  language: "python",
+  framework: "fastapi",
+  database: "sqlite",
+  orm: "sqlmodel",
+  migrations: "alembic",
+  install: false,
+});
+
+result.match({
+  ok: (data) => console.log(`Project created at: ${data.projectDirectory}`),
+  err: (error) => console.error(`Failed: ${error.message}`),
+});
+```
+
+See the [Programmatic API documentation](/docs/cli/programmatic-api) for complete examples and API reference.

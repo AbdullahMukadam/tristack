@@ -1,0 +1,44 @@
+---
+title: tristack.jsonc
+description: What tristack.jsonc does and why it matters
+---
+
+## What is it?
+
+`tristack.jsonc` is a small config file written to your project root when you create a project. It captures the stack choices you selected (language, framework, ORM, migrations, database, package manager, addons) and the command that reproduces them.
+
+Where: `./tristack.jsonc`
+
+## Format
+
+The file is JSONC (JSON with comments) and mirrors the resolved `ProjectConfig`:
+
+```jsonc
+// TriStack configuration for this project.
+{
+  "version": "0.1.0",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "reproducibleCommand": "uvx tristack my-api --language python --framework fastapi --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker,ruff,pytest --git --install",
+  "language": "python",
+  "framework": "fastapi",
+  "orm": "sqlmodel",
+  "migrations": "alembic",
+  "database": "sqlite",
+  "packageManager": "uv",
+  "addons": ["docker", "ruff", "pytest"],
+}
+```
+
+Notes:
+
+- Values mirror what you selected during project creation
+- `version` is the CLI version used to create the project
+- `createdAt` is an ISO timestamp of when the project was scaffolded
+- `reproducibleCommand` is the exact non-interactive command that reproduces this stack
+- The JSONC format lets future versions add comments without breaking parsers
+
+## Safe to delete
+
+It's safe to delete for normal development — the generated Python code is the source of truth. Its main purpose today is bookkeeping: knowing what stack a project uses and how to reproduce it. Keeping it costs nothing and gives editors and tooling a stable record of the project's configuration.
+
+See also: the [schema](/docs/cli/programmatic-api) that validates this file, and the [Agent Workflows](/docs/cli/agent-workflows) page for the JSON-first input shape.

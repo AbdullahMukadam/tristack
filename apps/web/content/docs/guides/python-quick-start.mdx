@@ -1,0 +1,104 @@
+---
+title: Python Quick Start
+description: Scaffold and run your first FastAPI project end to end
+---
+
+## Overview
+
+This guide walks through the default TriStack flow: scaffold a FastAPI + SQLModel + Alembic + SQLite project, run it, and verify the health endpoint.
+
+## 1. Scaffold
+
+```bash
+uvx tristack my-api
+```
+
+Follow the prompts, or skip them and take the defaults completely non-interactively:
+
+```bash
+uvx tristack my-api --yes
+```
+
+After scaffolding you'll see the reproducible command, which is also saved to `tristack.jsonc` inside the project.
+
+## 2. Run it
+
+```bash
+cd my-api
+cp .env.example .env
+uv sync
+uv run uvicorn my_api.main:app --reload
+```
+
+Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
+
+<Callout title="Note">
+  The import package is a snake_case version of your project name: `my-api` → `my_api`. The health
+  endpoint, database URLs, and docs all follow from your selections.
+</Callout>
+
+## 3. Common commands
+
+```bash
+uv sync                # install dependencies (default package manager)
+uv add <package>       # add a dependency
+uv run pytest          # run the test suite (pytest addon)
+uv run ruff check .    # lint (ruff addon)
+uv run ruff format .   # format (ruff addon)
+uv run mypy .          # type-check (mypy addon)
+```
+
+### Database migrations
+
+With Alembic, migrations live in `migrations/`:
+
+```bash
+uv run alembic revision --autogenerate -m "create users"
+uv run alembic upgrade head
+```
+
+### Docker
+
+With the `docker` addon, run the whole stack in containers:
+
+```bash
+docker compose up --build
+```
+
+## 4. Other frameworks
+
+The stack varies by framework — same flow, different runner:
+
+| Framework         | Scaffold flag          | Run                                                      |
+| ----------------- | ---------------------- | -------------------------------------------------------- |
+| FastAPI (default) | `--framework fastapi`  | `uv run uvicorn my_api.main:app --reload`                |
+| Litestar          | `--framework litestar` | `uv run litestar run --reload`                           |
+| Flask             | `--framework flask`    | `uv run flask --app my_api.main run`                     |
+| Django            | `--framework django`   | `uv run manage.py migrate && uv run manage.py runserver` |
+
+## 5. Reproduce the same stack
+
+Every scaffold prints a reproducible command and stores it in `tristack.jsonc`:
+
+```bash
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database sqlite \
+  --package-manager uv \
+  --addons docker,ruff,pytest
+```
+
+Or validate it without writing anything:
+
+```bash
+uvx tristack my-api --yes --dry-run
+```
+
+## Next steps
+
+- [Project Structure](/docs/project-structure) — exactly what gets generated
+- [CLI Options](/docs/cli/options) — every flag
+- [Compatibility](/docs/cli/compatibility) — valid combinations

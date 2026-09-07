@@ -1,0 +1,163 @@
+---
+title: Quick Start
+description: Create your first TriStack project in minutes
+---
+
+## Philosophy
+
+- Roll your own stack: pick only what you need, nothing extra.
+- Minimal templates: bare-bones scaffolds with zero bloat.
+- Latest dependencies: always current and stable by default.
+- Idiomatic per language: a generated Python project should look like a Python developer wrote it — and a Go or Rust one should look like a Go or Rust developer wrote it.
+- Free and open source: forever.
+
+## Languages
+
+TriStack scaffolds backend projects in multiple languages. Each has its own option set (framework, ORM, migrations, package manager, addons) in the [Compatibility reference](/docs/cli/compatibility).
+
+| Language | Status                    |
+| -------- | ------------------------- |
+| Python   | Scaffolding now (Phase 1) |
+| Go       | Coming (Phase 2)          |
+| Rust     | Coming (Phase 3)          |
+
+The CLI ships as a standalone native binary. The invoker differs per language:
+
+| Language        | Run the CLI                          |
+| --------------- | ------------------------------------ |
+| Python          | `uvx tristack` (PyPI wrapper)        |
+| Go              | `tristack` (curl/Homebrew installer) |
+| Rust            | `tristack` (curl/Homebrew installer) |
+| Any (secondary) | `npx create-tristack@latest`         |
+
+## Get Started
+
+### Prerequisites
+
+For a generated Python project you need **Python 3.12+** ([python.org](https://www.python.org/)) and **uv** ([astral.sh/uv](https://docs.astral.sh/uv/)), the default package manager for generated projects. **Git** (optional, [git-scm.com](https://git-scm.com/)) initializes a repository.
+
+To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack`.
+
+### CLI (prompts)
+
+```bash
+uvx tristack
+```
+
+Follow the interactive prompts to pick your language, framework, ORM/migrations, database, package manager, and addons.
+
+Skip prompts and use the default stack:
+
+```bash
+uvx tristack --yes
+```
+
+### Stack Builder (UI)
+
+- Visit [/new](/new) to pick your stack, preview the generated file tree live, and copy the exact CLI command
+- The command you copy runs verbatim (the builder lets you switch between the native runner and the `npx` path):
+
+```bash
+uvx tristack my-tristack-app \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database sqlite \
+  --package-manager uv \
+  --addons docker,ruff,pytest \
+  --install
+```
+
+### AI agent (JSON-first)
+
+Let an LLM CLI or CI job scaffold projects for you with the fully JSON-first `create-json` command — no prompts, one machine-readable payload. See [Agent Workflows](/docs/cli/agent-workflows).
+
+A native agent plugin (Claude Code / Codex MCP) ships in a later phase.
+
+## Common Setups — Python (Phase 1)
+
+Currently only Python scaffolds are generated; the examples below use the Python runner (`uvx tristack`).
+
+### Default Stack
+
+```bash
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database sqlite \
+  --package-manager uv \
+  --addons docker,ruff,pytest
+```
+
+### Postgres API
+
+```bash
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlalchemy \
+  --migrations alembic \
+  --database postgres \
+  --package-manager uv \
+  --addons docker,pytest
+```
+
+### Django Monolith
+
+```bash
+uvx tristack my-django \
+  --language python \
+  --framework django \
+  --database postgres \
+  --package-manager poetry \
+  --addons docker,ruff,mypy,pytest
+```
+
+### Minimal Flask Service
+
+```bash
+uvx tristack my-micro \
+  --language python \
+  --framework flask \
+  --database none \
+  --package-manager uv \
+  --addons pytest
+```
+
+## Flags Cheat Sheet
+
+See the full list in the [CLI Reference](/docs/cli). Option sets are per language — Python's set below; see [Compatibility](/docs/cli/compatibility) for Go and Rust.
+
+- `--language`: python (go, rust coming soon)
+- `--framework` (python): fastapi, litestar, django, flask
+- `--orm` (python): sqlmodel, sqlalchemy, tortoise, none
+- `--migrations` (python): alembic, none
+- `--database`: sqlite, postgres, mysql, none
+- `--package-manager` (python): uv, poetry, pip
+- `--addons`: docker, ruff, mypy, pytest, github-actions, fumadocs, starlight, none
+
+## Next Steps
+
+<Cards>
+  <Card href="/docs/cli" title="CLI reference">
+    Flags, usage, and examples for each command
+  </Card>
+  <Card href="/docs/project-structure" title="Project Structure">
+    How a generated project is laid out per language
+  </Card>
+  <Card href="/docs/cli/compatibility" title="Compatibility">
+    Valid options per language and how the CLI validates them
+  </Card>
+  <Card href="/docs/tristack-config" title="tristack.jsonc">
+    The config file written to every generated project
+  </Card>
+  <Card href="/docs/guides/python-quick-start" title="Python quick start">
+    Scaffold and run your first FastAPI project end to end
+  </Card>
+  <Card href="/docs/contributing" title="Contributing">
+    Dev setup and contribution flow
+  </Card>
+</Cards>

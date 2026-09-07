@@ -1,0 +1,82 @@
+{
+  "name": "create-tristack",
+  "version": "0.1.0",
+  "description": "A CLI tool for scaffolding backend projects in Python, Go, and Rust",
+  "keywords": [
+    "boilerplate",
+    "cli",
+    "fastapi",
+    "go",
+    "python",
+    "rust",
+    "scaffold",
+    "tristack"
+  ],
+  "homepage": "https://tristack.dev/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tristack/tristack.git",
+    "directory": "apps/cli"
+  },
+  "bin": {
+    "create-tristack": "dist/cli.mjs",
+    "tristack": "dist/cli.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./cli": {
+      "import": "./dist/cli.mjs"
+    },
+    "./virtual": {
+      "types": "./dist/virtual.d.mts",
+      "import": "./dist/virtual.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsdown --publint",
+    "dev": "tsdown --watch",
+    "check-types": "tsc --noEmit",
+    "test": "bun test",
+    "test:ci": "bun run build && BTS_SKIP_EXTERNAL_COMMANDS=1 BTS_TEST_MODE=1 bun test --bail=5",
+    "test:complete": "cd ../.. && bun run build && cd apps/cli && BTS_MATRIX_MODE=smoke BTS_BUILD_SAMPLES=1 bun test --bail=5"
+  },
+  "dependencies": {
+    "@clack/core": "^1.4.3",
+    "@clack/prompts": "^1.7.0",
+    "@tristack/template-generator": "workspace:*",
+    "@tristack/types": "workspace:*",
+    "@trpc/server": "^11.18.0",
+    "better-result": "^3.0.0",
+    "consola": "^3.4.2",
+    "execa": "^10.0.0",
+    "fs-extra": "^11.4.0",
+    "gradient-string": "^3.0.0",
+    "handlebars": "^4.7.9",
+    "jsonc-parser": "^3.3.1",
+    "picocolors": "^1.1.1",
+    "semver": "^7.8.5",
+    "tinyglobby": "^0.2.17",
+    "trpc-cli": "^0.16.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^26.1.2",
+    "@types/semver": "^7.8.0",
+    "publint": "^0.3.22",
+    "tsdown": "^0.22.14",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

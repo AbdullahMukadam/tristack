@@ -1,0 +1,232 @@
+---
+title: Options Reference
+description: Complete reference for all TriStack CLI options and flags
+---
+
+## General Options
+
+### `--yes, -y`
+
+Use default configuration and skip interactive prompts. Any flags you provide are merged over the defaults.
+
+```bash
+uvx tristack --yes
+uvx tristack my-api --yes --database postgres
+```
+
+### `--dry-run`
+
+Validate configuration, compatibility, and directory handling without writing files. The CLI still prints the resolved stack and the reproducible command.
+
+```bash
+uvx tristack my-api --yes --dry-run
+```
+
+### `--verbose`
+
+Show detailed result information in JSON format after project creation.
+
+```bash
+uvx tristack my-api --yes --verbose
+```
+
+### `--yolo`
+
+Bypass validations and compatibility checks. Not recommended for normal use.
+
+```bash
+uvx tristack --yolo
+```
+
+### `--language <lang>`
+
+Programming language for the backend:
+
+- `python`: Python backend (Phase 1)
+
+`go` and `rust` are accepted by the schema and prompt list, but their scaffolds ship in later phases.
+
+```bash
+uvx tristack --language python
+```
+
+### `--framework <framework>`
+
+Backend framework, scoped to the selected language (Python):
+
+- `fastapi`: FastAPI (async, OpenAPI-first)
+- `litestar`: Litestar (msgspec typing, batteries included)
+- `django`: Django + Django REST Framework
+- `flask`: Flask (minimal)
+
+```bash
+uvx tristack --framework litestar
+```
+
+### `--orm <orm>`
+
+ORM or data layer, scoped to the selected language (Python):
+
+- `sqlmodel`: SQLModel (Pydantic-native)
+- `sqlalchemy`: SQLAlchemy 2.0
+- `tortoise`: Tortoise ORM (async, Django-style)
+- `none`: No ORM
+
+```bash
+uvx tristack --orm sqlalchemy
+```
+
+### `--migrations <tool>`
+
+Database migration tool (Python):
+
+- `alembic`: Alembic (pairs with SQLModel/SQLAlchemy)
+- `none`: No migrations
+
+Django uses its own bundled migrations; combined with `--framework django`, migrations are on you by default.
+
+```bash
+uvx tristack --migrations alembic
+```
+
+### `--database <db>`
+
+Database type:
+
+- `sqlite`: SQLite (local, default)
+- `postgres`: PostgreSQL
+- `mysql`: MySQL
+- `none`: No database
+
+```bash
+uvx tristack --database postgres
+```
+
+### `--package-manager <pm>`
+
+Package manager, scoped to the selected language (Python):
+
+- `uv`: uv (fast, modern; default)
+- `poetry`: Poetry
+- `pip`: pip + venv
+
+```bash
+uvx tristack --package-manager poetry
+```
+
+### `--addons <types...>`
+
+Additional features, scoped to the selected language. Pass a comma-separated list, or `none`:
+
+- `docker`: Dockerfile + `docker-compose.yml`
+- `ruff`: Ruff linting/formatting config
+- `mypy`: MyPy type-checking config
+- `pytest`: Test suite with health-check tests
+- `github-actions`: CI workflow
+- `fumadocs`: Fumadocs documentation site
+- `starlight`: Astro Starlight documentation site
+- `none`: No addons
+
+```bash
+uvx tristack --addons docker,ruff,pytest
+uvx tristack --addons none
+```
+
+### `--git / --no-git`
+
+Control Git repository initialization.
+
+```bash
+uvx tristack --no-git
+```
+
+### `--install / --no-install`
+
+Control dependency installation after project creation (runs `uv sync`, `poetry install`, or `pip install`).
+
+```bash
+uvx tristack --no-install
+```
+
+### `--directory-conflict <strategy>`
+
+How to handle existing, non-empty target directories:
+
+- `merge`: Keep unrelated files and replace conflicting generated files
+- `overwrite`: Permanently clear the directory before scaffolding
+- `increment`: Create a suffixed directory (e.g., `my-api-1`)
+- `error`: Fail instead of prompting
+
+The interactive prompt recommends the first available suffixed directory and requires an extra confirmation before overwriting.
+
+```bash
+# Overwrite an existing directory without prompting
+uvx tristack my-api --yes --directory-conflict overwrite
+
+# Safely create a new directory name if it exists
+uvx tristack my-api --yes --directory-conflict increment
+```
+
+### `--render-title / --no-render-title`
+
+Control whether the ASCII art title is shown. Enabled by default.
+
+```bash
+# Hide the title (useful in CI)
+uvx tristack --no-render-title
+```
+
+### `--disable-analytics`
+
+Opt out of any telemetry for this run.
+
+```bash
+uvx tristack --disable-analytics
+```
+
+See [Analytics & Telemetry](/docs/analytics).
+
+## Default Stack
+
+Running with no flags (or with only `--yes`) produces:
+
+| Option           | Default                |
+| ---------------- | ---------------------- |
+| `language`       | `python`               |
+| `framework`      | `fastapi`              |
+| `orm`            | `sqlmodel`             |
+| `migrations`     | `alembic`              |
+| `database`       | `sqlite`               |
+| `packageManager` | `uv`                   |
+| `addons`         | `docker, ruff, pytest` |
+| `git`            | `true`                 |
+| `install`        | `true`                 |
+
+## Option Validation
+
+The CLI validates that `framework`, `orm`, and `migrations` values belong to the selected language. See the [Compatibility](/docs/cli/compatibility) page for the full rule set.
+
+## Examples
+
+### Full Configuration
+
+```bash
+uvx tristack my-api \
+  --language python \
+  --framework fastapi \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database postgres \
+  --package-manager uv \
+  --addons docker,ruff,mypy,pytest,github-actions \
+  --install
+```
+
+### Minimal Setup
+
+```bash
+uvx tristack my-micro \
+  --framework flask \
+  --database none \
+  --addons none
+```

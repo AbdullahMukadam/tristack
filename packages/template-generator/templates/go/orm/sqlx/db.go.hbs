@@ -1,0 +1,33 @@
+// Package db provides sqlx-based database access for {{projectName}}.
+package db
+
+import (
+	"os"
+
+	"github.com/jmoiron/sqlx"
+{{#if (eq database "sqlite")}}
+	_ "modernc.org/sqlite"
+{{else if (eq database "postgres")}}
+	_ "github.com/jackc/pgx/v5/stdlib"
+{{else if (eq database "mysql")}}
+	_ "github.com/go-sql-driver/mysql"
+{{/if}}
+)
+
+// Connect opens a sqlx connection using the DATABASE_URL environment variable.
+func Connect() (*sqlx.DB, error) {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	}
+
+{{#if (eq database "sqlite")}}
+	return sqlx.Open("sqlite", dsn)
+{{else if (eq database "postgres")}}
+	return sqlx.Open("pgx", dsn)
+{{else if (eq database "mysql")}}
+	return sqlx.Open("mysql", dsn)
+{{else}}
+	return sqlx.Open("sqlite", dsn)
+{{/if}}
+}
