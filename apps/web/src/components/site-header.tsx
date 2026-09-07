@@ -10,7 +10,6 @@ import { useTheme } from "next-themes";
 import { type ComponentProps, type ReactNode, useEffect, useState } from "react";
 
 import { baseOptions } from "@/app/layout.config";
-import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 type HrefItem = Extract<LinkItemType, { url: string }>;
@@ -30,11 +29,6 @@ const primaryItems = items.filter((item) => !isSecondary(item));
 const secondaryItems = items.filter(isSecondary);
 
 const navTitle = baseOptions.nav?.title;
-
-function navLabel(item: HrefItem) {
-  if ("label" in item && item.label) return item.label;
-  return item.url;
-}
 
 const labelClass = "text-sm font-medium tracking-tight text-fd-muted-foreground";
 const iconButtonClass =
@@ -118,7 +112,6 @@ function ThemeToggle({ className }: { className?: string }) {
       aria-label="Toggle theme"
       onClick={() => {
         const theme = isDark ? "light" : "dark";
-        track("theme_toggle", { theme });
         setTheme(theme);
       }}
       className={cn(iconButtonClass, className)}
@@ -163,11 +156,7 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
 
         <nav aria-label="Main" className="flex items-center gap-4 max-md:hidden">
           {primaryItems.map((item) => (
-            <NavLink
-              item={item}
-              key={item.url}
-              onClick={() => track("nav_click", { item: navLabel(item), location: "header" })}
-            />
+            <NavLink item={item} key={item.url} />
           ))}
         </nav>
 
@@ -186,11 +175,7 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
 
         <div className="flex items-center gap-1 max-md:hidden">
           {secondaryItems.map((item) => (
-            <IconLink
-              item={item}
-              key={item.url}
-              onClick={() => track("nav_click", { item: navLabel(item), location: "header" })}
-            />
+            <IconLink item={item} key={item.url} />
           ))}
         </div>
 
@@ -204,7 +189,6 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
           aria-expanded={open}
           aria-controls="site-header-menu"
           onClick={() => {
-            track("mobile_menu", { open: !open });
             setOpen(!open);
           }}
           className={cn(iconButtonClass, "md:hidden")}
@@ -234,7 +218,6 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
                   item={item}
                   key={item.url}
                   onClick={() => {
-                    track("nav_click", { item: navLabel(item), location: "mobile-menu" });
                     setOpen(false);
                   }}
                 />
@@ -246,7 +229,6 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
                   item={item}
                   key={item.url}
                   onClick={() => {
-                    track("nav_click", { item: navLabel(item), location: "mobile-menu" });
                     setOpen(false);
                   }}
                 />

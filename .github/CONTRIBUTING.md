@@ -73,29 +73,10 @@ This repository is organized as a monorepo containing:
    bun i
    ```
 
-2. **Setup backend**
+2. **Configure environment**
+   The web app uses `apps/web/.env` for build-time environment variables. Copy `.env.example` to `.env` and set any values (the site builds without them).
 
-   ```bash
-   cd packages/backend
-   bun dev:setup  # you can choose local development too in prompts
-   ```
-
-3. **Configure environment**
-   Copy the Convex URL from `packages/backend/.env.local` to `apps/web/.env`:
-
-   ```
-   NEXT_PUBLIC_CONVEX_URL=http://127.0.0.1:3210/
-   ```
-
-4. **Set GitHub tokens**
-   Now run `bun dev` in the root. It will complain about GitHub token, so run this in `packages/backend`:
-
-   ```bash
-   npx convex env set GITHUB_ACCESS_TOKEN=xxxxx
-   npx convex env set GITHUB_WEBHOOK_SECRET=xxxxx
-   ```
-
-5. **Start the documentation website**
+3. **Start the documentation website**
    ```bash
    bun dev
    ```

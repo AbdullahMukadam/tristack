@@ -54,9 +54,6 @@ function processFlags(options: CLIInput, projectName?: string): Partial<ProjectC
   return config;
 }
 
-/**
- * Validate a framework / orm / migrations value against the chosen language.
- */
 export function validatePerLanguageValues(config: Partial<ProjectConfig>): ValidationResult<void> {
   if (!config.language) return Result.ok(undefined);
 
@@ -93,9 +90,6 @@ export function validatePerLanguageValues(config: Partial<ProjectConfig>): Valid
   return Result.ok(undefined);
 }
 
-/**
- * Validate framework-specific rules (e.g. Django brings its own ORM/migrations).
- */
 function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResult<void> {
   if (config.framework === "django") {
     if (config.orm && config.orm !== "none") {

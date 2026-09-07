@@ -12,7 +12,7 @@ interface ShareButtonProps {
 
 export function ShareButton({ stackUrl, stackState }: ShareButtonProps) {
   return (
-    <ShareDialog stackUrl={stackUrl} stackState={stackState} page="builder">
+    <ShareDialog stackUrl={stackUrl} stackState={stackState}>
       <button
         type="button"
         className="builder-focus-ring pointer-coarse:min-h-8 flex items-center justify-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium text-primary transition-colors duration-150 hover:border-primary"

@@ -1,7 +1,6 @@
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { type BuilderCopySource, stackSnapshot, track } from "@/lib/analytics";
 import { DEFAULT_STACK, PRESET_TEMPLATES, type StackState, TECH_OPTIONS } from "@/lib/constant";
 import { sanitizeStackState } from "@/lib/sanitize-stack-addons";
 import { useStackState } from "@/lib/stack-url-state.client";
@@ -152,19 +151,7 @@ export function getTechSelectionUpdate(
   return update;
 }
 
-function isTechSelected(stack: StackState, category: keyof typeof TECH_OPTIONS, techId: string) {
-  const value = stack[category as keyof StackState];
-  return Array.isArray(value) ? value.includes(techId) : value === techId;
-}
-
 function showCompatibilityChanges(changes: CompatibilityAnalysis["changes"]) {
-  if (changes.length > 0) {
-    track("builder_compat_adjust", {
-      count: changes.length,
-      message: changes.map((change) => change.message).join(" | "),
-    });
-  }
-
   if (changes.length === 1) {
     toast.info(changes[0].message, { duration: 4000 });
     return;
@@ -320,33 +307,25 @@ export function useStackBuilder() {
     });
 
     contentRef.current?.scrollTo(0, 0);
-    track("builder_randomize", {});
   }
 
   function handleTechSelect(category: keyof typeof TECH_OPTIONS, techId: string) {
-    track("builder_tech_select", {
-      category,
-      tech: techId,
-      selected: !isTechSelected(effectiveStack, category, techId),
-    });
     startTransition(() => {
       setStack((currentStack) => getTechSelectionUpdate(currentStack, category, techId));
     });
   }
 
   function removeSelectedTech(category: TechCategory, techId: string) {
-    track("builder_tech_remove", { category, tech: techId });
     startTransition(() => {
       setStack((currentStack) => getSelectedTechRemovalUpdate(currentStack, category, techId));
     });
   }
 
-  async function copyToClipboard(source: BuilderCopySource) {
+  async function copyToClipboard() {
     try {
       await navigator.clipboard.writeText(command);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      track("builder_copy_command", { ...stackSnapshot(effectiveStack), source });
     } catch {
       toast.error("Unable to copy command. Please copy it manually.");
     }
@@ -357,7 +336,6 @@ export function useStackBuilder() {
       setStack(DEFAULT_STACK);
     });
     contentRef.current?.scrollTo(0, 0);
-    track("builder_reset", {});
   }
 
   function saveCurrentStack() {
@@ -365,7 +343,6 @@ export function useStackBuilder() {
     localStorage.setItem("tristackStackPreference", JSON.stringify(stackToSave));
     setLastSavedStack(stackToSave);
     toast.success("Your stack configuration has been saved");
-    track("builder_save", {});
   }
 
   function loadSavedStack() {
@@ -379,7 +356,6 @@ export function useStackBuilder() {
 
     contentRef.current?.scrollTo(0, 0);
     toast.success("Saved configuration loaded");
-    track("builder_load", {});
   }
 
   function applyPreset(presetId: string) {
@@ -394,7 +370,6 @@ export function useStackBuilder() {
 
     contentRef.current?.scrollTo(0, 0);
     toast.success(`Applied preset: ${preset.name}`);
-    track("builder_preset_apply", { preset: preset.id });
   }
 
   return {

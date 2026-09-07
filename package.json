@@ -8,12 +8,9 @@
       "packages/*"
     ],
     "catalog": {
-      "@erquhart/convex-oss-stats": "^0.8.2",
       "@types/fs-extra": "^11.0.4",
       "@types/node": "^26.1.2",
       "better-result": "^3.0.0",
-      "convex": "^1.43.0",
-      "convex-helpers": "^0.1.120",
       "handlebars": "^4.7.9",
       "oxfmt": "^0.63.0",
       "ts-morph": "^28.0.0",
@@ -37,7 +34,6 @@
     "check": "oxfmt . && oxlint .",
     "prepare": "lefthook install",
     "release": "bun run scripts/release.ts",
-    "deploy:convex": "turbo run --filter=@tristack/backend deploy",
     "deploy:web": "turbo run deploy --filter=web",
     "generate": "turbo run generate-schema --filter=web",
     "deploy": "turbo run deploy --filter=web"

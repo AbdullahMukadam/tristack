@@ -16,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { type SharePage, track } from "@/lib/analytics";
 import type { StackState } from "@/lib/constant";
 import {
   formatProjectName,
@@ -30,7 +29,6 @@ interface ShareDialogProps {
   children: React.ReactNode;
   stackUrl: string;
   stackState: StackState;
-  page: SharePage;
 }
 
 type CopyTarget = "url" | "command";
@@ -74,7 +72,7 @@ function CopyRow({
   );
 }
 
-export function ShareDialog({ children, stackUrl, stackState, page }: ShareDialogProps) {
+export function ShareDialog({ children, stackUrl, stackState }: ShareDialogProps) {
   const [copiedTarget, setCopiedTarget] = useState<CopyTarget | null>(null);
   const [showQr, setShowQr] = useState(false);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
@@ -104,7 +102,6 @@ export function ShareDialog({ children, stackUrl, stackState, page }: ShareDialo
       toast.success(
         target === "url" ? "Link copied to clipboard!" : "Command copied to clipboard!",
       );
-      track("share_copy", { page, target: target === "url" ? "link" : "command" });
       if (copyResetTimer.current) clearTimeout(copyResetTimer.current);
       copyResetTimer.current = setTimeout(() => setCopiedTarget(null), 2000);
     } catch {
@@ -122,14 +119,12 @@ export function ShareDialog({ children, stackUrl, stackState, page }: ShareDialo
   const shareToTwitter = () => {
     const text = encodeURIComponent(shareText());
     const url = encodeURIComponent(stackUrl);
-    track("share_post", { page });
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
   };
 
   const nativeShare = async () => {
     try {
       await navigator.share({ title: projectName, text: shareText(), url: stackUrl });
-      track("share_native", { page });
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       toast.error("Failed to open share sheet");
@@ -156,11 +151,7 @@ export function ShareDialog({ children, stackUrl, stackState, page }: ShareDialo
   }, [showQr, stackUrl, resolvedTheme]);
 
   return (
-    <Dialog
-      onOpenChange={(open) => {
-        if (open) track("share_open", { page });
-      }}
-    >
+    <Dialog>
       <DialogTrigger
         render={
           React.isValidElement(children) ? children : <button type="button">{children}</button>
@@ -243,7 +234,6 @@ export function ShareDialog({ children, stackUrl, stackState, page }: ShareDialo
           <button
             type="button"
             onClick={() => {
-              track("share_qr", { page, shown: !showQr });
               setShowQr(!showQr);
             }}
             className={cn(

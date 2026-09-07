@@ -4,13 +4,7 @@ import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
 import Providers from "@/components/providers";
-import {
-  REPOSITORY_URL,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_URL,
-  SUPPORT_EMAIL,
-} from "@/lib/site";
+import { REPOSITORY_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SUPPORT_EMAIL } from "@/lib/site";
 
 import "./global.css";
 import { cn } from "@/lib/utils";

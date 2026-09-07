@@ -10,7 +10,6 @@ This repo is a Bun + Turborepo monorepo.
 - `apps/web`: Next.js docs/site (`apps/web/src`, `apps/web/content/docs`, `apps/web/public`).
 - `packages/template-generator`: template generation engine used by the CLI.
 - `packages/types`: shared schemas/types.
-- `packages/backend`: Convex backend used by web features.
 
 ## Build, Test, and Development Commands
 

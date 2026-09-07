@@ -7,8 +7,6 @@ description: What we collect, how to disable it
 
 The CLI accepts a `--disable-analytics` flag and an `analyticsDisabled` context flag today, but no telemetry sender is wired up yet — the flags are stubs reserved for a later phase. Nothing is transmitted when you run the CLI in Phase 1.
 
-The website itself records limited, privacy-aware interaction events (builder selections, command copies, share actions, docs actions) via self-hosted Umami. See `apps/web/src/lib/analytics.ts` for the event definitions.
-
 ## Planned telemetry
 
 When CLI telemetry ships, it will follow this contract:

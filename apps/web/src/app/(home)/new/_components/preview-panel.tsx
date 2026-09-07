@@ -4,7 +4,6 @@ import { Loader2, FolderTree, FileCode2, Info, ChevronLeft } from "lucide-react"
 import { useEffect, useState, useCallback, useRef } from "react";
 
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { scrubMessage, track } from "@/lib/analytics";
 import type { StackState } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 
@@ -97,14 +96,12 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
       } else {
         const message = data.error || "Failed to generate preview";
         setError(message);
-        track("preview_error", { message: scrubMessage(message) });
       }
     } catch (err) {
       if (controller.signal.aborted) return;
       if (requestId !== requestIdRef.current) return;
       const message = err instanceof Error ? err.message : "Failed to fetch preview";
       setError(message);
-      track("preview_error", { message: scrubMessage(message) });
     } finally {
       if (requestId === requestIdRef.current) {
         setIsLoading(false);
@@ -122,7 +119,6 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
   }, [fetchPreview]);
 
   const handleSelectFile = (file: VirtualFile) => {
-    track("preview_file_open", { path: file.path, extension: file.extension });
     setSelectedFile(file);
     onSelectFile(file.path);
     setMobileView("code");

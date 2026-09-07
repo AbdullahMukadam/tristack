@@ -2,7 +2,6 @@ import { Archive, Globe, Heart, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa6";
 
-import { trackAttrs } from "@/lib/analytics";
 import {
   getSponsorUrl,
   getSponsorUrlLabel,
@@ -56,32 +55,12 @@ function SponsorLinks({ sponsor, muted = false }: { sponsor: Sponsor; muted?: bo
 
   return (
     <div className="flex flex-col">
-      <a
-        href={sponsor.githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={linkClass}
-        {...trackAttrs("sponsor_click", {
-          sponsor: sponsor.githubId,
-          target: "github",
-          location: "sponsors",
-        })}
-      >
+      <a href={sponsor.githubUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
         <FaGithub aria-hidden="true" className="size-3 shrink-0" />
         <span className="wrap-anywhere">{sponsor.githubId}</span>
       </a>
       {sponsor.websiteUrl && (
-        <a
-          href={sponsorUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={linkClass}
-          {...trackAttrs("sponsor_click", {
-            sponsor: sponsor.githubId,
-            target: "website",
-            location: "sponsors",
-          })}
-        >
+        <a href={sponsorUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
           <Globe aria-hidden="true" className="size-3 shrink-0" />
           <span className="wrap-anywhere">{getSponsorUrlLabel(sponsor)}</span>
         </a>
@@ -173,11 +152,6 @@ function BackerChip({ sponsor }: { sponsor: Sponsor }) {
       target="_blank"
       rel="noopener noreferrer"
       className="builder-focus-ring group flex items-center gap-2 rounded-md border px-3 py-2"
-      {...trackAttrs("sponsor_click", {
-        sponsor: sponsor.githubId,
-        target: "github",
-        location: "sponsors",
-      })}
     >
       <Image
         src={sponsor.avatarUrl}
@@ -203,11 +177,6 @@ function PastSponsorRow({ sponsor }: { sponsor: Sponsor }) {
       target="_blank"
       rel="noopener noreferrer"
       className="builder-focus-ring group flex items-center gap-3 rounded-md border px-3 py-2"
-      {...trackAttrs("sponsor_click", {
-        sponsor: sponsor.githubId,
-        target: "github",
-        location: "sponsors-past",
-      })}
     >
       <Image
         src={sponsor.avatarUrl}
@@ -251,11 +220,6 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
             href="https://github.com/sponsors/AbdullahMukadam"
             target="_blank"
             rel="noopener noreferrer"
-            {...trackAttrs("sponsor_click", {
-              sponsor: "AmanVarshney01",
-              target: "sponsor-me",
-              location: "sponsors",
-            })}
             className="builder-focus-ring flex min-h-8 items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium text-primary transition-colors duration-150 hover:text-fd-foreground"
           >
             <Heart aria-hidden="true" className="h-3.5 w-3.5" />
@@ -369,11 +333,6 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
             href="https://github.com/sponsors/AbdullahMukadam"
             target="_blank"
             rel="noopener noreferrer"
-            {...trackAttrs("sponsor_click", {
-              sponsor: "AmanVarshney01",
-              target: "sponsor-me",
-              location: "sponsors",
-            })}
             className="builder-focus-ring flex min-h-9 items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-primary transition-colors duration-150 hover:text-fd-foreground"
           >
             <Heart aria-hidden="true" className="h-3.5 w-3.5" />

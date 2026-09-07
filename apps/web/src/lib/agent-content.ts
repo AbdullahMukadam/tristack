@@ -1,11 +1,5 @@
 import type { StackState } from "./constant";
-import {
-  REPOSITORY_URL,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_URL,
-  SUPPORT_EMAIL,
-} from "./site";
+import { REPOSITORY_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SUPPORT_EMAIL } from "./site";
 import {
   generateStackCommand,
   generateStackSharingUrl,
@@ -63,7 +57,7 @@ Use GitHub issues for reproducible bugs and feature requests. Include the CLI ve
 - [Documentation](${SITE_URL}/docs)`,
   privacy: `# TriStack privacy
 
-The website uses self-hosted Umami analytics. The CLI accepts a \`--disable-analytics\` flag; CLI telemetry is not active in Phase 1, and when it ships it will follow the contract in the analytics documentation — no project names, paths, file contents, secrets, environment variables, or persistent user identifiers.
+The CLI accepts a \`--disable-analytics\` flag; CLI telemetry is not active in Phase 1, and when it ships it will follow the contract in the analytics documentation — no project names, paths, file contents, secrets, environment variables, or persistent user identifiers.
 
 - [Full privacy notice](${SITE_URL}/privacy)
 - [Analytics and telemetry details](${SITE_URL}/docs/analytics.mdx)

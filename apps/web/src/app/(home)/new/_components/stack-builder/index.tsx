@@ -6,7 +6,6 @@ import { startTransition, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { track } from "@/lib/analytics";
 import { formatStackCommandForDisplay } from "@/lib/stack-utils";
 import type { Sponsor } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -67,7 +66,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
       stackState={effectiveStack}
       yolo={stack.yolo === "true"}
       onYoloToggle={(yolo) => {
-        track("builder_yolo_toggle", { enabled: yolo === "true" });
         setStack({ yolo });
       }}
     />
@@ -82,7 +80,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
               <button
                 type="button"
                 onClick={() => {
-                  track("builder_mobile_tab", { tab: "build" });
                   setMobileTab("build");
                 }}
                 className={cn(
@@ -104,7 +101,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
               <button
                 type="button"
                 onClick={() => {
-                  track("builder_mobile_tab", { tab: "preview" });
                   setMobileTab("preview");
                 }}
                 className={cn(
@@ -171,11 +167,11 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       <div
                         role="button"
                         tabIndex={0}
-                        onClick={() => copyToClipboard("command")}
+                        onClick={() => copyToClipboard()}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
                             event.preventDefault();
-                            copyToClipboard("command");
+                            copyToClipboard();
                           }
                         }}
                         aria-label="Copy CLI command"
@@ -198,7 +194,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           <button
                             type="button"
                             onClick={() => {
-                              track("builder_command_expand", { expanded: !commandExpanded });
                               setCommandExpanded(!commandExpanded);
                             }}
                             className="builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-fd-foreground"
@@ -215,7 +210,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                         )}
                         <button
                           type="button"
-                          onClick={() => copyToClipboard("button")}
+                          onClick={() => copyToClipboard()}
                           className={cn(
                             "builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors duration-150",
                             copied
@@ -240,7 +235,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       stack={effectiveStack}
                       onRemove={removeSelectedTech}
                       onJump={(category) => {
-                        track("builder_category_jump", { category, source: "badge" });
                         if (viewMode !== "command") {
                           startTransition(() => {
                             setViewMode("command");
@@ -271,7 +265,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    track("builder_view_mode", { mode: "command" });
                     startTransition(() => {
                       setViewMode("command");
                     });
@@ -289,7 +282,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    track("builder_view_mode", { mode: "preview" });
                     startTransition(() => {
                       setViewMode("preview");
                     });
@@ -376,11 +368,11 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           commandExpanded ? "whitespace-pre-wrap break-words" : "truncate",
                           copied ? "border-primary" : "hover:border-primary/50",
                         )}
-                        onClick={() => copyToClipboard("mobile-command")}
+                        onClick={() => copyToClipboard()}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
                             event.preventDefault();
-                            copyToClipboard("mobile-command");
+                            copyToClipboard();
                           }
                         }}
                         role="button"
@@ -395,7 +387,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           <button
                             type="button"
                             onClick={() => {
-                              track("builder_command_expand", { expanded: !commandExpanded });
                               setCommandExpanded(!commandExpanded);
                             }}
                             className="builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-fd-foreground"
@@ -412,7 +403,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                         )}
                         <button
                           type="button"
-                          onClick={() => copyToClipboard("mobile-command")}
+                          onClick={() => copyToClipboard()}
                           className={cn(
                             "builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors duration-150",
                             copied

@@ -7,7 +7,6 @@
   "ignorePatterns": [
     "*.hbs",
     "apps/cli/templates/**",
-    "packages/backend/convex/_generated/**",
     "packages/template-generator/src/templates.generated.ts"
   ]
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
-import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 function Label({ children }: { children: string }) {
@@ -31,7 +30,6 @@ export default function InstallPane() {
           </a>
           <a
             href="/docs/cli/agent-workflows#mcp"
-            onClick={() => track("home_cta", { target: "mcp-docs" })}
             className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
           >
             Run as an MCP server
@@ -46,11 +44,7 @@ export default function InstallPane() {
         <p className="mx-auto max-w-[52ch] text-[14px] leading-[1.6] text-fd-muted-foreground">
           Configure every option in the browser, then copy the generated command.
         </p>
-        <Link
-          href="/new"
-          onClick={() => track("home_cta", { target: "builder" })}
-          className={cn(buttonVariants({ size: "default" }))}
-        >
+        <Link href="/new" className={cn(buttonVariants({ size: "default" }))}>
           Open the builder
         </Link>
       </div>

@@ -88,10 +88,7 @@ export function generateStackCommand(stack: StackState) {
   // Native-first: the engine is a standalone binary. Python devs
   // run it via uvx (PyPI wrapper); Go/Rust use the standalone `tristack`
   // command from the curl/Homebrew installers.
-  const base =
-    stack.language === "go" || stack.language === "rust"
-      ? "tristack"
-      : "uvx tristack";
+  const base = stack.language === "go" || stack.language === "rust" ? "tristack" : "uvx tristack";
   const projectName = quoteShellArgument(stack.projectName || "my-tristack-app");
 
   const isStackDefaultExceptProjectName = Object.entries(DEFAULT_STACK).every(

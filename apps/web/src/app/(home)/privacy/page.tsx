@@ -29,14 +29,11 @@ export default function PrivacyPage() {
     <TrustPage icon={ShieldCheck} title="Privacy" description={description}>
       <TrustSection title="Website analytics">
         <p>
-          The website loads a self-hosted Umami analytics script to understand aggregate traffic,
-          page usage, and anonymous interaction events such as which stack options are selected in
-          the builder, which commands are copied, and which outbound links are followed. These
-          events do not include the names of projects you build, personal information, or persistent
-          identifiers. The site also displays externally hosted content such as videos, social
-          posts, images, and sponsor information. Requests to those external services are governed
-          by their own privacy practices and may expose ordinary connection information such as an
-          IP address, browser headers, and the requested resource.
+          In its current phase the website does not load analytics scripts. The site displays
+          externally hosted content such as videos, social posts, images, and sponsor information.
+          Requests to those external services are governed by their own privacy practices and may
+          expose ordinary connection information such as an IP address, browser headers, and the
+          requested resource.
         </p>
         <p>
           TriStack does not provide user accounts on this website and does not sell personal

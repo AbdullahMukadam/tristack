@@ -30,25 +30,29 @@ what's written here.
 ## 2. To-do list, in order
 
 ### Fix first (blocking, small, unrelated to everything else)
+
 1. Move Go ORM template output from project root into `internal/db/` so
    `db.go` (`package db`) stops colliding with `main.go` (`package
-   main`).
+main`).
 2. Fix the pre-commit hook — it currently runs a full repo check on
    every staged file with no filter, which is slow and already caused a
    data-loss incident once. Scope it to only the file types that need
    checking.
 
 ### Finish Python (currently partial)
+
 3. Add templates for: Litestar, Django + Django REST Framework, Flask.
 4. Django needs a special rule: when Django is selected, don't ask the
    ORM or migrations questions at all (Django brings its own). Add this
    to the compatibility rules.
 
 ### Finish Go (currently partial)
+
 5. Add templates for: Gin, Fiber, Echo, stdlib `net/http`, plus `sqlx`
    as an ORM-layer alternative if not already done.
 
 ### Build Rust (currently 0%)
+
 6. Create `template-handlers/rust.ts` (doesn't exist yet — copy the
    pattern from `template-handlers/go.ts`).
 7. Add templates for: Axum, Actix-web, Rocket, Warp, Salvo, Loco ×
@@ -62,6 +66,7 @@ what's written here.
    Rust handler.
 
 ### Set up real distribution (see Section 3 below for how it works)
+
 10. Set up CI to build the binary for 5 platforms on every version tag.
 11. Publish to PyPI (so `pip install tristack` and `uvx tristack` work).
 12. Publish to npm as platform packages (so `npx create-tristack` works
@@ -72,11 +77,12 @@ what's written here.
     time — start it early, don't leave it for the end).
 
 ### Before calling it done
+
 16. Run every valid stack combination through CI and confirm the
     generated project actually builds/runs, not just that files got
     written.
 17. Make sure post-install steps (`uv sync`, `go mod tidy`, `cargo
-    build`) fail gracefully with a helpful message if the user doesn't
+build`) fail gracefully with a helpful message if the user doesn't
     have that language's toolchain installed — never crash the whole
     scaffold over this.
 18. Write real content for the docs site (currently just has the shell,
@@ -122,17 +128,17 @@ from.
 **The problem this section solves:** a Python developer doesn't think in
 terms of "download a file from GitHub." They think in terms of `pip
 install something`. A Go developer thinks `brew install something`. So
-you need to make the *same* file available through the tool each kind of
+you need to make the _same_ file available through the tool each kind of
 developer already normally uses.
 
 **How each one connects to the same 5 files:**
 
-| What the user types | What it secretly does |
-|---|---|
-| `pip install tristack` | Downloads a small Python package. That package doesn't contain your real code — it just contains one of the 5 binary files, already tucked inside it. |
-| `npx create-tristack` | Downloads a small npm package, which automatically pulls in whichever ONE of the 5 binary files matches the user's computer. |
-| `brew install tristack` | Homebrew reads a small recipe file that just says "download this exact file from this exact GitHub link." |
-| `curl ... \| sh` | A script you host yourself that does the same thing as Homebrew — figures out which of the 5 files matches the user's computer, downloads it directly. |
+| What the user types     | What it secretly does                                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pip install tristack`  | Downloads a small Python package. That package doesn't contain your real code — it just contains one of the 5 binary files, already tucked inside it.  |
+| `npx create-tristack`   | Downloads a small npm package, which automatically pulls in whichever ONE of the 5 binary files matches the user's computer.                           |
+| `brew install tristack` | Homebrew reads a small recipe file that just says "download this exact file from this exact GitHub link."                                              |
+| `curl ... \| sh`        | A script you host yourself that does the same thing as Homebrew — figures out which of the 5 files matches the user's computer, downloads it directly. |
 
 **The important part to understand:** none of these four options contain
 a second copy of your actual program. They are all just different-shaped
@@ -145,14 +151,14 @@ the new files.
 needed):** every template for every language/framework is already baked
 inside the binary file itself — this was proven by literally testing it
 with no internet connection and it still worked. So generating a project
-never needs to download anything. The *only* thing that ever needs
-internet is a separate, later step — installing the *generated project's
-own* dependencies (e.g. `uv sync` downloading FastAPI from PyPI), which
+never needs to download anything. The _only_ thing that ever needs
+internet is a separate, later step — installing the _generated project's
+own_ dependencies (e.g. `uv sync` downloading FastAPI from PyPI), which
 is normal for any project in any language and has nothing to do with
 TriStack itself.
 
 **One thing to remember if extending this:** whenever a new
-language/framework/template gets added, it goes into the *one* TypeScript
+language/framework/template gets added, it goes into the _one_ TypeScript
 codebase, then gets picked up automatically the next time the 5 binary
 files are rebuilt. There is never a reason to write the same feature
 twice for different install methods.
