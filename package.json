@@ -57,8 +57,16 @@
     "typescript": "catalog:"
   },
   "lint-staged": {
-    "*": [
-      "bun check"
+    "*.{ts,tsx}": [
+      "oxlint",
+      "oxfmt"
+    ],
+    "*.{js,mjs,cjs}": [
+      "oxlint",
+      "oxfmt"
+    ],
+    "*.{json,jsonc}": [
+      "oxfmt"
     ]
   },
   "engines": {
