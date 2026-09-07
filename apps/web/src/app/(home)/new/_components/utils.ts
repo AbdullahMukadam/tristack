@@ -134,6 +134,23 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     });
   }
 
+  if (adjustedStack.framework === "django") {
+    if (adjustedStack.orm !== "none") {
+      adjustedStack.orm = "none";
+      changes.push({
+        category: "orm",
+        message: "Django brings its own ORM — switched to none.",
+      });
+    }
+    if (adjustedStack.migrations !== "none") {
+      adjustedStack.migrations = "none";
+      changes.push({
+        category: "migrations",
+        message: "Django brings its own migration system — switched to none.",
+      });
+    }
+  }
+
   const hasChanges = changes.length > 0;
   return {
     adjustedStack: hasChanges ? adjustedStack : null,

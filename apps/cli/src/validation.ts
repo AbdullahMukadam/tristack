@@ -93,6 +93,33 @@ export function validatePerLanguageValues(config: Partial<ProjectConfig>): Valid
   return Result.ok(undefined);
 }
 
+/**
+ * Validate framework-specific rules (e.g. Django brings its own ORM/migrations).
+ */
+function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResult<void> {
+  if (config.framework === "django") {
+    if (config.orm && config.orm !== "none") {
+      return Result.err(
+        new ValidationError({
+          message: `Django brings its own ORM — set orm to "none" when using Django.`,
+          field: "orm",
+          value: config.orm,
+        }),
+      );
+    }
+    if (config.migrations && config.migrations !== "none") {
+      return Result.err(
+        new ValidationError({
+          message: `Django brings its own migration system — set migrations to "none" when using Django.`,
+          field: "migrations",
+          value: config.migrations,
+        }),
+      );
+    }
+  }
+  return Result.ok(undefined);
+}
+
 export function processAndValidateFlags(
   options: CLIInput,
   _providedFlags: Set<string>,
@@ -124,11 +151,15 @@ export function processProvidedFlagsWithoutValidation(
 export function validateConfigCompatibility(
   config: Partial<ProjectConfig>,
 ): ValidationResult<void> {
-  return validatePerLanguageValues(config);
+  const langResult = validatePerLanguageValues(config);
+  if (langResult.isErr()) return langResult;
+  return validateFrameworkRules(config);
 }
 
 export function validateResolvedConfigCompatibility(config: ProjectConfig): ValidationResult<void> {
-  return validatePerLanguageValues(config);
+  const langResult = validatePerLanguageValues(config);
+  if (langResult.isErr()) return langResult;
+  return validateFrameworkRules(config);
 }
 
 export { getProvidedFlags as getProvidedFlagsReexport };

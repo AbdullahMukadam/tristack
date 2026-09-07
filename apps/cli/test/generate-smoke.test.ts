@@ -120,6 +120,36 @@ describe("createVirtual - go scaffold", () => {
   });
 });
 
+describe("createVirtual - django scaffold", () => {
+  it("generates a Django + DRF project with no ORM or migrations files", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "django",
+      orm: "none",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const managePy = findFile(tree.root, "manage.py");
+    expect(managePy).not.toBeNull();
+
+    const pyproject = findFile(tree.root, "pyproject.toml");
+    expect(pyproject).not.toBeNull();
+    expect(pyproject).toContain("djangorestframework");
+
+    expect(findFile(tree.root, "db.py")).toBeNull();
+    expect(findFile(tree.root, "alembic.ini")).toBeNull();
+  });
+});
+
 describe("validateResolvedConfigCompatibility", () => {
   it("accepts a valid python stack", () => {
     const base = {
@@ -164,5 +194,59 @@ describe("validateResolvedConfigCompatibility", () => {
       install: false,
     });
     expect(result.isErr()).toBe(true);
+  });
+
+  it("rejects Django with a non-none ORM", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "django",
+      orm: "sqlmodel",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("rejects Django with a non-none migrations tool", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "django",
+      orm: "none",
+      migrations: "alembic",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("accepts Django with orm and migrations set to none", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "django",
+      orm: "none",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isOk()).toBe(true);
   });
 });

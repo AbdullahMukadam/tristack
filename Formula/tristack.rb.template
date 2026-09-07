@@ -1,0 +1,42 @@
+# typed: false
+# frozen_string_literal: true
+
+# Auto-generated formula for TriStack CLI.
+# Update VERSION and SHA256 checksums on each release.
+
+class Tristack < Formula
+  desc "Scaffold backend projects in Python, Go, and Rust"
+  homepage "https://tristack.dev"
+  version "VERSION"
+  license "MIT"
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/tristack/tristack/releases/download/v#{version}/tristack-macos-arm64.tar.gz"
+      sha256 "SHA256_DARWIN_ARM64"
+    else
+      url "https://github.com/tristack/tristack/releases/download/v#{version}/tristack-macos-x64.tar.gz"
+      sha256 "SHA256_DARWIN_X64"
+    end
+  end
+
+  on_linux do
+    if Hardware::CPU.arm?
+      url "https://github.com/tristack/tristack/releases/download/v#{version}/tristack-linux-arm64.tar.gz"
+      sha256 "SHA256_LINUX_ARM64"
+    else
+      url "https://github.com/tristack/tristack/releases/download/v#{version}/tristack-linux-x64.tar.gz"
+      sha256 "SHA256_LINUX_X64"
+    end
+  end
+
+  def install
+    binary = Dir.children(".").grep(/^tristack-/).first
+    odie "tristack binary not found" unless binary
+    bin.install binary => "tristack"
+  end
+
+  test do
+    assert_match version.to_s, shell_output("#{bin}/tristack --version")
+  end
+end

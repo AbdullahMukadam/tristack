@@ -1,3 +1,4 @@
+{{#if (eq framework "fastapi")}}
 from fastapi.testclient import TestClient
 
 from {{project_slug}}.main import app
@@ -9,3 +10,27 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+{{else if (eq framework "litestar")}}
+from litestar.testing import TestClient
+
+from {{project_slug}}.main import app
+
+client = TestClient(app)
+
+
+def test_health():
+    with client:
+        response = client.get("/health")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok"}
+{{else if (eq framework "flask")}}
+from {{project_slug}}.main import app
+
+client = app.test_client()
+
+
+def test_health():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "ok"}
+{{/if}}

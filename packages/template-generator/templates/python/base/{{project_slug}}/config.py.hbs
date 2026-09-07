@@ -1,8 +1,4 @@
-"""Application configuration.
-
-Environment variables are read from a `.env` file at the project root. Copy
-`.env.example` to `.env` and adjust values as needed.
-"""
+"""Application configuration loaded from environment variables."""
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -14,8 +10,12 @@ class Settings(BaseSettings):
     app_name: str = "{{projectName}}"
     debug: bool = False
 
-    {{#if (ne database "none")}}
-    database_url: str = "{{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{{project_slug}}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql+asyncmy://root:password@localhost:3306/{{project_slug}}{{/if}}"
+    {{#if (eq database "sqlite")}}
+    database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
+    {{else if (eq database "postgres")}}
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{else if (eq database "mysql")}}
+    database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
     {{/if}}
 
 

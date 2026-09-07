@@ -12,18 +12,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          go-version: "stable"
+          cache: true
       - name: Install dependencies
         run: go mod tidy
+      {{#if (includes addons "air")}}
+      - name: Verify formatting
+        run: test -z "$(gofmt -l .)"
+      {{/if}}
       {{#if (includes addons "golangci-lint")}}
       - name: Lint
         uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.61
       {{/if}}
-      {{#if (includes addons "air")}}
-      - name: Check for unused
+      - name: Vet
         run: go vet ./...
-      {{/if}}
       - name: Test
         run: go test ./...

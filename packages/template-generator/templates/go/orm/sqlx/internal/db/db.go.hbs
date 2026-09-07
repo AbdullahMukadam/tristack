@@ -1,33 +1,51 @@
-// Package db provides sqlx-based database access for {{projectName}}.
 package db
 
 import (
 	"os"
+	"time"
 
 	"github.com/jmoiron/sqlx"
-{{#if (eq database "sqlite")}}
+	{{#if (eq database "sqlite")}}
 	_ "modernc.org/sqlite"
-{{else if (eq database "postgres")}}
+	{{else if (eq database "postgres")}}
 	_ "github.com/jackc/pgx/v5/stdlib"
-{{else if (eq database "mysql")}}
+	{{else if (eq database "mysql")}}
 	_ "github.com/go-sql-driver/mysql"
-{{/if}}
+	{{/if}}
 )
 
-// Connect opens a sqlx connection using the DATABASE_URL environment variable.
+func databaseURL() string {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn
+	}
+	{{#if (eq database "sqlite")}}
+	return "{{project_slug}}.db"
+	{{else if (eq database "postgres")}}
+	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+	{{else if (eq database "mysql")}}
+	return "mysql://root:password@localhost:3306/{{project_slug}}"
+	{{/if}}
+}
+
 func Connect() (*sqlx.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	{{#if (eq database "sqlite")}}
+	db, err := sqlx.Open("sqlite", databaseURL())
+	{{else if (eq database "postgres")}}
+	db, err := sqlx.Open("pgx", databaseURL())
+	{{else if (eq database "mysql")}}
+	db, err := sqlx.Open("mysql", databaseURL())
+	{{/if}}
+	if err != nil {
+		return nil, err
 	}
 
-{{#if (eq database "sqlite")}}
-	return sqlx.Open("sqlite", dsn)
-{{else if (eq database "postgres")}}
-	return sqlx.Open("pgx", dsn)
-{{else if (eq database "mysql")}}
-	return sqlx.Open("mysql", dsn)
-{{else}}
-	return sqlx.Open("sqlite", dsn)
-{{/if}}
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

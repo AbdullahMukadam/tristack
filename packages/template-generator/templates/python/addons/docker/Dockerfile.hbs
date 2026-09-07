@@ -2,17 +2,25 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install uv for dependency management
+# Install uv for dependency management.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install dependencies first for better layer caching
+# Install dependencies first for better layer caching.
 COPY pyproject.toml ./
 RUN uv sync --no-install-project --no-dev
 
-# Copy the rest of the application
+# Copy the rest of the application.
 COPY . .
 
 ENV PYTHONPATH=/app
 EXPOSE 8000
 
+{{#if (eq framework "fastapi")}}
 CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "litestar")}}
+CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "flask")}}
+CMD ["uv", "run", "flask", "--app", "{{project_slug}}.main", "run", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "django")}}
+CMD ["uv", "run", "gunicorn", "{{project_slug}}.wsgi", "--bind", "0.0.0.0:8000"]
+{{/if}}

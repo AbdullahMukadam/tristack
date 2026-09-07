@@ -104,24 +104,25 @@ volumes:
 {{else if (eq database "mysql")}}
   mysqldata:
 {{/if}}`],
-  ["go/addons/docker/Dockerfile.hbs", `FROM golang:1.22-alpine AS builder
+  ["go/addons/docker/Dockerfile.hbs", `# syntax=docker/dockerfile:1
 
+FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 go build -o /bin/{{project_slug}} .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} .
 
-FROM alpine:3.20
-
+FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app
-COPY --from=builder /bin/{{project_slug}} .
+
+COPY --from=builder /out/{{project_slug}} /usr/local/bin/{{project_slug}}
 
 EXPOSE 8000
-
-ENTRYPOINT ["/app/{{project_slug}}"]`],
+ENTRYPOINT ["/usr/local/bin/{{project_slug}}"]
+`],
   ["go/addons/github-actions/.github/workflows/ci.yml.hbs", `name: CI
 
 on:
@@ -136,21 +137,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          go-version: "stable"
+          cache: true
       - name: Install dependencies
         run: go mod tidy
+      {{#if (includes addons "air")}}
+      - name: Verify formatting
+        run: test -z "$(gofmt -l .)"
+      {{/if}}
       {{#if (includes addons "golangci-lint")}}
       - name: Lint
         uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.61
       {{/if}}
-      {{#if (includes addons "air")}}
-      - name: Check for unused
+      - name: Vet
         run: go vet ./...
-      {{/if}}
       - name: Test
-        run: go test ./...`],
+        run: go test ./...
+`],
   ["go/addons/golangci-lint/.golangci.yml.hbs", `run:
   timeout: 5m
   tests: true
@@ -175,16 +178,19 @@ bin/
 # Test binary
 *.test
 
-# Output of go coverage
+# Coverage output
 *.out
 *.prof
 
 # Dependency directories
 vendor/
 
-# Go workspace file
+# Go workspace files
 go.work
 go.work.sum
+
+# Air (live-reload) temp output
+tmp/
 
 # Environment
 .env
@@ -193,24 +199,25 @@ go.work.sum
 # IDE
 .idea
 .vscode
-*.swp`],
+*.swp
+`],
   ["go/base/.gitkeep", ``],
-  ["go/base/env.example.hbs", `# Copy this file to \`.env\` and adjust values for your environment.
+  ["go/base/env.example.hbs", `# Copy this file to \`.env\` and adjust the values for your environment.
 
-# The application name / debug flag
+# The application name shown in logs.
 APP_NAME={{projectName}}
-DEBUG=false
 
-# The port the server listens on
+# The port the HTTP server listens on.
 PORT=8000
 
 {{#if (ne database "none")}}
-# Database URL.
-# SQLite:  {{project_slug}}.db
+# Database connection string.
+# SQLite:  ./{{project_slug}}.db
 # Postgres: postgres://postgres:postgres@localhost:5432/{{project_slug}}
 # MySQL:   mysql://root:password@localhost:3306/{{project_slug}}
 DATABASE_URL={{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}
-{{/if}}`],
+{{/if}}
+`],
   ["go/base/go.mod.hbs", `module {{project_slug}}
 
 go 1.22
@@ -228,7 +235,7 @@ require github.com/go-chi/chi/v5 v5.1.0
 {{#if (eq orm "gorm")}}
 require gorm.io/gorm v1.25.12
 {{#if (eq database "sqlite")}}
-require gorm.io/driver/sqlite v1.5.7
+require github.com/glebarez/sqlite v1.11.0
 {{else if (eq database "postgres")}}
 require gorm.io/driver/postgres v1.5.9
 {{else if (eq database "mysql")}}
@@ -257,9 +264,9 @@ require github.com/go-sql-driver/mysql v1.8.1
 require github.com/pressly/goose/v3 v3.22.1
 {{else if (eq migrations "golang-migrate")}}
 require github.com/golang-migrate/migrate/v4 v4.18.1
-{{/if}}`],
-  ["go/framework/chi/main.go.hbs", `// {{projectName}} - a Go backend scaffolded with TriStack.
-package main
+{{/if}}
+`],
+  ["go/framework/chi/main.go.hbs", `package main
 
 import (
 	"log"
@@ -267,33 +274,59 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+{{/if}}
 )
 
 func main() {
+{{#if (ne orm "none")}}
+	if err := initDatabase(); err != nil {
+		log.Printf("database not ready: %v", err)
+	}
+{{/if}}
+
 	r := chi.NewRouter()
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(\`{"status":"ok"}\`))
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	name := os.Getenv("APP_NAME")
-	if name == "" {
-		name = "{{projectName}}"
-	}
-
-	log.Printf("%s listening on :%s", name, port)
-	if err := http.ListenAndServe(":"+port, r); err != nil {
+	addr := ":" + getenv("PORT", "8000")
+	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
+	if err := http.ListenAndServe(addr, r); err != nil {
 		log.Fatal(err)
 	}
-}`],
-  ["go/framework/echo/main.go.hbs", `// {{projectName}} - a Go backend scaffolded with TriStack.
-package main
+}
+
+{{#if (ne orm "none")}}
+func initDatabase() error {
+{{#if (eq orm "gorm")}}
+	gormDB, err := db.Connect()
+	if err != nil {
+		return err
+	}
+	return db.AutoMigrate(gormDB)
+{{else if (eq orm "sqlx")}}
+	_, err := db.Connect()
+	return err
+{{else if (eq orm "sqlc")}}
+	_, err := db.Connect()
+	return err
+{{/if}}
+}
+{{/if}}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+`],
+  ["go/framework/echo/main.go.hbs", `package main
 
 import (
 	"log"
@@ -301,64 +334,114 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+{{/if}}
 )
 
 func main() {
+{{#if (ne orm "none")}}
+	if err := initDatabase(); err != nil {
+		log.Printf("database not ready: %v", err)
+	}
+{{/if}}
+
 	e := echo.New()
 
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	name := os.Getenv("APP_NAME")
-	if name == "" {
-		name = "{{projectName}}"
-	}
-
-	log.Printf("%s listening on :%s", name, port)
-	if err := e.Start(":" + port); err != nil {
+	addr := ":" + getenv("PORT", "8000")
+	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
+	if err := e.Start(addr); err != nil {
 		log.Fatal(err)
 	}
-}`],
-  ["go/framework/fiber/main.go.hbs", `// {{projectName}} - a Go backend scaffolded with TriStack.
-package main
+}
+
+{{#if (ne orm "none")}}
+func initDatabase() error {
+{{#if (eq orm "gorm")}}
+	gormDB, err := db.Connect()
+	if err != nil {
+		return err
+	}
+	return db.AutoMigrate(gormDB)
+{{else if (eq orm "sqlx")}}
+	_, err := db.Connect()
+	return err
+{{else if (eq orm "sqlc")}}
+	_, err := db.Connect()
+	return err
+{{/if}}
+}
+{{/if}}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+`],
+  ["go/framework/fiber/main.go.hbs", `package main
 
 import (
 	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+{{/if}}
 )
 
 func main() {
+{{#if (ne orm "none")}}
+	if err := initDatabase(); err != nil {
+		log.Printf("database not ready: %v", err)
+	}
+{{/if}}
+
 	app := fiber.New()
 
 	app.Get("/health", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"status": "ok"})
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	name := os.Getenv("APP_NAME")
-	if name == "" {
-		name = "{{projectName}}"
-	}
-
-	log.Printf("%s listening on :%s", name, port)
-	if err := app.Listen(":" + port); err != nil {
+	addr := ":" + getenv("PORT", "8000")
+	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
+	if err := app.Listen(addr); err != nil {
 		log.Fatal(err)
 	}
-}`],
-  ["go/framework/gin/main.go.hbs", `// {{projectName}} - a Go backend scaffolded with TriStack.
-package main
+}
+
+{{#if (ne orm "none")}}
+func initDatabase() error {
+{{#if (eq orm "gorm")}}
+	gormDB, err := db.Connect()
+	if err != nil {
+		return err
+	}
+	return db.AutoMigrate(gormDB)
+{{else if (eq orm "sqlx")}}
+	_, err := db.Connect()
+	return err
+{{else if (eq orm "sqlc")}}
+	_, err := db.Connect()
+	return err
+{{/if}}
+}
+{{/if}}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+`],
+  ["go/framework/gin/main.go.hbs", `package main
 
 import (
 	"log"
@@ -366,65 +449,113 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+{{/if}}
 )
 
 func main() {
+{{#if (ne orm "none")}}
+	if err := initDatabase(); err != nil {
+		log.Printf("database not ready: %v", err)
+	}
+{{/if}}
+
 	r := gin.Default()
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	app := os.Getenv("APP_NAME")
-	if app == "" {
-		app = "{{projectName}}"
-	}
-
-	log.Printf("%s listening on :%s", app, port)
-	if err := r.Run(":" + port); err != nil {
+	addr := ":" + getenv("PORT", "8000")
+	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
+	if err := r.Run(addr); err != nil {
 		log.Fatal(err)
 	}
-}`],
-  ["go/framework/stdlib/main.go.hbs", `// {{projectName}} - a Go backend scaffolded with TriStack.
-package main
+}
+
+{{#if (ne orm "none")}}
+func initDatabase() error {
+{{#if (eq orm "gorm")}}
+	gormDB, err := db.Connect()
+	if err != nil {
+		return err
+	}
+	return db.AutoMigrate(gormDB)
+{{else if (eq orm "sqlx")}}
+	_, err := db.Connect()
+	return err
+{{else if (eq orm "sqlc")}}
+	_, err := db.Connect()
+	return err
+{{/if}}
+}
+{{/if}}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+`],
+  ["go/framework/stdlib/main.go.hbs", `package main
 
 import (
 	"log"
 	"net/http"
 	"os"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+{{/if}}
 )
 
 func main() {
-	mux := http.NewServeMux()
+{{#if (ne orm "none")}}
+	if err := initDatabase(); err != nil {
+		log.Printf("database not ready: %v", err)
+	}
+{{/if}}
 
+	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(\`{"status":"ok"}\`))
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	log.Printf("%s listening on :%s", appName(), port)
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	addr := ":" + getenv("PORT", "8000")
+	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
+	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func appName() string {
-	name := os.Getenv("APP_NAME")
-	if name == "" {
-		return "{{projectName}}"
+{{#if (ne orm "none")}}
+func initDatabase() error {
+{{#if (eq orm "gorm")}}
+	gormDB, err := db.Connect()
+	if err != nil {
+		return err
 	}
-	return name
-}`],
+	return db.AutoMigrate(gormDB)
+{{else if (eq orm "sqlx")}}
+	_, err := db.Connect()
+	return err
+{{else if (eq orm "sqlc")}}
+	_, err := db.Connect()
+	return err
+{{/if}}
+}
+{{/if}}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+`],
   ["go/migrations/golang-migrate/db/migrations/0001_create_items.down.sql.hbs", `DROP TABLE items;`],
   ["go/migrations/golang-migrate/db/migrations/0001_create_items.up.sql.hbs", `CREATE TABLE items (
     id TEXT PRIMARY KEY,
@@ -440,125 +571,201 @@ CREATE TABLE items (
 
 -- +goose Down
 DROP TABLE items;`],
-  ["go/orm/gorm/internal/db/db.go.hbs", `// Package db provides GORM-based database access for {{projectName}}.
-package db
+  ["go/orm/gorm/internal/db/db.go.hbs", `package db
 
 import (
 	"os"
+	"time"
 
-	"gorm.io/driver/mysql"
-	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	{{#if (eq database "sqlite")}}
+	"github.com/glebarez/sqlite"
+	{{else if (eq database "postgres")}}
+	"gorm.io/driver/postgres"
+	{{else if (eq database "mysql")}}
+	"gorm.io/driver/mysql"
+	{{/if}}
 )
 
-// Connect opens a GORM connection using the DATABASE_URL environment variable.
-func Connect() (*gorm.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+func databaseURL() string {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn
 	}
-
-{{#if (eq database "sqlite")}}
-	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
-{{else if (eq database "postgres")}}
-	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
-{{else if (eq database "mysql")}}
-	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
-{{else}}
-	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
-{{/if}}
+	{{#if (eq database "sqlite")}}
+	return "{{project_slug}}.db"
+	{{else if (eq database "postgres")}}
+	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+	{{else if (eq database "mysql")}}
+	return "mysql://root:password@localhost:3306/{{project_slug}}"
+	{{/if}}
 }
 
-// AutoMigrate creates or updates the tables defined by the models.
+func Connect() (*gorm.DB, error) {
+	{{#if (eq database "sqlite")}}
+	db, err := gorm.Open(sqlite.Open(databaseURL()), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+	})
+	{{else if (eq database "postgres")}}
+	db, err := gorm.Open(postgres.Open(databaseURL()), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+	})
+	{{else if (eq database "mysql")}}
+	db, err := gorm.Open(mysql.Open(databaseURL()), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+	})
+	{{/if}}
+	if err != nil {
+		return nil, err
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	sqlDB.SetMaxOpenConns(25)
+	sqlDB.SetMaxIdleConns(25)
+	sqlDB.SetConnMaxLifetime(5 * time.Minute)
+
+	if err := sqlDB.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
 func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(&Item{})
-}`],
+}
+`],
   ["go/orm/gorm/internal/db/models.go.hbs", `package db
 
 import "time"
 
-// Item is an example model. Replace or remove as needed.
 type Item struct {
-	ID        string    \`gorm:"primaryKey" json:"id"\`
+	ID        string    \`gorm:"primarykey" json:"id"\`
 	Name      string    \`json:"name"\`
 	CreatedAt time.Time \`json:"created_at"\`
-}`],
-  ["go/orm/sqlc/internal/db/db.go.hbs", `// Package db provides database/sql access for {{projectName}} via sqlc.
-package db
+	UpdatedAt time.Time \`json:"updated_at"\`
+}
+`],
+  ["go/orm/sqlc/internal/db/db.go.hbs", `package db
 
 import (
 	"database/sql"
 	"os"
-{{#if (eq database "sqlite")}}
+	"time"
+	{{#if (eq database "sqlite")}}
 	_ "modernc.org/sqlite"
-{{else if (eq database "postgres")}}
+	{{else if (eq database "postgres")}}
 	_ "github.com/jackc/pgx/v5/stdlib"
-{{else if (eq database "mysql")}}
+	{{else if (eq database "mysql")}}
 	_ "github.com/go-sql-driver/mysql"
-{{/if}}
+	{{/if}}
 )
 
-// Connect opens a database handle using the DATABASE_URL environment variable.
+func databaseURL() string {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn
+	}
+	{{#if (eq database "sqlite")}}
+	return "{{project_slug}}.db"
+	{{else if (eq database "postgres")}}
+	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+	{{else if (eq database "mysql")}}
+	return "mysql://root:password@localhost:3306/{{project_slug}}"
+	{{/if}}
+}
+
 func Connect() (*sql.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	{{#if (eq database "sqlite")}}
+	db, err := sql.Open("sqlite", databaseURL())
+	{{else if (eq database "postgres")}}
+	db, err := sql.Open("pgx", databaseURL())
+	{{else if (eq database "mysql")}}
+	db, err := sql.Open("mysql", databaseURL())
+	{{/if}}
+	if err != nil {
+		return nil, err
 	}
 
-{{#if (eq database "sqlite")}}
-	return sql.Open("sqlite", dsn)
-{{else if (eq database "postgres")}}
-	return sql.Open("pgx", dsn)
-{{else if (eq database "mysql")}}
-	return sql.Open("mysql", dsn)
-{{else}}
-	return sql.Open("sqlite", dsn)
-{{/if}}
-}`],
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+`],
   ["go/orm/sqlc/sqlc.yaml.hbs", `version: "2"
 sql:
-  - engine: "sqlite" # Set to postgresql or mysql as needed
+  - engine: "{{#if (eq database "postgres")}}postgresql{{else if (eq database "mysql")}}mysql{{else}}sqlite{{/if}}"
     queries: "queries"
     schema: "schema"
     gen:
       go:
-        package: "store"
-        out: "internal/store"
-        sql_package: "database/sql"`],
-  ["go/orm/sqlx/internal/db/db.go.hbs", `// Package db provides sqlx-based database access for {{projectName}}.
-package db
+        package: "sqlc"
+        out: "internal/db/sqlc"
+        sql_package: "database/sql"
+        emit_json_tags: true
+        emit_prepared_queries: true
+`],
+  ["go/orm/sqlx/internal/db/db.go.hbs", `package db
 
 import (
 	"os"
+	"time"
 
 	"github.com/jmoiron/sqlx"
-{{#if (eq database "sqlite")}}
+	{{#if (eq database "sqlite")}}
 	_ "modernc.org/sqlite"
-{{else if (eq database "postgres")}}
+	{{else if (eq database "postgres")}}
 	_ "github.com/jackc/pgx/v5/stdlib"
-{{else if (eq database "mysql")}}
+	{{else if (eq database "mysql")}}
 	_ "github.com/go-sql-driver/mysql"
-{{/if}}
+	{{/if}}
 )
 
-// Connect opens a sqlx connection using the DATABASE_URL environment variable.
+func databaseURL() string {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn
+	}
+	{{#if (eq database "sqlite")}}
+	return "{{project_slug}}.db"
+	{{else if (eq database "postgres")}}
+	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+	{{else if (eq database "mysql")}}
+	return "mysql://root:password@localhost:3306/{{project_slug}}"
+	{{/if}}
+}
+
 func Connect() (*sqlx.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "{{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}"
+	{{#if (eq database "sqlite")}}
+	db, err := sqlx.Open("sqlite", databaseURL())
+	{{else if (eq database "postgres")}}
+	db, err := sqlx.Open("pgx", databaseURL())
+	{{else if (eq database "mysql")}}
+	db, err := sqlx.Open("mysql", databaseURL())
+	{{/if}}
+	if err != nil {
+		return nil, err
 	}
 
-{{#if (eq database "sqlite")}}
-	return sqlx.Open("sqlite", dsn)
-{{else if (eq database "postgres")}}
-	return sqlx.Open("pgx", dsn)
-{{else if (eq database "mysql")}}
-	return sqlx.Open("mysql", dsn)
-{{else}}
-	return sqlx.Open("sqlite", dsn)
-{{/if}}
-}`],
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+`],
   ["python/addons/docker/_dockerignore", `.git
 .gitignore
 .venv
@@ -608,20 +815,28 @@ volumes:
 
 WORKDIR /app
 
-# Install uv for dependency management
+# Install uv for dependency management.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install dependencies first for better layer caching
+# Install dependencies first for better layer caching.
 COPY pyproject.toml ./
 RUN uv sync --no-install-project --no-dev
 
-# Copy the rest of the application
+# Copy the rest of the application.
 COPY . .
 
 ENV PYTHONPATH=/app
 EXPOSE 8000
 
+{{#if (eq framework "fastapi")}}
 CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "litestar")}}
+CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "flask")}}
+CMD ["uv", "run", "flask", "--app", "{{project_slug}}.main", "run", "--host", "0.0.0.0", "--port", "8000"]
+{{else if (eq framework "django")}}
+CMD ["uv", "run", "gunicorn", "{{project_slug}}.wsgi", "--bind", "0.0.0.0:8000"]
+{{/if}}
 `],
   ["python/addons/github-actions/.github/workflows/ci.yml.hbs", `name: CI
 
@@ -664,7 +879,8 @@ plugins = ["pydantic.mypy"]
 module = "{{project_slug}}.*"
 follow_imports = "normal"
 `],
-  ["python/addons/pytest/tests/test_health.py.hbs", `from fastapi.testclient import TestClient
+  ["python/addons/pytest/tests/test_health.py.hbs", `{{#if (eq framework "fastapi")}}
+from fastapi.testclient import TestClient
 
 from {{project_slug}}.main import app
 
@@ -675,6 +891,30 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+{{else if (eq framework "litestar")}}
+from litestar.testing import TestClient
+
+from {{project_slug}}.main import app
+
+client = TestClient(app)
+
+
+def test_health():
+    with client:
+        response = client.get("/health")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok"}
+{{else if (eq framework "flask")}}
+from {{project_slug}}.main import app
+
+client = app.test_client()
+
+
+def test_health():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "ok"}
+{{/if}}
 `],
   ["python/addons/ruff/ruff.toml.hbs", `line-length = 100
 target-version = "py312"
@@ -688,11 +928,7 @@ known-first-party = ["{{project_slug}}"]
 `],
   ["python/base/{{project_slug}}/__init__.py.hbs", `"""{{projectName}} - a {{framework}} backend scaffolded with TriStack."""
 `],
-  ["python/base/{{project_slug}}/config.py.hbs", `"""Application configuration.
-
-Environment variables are read from a \`.env\` file at the project root. Copy
-\`.env.example\` to \`.env\` and adjust values as needed.
-"""
+  ["python/base/{{project_slug}}/config.py.hbs", `"""Application configuration loaded from environment variables."""
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -704,8 +940,12 @@ class Settings(BaseSettings):
     app_name: str = "{{projectName}}"
     debug: bool = False
 
-    {{#if (ne database "none")}}
-    database_url: str = "{{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{{project_slug}}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql+asyncmy://root:password@localhost:3306/{{project_slug}}{{/if}}"
+    {{#if (eq database "sqlite")}}
+    database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
+    {{else if (eq database "postgres")}}
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{else if (eq database "mysql")}}
+    database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
     {{/if}}
 
 
@@ -713,18 +953,18 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     return Settings()
 `],
-  ["python/base/env.example.hbs", `# Copy this file to \`.env\` and adjust values for your environment.
+  ["python/base/env.example.hbs", `# Copy this file to \`.env\` and adjust the values for your environment.
 
-# The application name / debug flag
+# Application settings.
 APP_NAME={{projectName}}
 DEBUG=false
 
 {{#if (ne database "none")}}
-# Database URL.
+# Database connection string.
 # SQLite:  sqlite+aiosqlite:///./{{project_slug}}.db
 # Postgres: postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}
 # MySQL:   mysql+asyncmy://root:password@localhost:3306/{{project_slug}}
-DATABASE_URL=sqlite+aiosqlite:///./{{project_slug}}.db
+DATABASE_URL={{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{{project_slug}}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql+asyncmy://root:password@localhost:3306/{{project_slug}}{{/if}}
 {{/if}}
 `],
   ["python/base/pyproject-pip.toml.hbs", `[project]
@@ -739,10 +979,12 @@ dependencies = [
     "uvicorn[standard]",
 {{else if (eq framework "litestar")}}
     "litestar",
+    "uvicorn[standard]",
 {{else if (eq framework "django")}}
     "django",
     "djangorestframework",
     "django-cors-headers",
+    "gunicorn",
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}
@@ -794,10 +1036,12 @@ fastapi = "^0.115"
 uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "litestar")}}
 litestar = "^2.14"
+uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "django")}}
 django = "^5.1"
 djangorestframework = "^3.15"
 django-cors-headers = "^4.6"
+gunicorn = "^23.0"
 {{else if (eq framework "flask")}}
 flask = "^3.1"
 {{/if}}
@@ -835,10 +1079,12 @@ dependencies = [
     "uvicorn[standard]",
 {{else if (eq framework "litestar")}}
     "litestar",
+    "uvicorn[standard]",
 {{else if (eq framework "django")}}
     "django",
     "djangorestframework",
     "django-cors-headers",
+    "gunicorn",
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}
@@ -1071,6 +1317,7 @@ if __name__ == "__main__":
     main()
 `],
   ["python/framework/fastapi/{{project_slug}}/main.py.hbs", `"""FastAPI application entrypoint for {{projectName}}."""
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -1082,32 +1329,24 @@ settings = get_settings()
 
 {{#if (and (ne database "none") (eq migrations "none"))}}
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from .db import init_db
 
     await init_db()
     yield
 {{else}}
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
 {{/if}}
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
-{{#if (ne database "none")}}
-from .db import get_session  # noqa: E402
-
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, str]:
     return {"status": "ok"}
-{{else}}
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
-{{/if}}
 `],
   ["python/framework/flask/{{project_slug}}/main.py.hbs", `"""Flask application entrypoint for {{projectName}}."""
 from flask import Flask, jsonify
@@ -1184,8 +1423,8 @@ datefmt = %H:%M:%S
 `],
   ["python/migrations/alembic/migrations/env.py.hbs", `"""Alembic migration environment.
 
-Url is read from the application settings so a single config works for
-SQLite, Postgres, and MySQL automatically.
+The database URL is read from the application settings so a single config
+works across SQLite, Postgres, and MySQL.
 """
 import asyncio
 from logging.config import fileConfig
@@ -1194,9 +1433,10 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from sqlmodel import SQLModel
 
 {{#if (eq orm "sqlmodel")}}
+from sqlmodel import SQLModel
+
 from {{project_slug}}.config import get_settings
 from {{project_slug}}.models import Item  # noqa: F401  (registers tables on SQLModel.metadata)
 {{else if (eq orm "sqlalchemy")}}
@@ -1205,15 +1445,13 @@ from {{project_slug}}.models import Base
 {{/if}}
 
 config = context.config
-{{#if (eq orm "sqlmodel")}}
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+{{#if (eq orm "sqlmodel")}}
 target_metadata = SQLModel.metadata
 {{else if (eq orm "sqlalchemy")}}
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
-
 target_metadata = Base.metadata
 {{/if}}
 
@@ -1221,9 +1459,8 @@ settings = get_settings()
 
 
 def run_migrations_offline() -> None:
-    url = settings.database_url
     context.configure(
-        url=url,
+        url=settings.database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -1299,8 +1536,8 @@ def downgrade() -> None:
 
 # Generated revisions are placed in this directory.
 `],
-  ["python/orm/sqlmodel/{{project_slug}}/db.py.hbs", `"""Database engine and session management using SQLModel."""
-from collections.abc import AsyncGenerator
+  ["python/orm/sqlmodel/{{project_slug}}/db.py.hbs", `"""Database engine and session management built on SQLModel."""
+from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
@@ -1313,23 +1550,22 @@ engine = create_async_engine(settings.database_url, echo=settings.debug)
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    """FastAPI dependency that yields a database session."""
+async def get_session() -> AsyncIterator[AsyncSession]:
+    """Yield an open database session for a request scope."""
     async with SessionLocal() as session:
         yield session
 
 
 {{#if (eq migrations "none")}}
 async def init_db() -> None:
-    """Create all tables (used when migrations are not enabled)."""
-    # Import models so they are registered on the metadata before create_all.
+    """Create tables directly when migrations are not enabled."""
     from . import models  # noqa: F401
 
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 {{/if}}
 `],
-  ["python/orm/sqlmodel/{{project_slug}}/models.py.hbs", `"""SQLModel models for {{projectName}}."""
+  ["python/orm/sqlmodel/{{project_slug}}/models.py.hbs", `"""Domain models for {{projectName}}."""
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -1341,7 +1577,7 @@ def utcnow() -> datetime:
 
 
 class Item(SQLModel, table=True):
-    """Example model. Replace or remove as needed."""
+    """Sample model. Replace with your own domain models."""
 
     id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
     name: str

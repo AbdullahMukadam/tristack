@@ -1,18 +1,18 @@
-FROM golang:1.22-alpine AS builder
+# syntax=docker/dockerfile:1
 
+FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 go build -o /bin/{{project_slug}} .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} .
 
-FROM alpine:3.20
-
+FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app
-COPY --from=builder /bin/{{project_slug}} .
+
+COPY --from=builder /out/{{project_slug}} /usr/local/bin/{{project_slug}}
 
 EXPOSE 8000
-
-ENTRYPOINT ["/app/{{project_slug}}"]
+ENTRYPOINT ["/usr/local/bin/{{project_slug}}"]

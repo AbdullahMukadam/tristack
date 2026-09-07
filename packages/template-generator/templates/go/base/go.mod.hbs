@@ -15,7 +15,7 @@ require github.com/go-chi/chi/v5 v5.1.0
 {{#if (eq orm "gorm")}}
 require gorm.io/gorm v1.25.12
 {{#if (eq database "sqlite")}}
-require gorm.io/driver/sqlite v1.5.7
+require github.com/glebarez/sqlite v1.11.0
 {{else if (eq database "postgres")}}
 require gorm.io/driver/postgres v1.5.9
 {{else if (eq database "mysql")}}

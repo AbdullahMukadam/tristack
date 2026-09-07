@@ -13,10 +13,12 @@ fastapi = "^0.115"
 uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "litestar")}}
 litestar = "^2.14"
+uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "django")}}
 django = "^5.1"
 djangorestframework = "^3.15"
 django-cors-headers = "^4.6"
+gunicorn = "^23.0"
 {{else if (eq framework "flask")}}
 flask = "^3.1"
 {{/if}}

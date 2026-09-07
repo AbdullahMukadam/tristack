@@ -1,10 +1,12 @@
 version: "2"
 sql:
-  - engine: "sqlite" # Set to postgresql or mysql as needed
+  - engine: "{{#if (eq database "postgres")}}postgresql{{else if (eq database "mysql")}}mysql{{else}}sqlite{{/if}}"
     queries: "queries"
     schema: "schema"
     gen:
       go:
-        package: "store"
-        out: "internal/store"
+        package: "sqlc"
+        out: "internal/db/sqlc"
         sql_package: "database/sql"
+        emit_json_tags: true
+        emit_prepared_queries: true

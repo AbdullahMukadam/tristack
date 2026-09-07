@@ -10,10 +10,12 @@ dependencies = [
     "uvicorn[standard]",
 {{else if (eq framework "litestar")}}
     "litestar",
+    "uvicorn[standard]",
 {{else if (eq framework "django")}}
     "django",
     "djangorestframework",
     "django-cors-headers",
+    "gunicorn",
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}

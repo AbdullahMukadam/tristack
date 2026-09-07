@@ -10,16 +10,19 @@ bin/
 # Test binary
 *.test
 
-# Output of go coverage
+# Coverage output
 *.out
 *.prof
 
 # Dependency directories
 vendor/
 
-# Go workspace file
+# Go workspace files
 go.work
 go.work.sum
+
+# Air (live-reload) temp output
+tmp/
 
 # Environment
 .env
