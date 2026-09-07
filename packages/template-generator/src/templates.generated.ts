@@ -440,7 +440,7 @@ CREATE TABLE items (
 
 -- +goose Down
 DROP TABLE items;`],
-  ["go/orm/gorm/db.go.hbs", `// Package db provides GORM-based database access for {{projectName}}.
+  ["go/orm/gorm/internal/db/db.go.hbs", `// Package db provides GORM-based database access for {{projectName}}.
 package db
 
 import (
@@ -474,7 +474,7 @@ func Connect() (*gorm.DB, error) {
 func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(&Item{})
 }`],
-  ["go/orm/gorm/models.go.hbs", `package db
+  ["go/orm/gorm/internal/db/models.go.hbs", `package db
 
 import "time"
 
@@ -484,7 +484,7 @@ type Item struct {
 	Name      string    \`json:"name"\`
 	CreatedAt time.Time \`json:"created_at"\`
 }`],
-  ["go/orm/sqlc/db.go.hbs", `// Package db provides database/sql access for {{projectName}} via sqlc.
+  ["go/orm/sqlc/internal/db/db.go.hbs", `// Package db provides database/sql access for {{projectName}} via sqlc.
 package db
 
 import (
@@ -526,7 +526,7 @@ sql:
         package: "store"
         out: "internal/store"
         sql_package: "database/sql"`],
-  ["go/orm/sqlx/db.go.hbs", `// Package db provides sqlx-based database access for {{projectName}}.
+  ["go/orm/sqlx/internal/db/db.go.hbs", `// Package db provides sqlx-based database access for {{projectName}}.
 package db
 
 import (

@@ -17,6 +17,19 @@ function findFile(root: VirtualNode, name: string): string | null {
   return null;
 }
 
+function findByPath(root: VirtualNode, parts: string[]): string | null {
+  const [head, ...rest] = parts;
+  const child = root.children.find((node) => node.name === head);
+  if (!child) return null;
+  if (rest.length === 0 && child.type === "file") return child.content;
+  return findByPath(child, rest);
+}
+
+function rootFileNames(root: VirtualNode): string[] {
+  if (root.type !== "directory") return [];
+  return root.children.filter((node) => node.type === "file").map((node) => node.name);
+}
+
 describe("createVirtual - python fastapi scaffold", () => {
   it("generates a FastAPI + SQLModel project", async () => {
     const result = await createVirtual({
@@ -75,6 +88,13 @@ describe("createVirtual - go scaffold", () => {
 
     const dockerfile = findFile(tree.root, "Dockerfile");
     expect(dockerfile).not.toBeNull();
+
+    expect(rootFileNames(tree.root)).not.toContain("db.go");
+
+    const dbGo = findByPath(tree.root, ["internal", "db", "db.go"]);
+    expect(dbGo).not.toBeNull();
+    expect(dbGo).toContain("package db");
+    expect(findByPath(tree.root, ["internal", "db", "models.go"])).not.toBeNull();
 
     expect(findFile(tree.root, "fastapi")).toBeNull();
   });
