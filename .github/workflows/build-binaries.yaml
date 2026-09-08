@@ -24,7 +24,7 @@ jobs:
         include:
           - os: macos-latest
             target: tristack-macos-arm64
-          - os: macos-13
+          - os: macos-14
             target: tristack-macos-x64
           - os: ubuntu-latest
             target: tristack-linux-x64
