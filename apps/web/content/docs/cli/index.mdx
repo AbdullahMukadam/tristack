@@ -5,7 +5,7 @@ description: Complete reference for all TriStack CLI commands
 
 ## Overview
 
-The TriStack CLI ships as a standalone native binary. It scaffolds Python backend projects directly: `uvx tristack` (or `uv tool install tristack` / `pipx install tristack`). It ships two commands today — `create` (the default) and `create-json` — plus a programmatic npm API for Node environments.
+The TriStack CLI ships as a standalone native binary. It scaffolds Python, Go, and Rust backend projects: `uvx tristack` for Python (or `uv tool install tristack` / `pipx install tristack`), and the standalone `tristack` command for Go and Rust (curl/Homebrew installers). It ships two commands today — `create` (the default) and `create-json` — plus a programmatic npm API for Node environments.
 
 ## `create` (Default Command)
 
@@ -25,7 +25,7 @@ uvx tristack [project-directory] [options]
 - `--dry-run`: Validate configuration and target directory without writing files
 - `--verbose`: Show detailed result information as JSON
 - `--yolo`: Bypass validations and compatibility checks
-- `--language <lang>`: `python` (Go and Rust are reserved for later phases)
+- `--language <lang>`: `python`, `go`, `rust`
 - `--framework <framework>` (Python): FastAPI (default), Litestar, Django, Flask
 - `--orm <orm>` (Python): `sqlmodel` (default), `sqlalchemy`, `tortoise`, `none`
 - `--migrations <tool>` (Python): `alembic` (default), `none`
@@ -60,6 +60,16 @@ uvx tristack my-api \
   --database postgres \
   --package-manager uv \
   --addons docker,ruff,pytest,github-actions
+
+# Rust stack (standalone binary)
+tristack my-api \
+  --language rust \
+  --framework axum \
+  --orm seaorm \
+  --migrations none \
+  --database sqlite \
+  --package-manager cargo \
+  --addons docker,cargo-watch,clippy
 
 # Validate without writing files
 uvx tristack my-api --yes --dry-run

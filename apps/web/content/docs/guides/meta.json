@@ -1,5 +1,5 @@
 {
   "title": "Guides",
   "defaultOpen": true,
-  "pages": ["index", "python-quick-start"]
+  "pages": ["index", "python-quick-start", "go-quick-start", "rust-quick-start"]
 }

@@ -1,0 +1,107 @@
+---
+title: Rust Quick Start
+description: Scaffold and run your first Axum + SeaORM project end to end
+---
+
+## Overview
+
+This guide walks through the default Rust flow: scaffold an Axum + SeaORM + SQLite project, run it, and verify the health endpoint. Rust projects run the CLI as the standalone `tristack` binary.
+
+## 1. Scaffold
+
+```bash
+tristack my-api
+```
+
+Follow the prompts, or skip them and take the defaults completely non-interactively:
+
+```bash
+tristack my-api --yes
+```
+
+After scaffolding you'll see the reproducible command, which is also saved to `tristack.jsonc` inside the project.
+
+## 2. Run it
+
+```bash
+cd my-api
+cp .env.example .env
+cargo build
+cargo watch -x run
+```
+
+Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
+
+<Callout title="Note">
+  The package name is a slugged version of your project name (`my-api` → `my_api`), sources live in
+  `src/` (`src/main.rs` entrypoint, `src/db.rs` data layer), and the port (`8000`) and app name come
+  from `PORT` and `APP_NAME` in `.env`.
+</Callout>
+
+## 3. Common commands
+
+```bash
+cargo build        # install/compile dependencies (default package manager)
+cargo run          # run without the cargo-watch addon
+cargo watch -x run # live reload (cargo-watch addon)
+cargo clippy       # lint (clippy addon)
+cargo fmt          # format
+```
+
+### Database migrations
+
+Rust stacks default to no migration tool (`--migrations none`). Run migrations with your ORM's own tooling:
+
+```bash
+diesel migration run      # Diesel
+sea-orm-cli migrate run   # SeaORM
+sqlx migrate run          # sqlx
+```
+
+### Docker
+
+With the `docker` addon, run the whole stack in containers:
+
+```bash
+docker compose up --build
+```
+
+## 4. Other frameworks
+
+The stack varies by framework — same flow, different server:
+
+| Framework      | Scaffold flag           | Run                                |
+| -------------- | ----------------------- | ---------------------------------- |
+| Axum (default) | `--framework axum`      | `cargo watch -x run` / `cargo run` |
+| Actix Web      | `--framework actix-web` | `cargo watch -x run` / `cargo run` |
+| Rocket         | `--framework rocket`    | `cargo run`                        |
+| Warp           | `--framework warp`      | `cargo watch -x run` / `cargo run` |
+| Salvo          | `--framework salvo`     | `cargo watch -x run` / `cargo run` |
+| Loco           | `--framework loco`      | `cargo run`                        |
+
+## 5. Reproduce the same stack
+
+Every scaffold prints a reproducible command and stores it in `tristack.jsonc`:
+
+```bash
+tristack my-api \
+  --language rust \
+  --framework axum \
+  --orm seaorm \
+  --migrations none \
+  --database sqlite \
+  --package-manager cargo \
+  --addons docker,cargo-watch,clippy
+```
+
+Or validate it without writing anything:
+
+```bash
+tristack my-api --yes --dry-run
+```
+
+## Next steps
+
+- [Project Structure](/docs/project-structure) — exactly what gets generated
+- [CLI Options](/docs/cli/options) — every flag
+- [Compatibility](/docs/cli/compatibility) — valid combinations

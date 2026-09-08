@@ -1583,7 +1583,487 @@ class Item(SQLModel, table=True):
     name: str
     created_at: datetime = Field(default_factory=utcnow)
 `],
-  ["rust/base/.gitkeep", ``]
+  ["rust/addons/cargo-watch/cargo-watch.toml.hbs", `watch = ["src", "config", "Cargo.toml"]
+
+commands = { run = "cargo run" }`],
+  ["rust/addons/clippy/clippy.toml.hbs", `# Clippy configuration.
+# See https://rust-lang.github.io/rust-clippy/ for options.
+
+off-warnings = true`],
+  ["rust/addons/docker/_dockerignore", `# Copy this file to \`.dockerignore\` and adjust as needed.
+
+target/
+.env
+.env.local
+.git
+.gitignore
+*.md
+Dockerfile*`],
+  ["rust/addons/docker/docker-compose.yml.hbs", `services:
+{{#if (eq database "postgres")}}
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: {{project_slug}}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+{{else if (eq database "mysql")}}
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: {{project_slug}}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+{{/if}}
+
+volumes:
+{{#if (eq database "postgres")}}
+  pgdata:
+{{else if (eq database "mysql")}}
+  mysqldata:
+{{/if}}`],
+  ["rust/addons/docker/Dockerfile.hbs", `# syntax=docker/dockerfile:1
+
+FROM rust:1.80-slim AS builder
+WORKDIR /app
+
+COPY Cargo.toml Cargo.lock* ./
+RUN cargo build --release
+
+COPY . .
+RUN cargo build --release
+
+FROM debian:bookworm-slim
+WORKDIR /app
+
+COPY --from=builder /app/target/release/{{project_slug}} /usr/local/bin/{{project_slug}}
+
+EXPOSE 8000
+ENTRYPOINT ["/usr/local/bin/{{project_slug}}"]`],
+  ["rust/addons/github-actions/.github/workflows/ci.yml.hbs", `name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Build
+        run: cargo build --all-targets
+      {{#if (includes addons "clippy")}}
+      - name: Lint
+        run: cargo clippy -- -D warnings
+      {{/if}}
+      - name: Format check
+        run: cargo fmt -- --check`],
+  ["rust/base/_gitignore", `# Build output
+/target/
+
+# Cargo artifacts
+**/*.rs.bk
+*.pdb
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db`],
+  ["rust/base/.gitkeep", ``],
+  ["rust/base/Cargo.toml.hbs", `[package]
+name = "{{project_slug}}"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dotenvy = "0.15"
+
+{{#if (eq framework "axum")}}
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+{{else if (eq framework "actix-web")}}
+actix-web = "4"
+{{else if (eq framework "rocket")}}
+rocket = "0.5"
+{{else if (eq framework "warp")}}
+warp = "0.3"
+tokio = { version = "1", features = ["full"] }
+{{else if (eq framework "salvo")}}
+salvo = "0.75"
+tokio = { version = "1", features = ["full"] }
+{{else if (eq framework "loco")}}
+loco-rs = "0.4"
+{{/if}}
+
+{{#if (eq orm "seaorm")}}
+{{#if (eq database "sqlite")}}
+sea-orm = { version = "1", features = ["sqlx-sqlite", "runtime-tokio-rustls"] }
+{{else if (eq database "postgres")}}
+sea-orm = { version = "1", features = ["sqlx-postgres", "runtime-tokio-rustls"] }
+{{else if (eq database "mysql")}}
+sea-orm = { version = "1", features = ["sqlx-mysql", "runtime-tokio-rustls"] }
+{{/if}}
+{{else if (eq orm "diesel")}}
+{{#if (eq database "sqlite")}}
+diesel = { version = "2", features = ["sqlite"] }
+{{else if (eq database "postgres")}}
+diesel = { version = "2", features = ["postgres"] }
+{{else if (eq database "mysql")}}
+diesel = { version = "2", features = ["mysql"] }
+{{/if}}
+{{else if (eq orm "sqlx-rust")}}
+{{#if (eq database "sqlite")}}
+sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }
+{{else if (eq database "postgres")}}
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }
+{{else if (eq database "mysql")}}
+sqlx = { version = "0.8", features = ["runtime-tokio", "mysql"] }
+{{/if}}
+{{/if}}`],
+  ["rust/base/env.example.hbs", `# Copy this file to \`.env\` and adjust the values for your environment.
+
+# The application name shown in logs.
+APP_NAME={{projectName}}
+
+# The port the HTTP server listens on.
+PORT=8000
+
+{{#if (ne database "none")}}
+# Database connection string.
+# SQLite:  ./{{project_slug}}.db
+# Postgres: postgres://postgres:postgres@localhost:5432/{{project_slug}}
+# MySQL:   mysql://root:password@localhost:3306/{{project_slug}}
+DATABASE_URL={{#if (eq database "sqlite")}}{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}
+{{/if}}`],
+  ["rust/framework/actix-web/src/main.rs.hbs", `use std::env;
+
+use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    let addr = format!(
+        "0.0.0.0:{}",
+        env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
+    );
+
+    println!(
+        "{} listening on {}",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        addr,
+    );
+
+    HttpServer::new(|| App::new().route("/health", web::get().to(health)))
+        .bind(addr)?
+        .run()
+        .await
+}
+
+async fn health() -> impl Responder {
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body("{\\"status\\":\\"ok\\"}")
+}`],
+  ["rust/framework/axum/src/main.rs.hbs", `use std::env;
+
+use axum::{routing::get, Router};
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[tokio::main]
+async fn main() {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    let router = Router::new().route("/health", get(health));
+
+    let addr = format!(
+        "0.0.0.0:{}",
+        env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
+    );
+    let listener = tokio::net::TcpListener::bind(&addr)
+        .await
+        .expect("failed to bind");
+
+    println!(
+        "{} listening on {}",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        addr,
+    );
+
+    axum::serve(listener, router).await.expect("server error");
+}
+
+async fn health() -> &'static str {
+    "{\\"status\\":\\"ok\\"}"
+}`],
+  ["rust/framework/loco/src/main.rs.hbs", `use std::env;
+
+use loco_rs::prelude::*;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    println!(
+        "{} initialized",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+    );
+
+    Ok(())
+}`],
+  ["rust/framework/rocket/src/main.rs.hbs", `#[macro_use]
+extern crate rocket;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[get("/health")]
+fn health() -> &'static str {
+    "{\\"status\\":\\"ok\\"}"
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let config = rocket::Config {
+        port: std::env::var("PORT")
+            .unwrap_or_else(|_| "8000".to_string())
+            .parse()
+            .expect("invalid PORT"),
+        ..Default::default()
+    };
+    let _ = rocket::custom(config).mount("/", routes![health]).launch().await?;
+    Ok(())
+}`],
+  ["rust/framework/salvo/src/main.rs.hbs", `use std::env;
+
+use salvo::prelude::*;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[handler]
+async fn health() -> &'static str {
+    "{\\"status\\":\\"ok\\"}"
+}
+
+#[tokio::main]
+async fn main() {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    let router = Router::new().path("health").get(health);
+
+    let addr = format!(
+        "0.0.0.0:{}",
+        env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
+    );
+
+    println!(
+        "{} listening on {}",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        addr,
+    );
+
+    Server::new(TcpListener::bind(&addr).await.unwrap())
+        .serve(router)
+        .await;
+}`],
+  ["rust/framework/warp/src/main.rs.hbs", `use std::env;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[tokio::main]
+async fn main() {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    let health = warp::path("health").map(|| "{\\"status\\":\\"ok\\"}");
+    let routes = health.with(warp::cors().allow_any_origin());
+
+    let port = env::var("PORT")
+        .unwrap_or_else(|_| "8000".to_string())
+        .parse::<u16>()
+        .expect("invalid PORT");
+
+    println!(
+        "{} listening on 0.0.0.0:{}",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        port,
+    );
+
+    warp::serve(routes).run(([0, 0, 0, 0], port)).await;
+}`],
+  ["rust/orm/diesel/src/db.rs.hbs", `use diesel::prelude::*;
+
+{{#if (eq database "sqlite")}}
+use diesel::SqliteConnection;
+
+pub type DbConnection = SqliteConnection;
+{{else if (eq database "postgres")}}
+use diesel::PgConnection;
+
+pub type DbConnection = PgConnection;
+{{else if (eq database "mysql")}}
+use diesel::MysqlConnection;
+
+pub type DbConnection = MysqlConnection;
+{{/if}}
+
+pub fn connect() -> Result<DbConnection, ConnectionError> {
+    <DbConnection as Connection>::establish(&database_url())
+}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> &'static str {
+    "{{project_slug}}.db"
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> &'static str {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> &'static str {
+    "mysql://root:password@localhost:3306/{{project_slug}}"
+}
+{{/if}}`],
+  ["rust/orm/seaorm/src/db.rs.hbs", `use sea_orm::{Database, DatabaseConnection, DbErr};
+
+pub async fn connect() -> Result<DatabaseConnection, DbErr> {
+    Database::connect(database_url()).await
+}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| database_default())
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> String {
+    "{{project_slug}}.db".to_string()
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> String {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}".to_string()
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> String {
+    "mysql://root:password@localhost:3306/{{project_slug}}".to_string()
+}
+{{/if}}`],
+  ["rust/orm/sqlx-rust/src/db.rs.hbs", `use sqlx::Error;
+
+{{#if (eq database "sqlite")}}
+use sqlx::SqlitePool;
+
+pub type OrmPool = SqlitePool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    SqlitePool::connect(&database_url()).await
+}
+{{else if (eq database "postgres")}}
+use sqlx::PgPool;
+
+pub type OrmPool = PgPool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    PgPool::connect(&database_url()).await
+}
+{{else if (eq database "mysql")}}
+use sqlx::MySqlPool;
+
+pub type OrmPool = MySqlPool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    MySqlPool::connect(&database_url()).await
+}
+{{/if}}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> &'static str {
+    "{{project_slug}}.db"
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> &'static str {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> &'static str {
+    "mysql://root:password@localhost:3306/{{project_slug}}"
+}
+{{/if}}`]
 ]);
 
-export const TEMPLATE_COUNT = 57;
+export const TEMPLATE_COUNT = 75;

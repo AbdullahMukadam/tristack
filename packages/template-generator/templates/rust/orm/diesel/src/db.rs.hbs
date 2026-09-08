@@ -1,0 +1,37 @@
+use diesel::prelude::*;
+
+{{#if (eq database "sqlite")}}
+use diesel::SqliteConnection;
+
+pub type DbConnection = SqliteConnection;
+{{else if (eq database "postgres")}}
+use diesel::PgConnection;
+
+pub type DbConnection = PgConnection;
+{{else if (eq database "mysql")}}
+use diesel::MysqlConnection;
+
+pub type DbConnection = MysqlConnection;
+{{/if}}
+
+pub fn connect() -> Result<DbConnection, ConnectionError> {
+    <DbConnection as Connection>::establish(&database_url())
+}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> &'static str {
+    "{{project_slug}}.db"
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> &'static str {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> &'static str {
+    "mysql://root:password@localhost:3306/{{project_slug}}"
+}
+{{/if}}

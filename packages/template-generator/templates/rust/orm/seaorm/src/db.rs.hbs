@@ -1,0 +1,23 @@
+use sea_orm::{Database, DatabaseConnection, DbErr};
+
+pub async fn connect() -> Result<DatabaseConnection, DbErr> {
+    Database::connect(database_url()).await
+}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| database_default())
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> String {
+    "{{project_slug}}.db".to_string()
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> String {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}".to_string()
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> String {
+    "mysql://root:password@localhost:3306/{{project_slug}}".to_string()
+}
+{{/if}}

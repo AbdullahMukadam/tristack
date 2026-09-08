@@ -25,7 +25,7 @@ Each language has its own option sets (`packages/types`), so a Go/Rust value can
 | `packageManager` | `uv`, `poetry`, `pip`                                                                 | `go`                                                                                | `cargo`                                                                              |
 | `addons`         | `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `air`, `golangci-lint`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `cargo-watch`, `clippy`, `github-actions`, `fumadocs`, `starlight`, `none` |
 
-> **Phase 1 note:** Go and Rust option sets exist in the schema and prompts, but only Python scaffolds are generated today. Choosing `go` or `rust` produces a base scaffold only; full support lands in Phases 2–3.
+> **Status:** Python (Phase 1), Go (Phase 2), and Rust (Phase 3) scaffolds are all generated today.
 
 ## What gets validated today
 
@@ -47,6 +47,9 @@ uvx tristack --language python --orm seaorm
 
 # ✅ Valid
 uvx tristack --language python --orm sqlmodel
+
+# ✅ Valid - Rust stack (standalone binary)
+tristack my-api --language rust --framework axum --orm seaorm
 ```
 
 ## Validation order

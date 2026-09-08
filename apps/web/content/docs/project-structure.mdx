@@ -5,9 +5,30 @@ description: Understanding the structure of projects created by the TriStack CLI
 
 ## Overview
 
-This page documents the **Python (Phase 1)** project layout � what the CLI writes today. Go and Rust phases ship their own trees and will get their own structure pages. The exact tree depends on your selections � base files are always present, then framework, ORM, migrations, database, and add-on files are layered on top. This page mirrors what the CLI actually writes.
+TriStack scaffolds backend projects in **Python** (Phase 1), **Go** (Phase 2), and **Rust** (Phase 3). Each language follows its own native conventions, so a generated project looks like a real developer wrote it:
 
-## Root layout (default stack)
+- **Python** — `pyproject.toml`, a snake_case import package, `migrations/`
+- **Go** — `go.mod`, a root-level `main.go`, `internal/` packages
+- **Rust** — `Cargo.toml`, sources under `src/`
+
+The exact tree depends on your selections: base files are always present, then framework, ORM, migrations, database, and add-on files are layered on top. This page mirrors what the CLI actually writes.
+
+## How the tree is built
+
+Files come from these layers, in order:
+
+1. **Base** — always included (`README.md`, `tristack.jsonc`, `.env.example`, `.gitignore`, plus the language manifest: `pyproject.toml`, `go.mod`, or `Cargo.toml`)
+2. **Framework** — the HTTP entrypoint per framework
+3. **ORM** — the data layer
+4. **Migrations** — migration files/tooling
+5. **Database** — database choice drives configuration and env values
+6. **Addons** — one set of files per selected addon
+
+`tristack.jsonc` records the stack and its reproducible command. See [`tristack.jsonc`](/docs/tristack-config).
+
+## Python (Phase 1)
+
+### Root layout (default stack)
 
 The default stack (`fastapi` + `sqlmodel` + `alembic` + `sqlite` + `uv` + `docker, ruff, pytest`) looks like this:
 
@@ -52,20 +73,8 @@ Notes:
 
 - The import package is a snake_case version of your project name (`my_tristack_app` for `my-tristack-app`).
 - Docker/CI files exist only when the matching addon is selected; `tests/` only with the `pytest` addon.
-- `tristack.jsonc` records the stack and its reproducible command. See [`tristack.jsonc`](/docs/tristack-config).
 
-## How the tree is built
-
-Files come from these layers, in order:
-
-1. **Base** — always included (`README.md`, `tristack.jsonc`, `pyproject.toml`, `.env.example`, `.gitignore`, the import package with `__init__.py` and `config.py`)
-2. **Framework** — entrypoint per framework (see below)
-3. **ORM** — data-layer files (`db.py`, `models.py` with `sqlmodel`; `sqlalchemy`/`tortoise` scaffold later)
-4. **Migrations** — Alembic layout with `alembic`; nothing with `none`
-5. **Database** — database choice drives configuration/env today; per-provider template folders are placeholders for hosted-provider phases
-6. **Addons** — one directory per selected addon
-
-## Framework variations
+### Framework variations
 
 All Python frameworks share the base + import package, then differ in the entrypoint:
 
@@ -93,27 +102,182 @@ All Python frameworks share the base + import package, then differ in the entryp
   </Folder>
 </Files>
 
-## ORM variations
+### ORM variations
 
 - **SQLModel** — adds `db.py` (engine/session) and `models.py` (models) to the import package
-- **SQLAlchemy / Tortoise** — the ORM template folders are in place for these; generated files land alongside the SQLModel rollout
+- **SQLAlchemy / Tortoise** — adds the data-layer files to the import package
 - **None** — no data-layer files
 
-## Migrations
+### Migrations
 
-With `--migrations alembic`, the CLI writes a `migrations/` directory with `alembic.ini`, `env.py`, `script.py.mako`, and a `versions/` folder for your migration files.
+With `--migrations alembic`, the CLI writes a `migrations/` directory with `alembic.ini`, `env.py`, `script.py.mako`, and a `versions/` folder for your migration files. Django uses its own bundled migrations.
 
-## Addons
+### Addons
 
-| Addon | Adds |
-| ----- | ---- |
-| `docker` | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
-| `ruff` | `ruff.toml` |
-| `mypy` | `mypy.ini` |
-| `pytest` | `tests/test_health.py` |
-| `github-actions` | `.github/workflows/ci.yml` |
-| `fumadocs` / `starlight` | docs-site folders land with the full docs addons rollout |
+| Addon            | Adds                                                |
+| ---------------- | --------------------------------------------------- |
+| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
+| `ruff`           | `ruff.toml`                                         |
+| `mypy`           | `mypy.ini`                                          |
+| `pytest`         | `tests/test_health.py`                              |
+| `github-actions` | `.github/workflows/ci.yml`                          |
+| `fumadocs`       | a Fumadocs documentation site                       |
+| `starlight`      | an Astro Starlight documentation site               |
+
+## Go (Phase 2)
+
+Every Go project is a single module with a root-level `main.go` (the entrypoint) and its data layer under `internal/`. Framework and data imports are pinned in `go.mod`.
+
+### Root layout (default stack)
+
+The default stack (`gin` + `gorm` + `goose` + `sqlite` + `go` + `docker, air, golangci-lint`) looks like this:
+
+<Files>
+  <Folder name="/" defaultOpen>
+    <File name="README.md" />
+    <File name="tristack.jsonc" />
+    <File name="go.mod" />
+    <File name=".env.example" />
+    <File name=".gitignore" />
+    <File name=".dockerignore" />
+    <File name="Dockerfile" />
+    <File name="docker-compose.yml" />
+    <File name="air.toml" />
+    <File name=".golangci.yml" />
+    <Folder name=".github">
+      <Folder name="workflows">
+        <File name="ci.yml" />
+      </Folder>
+    </Folder>
+    <File name="main.go" />
+    <Folder name="internal">
+      <Folder name="db">
+        <File name="db.go" />
+        <File name="models.go" />
+      </Folder>
+    </Folder>
+    <Folder name="migrations">
+      <File name="0001_create_items.sql" />
+    </Folder>
+  </Folder>
+</Files>
+
+Notes:
+
+- The module path is the slugged project name (`my_api` for `my-api`) unless your project name is already a module path.
+- The server reads `PORT` (default `8000`) and `APP_NAME` from the environment (`main.go`).
+- The import path for the data layer is `<module>/internal/db`.
+
+### Framework variations
+
+All frameworks write `main.go` at the module root and differ only in the router and its API:
+
+- **Gin** — `gin.Default()` with `GET /health`
+- **Fiber** — `fiber.New()` with `GET /health`
+- **Echo** — `echo.New()` with `GET /health`
+- **Chi** — `chi.NewRouter()` with `GET /health`
+- **Go stdlib** — `http.NewServeMux()` with `GET /health`
+
+### ORM variations
+
+- **GORM** — `internal/db/db.go` (connection + auto-migration) and `internal/db/models.go`
+- **sqlx** — `internal/db/db.go` (connection only)
+- **sqlc** — `internal/db/db.go` (connection) plus a root `sqlc.yaml` for generating from SQL
+- **None** — no data-layer files
+
+The driver is chosen from the `database` value (`sqlite`, `postgres`, or `mysql`) and pinned in `go.mod`.
+
+### Migrations
+
+- **goose** — a `migrations/` folder of `.sql` files (`0001_create_items.sql`)
+- **golang-migrate** — a `db/migrations/` folder with paired `.up.sql` / `.down.sql` files
+
+### Addons
+
+| Addon            | Adds                                                |
+| ---------------- | --------------------------------------------------- |
+| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
+| `air`            | `air.toml` (live reload)                            |
+| `golangci-lint`  | `.golangci.yml`                                     |
+| `github-actions` | `.github/workflows/ci.yml`                          |
+| `fumadocs`       | a Fumadocs documentation site                       |
+| `starlight`      | an Astro Starlight documentation site               |
+
+## Rust (Phase 3)
+
+Every Rust project is a single `cargo` package with its sources under `src/`. The Cargo build target is the default binary target, so `main.rs` lives at `src/main.rs`.
+
+### Root layout (default stack)
+
+The default stack (`axum` + `seaorm` + `cargo` + `docker, cargo-watch, clippy`) looks like this:
+
+<Files>
+  <Folder name="/" defaultOpen>
+    <File name="README.md" />
+    <File name="tristack.jsonc" />
+    <File name="Cargo.toml" />
+    <File name=".env.example" />
+    <File name=".gitignore" />
+    <File name=".dockerignore" />
+    <File name="Dockerfile" />
+    <File name="docker-compose.yml" />
+    <File name="cargo-watch.toml" />
+    <File name="clippy.toml" />
+    <Folder name=".github">
+      <Folder name="workflows">
+        <File name="ci.yml" />
+      </Folder>
+    </Folder>
+    <Folder name="src">
+      <File name="main.rs" />
+      <File name="db.rs" />
+    </Folder>
+  </Folder>
+</Files>
+
+Notes:
+
+- The package name is the slugged project name (`my_api` for `my-api`).
+- The server reads `PORT` (default `8000`) and `APP_NAME` from the environment (`main.rs`), and exposes `GET /health`.
+- Dependencies (`serde`, `tokio`, the framework, and the ORM) are pinned in `Cargo.toml`.
+
+### Framework variations
+
+Every framework writes its entrypoint to `src/main.rs`. Each exposes `GET /health` returning `{"status":"ok"}`:
+
+- **Axum** — `axum::Router` with a `#[tokio::main]` async runtime
+- **Actix Web** — the `actix-web` `HttpServer`/`App`
+- **Rocket** — `rocket` routes with the `#[launch]` (or `#[rocket::main]`) runtime
+- **Warp** — a `warp` filter pipeline on `tokio`
+- **Salvo** — a `salvo` `Router` on `tokio`
+- **Loco** — the Rails-like `loco-rs` app (entrypoint layout)
+
+### ORM variations
+
+The data layer always lands at `src/db.rs` and is wired to `main.rs` via `mod db;`:
+
+- **SeaORM** — an async connection helper (`DatabaseConnection` for `postgres`/`mysql`, the SQLite connection for `sqlite`)
+- **Diesel** — a synchronous connection helper (`PgConnection` / `MysqlConnection` / `SqliteConnection`)
+- **sqlx** — an async pool helper (`PgPool` / `MySqlPool` / `SqlitePool`)
+- **None** — no `src/db.rs` and no `mod db;`
+
+The database driver is chosen from the `database` value and enabled via Cargo features in `Cargo.toml`.
+
+### Migrations
+
+Rust has no standard migration tool in the option set yet, so `--migrations` is `none`. Run migrations with your ORM's own tooling (e.g. `diesel migration run`, `sqlx migrate run`).
+
+### Addons
+
+| Addon            | Adds                                                |
+| ---------------- | --------------------------------------------------- |
+| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
+| `cargo-watch`    | `cargo-watch.toml` (rerun on change)                |
+| `clippy`         | `clippy.toml`                                       |
+| `github-actions` | `.github/workflows/ci.yml`                          |
+| `fumadocs`       | a Fumadocs documentation site                       |
+| `starlight`      | an Astro Starlight documentation site               |
 
 ## Config file
 
-`tristack.jsonc` at the project root captures the resolved stack and a `reproducibleCommand` that reproduces it. See [`tristack.jsonc`](/docs/tristack-config).
+`tristack.jsonc` at the project root captures the resolved stack and a `reproducibleCommand` that reproduces it, regardless of language. See [`tristack.jsonc`](/docs/tristack-config).

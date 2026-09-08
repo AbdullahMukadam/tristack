@@ -1,0 +1,24 @@
+use std::env;
+
+use loco_rs::prelude::*;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    println!(
+        "{} initialized",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+    );
+
+    Ok(())
+}

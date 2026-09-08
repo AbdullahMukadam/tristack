@@ -15,11 +15,11 @@ description: Create your first TriStack project in minutes
 
 TriStack scaffolds backend projects in multiple languages. Each has its own option set (framework, ORM, migrations, package manager, addons) in the [Compatibility reference](/docs/cli/compatibility).
 
-| Language | Status                    |
-| -------- | ------------------------- |
-| Python   | Scaffolding now (Phase 1) |
-| Go       | Coming (Phase 2)          |
-| Rust     | Coming (Phase 3)          |
+| Language | Status                |
+| -------- | --------------------- |
+| Python   | Scaffolding (Phase 1) |
+| Go       | Scaffolding (Phase 2) |
+| Rust     | Scaffolding (Phase 3) |
 
 The CLI ships as a standalone native binary. The invoker differs per language:
 
@@ -34,9 +34,15 @@ The CLI ships as a standalone native binary. The invoker differs per language:
 
 ### Prerequisites
 
-For a generated Python project you need **Python 3.12+** ([python.org](https://www.python.org/)) and **uv** ([astral.sh/uv](https://docs.astral.sh/uv/)), the default package manager for generated projects. **Git** (optional, [git-scm.com](https://git-scm.com/)) initializes a repository.
+You only need the runtime of whatever language you scaffold, plus **Git** (optional, [git-scm.com](https://git-scm.com/)) to initialize a repository:
 
-To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack`.
+| Language | Runtime                                              | Package manager                                                         |
+| -------- | ---------------------------------------------------- | ----------------------------------------------------------------------- |
+| Python   | Python 3.12+ ([python.org](https://www.python.org/)) | `uv` ([astral.sh/uv](https://docs.astral.sh/uv/)) — or `poetry` / `pip` |
+| Go       | Go 1.22+ ([go.dev](https://go.dev/dl/))              | `go`                                                                    |
+| Rust     | Rust 1.75+ ([rustup](https://rustup.rs/))            | `cargo`                                                                 |
+
+To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack` (Python path). Go and Rust devs run the standalone `tristack` binary from the curl/Homebrew installers.
 
 ### CLI (prompts)
 
@@ -54,7 +60,7 @@ uvx tristack --yes
 
 ### Stack Builder (UI)
 
-- Visit [/new](/new) to pick your stack, preview the generated file tree live, and copy the exact CLI command
+- Visit [/new](/new) to pick your stack, preview the generated file tree live, and copy the exact CLI command. The builder supports Python, Go, and Rust stacks.
 - The command you copy runs verbatim (the builder lets you switch between the native runner and the `npx` path):
 
 ```bash
@@ -77,7 +83,7 @@ A native agent plugin (Claude Code / Codex MCP) ships in a later phase.
 
 ## Common Setups — Python (Phase 1)
 
-Currently only Python scaffolds are generated; the examples below use the Python runner (`uvx tristack`).
+The examples below use the Python runner (`uvx tristack`).
 
 ### Default Stack
 
@@ -127,17 +133,87 @@ uvx tristack my-micro \
   --addons pytest
 ```
 
+## Common Setups — Go (Phase 2)
+
+The Go CLI runs as the standalone `tristack` binary.
+
+### Gin + GORM + SQLite
+
+```bash
+tristack my-api \
+  --language go \
+  --framework gin \
+  --orm gorm \
+  --migrations goose \
+  --database sqlite \
+  --package-manager go \
+  --addons docker,air,golangci-lint
+```
+
+### Fiber + sqlx + Postgres
+
+```bash
+tristack my-api \
+  --language go \
+  --framework fiber \
+  --orm sqlx \
+  --migrations golang-migrate \
+  --database postgres \
+  --package-manager go \
+  --addons docker,air,golangci-lint
+```
+
+## Common Setups — Rust (Phase 3)
+
+The Rust CLI runs as the standalone `tristack` binary.
+
+### Axum + SeaORM + SQLite
+
+```bash
+tristack my-api \
+  --language rust \
+  --framework axum \
+  --orm seaorm \
+  --migrations none \
+  --database sqlite \
+  --package-manager cargo \
+  --addons docker,cargo-watch,clippy
+```
+
+### Actix Web + Diesel + Postgres
+
+```bash
+tristack my-api \
+  --language rust \
+  --framework actix-web \
+  --orm diesel \
+  --migrations none \
+  --database postgres \
+  --package-manager cargo \
+  --addons docker,cargo-watch,clippy
+```
+
 ## Flags Cheat Sheet
 
-See the full list in the [CLI Reference](/docs/cli). Option sets are per language — Python's set below; see [Compatibility](/docs/cli/compatibility) for Go and Rust.
+See the full list in the [CLI Reference](/docs/cli). Option sets are per language:
 
-- `--language`: python (go, rust coming soon)
+- `--language`: python, go, rust
 - `--framework` (python): fastapi, litestar, django, flask
+- `--framework` (go): gin, fiber, echo, chi, stdlib
+- `--framework` (rust): axum, actix-web, rocket, warp, salvo, loco
 - `--orm` (python): sqlmodel, sqlalchemy, tortoise, none
+- `--orm` (go): sqlc, gorm, sqlx, none
+- `--orm` (rust): seaorm, diesel, sqlx-rust, none
 - `--migrations` (python): alembic, none
+- `--migrations` (go): goose, golang-migrate, none
+- `--migrations` (rust): none
 - `--database`: sqlite, postgres, mysql, none
 - `--package-manager` (python): uv, poetry, pip
-- `--addons`: docker, ruff, mypy, pytest, github-actions, fumadocs, starlight, none
+- `--package-manager` (go): go
+- `--package-manager` (rust): cargo
+- `--addons` (python): docker, ruff, mypy, pytest, github-actions, fumadocs, starlight, none
+- `--addons` (go): docker, air, golangci-lint, github-actions, fumadocs, starlight, none
+- `--addons` (rust): docker, cargo-watch, clippy, github-actions, fumadocs, starlight, none
 
 ## Next Steps
 
@@ -156,6 +232,12 @@ See the full list in the [CLI Reference](/docs/cli). Option sets are per languag
   </Card>
   <Card href="/docs/guides/python-quick-start" title="Python quick start">
     Scaffold and run your first FastAPI project end to end
+  </Card>
+  <Card href="/docs/guides/go-quick-start" title="Go quick start">
+    Scaffold and run your first Gin + GORM project end to end
+  </Card>
+  <Card href="/docs/guides/rust-quick-start" title="Rust quick start">
+    Scaffold and run your first Axum + SeaORM project end to end
   </Card>
   <Card href="/docs/contributing" title="Contributing">
     Dev setup and contribution flow

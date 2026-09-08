@@ -11,20 +11,19 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
   <Accordion
     id="faq-1"
     title="What is TriStack?">
-    A CLI that scaffolds backend projects for Python (Go and Rust coming later) and a matching web-based Stack Builder. It generates clean, ready-to-run FastAPI, Litestar, Django, or Flask projects with the ORM, migrations, database, package manager, and addons you choose. See the Quick Start on the docs home.
+    A CLI that scaffolds backend projects for Python, Go, and Rust, plus a matching web-based Stack Builder. It generates clean, ready-to-run projects with the framework, ORM, migrations, database, package manager, and addons you choose — FastAPI/Litestar/Django/Flask, Gin/Fiber/Echo/Chi/Go stdlib, or Axum/Actix Web/Rocket/Warp/Salvo/Loco. See the Quick Start on the docs home.
   </Accordion>
 
 <Accordion id="faq-2" title="Do I need to install anything globally?">
   No. The CLI is a standalone native binary. For Python, run it with `uvx tristack` (or `uv tool
-  install tristack` / `pipx install tristack`); the Go and Rust phases ship their own `tristack`
+  install tristack` / `pipx install tristack`); Go and Rust devs run the standalone `tristack`
   binary via curl/Homebrew. You only need the runtime of whatever language you scaffold (e.g. Python
   + your chosen package manager for a generated Python project).
 </Accordion>
 
 <Accordion id="faq-3" title="Which package manager do generated projects use?">
-  For Python (Phase 1) it depends on your choice: `uv` (default), `poetry`, or `pip`. uv is
-  recommended for speed and modern conventions. Go and Rust phases use their own toolchains (`go`,
-  `cargo`).
+  It depends on the language. Python offers `uv` (default), `poetry`, or `pip`; Go uses `go`
+  modules; Rust uses `cargo`. uv is recommended for Python for speed and modern conventions.
 </Accordion>
 
 <Accordion id="faq-4" title="What Python version is required?">
@@ -33,8 +32,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 </Accordion>
 
 <Accordion id="faq-5" title="Can I use this with an existing project?">
-  The CLI scaffolds new projects into a fresh directory. It does not modify existing codebases in
-  Phase 1.
+  The CLI scaffolds new projects into a fresh directory. It does not modify existing codebases.
 </Accordion>
 
   <Accordion id="faq-6" title="Where do generated files live?">
@@ -46,7 +44,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 
 <Accordions type="single">
   <Accordion id="faq-7" title="Does the CLI recommend a stack?">
-    The default Python stack is FastAPI + SQLModel + Alembic + SQLite + uv with Docker, Ruff, and pytest. Pick anything else that fits your needs — the CLI validates that values match your chosen language. See [Compatibility](/docs/cli/compatibility).
+  The default Python stack is FastAPI + SQLModel + Alembic + SQLite + uv with Docker, Ruff, and pytest. Each language has its own defaults (Go: Gin + GORM + Goose; Rust: Axum + SeaORM). Pick anything else that fits your needs — the CLI validates that values match your chosen language. See [Compatibility](/docs/cli/compatibility).
   </Accordion>
 
   <Accordion id="faq-8" title="I'm unsure between FastAPI and Django, or SQLModel and SQLAlchemy">
@@ -70,4 +68,3 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 
 - Docs: Quick Start, CLI, Project Structure, Compatibility
 - Ask/Report: GitHub Issues & Discussions
-- Community: Discord

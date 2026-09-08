@@ -13,16 +13,16 @@ The questions are grouped into two sections, prompted in order:
 
 **Stack**
 
-1. **Language** — which language is your backend? (`python`, `go`, `rust` — only `python` is scaffolded for now)
-2. **Framework** — options depend on the language (Python: `fastapi`, `litestar`, `django`, `flask`)
-3. **ORM / data layer** — options depend on the language (Python: `sqlmodel`, `sqlalchemy`, `tortoise`, `none`)
-4. **Migrations** — options depend on the language (Python: `alembic`, `none`)
+1. **Language** — which language is your backend? (`python`, `go`, `rust`)
+2. **Framework** — options depend on the language (Python: `fastapi`, `litestar`, `django`, `flask`; Go: `gin`, `fiber`, `echo`, `chi`, `stdlib`; Rust: `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`)
+3. **ORM / data layer** — options depend on the language (Python: `sqlmodel`, `sqlalchemy`, `tortoise`, `none`; Go: `sqlc`, `gorm`, `sqlx`, `none`; Rust: `seaorm`, `diesel`, `sqlx-rust`, `none`)
+4. **Migrations** — options depend on the language (Python: `alembic`, `none`; Go: `goose`, `golang-migrate`, `none`; Rust: `none`)
 5. **Database** — `sqlite`, `postgres`, `mysql`, `none`
 
 **Tooling**
 
-6. **Package manager** — options depend on the language (Python: `uv`, `poetry`, `pip`)
-7. **Addons** — multi-select, options depend on the language (Python: `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none`)
+6. **Package manager** — options depend on the language (Python: `uv`, `poetry`, `pip`; Go: `go`; Rust: `cargo`)
+7. **Addons** — multi-select, options depend on the language (Python: `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none`; Go: `docker`, `air`, `golangci-lint`, `github-actions`, `fumadocs`, `starlight`, `none`; Rust: `docker`, `cargo-watch`, `clippy`, `github-actions`, `fumadocs`, `starlight`, `none`)
 8. **Git** — initialize a Git repository? (yes/no)
 9. **Install** — install dependencies after creation? (yes/no)
 

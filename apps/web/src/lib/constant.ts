@@ -19,6 +19,11 @@ import {
   PYTHON_MIGRATIONS,
   PYTHON_ORMS,
   PYTHON_PACKAGE_MANAGERS,
+  RUST_ADDONS,
+  RUST_FRAMEWORKS,
+  RUST_MIGRATIONS,
+  RUST_ORMS,
+  RUST_PACKAGE_MANAGERS,
 } from "@tristack/types";
 
 import type { TechCategory } from "@/lib/types";
@@ -51,6 +56,13 @@ const LANGUAGE_META = {
     description: "Backend language",
     icon: "🐹",
     color: "from-cyan-400 to-sky-600",
+  },
+  rust: {
+    id: "rust",
+    name: "Rust",
+    description: "Backend language",
+    icon: "🦀",
+    color: "from-orange-400 to-orange-600",
   },
 } satisfies Partial<Record<Language, TechOption>>;
 
@@ -119,6 +131,48 @@ const FRAMEWORK_META = {
     icon: "⚙️",
     color: "from-gray-400 to-gray-600",
   },
+  axum: {
+    id: "axum",
+    name: "Axum",
+    description: "Modular, ergonomic web framework",
+    icon: "🌳",
+    color: "from-emerald-400 to-green-600",
+  },
+  "actix-web": {
+    id: "actix-web",
+    name: "Actix Web",
+    description: "Powerful, pragmatic actor-based framework",
+    icon: "🎭",
+    color: "from-cyan-400 to-blue-600",
+  },
+  rocket: {
+    id: "rocket",
+    name: "Rocket",
+    description: "Productive, type-safe web framework",
+    icon: "🚀",
+    color: "from-orange-400 to-amber-600",
+  },
+  warp: {
+    id: "warp",
+    name: "Warp",
+    description: "Composable, filter-based HTTP framework",
+    icon: "🌀",
+    color: "from-indigo-400 to-violet-600",
+  },
+  salvo: {
+    id: "salvo",
+    name: "Salvo",
+    description: "Simple, powerful web server framework",
+    icon: "⚡",
+    color: "from-sky-400 to-blue-600",
+  },
+  loco: {
+    id: "loco",
+    name: "Loco",
+    description: "Rails-like full web framework",
+    icon: "🚂",
+    color: "from-red-400 to-rose-600",
+  },
 } satisfies Partial<Record<Framework, TechOption>>;
 
 const ORM_META = {
@@ -163,6 +217,27 @@ const ORM_META = {
     name: "sqlx",
     description: "Extend database/sql with ergonomics",
     icon: "🧩",
+    color: "from-sky-400 to-blue-600",
+  },
+  seaorm: {
+    id: "seaorm",
+    name: "SeaORM",
+    description: "Production-ready async Rust ORM",
+    icon: "🌊",
+    color: "from-cyan-400 to-blue-600",
+  },
+  diesel: {
+    id: "diesel",
+    name: "Diesel",
+    description: "Safe, extensible Rust ORM",
+    icon: "⛽",
+    color: "from-orange-400 to-amber-600",
+  },
+  "sqlx-rust": {
+    id: "sqlx-rust",
+    name: "sqlx",
+    description: "Async SQL toolkit for Rust",
+    icon: "🔌",
     color: "from-sky-400 to-blue-600",
   },
   none: {
@@ -268,6 +343,13 @@ const PACKAGE_MANAGER_META = {
     icon: "🐹",
     color: "from-cyan-400 to-sky-600",
   },
+  cargo: {
+    id: "cargo",
+    name: "Cargo",
+    description: "Rust's official package manager",
+    icon: "🚢",
+    color: "from-amber-400 to-orange-600",
+  },
 } satisfies Partial<Record<PackageManager, TechOption>>;
 
 const ADDONS_META = {
@@ -323,6 +405,20 @@ const ADDONS_META = {
     icon: "🧹",
     color: "from-purple-400 to-violet-600",
   },
+  "cargo-watch": {
+    id: "cargo-watch",
+    name: "Cargo Watch",
+    description: "Rerun your project on file changes",
+    icon: "👁️",
+    color: "from-sky-400 to-blue-600",
+  },
+  clippy: {
+    id: "clippy",
+    name: "Clippy",
+    description: "Lints to catch common mistakes",
+    icon: "📎",
+    color: "from-teal-400 to-cyan-600",
+  },
   fumadocs: {
     id: "fumadocs",
     name: "Fumadocs",
@@ -369,16 +465,29 @@ function unionOptions<Id extends string>(
 }
 
 export const TECH_OPTIONS = {
-  language: composeOptions(["python", "go"], LANGUAGE_META),
-  framework: unionOptions([PYTHON_FRAMEWORKS, FRAMEWORK_META], [GO_FRAMEWORKS, FRAMEWORK_META]),
-  orm: unionOptions([PYTHON_ORMS, ORM_META], [GO_ORMS, ORM_META]),
-  migrations: unionOptions([PYTHON_MIGRATIONS, MIGRATIONS_META], [GO_MIGRATIONS, MIGRATIONS_META]),
+  language: composeOptions(["python", "go", "rust"], LANGUAGE_META),
+  framework: unionOptions(
+    [PYTHON_FRAMEWORKS, FRAMEWORK_META],
+    [GO_FRAMEWORKS, FRAMEWORK_META],
+    [RUST_FRAMEWORKS, FRAMEWORK_META],
+  ),
+  orm: unionOptions([PYTHON_ORMS, ORM_META], [GO_ORMS, ORM_META], [RUST_ORMS, ORM_META]),
+  migrations: unionOptions(
+    [PYTHON_MIGRATIONS, MIGRATIONS_META],
+    [GO_MIGRATIONS, MIGRATIONS_META],
+    [RUST_MIGRATIONS, MIGRATIONS_META],
+  ),
   database: composeOptions(DATABASE_VALUES, DATABASE_META),
   packageManager: unionOptions(
     [PYTHON_PACKAGE_MANAGERS, PACKAGE_MANAGER_META],
     [GO_PACKAGE_MANAGERS, PACKAGE_MANAGER_META],
+    [RUST_PACKAGE_MANAGERS, PACKAGE_MANAGER_META],
   ),
-  addons: unionOptions([PYTHON_ADDONS, ADDONS_META], [GO_ADDONS, ADDONS_META]),
+  addons: unionOptions(
+    [PYTHON_ADDONS, ADDONS_META],
+    [GO_ADDONS, ADDONS_META],
+    [RUST_ADDONS, ADDONS_META],
+  ),
   git: [
     {
       id: "true",
@@ -501,6 +610,24 @@ export const PRESET_TEMPLATES = [
       database: "sqlite",
       packageManager: "go",
       addons: ["docker", "air", "golangci-lint"],
+      git: "true",
+      install: "true",
+      yolo: "false",
+    },
+  },
+  {
+    id: "axum-sqlite",
+    name: "Axum + SQLite",
+    description: "Axum with SeaORM and SQLite",
+    stack: {
+      projectName: "my-api",
+      language: "rust",
+      framework: "axum",
+      orm: "seaorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+      addons: ["docker", "cargo-watch", "clippy"],
       git: "true",
       install: "true",
       yolo: "false",
