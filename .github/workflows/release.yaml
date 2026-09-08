@@ -7,16 +7,104 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Create Release
+  check:
+    name: Validate release commit
     if: startsWith(github.event.head_commit.message, 'chore(release):')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Extract version from commit message
+        id: version
+        run: |
+          VERSION=$(git log -1 --pretty=%s | sed -nE 's/^chore\(release\): ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: expected semver (x.y.z) in the head commit message"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build (${{ matrix.platform }})
+    needs: check
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux-x64
+            os: ubuntu-latest
+            tag: manylinux_2_17_x86_64
+            bin: tristack-linux-x64
+          - platform: linux-arm64
+            os: ubuntu-24.04-arm
+            tag: manylinux_2_17_aarch64
+            bin: tristack-linux-arm64
+          - platform: macos-x64
+            os: macos-14
+            tag: macosx_10_13_x86_64
+            bin: tristack-macos-x64
+          - platform: macos-arm64
+            os: macos-14
+            tag: macosx_11_0_arm64
+            bin: tristack-macos-arm64
+          - platform: windows-x64
+            os: windows-latest
+            tag: win_amd64
+            bin: tristack-windows-x64.exe
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Python build deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build
+        shell: bash
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build CLI
+        run: bun run build:cli
+
+      - name: Build Binary
+        run: bun build --compile apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
+        shell: bash
+
+      - name: Build Wheel
+        run: python scripts/build-wheel.py "${{ matrix.bin }}" "${{ needs.check.outputs.version }}" --tag "${{ matrix.tag }}"
+        shell: bash
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bin-${{ matrix.platform }}
+          path: ${{ matrix.bin }}*
+
+      - name: Upload Wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.platform }}
+          path: packages/tristack-py/dist/*.whl
+
+  publish:
+    name: Publish release + PyPI
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -25,72 +113,74 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Download Binaries
+        uses: actions/download-artifact@v4
         with:
-          node-version-file: package.json
-          check-latest: true
-          package-manager-cache: false
+          path: artifacts
+          pattern: bin-*
+          merge-multiple: true
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Download Wheels
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: wheel-*
+          merge-multiple: true
 
-      - name: Extract version from commit message
-        id: version
-        run: |
-          VERSION=$(git log -1 --pretty=%s | sed -nE 's/^chore\(release\): ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Releasing version: $VERSION"
-
-      - name: Validate version format
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Error: Invalid version format '$VERSION'. Expected semver (x.y.z)"
-            exit 1
-          fi
+      - name: Publish wheels to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist
+          skip-existing: true
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Create and push tag
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
+          VERSION="${{ needs.check.outputs.version }}"
           git config --local user.email "abdullahmukadam21@gmail.com"
           git config --local user.name "AbdullahMukadam"
-          if ! git rev-parse "v$VERSION" >/dev/null 2>&1; then
-            git tag -a "v$VERSION" -m "Release v$VERSION"
-            git push --tags
-          else
-            echo "Tag v$VERSION already exists, skipping"
-          fi
+          git tag -a "v$VERSION" -m "Release v$VERSION" || true
+          git push origin "v$VERSION" || true
 
       - name: Create GitHub Release
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
+          VERSION="${{ needs.check.outputs.version }}"
           if ! gh release view "v$VERSION" >/dev/null 2>&1; then
             gh release create "v$VERSION" --title "Release v$VERSION" --generate-notes
           else
-            echo "Release v$VERSION already exists, skipping"
+            echo "Release v$VERSION already exists"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dispatch build binaries
+      - name: Upload binaries to release
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          gh workflow run ".github/workflows/build-binaries.yaml" --ref "v$VERSION"
+          VERSION="${{ needs.check.outputs.version }}"
+          for file in artifacts/*; do
+            echo "Uploading: $file"
+            gh release upload "v$VERSION" "$file" --clobber
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dispatch publish to PyPI
+      - name: Publish draft release
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          gh workflow run ".github/workflows/publish-pypi.yaml" --ref "v$VERSION"
+          VERSION="${{ needs.check.outputs.version }}"
+          gh release edit "v$VERSION" --draft=false || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release Summary
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
+          VERSION="${{ needs.check.outputs.version }}"
           echo "## Release v$VERSION Complete!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### GitHub Release" >> $GITHUB_STEP_SUMMARY
           echo "[v$VERSION](https://github.com/${{ github.repository }}/releases/tag/v$VERSION)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Binaries" >> $GITHUB_STEP_SUMMARY
+          for file in artifacts/*; do
+            name=$(basename "$file")
+            size=$(du -h "$file" | cut -f1)
+            echo "- $name ($size)" >> $GITHUB_STEP_SUMMARY
+          done
