@@ -54,7 +54,11 @@ jobs:
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          python scripts/build-wheel.py "${{ runner.temp }}/tristack" "$VERSION" --tag "${{ matrix.tag }}"
+          BIN="${{ runner.temp }}/tristack"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            BIN="${BIN}.exe"
+          fi
+          python scripts/build-wheel.py "$BIN" "$VERSION" --tag "${{ matrix.tag }}"
 
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v4
