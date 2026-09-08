@@ -33,7 +33,6 @@
     "lint": "turbo run lint",
     "check": "oxfmt . && oxlint .",
     "prepare": "lefthook install",
-    "release": "bun run scripts/release.ts",
     "release:cut": "bun run scripts/cut-release.ts",
     "deploy:web": "turbo run deploy --filter=web",
     "generate": "turbo run generate-schema --filter=web",
@@ -45,7 +44,6 @@
   "devDependencies": {
     "@oxlint/plugins": "1.78.0",
     "@types/bun": "^1.3.14",
-    "changelogithub": "^14.0.0",
     "lefthook": "^2.1.10",
     "lint-staged": "^17.2.0",
     "oxfmt": "catalog:",
