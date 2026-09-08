@@ -73,6 +73,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Dispatch build binaries
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          gh workflow run ".github/workflows/build-binaries.yaml" --ref "v$VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dispatch publish to PyPI
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          gh workflow run ".github/workflows/publish-pypi.yaml" --ref "v$VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release Summary
         run: |
           VERSION="${{ steps.version.outputs.version }}"
