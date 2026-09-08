@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.better-t-stack.dev/sitemap.xml
+Sitemap: https://tristack.dev/sitemap.xml

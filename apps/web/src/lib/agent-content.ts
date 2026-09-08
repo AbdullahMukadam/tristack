@@ -67,7 +67,7 @@ The CLI accepts a \`--disable-analytics\` flag; CLI telemetry is not active in P
 The sponsors page recognizes the companies and developers funding TriStack development and infrastructure.
 
 - [View sponsors](${SITE_URL}/sponsors)
-- [Sponsor the project](https://github.com/sponsors/AmanVarshney01)`,
+- [Sponsor the project](https://github.com/sponsors/AbdullahMukadam)`,
   stack: `# Shared TriStack configuration
 
 The stack page renders a configuration encoded in its query string. Open the linked page to inspect the selected technologies, copy the generated CLI command, or continue editing in the browser builder.

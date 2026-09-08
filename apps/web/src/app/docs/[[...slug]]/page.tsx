@@ -49,7 +49,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         <LLMCopyButton markdownUrl={markdownUrl} />
         <ViewOptions
           markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/web/content/docs/${page.path}`}
+          githubUrl={`https://github.com/AbdullahMukadam/tristack/blob/main/apps/web/content/docs/${page.path}`}
         />
       </div>
       <DocsBody className="[&_:not(pre)>code]:wrap-break-word">

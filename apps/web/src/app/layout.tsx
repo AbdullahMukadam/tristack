@@ -31,7 +31,7 @@ const structuredData = {
       name: SITE_NAME,
       url: SITE_URL,
       logo: `${SITE_URL}/favicon/web-app-manifest-512x512.png`,
-      sameAs: [REPOSITORY_URL, "https://x.com/amanvarshney01"],
+      sameAs: [REPOSITORY_URL, "https://x.com/abd_mukadam"],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "project support",

@@ -77,7 +77,7 @@ This repository is organized as a monorepo containing:
 
 ```bash
 # Clone the repository
-git clone https://github.com/AmanVarshney01/create-better-t-stack.git
+git clone https://github.com/AbdullahMukadam/tristack.git
 
 # Install dependencies
 bun install

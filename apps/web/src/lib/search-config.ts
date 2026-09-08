@@ -14,7 +14,7 @@ export const customSearchItems: CustomSearchItem[] = [
   },
   {
     title: "GitHub Repository",
-    url: "https://github.com/AmanVarshney01/create-better-t-stack",
+    url: "https://github.com/AbdullahMukadam/tristack",
     content: "GitHub",
     tags: ["github", "source", "code", "repository", "contribute", "star"],
   },
@@ -26,15 +26,9 @@ export const customSearchItems: CustomSearchItem[] = [
   },
   {
     title: "X (Twitter)",
-    url: "https://x.com/amanvarshney01",
+    url: "https://x.com/abd_mukadam",
     content: "X",
     tags: ["twitter", "x", "social", "updates", "announcements", "follow"],
-  },
-  {
-    title: "Discord Community",
-    url: "https://discord.gg/ZYsbjpDaM5",
-    content: "Discord",
-    tags: ["discord", "community", "chat", "help", "support", "discussions"],
   },
 ];
 
