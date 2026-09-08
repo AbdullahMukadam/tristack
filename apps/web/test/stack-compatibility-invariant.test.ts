@@ -90,7 +90,8 @@ describe("compatibility adjustment invariants", () => {
 
     expect(stack.language).toBe("python");
     expect(stack.framework).toBe("django");
-    expect(stack.orm).toBe("tortoise");
+    expect(stack.orm).toBe("none");
+    expect(stack.migrations).toBe("none");
     expect(getCliCompatibilityError(stack)).toBeNull();
   });
 

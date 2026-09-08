@@ -48,17 +48,18 @@ export function getValidIdsForLanguage(
   const all = TECH_OPTIONS[category].map((option) => option.id);
   switch (category) {
     case "framework":
-      return [...getFrameworksForLanguage(language as "python" | "go")];
+      return [...getFrameworksForLanguage(language as "python" | "go" | "rust")];
     case "orm":
-      return [...getOrmsForLanguage(language as "python" | "go")];
+      return [...getOrmsForLanguage(language as "python" | "go" | "rust")];
     case "migrations":
-      return [...getMigrationsForLanguage(language as "python" | "go")];
+      return [...getMigrationsForLanguage(language as "python" | "go" | "rust")];
     case "packageManager":
       if (language === "go") return ["go"];
+      if (language === "rust") return ["cargo"];
       if (language === "python") return ["uv", "poetry", "pip"];
       return all;
     case "addons":
-      return [...getAddonsForLanguage(language as "python" | "go")];
+      return [...getAddonsForLanguage(language as "python" | "go" | "rust")];
     default:
       return all;
   }
@@ -97,10 +98,10 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
   const adjustedStack: StackState = { ...stack };
 
   const categoryDefaults = {
-    framework: stack.language === "go" ? "gin" : "fastapi",
-    orm: stack.language === "go" ? "sqlc" : "sqlmodel",
-    migrations: stack.language === "go" ? "goose" : "alembic",
-    packageManager: stack.language === "go" ? "go" : "uv",
+    framework: stack.language === "go" ? "gin" : stack.language === "rust" ? "axum" : "fastapi",
+    orm: stack.language === "go" ? "sqlc" : stack.language === "rust" ? "seaorm" : "sqlmodel",
+    migrations: stack.language === "go" ? "goose" : stack.language === "rust" ? "none" : "alembic",
+    packageManager: stack.language === "go" ? "go" : stack.language === "rust" ? "cargo" : "uv",
   } satisfies Record<"framework" | "orm" | "migrations" | "packageManager", string>;
 
   const categories = ["framework", "orm", "migrations", "packageManager"] as const;

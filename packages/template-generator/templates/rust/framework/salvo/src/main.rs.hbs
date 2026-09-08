@@ -1,0 +1,39 @@
+use std::env;
+
+use salvo::prelude::*;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[handler]
+async fn health() -> &'static str {
+    "{\"status\":\"ok\"}"
+}
+
+#[tokio::main]
+async fn main() {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+
+    let router = Router::new().path("health").get(health);
+
+    let addr = format!(
+        "0.0.0.0:{}",
+        env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
+    );
+
+    println!(
+        "{} listening on {}",
+        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        addr,
+    );
+
+    Server::new(TcpListener::bind(&addr).await.unwrap())
+        .serve(router)
+        .await;
+}

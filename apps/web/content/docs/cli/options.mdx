@@ -43,50 +43,100 @@ uvx tristack --yolo
 Programming language for the backend:
 
 - `python`: Python backend (Phase 1)
-
-`go` and `rust` are accepted by the schema and prompt list, but their scaffolds ship in later phases.
+- `go`: Go backend (Phase 2)
+- `rust`: Rust backend (Phase 3)
 
 ```bash
-uvx tristack --language python
+uvx tristack --language rust --framework axum
 ```
 
 ### `--framework <framework>`
 
-Backend framework, scoped to the selected language (Python):
+Backend framework, scoped to the selected language:
+
+Python:
 
 - `fastapi`: FastAPI (async, OpenAPI-first)
 - `litestar`: Litestar (msgspec typing, batteries included)
 - `django`: Django + Django REST Framework
 - `flask`: Flask (minimal)
 
+Go:
+
+- `gin`: Gin (high-performance HTTP)
+- `fiber`: Fiber (Express-inspired)
+- `echo`: Echo (high performance, minimalist)
+- `chi`: Chi (lightweight, idiomatic router)
+- `stdlib`: Go stdlib (net/http)
+
+Rust:
+
+- `axum`: Axum (modular, ergonomic)
+- `actix-web`: Actix Web (actor-based)
+- `rocket`: Rocket (type-safe, productive)
+- `warp`: Warp (composable, filter-based)
+- `salvo`: Salvo (simple, powerful)
+- `loco`: Loco (Rails-like full framework)
+
 ```bash
 uvx tristack --framework litestar
+tristack --framework axum
 ```
 
 ### `--orm <orm>`
 
-ORM or data layer, scoped to the selected language (Python):
+ORM or data layer, scoped to the selected language:
+
+Python:
 
 - `sqlmodel`: SQLModel (Pydantic-native)
 - `sqlalchemy`: SQLAlchemy 2.0
 - `tortoise`: Tortoise ORM (async, Django-style)
 - `none`: No ORM
 
+Go:
+
+- `sqlc`: sqlc (type-safe Go from SQL)
+- `gorm`: GORM (developer-friendly)
+- `sqlx`: sqlx (extend `database/sql`)
+- `none`: No ORM
+
+Rust:
+
+- `seaorm`: SeaORM (async)
+- `diesel`: Diesel (safe, extensible)
+- `sqlx-rust`: sqlx (async SQL toolkit)
+- `none`: No ORM
+
 ```bash
 uvx tristack --orm sqlalchemy
+tristack --orm seaorm
 ```
 
 ### `--migrations <tool>`
 
-Database migration tool (Python):
+Database migration tool, scoped to the selected language:
+
+Python:
 
 - `alembic`: Alembic (pairs with SQLModel/SQLAlchemy)
 - `none`: No migrations
+
+Go:
+
+- `goose`: Goose (`migrations/*.sql`)
+- `golang-migrate`: golang-migrate (`db/migrations/*.up.sql` / `*.down.sql`)
+- `none`: No migrations
+
+Rust:
+
+- `none`: No migrations (run your ORM's own tooling)
 
 Django uses its own bundled migrations; combined with `--framework django`, migrations are on you by default.
 
 ```bash
 uvx tristack --migrations alembic
+tristack --migrations goose
 ```
 
 ### `--database <db>`
@@ -104,19 +154,32 @@ uvx tristack --database postgres
 
 ### `--package-manager <pm>`
 
-Package manager, scoped to the selected language (Python):
+Package manager, scoped to the selected language:
+
+Python:
 
 - `uv`: uv (fast, modern; default)
 - `poetry`: Poetry
 - `pip`: pip + venv
 
+Go:
+
+- `go`: Go modules (always)
+
+Rust:
+
+- `cargo`: Cargo (always)
+
 ```bash
 uvx tristack --package-manager poetry
+tristack --package-manager cargo
 ```
 
 ### `--addons <types...>`
 
 Additional features, scoped to the selected language. Pass a comma-separated list, or `none`:
+
+Python:
 
 - `docker`: Dockerfile + `docker-compose.yml`
 - `ruff`: Ruff linting/formatting config
@@ -127,8 +190,29 @@ Additional features, scoped to the selected language. Pass a comma-separated lis
 - `starlight`: Astro Starlight documentation site
 - `none`: No addons
 
+Go:
+
+- `docker`: Dockerfile + `docker-compose.yml`
+- `air`: Live-reloading for Go apps
+- `golangci-lint`: Fast Go linters runner
+- `github-actions`: CI workflow
+- `fumadocs`: Fumadocs documentation site
+- `starlight`: Astro Starlight documentation site
+- `none`: No addons
+
+Rust:
+
+- `docker`: Dockerfile + `docker-compose.yml`
+- `cargo-watch`: Rerun on file changes
+- `clippy`: Lints to catch common mistakes
+- `github-actions`: CI workflow
+- `fumadocs`: Fumadocs documentation site
+- `starlight`: Astro Starlight documentation site
+- `none`: No addons
+
 ```bash
 uvx tristack --addons docker,ruff,pytest
+tristack --addons docker,cargo-watch,clippy
 uvx tristack --addons none
 ```
 
@@ -142,7 +226,7 @@ uvx tristack --no-git
 
 ### `--install / --no-install`
 
-Control dependency installation after project creation (runs `uv sync`, `poetry install`, or `pip install`).
+Control dependency installation after project creation. Runs `uv sync` / `poetry install` / `pip install` for Python, `go mod tidy` for Go, and `cargo build` for Rust.
 
 ```bash
 uvx tristack --no-install

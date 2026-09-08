@@ -150,6 +150,80 @@ describe("createVirtual - django scaffold", () => {
   });
 });
 
+describe("createVirtual - rust scaffold", () => {
+  it("generates an Axum + SeaORM project", async () => {
+    const result = await createVirtual({
+      language: "rust",
+      framework: "axum",
+      orm: "seaorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+      addons: ["docker", "clippy"],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const cargoToml = findFile(tree.root, "Cargo.toml");
+    expect(cargoToml).not.toBeNull();
+    expect(cargoToml).toContain("axum");
+    expect(cargoToml).toContain("sea-orm");
+
+    const main = findByPath(tree.root, ["src", "main.rs"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("mod db");
+
+    const db = findByPath(tree.root, ["src", "db.rs"]);
+    expect(db).not.toBeNull();
+    expect(db).toContain("sea_orm");
+
+    const dockerfile = findFile(tree.root, "Dockerfile");
+    expect(dockerfile).not.toBeNull();
+
+    expect(findFile(tree.root, "main.go")).toBeNull();
+    expect(rootFileNames(tree.root)).not.toContain(".gitkeep");
+  });
+
+  it("generates an Actix-Web + diesel project", async () => {
+    const result = await createVirtual({
+      language: "rust",
+      framework: "actix-web",
+      orm: "diesel",
+      migrations: "none",
+      database: "postgres",
+      packageManager: "cargo",
+      addons: ["github-actions", "cargo-watch"],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const cargoToml = findFile(tree.root, "Cargo.toml");
+    expect(cargoToml).not.toBeNull();
+    expect(cargoToml).toContain("actix-web");
+    expect(cargoToml).toContain("diesel");
+
+    const main = findByPath(tree.root, ["src", "main.rs"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("db::connect");
+
+    const db = findByPath(tree.root, ["src", "db.rs"]);
+    expect(db).not.toBeNull();
+    expect(db).toContain("PgConnection");
+
+    const ci = findByPath(tree.root, [".github", "workflows", "ci.yml"]);
+    expect(ci).not.toBeNull();
+    expect(rootFileNames(tree.root)).not.toContain(".gitkeep");
+  });
+});
+
 describe("validateResolvedConfigCompatibility", () => {
   it("accepts a valid python stack", () => {
     const base = {

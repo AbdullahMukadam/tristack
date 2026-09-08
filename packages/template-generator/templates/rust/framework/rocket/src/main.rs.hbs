@@ -1,0 +1,30 @@
+#[macro_use]
+extern crate rocket;
+
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[get("/health")]
+fn health() -> &'static str {
+    "{\"status\":\"ok\"}"
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    dotenvy::dotenv().ok();
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let config = rocket::Config {
+        port: std::env::var("PORT")
+            .unwrap_or_else(|_| "8000".to_string())
+            .parse()
+            .expect("invalid PORT"),
+        ..Default::default()
+    };
+    let _ = rocket::custom(config).mount("/", routes![health]).launch().await?;
+    Ok(())
+}

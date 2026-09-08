@@ -1,0 +1,112 @@
+---
+title: Go Quick Start
+description: Scaffold and run your first Gin + GORM project end to end
+---
+
+## Overview
+
+This guide walks through the default Go flow: scaffold a Gin + GORM + Goose + SQLite project, run it, and verify the health endpoint. Go projects run the CLI as the standalone `tristack` binary.
+
+## 1. Scaffold
+
+```bash
+tristack my-api
+```
+
+Follow the prompts, or skip them and take the defaults completely non-interactively:
+
+```bash
+tristack my-api --yes
+```
+
+After scaffolding you'll see the reproducible command, which is also saved to `tristack.jsonc` inside the project.
+
+## 2. Run it
+
+```bash
+cd my-api
+cp .env.example .env
+go mod tidy
+air
+```
+
+Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
+
+<Callout title="Note">
+  The module path is a slugged version of your project name (`my-api` → `my_api`), and the data
+  layer is imported as `<module>/internal/db`. The port (`8000`) and app name come from `PORT` and
+  `APP_NAME` in `.env`.
+</Callout>
+
+## 3. Common commands
+
+```bash
+go mod tidy        # install dependencies (default package manager)
+go run .           # run without the air addon
+go build           # compile the binary
+air                # live reload (air addon)
+golangci-lint run  # lint (golangci-lint addon)
+```
+
+### Database migrations
+
+With Goose, migrations live in `migrations/`:
+
+```bash
+go run github.com/pressly/goose/v3/cmd/goose@latest create create_users sql
+go run github.com/pressly/goose/v3/cmd/goose@latest up
+```
+
+With golang-migrate, SQL files live in `db/migrations/`:
+
+```bash
+go run -tags 'sqlite3' github.com/golang-migrate/migrate/v4/cmd/migrate@latest \
+  -path db/migrations -database $DATABASE_URL up
+```
+
+### Docker
+
+With the `docker` addon, run the whole stack in containers:
+
+```bash
+docker compose up --build
+```
+
+## 4. Other frameworks
+
+The stack varies by framework — same flow, different router:
+
+| Framework     | Scaffold flag        | Run                |
+| ------------- | -------------------- | ------------------ |
+| Gin (default) | `--framework gin`    | `air` / `go run .` |
+| Fiber         | `--framework fiber`  | `air` / `go run .` |
+| Echo          | `--framework echo`   | `air` / `go run .` |
+| Chi           | `--framework chi`    | `air` / `go run .` |
+| Go stdlib     | `--framework stdlib` | `air` / `go run .` |
+
+## 5. Reproduce the same stack
+
+Every scaffold prints a reproducible command and stores it in `tristack.jsonc`:
+
+```bash
+tristack my-api \
+  --language go \
+  --framework gin \
+  --orm gorm \
+  --migrations goose \
+  --database sqlite \
+  --package-manager go \
+  --addons docker,air,golangci-lint
+```
+
+Or validate it without writing anything:
+
+```bash
+tristack my-api --yes --dry-run
+```
+
+## Next steps
+
+- [Project Structure](/docs/project-structure) — exactly what gets generated
+- [CLI Options](/docs/cli/options) — every flag
+- [Compatibility](/docs/cli/compatibility) — valid combinations

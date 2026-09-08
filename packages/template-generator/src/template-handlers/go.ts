@@ -6,8 +6,12 @@ import { copyTemplate, copyTemplates, type TemplateData } from "./utils";
 function copyGoBase(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   copyTemplate(vfs, data.templates, config, "go/base/go.mod.hbs", "go.mod");
-  copyTemplates(vfs, data.templates, config, "go/base", (templatePath) =>
-    templatePath.includes("go.mod"),
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    "go/base",
+    (templatePath) => templatePath.includes("go.mod") || templatePath.includes(".gitkeep"),
   );
 }
 

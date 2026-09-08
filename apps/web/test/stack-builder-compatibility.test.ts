@@ -11,6 +11,11 @@ import {
   PYTHON_MIGRATIONS,
   PYTHON_ORMS,
   PYTHON_PACKAGE_MANAGERS,
+  RUST_ADDONS,
+  RUST_FRAMEWORKS,
+  RUST_MIGRATIONS,
+  RUST_ORMS,
+  RUST_PACKAGE_MANAGERS,
 } from "../../../packages/types/src/constants";
 import { DATABASE_VALUES } from "../../../packages/types/src/schemas";
 import {
@@ -39,36 +44,47 @@ function createStack(overrides: Partial<StackState> = {}): StackState {
 }
 
 describe("stack builder option parity", () => {
-  test("exposes union of CLI option sets across Python and Go", () => {
-    const union = (py: readonly string[], go: readonly string[]) => [...new Set([...py, ...go])];
-    expect(TECH_OPTIONS.language.map((option) => option.id)).toEqual(["python", "go"]);
+  test("exposes union of CLI option sets across Python, Go, and Rust", () => {
+    const union = (py: readonly string[], go: readonly string[], rust: readonly string[]) => [
+      ...new Set([...py, ...go, ...rust]),
+    ];
+    expect(TECH_OPTIONS.language.map((option) => option.id)).toEqual(["python", "go", "rust"]);
     expect(TECH_OPTIONS.framework.map((option) => option.id)).toEqual(
-      union(PYTHON_FRAMEWORKS, GO_FRAMEWORKS),
+      union(PYTHON_FRAMEWORKS, GO_FRAMEWORKS, RUST_FRAMEWORKS),
     );
-    expect(TECH_OPTIONS.orm.map((option) => option.id)).toEqual(union(PYTHON_ORMS, GO_ORMS));
+    expect(TECH_OPTIONS.orm.map((option) => option.id)).toEqual(
+      union(PYTHON_ORMS, GO_ORMS, RUST_ORMS),
+    );
     expect(TECH_OPTIONS.migrations.map((option) => option.id)).toEqual(
-      union(PYTHON_MIGRATIONS, GO_MIGRATIONS),
+      union(PYTHON_MIGRATIONS, GO_MIGRATIONS, RUST_MIGRATIONS),
     );
     expect(TECH_OPTIONS.database.map((option) => option.id)).toEqual([...DATABASE_VALUES]);
     expect(TECH_OPTIONS.packageManager.map((option) => option.id)).toEqual(
-      union(PYTHON_PACKAGE_MANAGERS, GO_PACKAGE_MANAGERS),
+      union(PYTHON_PACKAGE_MANAGERS, GO_PACKAGE_MANAGERS, RUST_PACKAGE_MANAGERS),
     );
-    expect(TECH_OPTIONS.addons.map((option) => option.id)).toEqual(union(PYTHON_ADDONS, GO_ADDONS));
+    expect(TECH_OPTIONS.addons.map((option) => option.id)).toEqual(
+      union(PYTHON_ADDONS, GO_ADDONS, RUST_ADDONS),
+    );
   });
 
   test("exposes exactly the per-language option sets via getValidIdsForLanguage", () => {
     expect(getValidIdsForLanguage("python", "framework")).toEqual([...PYTHON_FRAMEWORKS]);
     expect(getValidIdsForLanguage("go", "framework")).toEqual([...GO_FRAMEWORKS]);
+    expect(getValidIdsForLanguage("rust", "framework")).toEqual([...RUST_FRAMEWORKS]);
     expect(getValidIdsForLanguage("python", "orm")).toEqual([...PYTHON_ORMS]);
     expect(getValidIdsForLanguage("go", "orm")).toEqual([...GO_ORMS]);
+    expect(getValidIdsForLanguage("rust", "orm")).toEqual([...RUST_ORMS]);
     expect(getValidIdsForLanguage("python", "migrations")).toEqual([...PYTHON_MIGRATIONS]);
     expect(getValidIdsForLanguage("go", "migrations")).toEqual([...GO_MIGRATIONS]);
+    expect(getValidIdsForLanguage("rust", "migrations")).toEqual([...RUST_MIGRATIONS]);
     expect(getValidIdsForLanguage("python", "packageManager")).toEqual([
       ...PYTHON_PACKAGE_MANAGERS,
     ]);
     expect(getValidIdsForLanguage("go", "packageManager")).toEqual([...GO_PACKAGE_MANAGERS]);
+    expect(getValidIdsForLanguage("rust", "packageManager")).toEqual([...RUST_PACKAGE_MANAGERS]);
     expect(getValidIdsForLanguage("python", "addons")).toEqual([...PYTHON_ADDONS]);
     expect(getValidIdsForLanguage("go", "addons")).toEqual([...GO_ADDONS]);
+    expect(getValidIdsForLanguage("rust", "addons")).toEqual([...RUST_ADDONS]);
   });
 
   test("filters the builder options to the selected language only", () => {
@@ -95,6 +111,23 @@ describe("stack builder option parity", () => {
       ...PYTHON_FRAMEWORKS,
     ]);
     expect(getOptionsForStack(pythonStack, "framework").some((o) => o.id === "gin")).toBe(false);
+
+    const rustStack = createStack({ language: "rust" });
+    expect(getOptionsForStack(rustStack, "framework").map((option) => option.id)).toEqual([
+      ...RUST_FRAMEWORKS,
+    ]);
+    expect(getOptionsForStack(rustStack, "orm").map((option) => option.id)).toEqual([...RUST_ORMS]);
+    expect(getOptionsForStack(rustStack, "migrations").map((option) => option.id)).toEqual([
+      ...RUST_MIGRATIONS,
+    ]);
+    expect(getOptionsForStack(rustStack, "packageManager").map((option) => option.id)).toEqual([
+      ...RUST_PACKAGE_MANAGERS,
+    ]);
+    expect(getOptionsForStack(rustStack, "addons").map((option) => option.id)).toEqual([
+      ...RUST_ADDONS,
+    ]);
+    expect(getOptionsForStack(rustStack, "framework").some((o) => o.id === "django")).toBe(false);
+    expect(getOptionsForStack(rustStack, "packageManager").some((o) => o.id === "uv")).toBe(false);
   });
 
   test("marks the default options on git, install, and the default stack", () => {

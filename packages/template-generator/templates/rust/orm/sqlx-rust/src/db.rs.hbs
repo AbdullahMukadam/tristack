@@ -1,0 +1,45 @@
+use sqlx::Error;
+
+{{#if (eq database "sqlite")}}
+use sqlx::SqlitePool;
+
+pub type OrmPool = SqlitePool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    SqlitePool::connect(&database_url()).await
+}
+{{else if (eq database "postgres")}}
+use sqlx::PgPool;
+
+pub type OrmPool = PgPool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    PgPool::connect(&database_url()).await
+}
+{{else if (eq database "mysql")}}
+use sqlx::MySqlPool;
+
+pub type OrmPool = MySqlPool;
+
+pub async fn connect() -> Result<OrmPool, Error> {
+    MySqlPool::connect(&database_url()).await
+}
+{{/if}}
+
+fn database_url() -> String {
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
+}
+
+{{#if (eq database "sqlite")}}
+fn database_default() -> &'static str {
+    "{{project_slug}}.db"
+}
+{{else if (eq database "postgres")}}
+fn database_default() -> &'static str {
+    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+}
+{{else if (eq database "mysql")}}
+fn database_default() -> &'static str {
+    "mysql://root:password@localhost:3306/{{project_slug}}"
+}
+{{/if}}

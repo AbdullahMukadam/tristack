@@ -6,6 +6,14 @@ function goRunCommand(config: ProjectConfig): string {
   return config.addons.includes("air") ? "air" : "go run .";
 }
 
+function rustRunCommand(config: ProjectConfig): string {
+  return config.addons.includes("cargo-watch") ? "cargo watch -x run" : "cargo run";
+}
+
+function rustInstallCommand(config: ProjectConfig): string {
+  return "cargo build";
+}
+
 function goMigrationsCommand(config: ProjectConfig): string {
   switch (config.migrations) {
     case "goose":
@@ -21,6 +29,9 @@ function runCommand(config: ProjectConfig): string {
   if (config.language === "go") {
     return goRunCommand(config);
   }
+  if (config.language === "rust") {
+    return rustRunCommand(config);
+  }
   switch (config.packageManager) {
     case "uv":
       return "uv run fastapi dev";
@@ -35,6 +46,9 @@ function installCommand(config: ProjectConfig): string {
   if (config.language === "go") {
     return "go mod tidy";
   }
+  if (config.language === "rust") {
+    return rustInstallCommand(config);
+  }
   switch (config.packageManager) {
     case "uv":
       return "uv sync";
@@ -48,6 +62,9 @@ function installCommand(config: ProjectConfig): string {
 function migrationsCommand(config: ProjectConfig): string {
   if (config.language === "go") {
     return goMigrationsCommand(config);
+  }
+  if (config.language === "rust") {
+    return "# no migrations configured";
   }
   if (config.database === "none") {
     return "# no database configured";
@@ -96,7 +113,7 @@ ${runCommand(config)}
 
 ## API Docs
 
-${config.language === "go" ? 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.' : "When the dev server is running, interactive API docs are available at `/docs`."}
+${config.language === "go" ? 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.' : config.language === "rust" ? 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.' : "When the dev server is running, interactive API docs are available at `/docs`."}
 
 ## Environment
 

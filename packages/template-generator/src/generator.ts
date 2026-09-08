@@ -6,6 +6,7 @@ import {
   processBaseTemplate,
   processGoTemplates,
   processPythonTemplates,
+  processRustTemplates,
 } from "./template-handlers";
 import { writeTriStackConfigToVfs } from "./tristack-config";
 import type { GeneratorOptions, VirtualFileTree } from "./types";
@@ -40,7 +41,7 @@ export async function generate(
           processGoTemplates(vfs, templates, config);
           break;
         case "rust":
-          // Not yet implemented in current phase
+          processRustTemplates(vfs, templates, config);
           break;
       }
 

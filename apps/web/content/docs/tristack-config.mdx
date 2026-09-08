@@ -34,11 +34,11 @@ Notes:
 - Values mirror what you selected during project creation
 - `version` is the CLI version used to create the project
 - `createdAt` is an ISO timestamp of when the project was scaffolded
-- `reproducibleCommand` is the exact non-interactive command that reproduces this stack
+- `reproducibleCommand` is the exact non-interactive command that reproduces this stack (prefixed with `uvx tristack` for Python stacks and `tristack` for Go/Rust stacks)
 - The JSONC format lets future versions add comments without breaking parsers
 
 ## Safe to delete
 
-It's safe to delete for normal development — the generated Python code is the source of truth. Its main purpose today is bookkeeping: knowing what stack a project uses and how to reproduce it. Keeping it costs nothing and gives editors and tooling a stable record of the project's configuration.
+It's safe to delete for normal development — the generated code is the source of truth. Its main purpose today is bookkeeping: knowing what stack a project uses and how to reproduce it. Keeping it costs nothing and gives editors and tooling a stable record of the project's configuration.
 
 See also: the [schema](/docs/cli/programmatic-api) that validates this file, and the [Agent Workflows](/docs/cli/agent-workflows) page for the JSON-first input shape.
