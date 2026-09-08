@@ -34,6 +34,7 @@
     "check": "oxfmt . && oxlint .",
     "prepare": "lefthook install",
     "release": "bun run scripts/release.ts",
+    "release:cut": "bun run scripts/cut-release.ts",
     "deploy:web": "turbo run deploy --filter=web",
     "generate": "turbo run generate-schema --filter=web",
     "deploy": "turbo run deploy --filter=web"
