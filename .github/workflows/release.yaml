@@ -104,7 +104,7 @@ jobs:
 
   publish:
     name: Publish release + PyPI
-    needs: build
+    needs: [check, build]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
