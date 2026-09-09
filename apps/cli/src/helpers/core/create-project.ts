@@ -3,7 +3,6 @@ import { generate, EMBEDDED_TEMPLATES } from "@tristack/template-generator";
 import { writeTree } from "@tristack/template-generator/fs-writer";
 import { Result } from "better-result";
 import fs from "fs-extra";
-import pc from "picocolors";
 
 import { CLI_VERSION } from "../../constants";
 import type { ProjectConfig } from "../../types";
@@ -18,6 +17,7 @@ import {
 } from "../../utils/interrupt";
 import { runOptionalStep } from "../../utils/optional-step";
 import { cliLog } from "../../utils/terminal-output";
+import { accent } from "../../utils/theme";
 import { initializeGit } from "./git";
 import { installDependencies } from "./install-dependencies";
 
@@ -124,9 +124,9 @@ async function runPostScaffoldSteps(
   );
 
   if (!isSilent()) {
-    cliLog.message(pc.cyan(`cd ${options.relativePath}`));
+    cliLog.message(accent(`cd ${options.relativePath}`));
     const runCmd = runCommandHint(options);
-    if (runCmd) cliLog.message(pc.cyan(runCmd));
+    if (runCmd) cliLog.message(accent(runCmd));
   }
 
   return { projectDir, install, installError, interrupted: wasAnyStepInterrupted() };

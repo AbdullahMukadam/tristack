@@ -33,7 +33,9 @@ import {
 import { validateProjectName } from "../../utils/project-name-validation";
 import { renderTitle } from "../../utils/render-title";
 import { checkBaselineRequirements, checkLocalRequirements } from "../../utils/requirements";
+import { accent, success } from "../../utils/theme";
 import {
+  applyFlagDefaults,
   getProvidedFlags,
   processAndValidateFlags,
   validateResolvedConfigCompatibility,
@@ -168,7 +170,7 @@ async function createProjectHandlerInternal(
     if (!isSilent() && input.renderTitle !== false) {
       renderTitle();
     }
-    if (!isSilent()) intro(pc.magenta("Configure your new project"));
+    if (!isSilent()) intro(accent("Configure your new project"));
 
     if (!isSilent()) {
       const baseline = yield* Result.await(
@@ -230,8 +232,7 @@ async function createProjectHandlerInternal(
       }
       const flagConfig = flagConfigResult.value;
       config = {
-        ...getDefaultConfig(),
-        ...flagConfig,
+        ...applyFlagDefaults(getDefaultConfig(), flagConfig),
         projectName: finalBaseName,
         projectDir: finalResolvedPath,
         relativePath: finalPathInput,
@@ -296,7 +297,7 @@ async function createProjectHandlerInternal(
     }
 
     if (!isSilent()) {
-      log.info(pc.magenta(pc.bold("Stack ready")));
+      log.info(accent(pc.bold("Stack ready")));
       log.message(displayConfig(config));
     }
 
@@ -305,10 +306,10 @@ async function createProjectHandlerInternal(
     if (input.dryRun) {
       const elapsedTimeMs = Date.now() - startTime;
       if (!isSilent()) {
-        log.success(pc.green("Configuration ready. No files were written."));
+        log.success(success("Configuration ready. No files were written."));
         log.message(pc.dim(`Target directory: ${finalResolvedPath}`));
         log.message(pc.dim(`Run without --dry-run to create the project.`));
-        outro(pc.magenta("Dry run complete."));
+        outro(accent("Dry run complete."));
       }
       return Result.ok({
         success: true,
@@ -334,8 +335,8 @@ async function createProjectHandlerInternal(
     const elapsedTimeMs = Date.now() - startTime;
     if (!isSilent()) {
       const elapsedTimeInSeconds = (elapsedTimeMs / 1000).toFixed(1);
-      outro(pc.magenta(`Project ready in ${pc.bold(`${elapsedTimeInSeconds}s`)}`));
-      log.message(`${pc.dim("Recreate this stack")}\n${pc.cyan(reproducibleCommand)}`);
+      outro(accent(`Project ready in ${pc.bold(`${elapsedTimeInSeconds}s`)}`));
+      log.message(`${pc.dim("Recreate this stack")}\n${accent(reproducibleCommand)}`);
     }
 
     return Result.ok({

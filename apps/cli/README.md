@@ -34,11 +34,12 @@ Non-interactive default project:
 uvx tristack my-api --yes
 ```
 
-Go and Rust developers will use the same `tristack` binary via a curl/PowerShell installer or Homebrew (Phase 2 onward). `npx create-tristack@latest` is a secondary channel for Node-comfortable users.
+Go and Rust developers use the same `tristack` binary; curl/PowerShell installers and Homebrew are on the roadmap.
 
 ## Requirements
 
 - Python 3.10+ is recommended for generated Python projects; the CLI checks the exact stack before writing files.
+- Go and Rust toolchains are required to run the generated Go and Rust projects (not to run the CLI itself).
 - Rust is required only when building the binary from source.
 
 ## Usage
@@ -51,12 +52,12 @@ Options:
   --dry-run                       Validate configuration without writing files
   --verbose                       Show detailed result information as JSON
   --yolo                          Bypass validations and compatibility checks
-  --language <lang>               python (Go and Rust are reserved for later phases)
-  --framework <framework>         Python: fastapi (default), litestar, django, flask
-  --orm <orm>                     Python: sqlmodel (default), sqlalchemy, tortoise, none
-  --migrations <tool>             Python: alembic (default), none
+  --language <lang>               python (default), go, rust
+  --framework <framework>         python: fastapi (default), litestar, django, flask · go: gin, fiber, echo, chi, stdlib · rust: axum, actix-web, rocket, warp, salvo, loco
+  --orm <orm>                     python: sqlmodel (default), sqlalchemy, tortoise, none · go: sqlc, gorm, sqlx, none · rust: seaorm, diesel, sqlx, none
+  --migrations <tool>             python: alembic (default), none · go: goose, golang-migrate, none · rust: none
   --database <db>                 sqlite (default), postgres, mysql, none
-  --package-manager <pm>          Python: uv (default), poetry, pip
+  --package-manager <pm>          python: uv (default), poetry, pip · go: go · rust: cargo
   --addons <types...>             Comma-separated addons or none
   --git / --no-git                Initialize a Git repository (default on)
   --install / --no-install        Install dependencies after creation (default on)

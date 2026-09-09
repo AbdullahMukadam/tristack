@@ -1,6 +1,7 @@
 import pc from "picocolors";
 
 import type { ProjectConfig } from "../types";
+import { accent } from "./theme";
 
 export type ConfigDisplayRow = { label: string; value: string };
 export type ConfigDisplaySection = { title: string; rows: ConfigDisplayRow[] };
@@ -128,7 +129,7 @@ export function displayConfig(config: Partial<ProjectConfig>): string {
       const renderedRows = rows
         .map(({ label, value }) => `  ${pc.dim(label.padEnd(labelWidth))}  ${value}`)
         .join("\n");
-      return `${pc.magenta(pc.bold(title))}\n${renderedRows}`;
+      return `${accent(pc.bold(title))}\n${renderedRows}`;
     })
     .join("\n\n");
 }

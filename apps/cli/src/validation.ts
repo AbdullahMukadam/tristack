@@ -131,6 +131,24 @@ export function processAndValidateFlags(
   return Result.ok(config);
 }
 
+export function applyFlagDefaults(
+  defaults: ProjectConfig,
+  flags: Partial<ProjectConfig>,
+): ProjectConfig {
+  return {
+    ...defaults,
+    language: flags.language ?? defaults.language,
+    framework: flags.framework ?? defaults.framework,
+    orm: flags.orm ?? defaults.orm,
+    migrations: flags.migrations ?? defaults.migrations,
+    database: flags.database ?? defaults.database,
+    packageManager: flags.packageManager ?? defaults.packageManager,
+    addons: flags.addons ?? defaults.addons,
+    git: flags.git ?? defaults.git,
+    install: flags.install ?? defaults.install,
+  };
+}
+
 export function processProvidedFlagsWithoutValidation(
   options: CLIInput,
   projectName?: string,

@@ -27,8 +27,8 @@ tristack create --yes    # use default configuration
 ## Support
 
 - Operations: interactive prompts, `--yes`, `--yolo`, `--dry-run`, `--verbose`
-- Languages: Python (FastAPI, Litestar, Django, Flask), Go (Gin, Fiber, Echo, Chi, stdlib)
-- Rust: coming soon
+- Languages: Python (FastAPI, Litestar, Django, Flask), Go (Gin, Fiber, Echo, Chi, stdlib), Rust (Axum, Actix-Web, Rocket, Warp, Salvo, Loco)
+- ORMs/migrations: Python (SQLModel, SQLAlchemy, Tortoise, Alembic), Go (GORM, SQLC, SQLx, Goose), Rust (SeaORM, Diesel, SQLx)
 
 ## License
 

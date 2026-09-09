@@ -39,6 +39,7 @@ import {
   S_STEP_SUBMIT,
 } from "../utils/glyphs";
 import { GO_BACK_SYMBOL } from "../utils/navigation";
+import { accent, error, success, warning } from "../utils/theme";
 
 const promptsNavigatingBack = new WeakSet<object>();
 
@@ -50,13 +51,13 @@ function symbol(state: State) {
   switch (state) {
     case "initial":
     case "active":
-      return pc.cyan(S_STEP_ACTIVE);
+      return accent(S_STEP_ACTIVE);
     case "cancel":
-      return pc.red(S_STEP_CANCEL);
+      return error(S_STEP_CANCEL);
     case "error":
-      return pc.yellow(S_STEP_ERROR);
+      return warning(S_STEP_ERROR);
     case "submit":
-      return pc.green(S_STEP_SUBMIT);
+      return success(S_STEP_SUBMIT);
   }
 }
 
@@ -91,10 +92,10 @@ function getMultiHint(): string {
 function activePromptTitle(message: string, state: "active" | "error" = "active"): string {
   const progress = getPromptProgress();
   const eyebrow = progress
-    ? `${pc.magenta(pc.bold(progress.section.toUpperCase()))} ${pc.dim(`· ${progress.current}/${progress.total}`)}`
+    ? `${accent(pc.bold(progress.section.toUpperCase()))} ${pc.dim(`· ${progress.current}/${progress.total}`)}`
     : pc.dim("SETUP");
 
-  return `${pc.gray(S_BAR)}  ${eyebrow}\n${symbol(state)}  ${pc.bold(message)}\n`;
+  return `\n${pc.gray(S_BAR)}  ${eyebrow}\n${symbol(state)}  ${pc.bold(message)}\n`;
 }
 
 function resolvedPrompt(message: string, value: string, state: "submit" | "cancel"): string {
@@ -104,7 +105,7 @@ function resolvedPrompt(message: string, value: string, state: "submit" | "cance
 
 function canceledPrompt<T extends object>(prompt: T, message: string, value: string): string {
   if (promptsNavigatingBack.has(prompt)) {
-    return `${pc.cyan(S_STEP_BACK)}  ${pc.dim(message)}`;
+    return `${accent(S_STEP_BACK)}  ${pc.dim(message)}`;
   }
   return resolvedPrompt(message, value, "cancel");
 }
@@ -172,7 +173,7 @@ export async function navigableSelect<T>(opts: NavigableSelectOptions<T>): Promi
       case "selected":
         return `${pc.dim(label)}`;
       case "active":
-        return `${pc.cyan(S_RADIO_ACTIVE)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+        return `${accent(S_RADIO_ACTIVE)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
       case "cancelled":
         return `${pc.strikethrough(pc.dim(label))}`;
       default:
@@ -204,9 +205,9 @@ export async function navigableSelect<T>(opts: NavigableSelectOptions<T>): Promi
             rowPadding: 5,
             style: (option, active) =>
               opt(option, option.disabled ? "disabled" : active ? "active" : "inactive"),
-          }).join(`\n${pc.cyan(S_BAR)}  `);
+          }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.cyan(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
         }
       }
     },
@@ -246,16 +247,16 @@ export async function navigableMultiselect<T>(
       return `${pc.gray(S_CHECKBOX_INACTIVE)} ${pc.strikethrough(pc.gray(label))}${option.hint ? ` ${pc.dim(`(${option.hint ?? "disabled"})`)}` : ""}`;
     }
     if (state === "active") {
-      return `${pc.cyan(S_CHECKBOX_ACTIVE)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+      return `${accent(S_CHECKBOX_ACTIVE)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "selected") {
-      return `${pc.green(S_CHECKBOX_SELECTED)} ${pc.dim(label)}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+      return `${success(S_CHECKBOX_SELECTED)} ${pc.dim(label)}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "cancelled") {
       return `${pc.strikethrough(pc.dim(label))}`;
     }
     if (state === "active-selected") {
-      return `${pc.green(S_CHECKBOX_SELECTED)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+      return `${success(S_CHECKBOX_SELECTED)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "submitted") {
       return `${pc.dim(label)}`;
@@ -314,7 +315,7 @@ export async function navigableMultiselect<T>(
         case "error": {
           const footer = this.error
             .split("\n")
-            .map((ln, i) => (i === 0 ? `${pc.yellow(S_BAR_END)}  ${pc.yellow(ln)}` : `   ${ln}`))
+            .map((ln, i) => (i === 0 ? `${warning(S_BAR_END)}  ${warning(ln)}` : `   ${ln}`))
             .join("\n");
           const optionsText = limitOptions({
             output: opts.output,
@@ -324,8 +325,8 @@ export async function navigableMultiselect<T>(
             columnPadding: 3,
             rowPadding: footer.split("\n").length + 4,
             style: styleOption,
-          }).join(`\n${pc.yellow(S_BAR)}  `);
-          return `${activePromptTitle(opts.message, "error")}${pc.yellow(S_BAR)}  ${optionsText}\n${footer}\n`;
+          }).join(`\n${warning(S_BAR)}  `);
+          return `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`;
         }
         default: {
           const optionsText = limitOptions({
@@ -336,9 +337,9 @@ export async function navigableMultiselect<T>(
             columnPadding: 3,
             rowPadding: 5,
             style: styleOption,
-          }).join(`\n${pc.cyan(S_BAR)}  `);
+          }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getMultiHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.cyan(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
         }
       }
     },
@@ -375,13 +376,13 @@ export async function navigableConfirm(opts: NavigableConfirmOptions): Promise<b
           return canceledPrompt(this, opts.message, pc.strikethrough(pc.dim(value)));
         default: {
           const hint = `${pc.gray(S_BAR_END)}  ${getHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.cyan(S_BAR)}  ${
+          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${
             this.value
-              ? `${pc.cyan(S_RADIO_ACTIVE)} ${active}`
+              ? `${accent(S_RADIO_ACTIVE)} ${active}`
               : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(active)}`
           } ${pc.dim("/")} ${
             !this.value
-              ? `${pc.cyan(S_RADIO_ACTIVE)} ${inactive}`
+              ? `${accent(S_RADIO_ACTIVE)} ${inactive}`
               : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(inactive)}`
           }\n${hint}\n`;
         }
@@ -468,23 +469,23 @@ export async function navigableGroupMultiselect<T>(
     const inactiveBox = radio ? S_RADIO_INACTIVE : S_CHECKBOX_INACTIVE;
 
     if (state === "active") {
-      return `${pc.dim(prefix)}${pc.cyan(activeBox)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+      return `${pc.dim(prefix)}${accent(activeBox)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "group-active") {
-      return `${prefix}${pc.cyan(S_CHECKBOX_ACTIVE)} ${pc.dim(label)}`;
+      return `${prefix}${accent(S_CHECKBOX_ACTIVE)} ${pc.dim(label)}`;
     }
     if (state === "group-active-selected") {
-      return `${prefix}${pc.green(S_CHECKBOX_SELECTED)} ${pc.dim(label)}`;
+      return `${prefix}${success(S_CHECKBOX_SELECTED)} ${pc.dim(label)}`;
     }
     if (state === "selected") {
-      const selectedCheckbox = isItem ? pc.green(selectedBox) : "";
+      const selectedCheckbox = isItem ? success(selectedBox) : "";
       return `${pc.dim(prefix)}${selectedCheckbox} ${pc.dim(label)}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "cancelled") {
       return `${pc.strikethrough(pc.dim(label))}`;
     }
     if (state === "active-selected") {
-      return `${pc.dim(prefix)}${pc.green(selectedBox)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
+      return `${pc.dim(prefix)}${success(selectedBox)} ${label}${option.hint ? ` ${pc.dim(`(${option.hint})`)}` : ""}`;
     }
     if (state === "submitted") {
       return `${pc.dim(label)}`;
@@ -553,7 +554,7 @@ export async function navigableGroupMultiselect<T>(
         case "error": {
           const footer = this.error
             .split("\n")
-            .map((ln, i) => (i === 0 ? `${pc.yellow(S_BAR_END)}  ${pc.yellow(ln)}` : `   ${ln}`))
+            .map((ln, i) => (i === 0 ? `${warning(S_BAR_END)}  ${warning(ln)}` : `   ${ln}`))
             .join("\n");
           const optionsText = limitOptions({
             output: opts.output,
@@ -563,8 +564,8 @@ export async function navigableGroupMultiselect<T>(
             columnPadding: 3,
             rowPadding: footer.split("\n").length + 4,
             style: styleOption,
-          }).join(`\n${pc.yellow(S_BAR)}  `);
-          return `${activePromptTitle(opts.message, "error")}${pc.yellow(S_BAR)}  ${optionsText}\n${footer}\n`;
+          }).join(`\n${warning(S_BAR)}  `);
+          return `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`;
         }
         default: {
           const optionsText = limitOptions({
@@ -575,9 +576,9 @@ export async function navigableGroupMultiselect<T>(
             columnPadding: 3,
             rowPadding: 5,
             style: styleOption,
-          }).join(`\n${pc.cyan(S_BAR)}  `);
+          }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getMultiHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.cyan(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
         }
       }
     },

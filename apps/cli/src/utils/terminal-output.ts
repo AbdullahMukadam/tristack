@@ -5,6 +5,7 @@ import pc from "picocolors";
 import { isSilent } from "./context";
 import { S_BAR, S_STEP_CANCEL, S_STEP_SUBMIT, SPINNER_FRAMES } from "./glyphs";
 import { wasInterrupted } from "./interrupt";
+import { accent, success, warning } from "./theme";
 
 type SpinnerLike = {
   start(message: string): void;
@@ -59,7 +60,7 @@ function createTerminalSpinner(): SpinnerLike {
 
   const render = () => {
     const suffix = ".".repeat(Math.floor(dots)).slice(0, 3);
-    out.write(`${CLEAR_LINE}${pc.magenta(SPINNER_FRAMES[frame])}  ${text}${suffix}`);
+    out.write(`${CLEAR_LINE}${accent(SPINNER_FRAMES[frame])}  ${text}${suffix}`);
     frame = (frame + 1) % SPINNER_FRAMES.length;
     dots = dots < 4 ? dots + 0.125 : 0;
   };
@@ -79,7 +80,7 @@ function createTerminalSpinner(): SpinnerLike {
         render();
         timer = setInterval(render, FRAME_MS);
       } else {
-        out.write(`${pc.magenta(SPINNER_FRAMES[0])}  ${text}\n`);
+        out.write(`${accent(SPINNER_FRAMES[0])}  ${text}\n`);
       }
     },
     message: setText,
@@ -94,8 +95,8 @@ function createTerminalSpinner(): SpinnerLike {
       const cancelled = wasInterrupted() && !interruptedBefore;
       out.write(
         cancelled
-          ? `${pc.yellow(S_STEP_CANCEL)}  ${text} (cancelled)\n`
-          : `${pc.green(S_STEP_SUBMIT)}  ${message || text}\n`,
+          ? `${warning(S_STEP_CANCEL)}  ${text} (cancelled)\n`
+          : `${success(S_STEP_SUBMIT)}  ${message || text}\n`,
       );
     },
   };

@@ -237,29 +237,6 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-6 border-y py-5 lg:grid-cols-4 lg:gap-x-0">
-        <SummaryTile
-          label="Lifetime funding"
-          value={currency.format(summary.total_lifetime_amount)}
-          detail="All-time processed"
-        />
-        <SummaryTile
-          label="Monthly recurring"
-          value={currency.format(summary.total_current_monthly)}
-          detail="Per month right now"
-        />
-        <SummaryTile
-          label="Active sponsors"
-          value={String(activeCount)}
-          detail={`${specialSponsors.length} special`}
-        />
-        <SummaryTile
-          label="All-time sponsors"
-          value={String(summary.total_sponsors)}
-          detail={`Including ${pastSponsors.length} past`}
-        />
-      </div>
-
       {specialSponsors.length > 0 && (
         <section className="space-y-4">
           <SectionHeader
