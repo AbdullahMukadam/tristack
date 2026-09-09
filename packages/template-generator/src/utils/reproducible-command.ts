@@ -15,9 +15,9 @@ function formatMultiFlag(flag: string, values: string[]): string {
 
 /**
  * Native install command per language. The core engine is a standalone binary
- * wrapped natively per ecosystem: `uvx`/`pip` for Python (Phase 1), and a plain
- * `tristack` command from the standalone/Homebrew installers for the Go/Rust
- * phases (which cannot compile a foreign binary via `go install`/`cargo install`).
+ * wrapped natively per ecosystem: `uvx`/`pip` for Python, and a plain
+ * `tristack` command from the standalone curl/PowerShell installers for the
+ * Go/Rust phases (which cannot compile a foreign binary via `go install`/`cargo install`).
  */
 export function getNativeCommand(language: ProjectConfig["language"]): string {
   if (language === "go" || language === "rust") {

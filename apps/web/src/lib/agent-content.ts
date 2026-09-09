@@ -41,13 +41,13 @@ TriStack is a free, MIT-licensed open-source project forked from Better-T-Stack.
 - [Contact](${SITE_URL}/contact)`,
   builder: `# TriStack browser builder
 
-Use the stack builder to choose a language, framework, ORM, database, migrations, package manager, and addons. It produces a reproducible \`create-tristack\` command.
+Use the stack builder to choose a language, framework, ORM, database, migrations, package manager, and addons. It produces a reproducible \`uvx tristack\` or \`tristack\` command.
 
 - [Open the builder](${SITE_URL}/new)
 - [CLI options](${SITE_URL}/docs/cli/options.mdx)
 - [Compatibility rules](${SITE_URL}/docs/cli/compatibility.mdx)
 
-For agent automation, prefer \`create-json\` or the programmatic API documented in the agent workflow guide.`,
+For agent automation, prefer the \`create-json\` command documented in the agent workflow guide.`,
   contact: `# Contact TriStack
 
 Use GitHub issues for reproducible bugs and feature requests. Include the CLI version, command, selected stack, operating system, and a minimal reproduction when possible. General project questions can be sent to ${SUPPORT_EMAIL}.
@@ -57,10 +57,9 @@ Use GitHub issues for reproducible bugs and feature requests. Include the CLI ve
 - [Documentation](${SITE_URL}/docs)`,
   privacy: `# TriStack privacy
 
-The CLI accepts a \`--disable-analytics\` flag; CLI telemetry is not active in Phase 1, and when it ships it will follow the contract in the analytics documentation — no project names, paths, file contents, secrets, environment variables, or persistent user identifiers.
+The CLI accepts a \`--disable-analytics\` flag. It does not currently transmit telemetry; any future telemetry will follow the contract in the privacy notice — no project names, paths, file contents, secrets, environment variables, or persistent user identifiers.
 
 - [Full privacy notice](${SITE_URL}/privacy)
-- [Analytics and telemetry details](${SITE_URL}/docs/analytics.mdx)
 - Disable CLI telemetry with \`--disable-analytics\`.`,
   sponsors: `# TriStack sponsors
 
@@ -159,9 +158,9 @@ export function buildLlmsIndex(pages: DocumentationPage[]) {
 
 ## When to use TriStack
 
-Use TriStack when a developer or coding agent needs to scaffold a new backend project (currently Python with FastAPI, Litestar, Django, or Flask; Go and Rust coming), reproduce a selected stack from a command, inspect compatibility rules, or generate a project through a structured interface.
+Use TriStack when a developer or coding agent needs to scaffold a new backend project (Python, Go, or Rust), reproduce a selected stack from a command, inspect compatibility rules, or generate a project through a structured interface.
 
-TriStack does not expose a public hosted application API. The supported automation interfaces are the CLI, its JSON-first \`create-json\` command, and the programmatic npm API. A native MCP plugin is planned for a later phase.
+TriStack does not expose a public hosted application API. The supported automation interfaces are the CLI and its JSON-first \`create-json\` command. A native MCP plugin is planned.
 
 ## Quick start
 
@@ -180,7 +179,6 @@ uvx tristack my-api --yes
 - JSON project creation: \`tristack create-json --input '{...}'\`
 - Dry-run validation: \`tristack create-json --input '{"projectName":"my-api","dryRun":true}'\`
 - [Agent workflow guide](${SITE_URL}/docs/cli/agent-workflows.mdx)
-- [Programmatic API](${SITE_URL}/docs/cli/programmatic-api.mdx)
 
 ## Documentation
 

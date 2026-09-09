@@ -20,8 +20,8 @@ uvx tristack
 ## Usage
 
 ```bash
-tristack                 # interactive prompts
-tristack create --yes    # use default configuration
+tristack my-api          # interactive prompts
+tristack my-api --yes    # use default configuration
 ```
 
 ## Support

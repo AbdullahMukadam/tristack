@@ -15,20 +15,19 @@ description: Create your first TriStack project in minutes
 
 TriStack scaffolds backend projects in multiple languages. Each has its own option set (framework, ORM, migrations, package manager, addons) in the [Compatibility reference](/docs/cli/compatibility).
 
-| Language | Status                |
-| -------- | --------------------- |
-| Python   | Scaffolding (Phase 1) |
-| Go       | Scaffolding (Phase 2) |
-| Rust     | Scaffolding (Phase 3) |
+| Language | Status      |
+| -------- | ----------- |
+| Python   | Scaffolding |
+| Go       | Scaffolding |
+| Rust     | Scaffolding |
 
 The CLI ships as a standalone native binary. The invoker differs per language:
 
-| Language        | Run the CLI                          |
-| --------------- | ------------------------------------ |
-| Python          | `uvx tristack` (PyPI wrapper)        |
-| Go              | `tristack` (curl/Homebrew installer) |
-| Rust            | `tristack` (curl/Homebrew installer) |
-| Any (secondary) | `npx create-tristack@latest`         |
+| Language | Run the CLI                          |
+| --------- | ------------------------------------ |
+| Python    | `uvx tristack` (PyPI wrapper)        |
+| Go        | `tristack` (curl installer) |
+| Rust      | `tristack` (curl installer) |
 
 ## Get Started
 
@@ -42,7 +41,7 @@ You only need the runtime of whatever language you scaffold, plus **Git** (optio
 | Go       | Go 1.22+ ([go.dev](https://go.dev/dl/))              | `go`                                                                    |
 | Rust     | Rust 1.75+ ([rustup](https://rustup.rs/))            | `cargo`                                                                 |
 
-To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack` (Python path). Go and Rust devs run the standalone `tristack` binary from the curl/Homebrew installers.
+To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack` (Python path). Go and Rust devs run the standalone `tristack` binary from the curl installers.
 
 ### CLI (prompts)
 
@@ -61,7 +60,7 @@ uvx tristack --yes
 ### Stack Builder (UI)
 
 - Visit [/new](/new) to pick your stack, preview the generated file tree live, and copy the exact CLI command. The builder supports Python, Go, and Rust stacks.
-- The command you copy runs verbatim (the builder lets you switch between the native runner and the `npx` path):
+- The command you copy runs verbatim:
 
 ```bash
 uvx tristack my-tristack-app \
@@ -81,7 +80,7 @@ Let an LLM CLI or CI job scaffold projects for you with the fully JSON-first `cr
 
 A native agent plugin (Claude Code / Codex MCP) ships in a later phase.
 
-## Common Setups — Python (Phase 1)
+## Common Setups — Python
 
 The examples below use the Python runner (`uvx tristack`).
 
@@ -133,7 +132,7 @@ uvx tristack my-micro \
   --addons pytest
 ```
 
-## Common Setups — Go (Phase 2)
+## Common Setups — Go
 
 The Go CLI runs as the standalone `tristack` binary.
 
@@ -163,7 +162,7 @@ tristack my-api \
   --addons docker,air,golangci-lint
 ```
 
-## Common Setups — Rust (Phase 3)
+## Common Setups — Rust
 
 The Rust CLI runs as the standalone `tristack` binary.
 

@@ -62,10 +62,9 @@ const structuredData = {
         priceCurrency: "USD",
       },
       featureList: [
-        "Interactive and non-interactive TypeScript project scaffolding",
+        "Interactive and non-interactive backend project scaffolding",
         "Structured JSON commands for coding agents",
         "Local stdio MCP server",
-        "Programmatic npm API",
       ],
       sameAs: [REPOSITORY_URL],
     },

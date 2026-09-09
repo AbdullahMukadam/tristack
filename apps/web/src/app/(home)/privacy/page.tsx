@@ -29,11 +29,10 @@ export default function PrivacyPage() {
     <TrustPage icon={ShieldCheck} title="Privacy" description={description}>
       <TrustSection title="Website analytics">
         <p>
-          In its current phase the website does not load analytics scripts. The site displays
-          externally hosted content such as videos, social posts, images, and sponsor information.
-          Requests to those external services are governed by their own privacy practices and may
-          expose ordinary connection information such as an IP address, browser headers, and the
-          requested resource.
+          The website does not currently load analytics scripts. The site displays externally hosted
+          content such as videos, social posts, images, and sponsor information. Requests to those
+          external services are governed by their own privacy practices and may expose ordinary
+          connection information such as an IP address, browser headers, and the requested resource.
         </p>
         <p>
           TriStack does not provide user accounts on this website and does not sell personal
@@ -44,11 +43,11 @@ export default function PrivacyPage() {
       <TrustSection title="CLI telemetry">
         <p>
           The CLI accepts a <code>--disable-analytics</code> flag and an optional
-          <code>DO_NOT_TRACK=1</code> convention. In TriStack Phase 1 the CLI does not yet send
-          telemetry; when it ships, one anonymous event per successful scaffold will cover selected
+          <code>DO_NOT_TRACK=1</code> convention. The CLI does not currently transmit telemetry; if
+          telemetry is ever enabled, one anonymous event per successful scaffold will cover selected
           stack options and basic environment fields: CLI version, language, package manager, and
-          platform. This information is used to understand which integrations are used and to guide
-          maintenance priorities.
+          platform. This information would be used to understand which integrations are used and to
+          guide maintenance priorities.
         </p>
         <p>
           The telemetry payload is designed to omit project names, paths, file contents, secrets,
@@ -66,11 +65,8 @@ export default function PrivacyPage() {
           off.
         </p>
         <p>
-          See the{" "}
-          <Link href="/docs/analytics" className={trustPageLinkClass}>
-            analytics and telemetry documentation
-          </Link>{" "}
-          for the exact payload, public aggregates, and source-code links.
+          No telemetry is currently collected. Any future telemetry will be documented in this
+          notice and announced before it is enabled.
         </p>
       </TrustSection>
 

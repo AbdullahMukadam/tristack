@@ -7,7 +7,7 @@ set -euo pipefail
 # Installs the latest tristack binary to /usr/local/bin.
 # Supports macOS (arm64/x64) and Linux (x64/arm64).
 
-REPO="tristack/tristack"
+REPO="AbdullahMukadam/tristack"
 INSTALL_DIR="${TRISTACK_INSTALL_DIR:-/usr/local/bin}"
 
 # Colors

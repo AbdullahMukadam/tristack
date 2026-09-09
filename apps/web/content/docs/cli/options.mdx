@@ -42,9 +42,9 @@ uvx tristack --yolo
 
 Programming language for the backend:
 
-- `python`: Python backend (Phase 1)
-- `go`: Go backend (Phase 2)
-- `rust`: Rust backend (Phase 3)
+- `python`: Python backend
+- `go`: Go backend
+- `rust`: Rust backend
 
 ```bash
 uvx tristack --language rust --framework axum
@@ -262,13 +262,11 @@ uvx tristack --no-render-title
 
 ### `--disable-analytics`
 
-Opt out of any telemetry for this run.
+Opt out of telemetry for this run. The CLI does not transmit telemetry today; the flag is reserved for future telemetry.
 
 ```bash
 uvx tristack --disable-analytics
 ```
-
-See [Analytics & Telemetry](/docs/analytics).
 
 ## Default Stack
 

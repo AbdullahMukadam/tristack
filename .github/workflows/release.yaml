@@ -88,6 +88,11 @@ jobs:
         run: bun build --compile apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
         shell: bash
 
+      - name: Create Release Tarball
+        if: matrix.platform != 'windows-x64'
+        run: tar -czf "${{ matrix.bin }}.tar.gz" "${{ matrix.bin }}"
+        shell: bash
+
       - name: Build Wheel
         run: python scripts/build-wheel.py "${{ matrix.bin }}" "${{ needs.check.outputs.version }}" --tag "${{ matrix.tag }}"
         shell: bash

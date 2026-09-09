@@ -10,7 +10,6 @@ TriStack supports a JSON-first workflow for agents and automation:
 - Raw JSON project creation with `create-json`
 - Safe planning with `--dry-run`
 - Runtime validation with the same Zod schemas that back interactive mode
-- A [Programmatic API](/docs/cli/programmatic-api) for TypeScript callers
 
 If you are automating the CLI from an LLM, CI job, or another tool, start here instead of the interactive prompt flow.
 
@@ -65,15 +64,9 @@ This is especially useful for:
 - CI validation
 - Agent reasoning loops
 
-## Programmatic API
-
-The exported `create()` API runs in silent mode by default, so it benefits from the same agent-safe behavior as `create-json`. `createVirtual()` generates the virtual file tree in memory — ideal for previews and tests.
-
-See [Programmatic API](/docs/cli/programmatic-api) for TypeScript examples.
-
 ## Native agent plugin (later phase)
 
-A Claude Code / Codex plugin with an MCP server is scheduled for a later phase. Until then, any CLI-capable agent can drive TriStack through `create-json` or the programmatic API directly.
+A Claude Code / Codex plugin with an MCP server is scheduled for a later phase. Until then, any CLI-capable agent can drive TriStack through `create-json`.
 
 ## Stored in `tristack.jsonc`
 

@@ -19,12 +19,6 @@ export const customSearchItems: CustomSearchItem[] = [
     tags: ["github", "source", "code", "repository", "contribute", "star"],
   },
   {
-    title: "NPM Package",
-    url: "https://www.npmjs.com/package/create-tristack",
-    content: "NPM",
-    tags: ["npm", "package", "install", "cli", "tool"],
-  },
-  {
     title: "X (Twitter)",
     url: "https://x.com/abd_mukadam",
     content: "X",

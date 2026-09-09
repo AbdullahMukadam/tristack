@@ -17,7 +17,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 <Accordion id="faq-2" title="Do I need to install anything globally?">
   No. The CLI is a standalone native binary. For Python, run it with `uvx tristack` (or `uv tool
   install tristack` / `pipx install tristack`); Go and Rust devs run the standalone `tristack`
-  binary via curl/Homebrew. You only need the runtime of whatever language you scaffold (e.g. Python
+  binary via curl. You only need the runtime of whatever language you scaffold (e.g. Python
   + your chosen package manager for a generated Python project).
 </Accordion>
 
@@ -27,7 +27,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 </Accordion>
 
 <Accordion id="faq-4" title="What Python version is required?">
-  Python (Phase 1) projects target Python 3.12+. Use 3.12+ to avoid runtime warnings and
+  Python projects target Python 3.12+. Use 3.12+ to avoid runtime warnings and
   version-gating issues.
 </Accordion>
 
@@ -59,8 +59,10 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
     Install your chosen package manager and make sure it is on your PATH, then rerun. See [Prerequisites](/docs#prerequisites).
   </Accordion>
 
-  <Accordion id="faq-10" title="How do I disable telemetry?">
-    Pass `--disable-analytics` for a single run. The cross-tool `DO_NOT_TRACK=1` convention is honored too. See [Analytics & Telemetry](/docs/analytics).
+  <Accordion id="faq-10" title="Does TriStack collect any usage data?">
+    No. The CLI does not currently transmit telemetry. The <code>--disable-analytics</code> flag
+    and the cross-tool <code>DO_NOT_TRACK=1</code> convention are honored for a single run or
+    permanently, and are reserved for any future telemetry.
   </Accordion>
 </Accordions>
 

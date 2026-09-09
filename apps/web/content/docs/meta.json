@@ -1,12 +1,3 @@
 {
-  "pages": [
-    "index",
-    "cli",
-    "guides",
-    "project-structure",
-    "tristack-config",
-    "analytics",
-    "contributing",
-    "faq"
-  ]
+  "pages": ["index", "cli", "guides", "project-structure", "tristack-config", "contributing", "faq"]
 }

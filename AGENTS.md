@@ -41,8 +41,8 @@ This repo is a Bun + Turborepo monorepo.
 
 ## Key Project Notes
 
-- **CLI runner mapping (language-aware):** Python → `uvx tristack`; Go/Rust → plain `tristack` (curl/Homebrew).
-- **CLI distribution:** `tristack`/`uvx` for Python, `tristack` for Go/Rust (curl/Homebrew installers + Homebrew). No npm/npx distribution channel; packages are workspace-private (no `publishConfig`, no npm release scripts, no npm-publish CI steps).
+- **CLI runner mapping (language-aware):** Python → `uvx tristack`; Go/Rust → plain `tristack` (curl installer).
+- **CLI distribution:** `tristack`/`uvx` for Python, `tristack` for Go/Rust (curl/PowerShell installers). No npm/npx distribution channel; packages are workspace-private (no `publishConfig`, no npm release scripts, no npm-publish CI steps).
 - **Home page rail:** a single-pane init-only rail (sponsors/videos/tweets panes and the `StatusBar` footer removed). Hero is a centered, clean text wordmark ("TriStack"), NOT a terminal/ASCII banner.
 - **Branding:** TriStack is a fork of Better-T-Stack (MIT). Attribution to Better-T-Stack is required in READMEs and LICENSE. The `SITE_DESCRIPTION` and all site copy are language-agnostic (Python Phase 1, Go Phase 2, Rust Phase 3).
 - **`TRISTACK` wordmark:** the CLI keeps the ANSI Shadow banner (`apps/cli/src/utils/render-title.ts`); the web hero uses a plain sans-serif text wordmark. Do not reintroduce the old GoiStack/OWN STACK ASCII or the "type-safe TypeScript projects" tagline.

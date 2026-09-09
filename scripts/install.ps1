@@ -6,7 +6,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$Repo = "tristack/tristack"
+$Repo = "AbdullahMukadam/tristack"
 $InstallDir = Join-Path $env:LOCALAPPDATA "tristack\bin"
 $Channel = if ($env:TRISTACK_VERSION) { $env:TRISTACK_VERSION } else { "latest" }
 

@@ -2,7 +2,7 @@
 
 A modern CLI for scaffolding backend projects across **Python, Go, and Rust** — roll your own stack.
 
-The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fiber, Echo, Chi, stdlib), and **Rust** (Axum, Actix-Web, Rocket, Warp) backends. Python is fully shipped (Phase 1); Go (Phase 2) and Rust (Phase 3) scaffolds are available in the same CLI, with installers and full parity on the roadmap.
+The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fiber, Echo, Chi, stdlib), and **Rust** (Axum, Actix-Web, Rocket, Warp) backends — all in the same binary. The Python path is fully shipped (`uvx tristack`); the Go/Rust installers (curl/PowerShell) and full per-language parity are on the roadmap.
 
 > **Built as a fork of [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack) (MIT licensed)** — the prompt UX framework, virtual file-system template engine, and Stack Builder web UI are adapted from the original project, extended to scaffold Python, Go, and Rust backend stacks instead of TypeScript/JavaScript.
 
@@ -13,13 +13,13 @@ The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fi
 - **Roll your own stack**: you pick only the parts you need, nothing extra.
 - **Minimal templates**: bare-bones scaffolds with zero bloat.
 - **Latest dependencies**: always use current, stable versions by default.
-- **Native-first distribution**: Python devs use `uvx tristack`; Go and Rust get their own installers and Homebrew (on the roadmap).
+- **Native-first distribution**: Python devs use `uvx tristack`; Go and Rust get their own curl/PowerShell installers (on the roadmap).
 - **Free and open source**: forever, under the MIT License.
 
 ## Quick Start
 
 ```bash
-# Python (Phase 1)
+# Python — run on demand via uvx
 uvx tristack my-api
 ```
 
@@ -41,7 +41,15 @@ Non-interactive default project:
 uvx tristack my-api --yes
 ```
 
-Go and Rust developers use the same `tristack` binary; curl/PowerShell installers and Homebrew are on the roadmap.
+Go and Rust developers run the same `tristack` binary. The native installers are on the roadmap:
+
+```bash
+# Windows (PowerShell)
+irm https://tristack.dev/install.ps1 | iex
+
+# macOS / Linux
+curl -fsSL https://tristack.dev/install.sh | bash
+```
 
 ## Features
 
@@ -51,7 +59,7 @@ Go and Rust developers use the same `tristack` binary; curl/PowerShell installer
 - **Databases**: SQLite (default), PostgreSQL, MySQL, or none
 - **Package managers**: Python: uv (default), poetry, or pip · Go: go · Rust: cargo
 - **Addons**: Docker, Ruff, Pytest, GitHub Actions, and more
-- **Agent automation**: JSON-first `create-json` command and a programmatic API
+- **Agent automation**: JSON-first `create-json` command for AI agents and CI pipelines
 
 Type-safe, dependency-pinned scaffolding with no lock-in: you choose only what you need.
 

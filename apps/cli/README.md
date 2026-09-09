@@ -6,7 +6,7 @@ A modern CLI for scaffolding backend projects across **Python, Go, and Rust** 鈥
 
 ## Quick Start
 
-Python (Phase 1):
+Python (run on demand via uvx):
 
 ```bash
 uvx tristack my-api
@@ -34,11 +34,19 @@ Non-interactive default project:
 uvx tristack my-api --yes
 ```
 
-Go and Rust developers use the same `tristack` binary; curl/PowerShell installers and Homebrew are on the roadmap.
+Go and Rust developers run the same `tristack` binary. The native installers are on the roadmap:
+
+```bash
+# Windows (PowerShell)
+irm https://tristack.dev/install.ps1 | iex
+
+# macOS / Linux
+curl -fsSL https://tristack.dev/install.sh | bash
+```
 
 ## Requirements
 
-- Python 3.10+ is recommended for generated Python projects; the CLI checks the exact stack before writing files.
+- Python 3.12+ is required for generated Python projects; the CLI checks the exact stack before writing files.
 - Go and Rust toolchains are required to run the generated Go and Rust projects (not to run the CLI itself).
 - Rust is required only when building the binary from source.
 
@@ -58,12 +66,12 @@ Options:
   --migrations <tool>             python: alembic (default), none 路 go: goose, golang-migrate, none 路 rust: none
   --database <db>                 sqlite (default), postgres, mysql, none
   --package-manager <pm>          python: uv (default), poetry, pip 路 go: go 路 rust: cargo
-  --addons <types...>             Comma-separated addons or none
+  --addons [values...]            Space-separated addons, or repeat the flag; none disables
   --git / --no-git                Initialize a Git repository (default on)
   --install / --no-install        Install dependencies after creation (default on)
   --directory-conflict <strategy> merge, overwrite, increment, error
   --render-title / --no-render-title  Show/hide the ASCII art title
-  --disable-analytics             Opt out of telemetry
+  --disable-analytics             Disable analytics (no telemetry is transmitted today)
   -h, --help                      Display help
 ```
 
@@ -90,7 +98,7 @@ uvx tristack my-api \
   --migrations alembic \
   --database postgres \
   --package-manager uv \
-  --addons docker,ruff,pytest,github-actions
+  --addons docker ruff pytest github-actions
 
 # Validate without writing files
 uvx tristack my-api --yes --dry-run
@@ -98,7 +106,7 @@ uvx tristack my-api --yes --dry-run
 
 ## Telemetry & Privacy
 
-Set `--disable-analytics` (or the `DO_NOT_TRACK=1` convention) to opt out. No project names, paths, file contents, or secrets are ever collected. See the [analytics documentation](https://tristack.dev/docs/analytics) for details.
+The CLI does not currently transmit telemetry; `--disable-analytics` (or the `DO_NOT_TRACK=1` convention) is reserved for if it ever does. No project names, paths, file contents, or secrets are ever collected. See the [Privacy Policy](https://tristack.dev/privacy) for details.
 
 ## License & Attribution
 

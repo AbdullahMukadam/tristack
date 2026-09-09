@@ -26,7 +26,6 @@ describe("agent discovery content", () => {
     expect(markdown.indexOf("[Quick Start]")).toBeLessThan(markdown.indexOf("[Zebra]"));
     expect(markdown).toContain("uvx tristack my-api");
     expect(markdown).toContain("tristack create-json");
-    expect(markdown).toContain(`${SITE_URL}/docs/cli/programmatic-api.mdx`);
     expect(markdown).toContain(`${SITE_URL}/llms-full.txt`);
     expect(markdown).toContain(`${SITE_URL}/docs/index.mdx`);
     expect(markdown).toContain("does not expose a public hosted application API");

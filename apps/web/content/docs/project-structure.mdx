@@ -5,7 +5,7 @@ description: Understanding the structure of projects created by the TriStack CLI
 
 ## Overview
 
-TriStack scaffolds backend projects in **Python** (Phase 1), **Go** (Phase 2), and **Rust** (Phase 3). Each language follows its own native conventions, so a generated project looks like a real developer wrote it:
+TriStack scaffolds backend projects in **Python**, **Go**, and **Rust**. Each language follows its own native conventions, so a generated project looks like a real developer wrote it:
 
 - **Python** — `pyproject.toml`, a snake_case import package, `migrations/`
 - **Go** — `go.mod`, a root-level `main.go`, `internal/` packages
@@ -26,7 +26,7 @@ Files come from these layers, in order:
 
 `tristack.jsonc` records the stack and its reproducible command. See [`tristack.jsonc`](/docs/tristack-config).
 
-## Python (Phase 1)
+## Python
 
 ### Root layout (default stack)
 
@@ -124,7 +124,7 @@ With `--migrations alembic`, the CLI writes a `migrations/` directory with `alem
 | `fumadocs`       | a Fumadocs documentation site                       |
 | `starlight`      | an Astro Starlight documentation site               |
 
-## Go (Phase 2)
+## Go
 
 Every Go project is a single module with a root-level `main.go` (the entrypoint) and its data layer under `internal/`. Framework and data imports are pinned in `go.mod`.
 
@@ -203,7 +203,7 @@ The driver is chosen from the `database` value (`sqlite`, `postgres`, or `mysql`
 | `fumadocs`       | a Fumadocs documentation site                       |
 | `starlight`      | an Astro Starlight documentation site               |
 
-## Rust (Phase 3)
+## Rust
 
 Every Rust project is a single `cargo` package with its sources under `src/`. The Cargo build target is the default binary target, so `main.rs` lives at `src/main.rs`.
 

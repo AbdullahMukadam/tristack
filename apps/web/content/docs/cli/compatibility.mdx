@@ -16,7 +16,7 @@ The CLI validates option combinations to ensure generated projects are coherent.
 
 Each language has its own option sets (`packages/types`), so a Go/Rust value can never leak into a Python stack:
 
-| Category         | Python (Phase 1)                                                                      | Go (Phase 2)                                                                        | Rust (Phase 3)                                                                       |
+| Category         | Python                                                                              | Go                                                                                  | Rust                                                                                 |
 | ---------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `framework`      | `fastapi`, `litestar`, `django`, `flask`                                              | `gin`, `fiber`, `echo`, `chi`, `stdlib`                                             | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`                               |
 | `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                                          | `sqlc`, `gorm`, `sqlx`, `none`                                                      | `seaorm`, `diesel`, `sqlx-rust`, `none`                                              |
@@ -25,7 +25,7 @@ Each language has its own option sets (`packages/types`), so a Go/Rust value can
 | `packageManager` | `uv`, `poetry`, `pip`                                                                 | `go`                                                                                | `cargo`                                                                              |
 | `addons`         | `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `air`, `golangci-lint`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `cargo-watch`, `clippy`, `github-actions`, `fumadocs`, `starlight`, `none` |
 
-> **Status:** Python (Phase 1), Go (Phase 2), and Rust (Phase 3) scaffolds are all generated today.
+> **Status:** Python, Go, and Rust scaffolds are all generated today.
 
 ## What gets validated today
 

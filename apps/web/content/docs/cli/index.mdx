@@ -5,7 +5,7 @@ description: Complete reference for all TriStack CLI commands
 
 ## Overview
 
-The TriStack CLI ships as a standalone native binary. It scaffolds Python, Go, and Rust backend projects: `uvx tristack` for Python (or `uv tool install tristack` / `pipx install tristack`), and the standalone `tristack` command for Go and Rust (curl/Homebrew installers). It ships two commands today — `create` (the default) and `create-json` — plus a programmatic npm API for Node environments.
+The TriStack CLI ships as a standalone native binary. It scaffolds Python, Go, and Rust backend projects: `uvx tristack` for Python (or `uv tool install tristack` / `pipx install tristack`), and the standalone `tristack` command for Go and Rust (curl installers). It ships two commands today — `create` (the default) and `create-json`.
 
 ## `create` (Default Command)
 
@@ -36,7 +36,7 @@ uvx tristack [project-directory] [options]
 - `--install / --no-install`: Install dependencies after creation (default on)
 - `--directory-conflict <strategy>`: `merge`, `overwrite`, `increment`, `error`
 - `--render-title / --no-render-title`: Show/hide the ASCII art title
-- `--disable-analytics`: Opt out of telemetry
+- `--disable-analytics`: Opt out of telemetry (the CLI sends none today)
 
 See the full reference in [Options](/docs/cli/options). Options are per language — see the [Compatibility reference](/docs/cli/compatibility) for the Go and Rust option sets.
 
@@ -95,27 +95,3 @@ uvx tristack create-json --input '{
 ```
 
 The payload is validated against `CreateInputSchema` — the same schema that backs `--yes`. See [Agent Workflows](/docs/cli/agent-workflows) for details.
-
-## Programmatic Usage
-
-For advanced use cases, automation, or integration with other tools, you can use the [Programmatic API](/docs/cli/programmatic-api) to create projects from Node.js code:
-
-```typescript
-import { create } from "create-tristack";
-
-const result = await create("my-api", {
-  language: "python",
-  framework: "fastapi",
-  database: "sqlite",
-  orm: "sqlmodel",
-  migrations: "alembic",
-  install: false,
-});
-
-result.match({
-  ok: (data) => console.log(`Project created at: ${data.projectDirectory}`),
-  err: (error) => console.error(`Failed: ${error.message}`),
-});
-```
-
-See the [Programmatic API documentation](/docs/cli/programmatic-api) for complete examples and API reference.
