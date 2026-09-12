@@ -1614,10 +1614,17 @@ DEBUG=false
 
 {{#if (ne database "none")}}
 # Database connection string.
+{{#if (eq orm "tortoise")}}
+# SQLite:  sqlite://./{{project_slug}}.db
+# Postgres: postgres://postgres:postgres@localhost:5432/{{project_slug}}
+# MySQL:   mysql://root:password@localhost:3306/{{project_slug}}
+DATABASE_URL={{#if (eq database "sqlite")}}sqlite://./{{project_slug}}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql://root:password@localhost:3306/{{project_slug}}{{/if}}
+{{else}}
 # SQLite:  sqlite+aiosqlite:///./{{project_slug}}.db
 # Postgres: postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}
 # MySQL:   mysql+asyncmy://root:password@localhost:3306/{{project_slug}}
 DATABASE_URL={{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{{project_slug}}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql+asyncmy://root:password@localhost:3306/{{project_slug}}{{/if}}
+{{/if}}
 {{/if}}
 {{/if}}`],
   ["python/base/pyproject-pip.toml.hbs", `[project]
@@ -1845,11 +1852,23 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:3000"]
 
     {{#if (eq database "sqlite")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "sqlite://./{{project_slug}}.db"
+    {{else}}
     database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
+    {{/if}}
     {{else if (eq database "postgres")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{else}}
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{/if}}
     {{else if (eq database "mysql")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "mysql://root:password@localhost:3306/{{project_slug}}"
+    {{else}}
     database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
+    {{/if}}
     {{/if}}
 
 

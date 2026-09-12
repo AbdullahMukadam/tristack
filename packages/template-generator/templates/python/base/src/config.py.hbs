@@ -12,11 +12,23 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:3000"]
 
     {{#if (eq database "sqlite")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "sqlite://./{{project_slug}}.db"
+    {{else}}
     database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
+    {{/if}}
     {{else if (eq database "postgres")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{else}}
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{/if}}
     {{else if (eq database "mysql")}}
+    {{#if (eq orm "tortoise")}}
+    database_url: str = "mysql://root:password@localhost:3306/{{project_slug}}"
+    {{else}}
     database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
+    {{/if}}
     {{/if}}
 
 
