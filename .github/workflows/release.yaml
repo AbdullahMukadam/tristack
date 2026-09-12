@@ -85,7 +85,7 @@ jobs:
         run: bun run build:cli
 
       - name: Build Binary
-        run: bun build --compile --minify apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
+        run: bun build --compile --minify-whitespace --minify-syntax apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
         shell: bash
 
       - name: Create Release Tarball
