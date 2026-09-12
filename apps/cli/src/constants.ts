@@ -42,7 +42,7 @@ export function getDefaultConfig(): ProjectConfig {
 
 export const DEFAULT_CONFIG = getDefaultConfig();
 
-export const CLI_VERSION = "0.1.4";
+export const CLI_VERSION = "0.1.5";
 
 export const LANGUAGE_LABELS = {
   python: "Python",

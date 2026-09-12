@@ -1,6 +1,6 @@
 {
   "name": "create-tristack",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A CLI tool for scaffolding backend projects in Python, Go, and Rust",
   "keywords": [
     "boilerplate",
