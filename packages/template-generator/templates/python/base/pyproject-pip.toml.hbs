@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "{{projectName}} - a {{framework}} backend"
 requires-python = ">=3.12"
 dependencies = [
+{{#if (ne framework "django")}}
     "pydantic-settings",
+{{/if}}
 {{#if (eq framework "fastapi")}}
     "fastapi",
     "uvicorn[standard]",
@@ -19,7 +21,9 @@ dependencies = [
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}
-{{#if (eq orm "sqlmodel")}}
+{{#if (eq framework "django")}}
+    "psycopg[binary]",
+{{else if (eq orm "sqlmodel")}}
     "sqlmodel",
 {{else if (eq orm "sqlalchemy")}}
     "sqlalchemy[asyncio]",
@@ -29,12 +33,14 @@ dependencies = [
 {{#if (eq migrations "alembic")}}
     "alembic",
 {{/if}}
-{{#if (eq database "postgres")}}
+{{#if (and (ne framework "django") (eq database "postgres"))}}
     "asyncpg",
-{{else if (eq database "mysql")}}
+{{else if (and (ne framework "django") (eq database "mysql"))}}
     "asyncmy",
-{{else if (eq database "sqlite")}}
+{{else if (and (ne framework "django") (eq database "sqlite"))}}
     "aiosqlite",
+{{else if (and (eq framework "django") (eq database "mysql"))}}
+    "mysqlclient",
 {{/if}}
 ]
 
@@ -49,5 +55,17 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+{{#if (eq framework "django")}}
 [tool.hatch.build.targets.wheel]
-packages = ["{{project_slug}}"]
+packages = ["config", "apps"]
+
+[tool.hatch.build.targets.wheel.force-include]
+templates = "templates"
+static = "static"
+{{else}}
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+{{/if}}
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

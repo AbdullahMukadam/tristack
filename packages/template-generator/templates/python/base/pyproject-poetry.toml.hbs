@@ -3,11 +3,22 @@ name = "{{project_slug}}"
 version = "0.1.0"
 description = "{{projectName}} - a {{framework}} backend"
 authors = []
-packages = [{ include = "{{project_slug}}" }]
+{{#if (eq framework "django")}}
+packages = [
+    { include = "config" },
+    { include = "apps" },
+    { include = "templates" },
+    { include = "static" },
+]
+{{else}}
+packages = [{ include = "src" }]
+{{/if}}
 
 [tool.poetry.dependencies]
 python = ">=3.12"
+{{#if (ne framework "django")}}
 pydantic-settings = "^2.7"
+{{/if}}
 {{#if (eq framework "fastapi")}}
 fastapi = "^0.115"
 uvicorn = { extras = ["standard"], version = "^0.34" }
@@ -22,7 +33,9 @@ gunicorn = "^23.0"
 {{else if (eq framework "flask")}}
 flask = "^3.1"
 {{/if}}
-{{#if (eq orm "sqlmodel")}}
+{{#if (eq framework "django")}}
+psycopg = { extras = ["binary"], version = "^3.2" }
+{{else if (eq orm "sqlmodel")}}
 sqlmodel = "^0.0.22"
 {{else if (eq orm "sqlalchemy")}}
 sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
@@ -32,12 +45,14 @@ tortoise-orm = "^0.24"
 {{#if (eq migrations "alembic")}}
 alembic = "^1.14"
 {{/if}}
-{{#if (eq database "postgres")}}
+{{#if (and (ne framework "django") (eq database "postgres"))}}
 asyncpg = "^0.30"
-{{else if (eq database "mysql")}}
+{{else if (and (ne framework "django") (eq database "mysql"))}}
 asyncmy = "^0.2"
-{{else if (eq database "sqlite")}}
+{{else if (and (ne framework "django") (eq database "sqlite"))}}
 aiosqlite = "^0.20"
+{{else if (and (eq framework "django") (eq database "mysql"))}}
+mysqlclient = "^2.2"
 {{/if}}
 
 [build-system]

@@ -33,17 +33,17 @@ air
 Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
 
 <Callout title="Note">
-  The module path is a slugged version of your project name (`my-api` → `my_api`), and the data
-  layer is imported as `<module>/internal/db`. The port (`8000`) and app name come from `PORT` and
-  `APP_NAME` in `.env`.
+  The module path is a slugged version of your project name (`my-api` → `my_api`), and the
+  layered packages live under `<module>/internal/{config,handler,service,repository,model,db}`.
+  The port (`8000`) and app name come from `PORT` and `APP_NAME` in `.env`.
 </Callout>
 
 ## 3. Common commands
 
 ```bash
 go mod tidy        # install dependencies (default package manager)
-go run .           # run without the air addon
-go build           # compile the binary
+go run ./cmd/api    # run without the air addon
+make build          # compile the binary (Makefile targets: run, test, vet, fmt)
 air                # live reload (air addon)
 golangci-lint run  # lint (golangci-lint addon)
 ```
@@ -76,13 +76,13 @@ docker compose up --build
 
 The stack varies by framework — same flow, different router:
 
-| Framework     | Scaffold flag        | Run                |
-| ------------- | -------------------- | ------------------ |
-| Gin (default) | `--framework gin`    | `air` / `go run .` |
-| Fiber         | `--framework fiber`  | `air` / `go run .` |
-| Echo          | `--framework echo`   | `air` / `go run .` |
-| Chi           | `--framework chi`    | `air` / `go run .` |
-| Go stdlib     | `--framework stdlib` | `air` / `go run .` |
+| Framework     | Scaffold flag        | Run                        |
+| ------------- | -------------------- | -------------------------- |
+| Gin (default) | `--framework gin`    | `air` / `go run ./cmd/api` |
+| Fiber         | `--framework fiber`  | `air` / `go run ./cmd/api` |
+| Echo          | `--framework echo`   | `air` / `go run ./cmd/api` |
+| Chi           | `--framework chi`    | `air` / `go run ./cmd/api` |
+| Go stdlib     | `--framework stdlib` | `air` / `go run ./cmd/api` |
 
 ## 5. Reproduce the same stack
 
@@ -96,7 +96,7 @@ tristack my-api \
   --migrations goose \
   --database sqlite \
   --package-manager go \
-  --addons docker,air,golangci-lint
+  --addons docker air golangci-lint
 ```
 
 Or validate it without writing anything:

@@ -31,6 +31,7 @@ export type SelectedTech = {
   id: string;
   name: string;
   icon: string;
+  svgl?: string;
 };
 
 export function getSelectedTechs(stack: StackState): SelectedTech[] {
@@ -51,7 +52,13 @@ export function getSelectedTechs(stack: StackState): SelectedTech[] {
       }
       const tech = options.find((opt) => opt.id === id);
       if (tech) {
-        selected.push({ category, id: tech.id, name: tech.name, icon: tech.icon });
+        selected.push({
+          category,
+          id: tech.id,
+          name: tech.name,
+          icon: tech.icon,
+          svgl: "svgl" in tech ? tech.svgl : undefined,
+        });
       }
     }
   }
@@ -112,7 +119,7 @@ export function generateStackCommand(stack: StackState) {
     `--migrations ${stack.migrations}`,
     `--database ${stack.database}`,
     `--package-manager ${stack.packageManager}`,
-    `--addons ${addons.length > 0 ? addons.join(",") : "none"}`,
+    `--addons ${addons.length > 0 ? addons.join(" ") : "none"}`,
     stack.git === "false" ? "--no-git" : "--git",
     stack.install === "false" ? "--no-install" : "--install",
   ];

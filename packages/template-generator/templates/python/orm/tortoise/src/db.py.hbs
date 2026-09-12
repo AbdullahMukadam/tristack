@@ -1,0 +1,17 @@
+"""Database connection management for {{projectName}} — Tortoise ORM."""
+from tortoise import Tortoise
+
+from .config import get_settings
+
+settings = get_settings()
+
+
+async def init_db() -> None:
+    """Initialize the ORM and create tables when migrations are disabled."""
+    await Tortoise.init(
+        db_url=settings.database_url,
+        modules={"models": ["src.models"]},
+    )
+    {{#if (eq migrations "none")}}
+    await Tortoise.generate_schemas()
+    {{/if}}

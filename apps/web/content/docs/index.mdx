@@ -23,11 +23,11 @@ TriStack scaffolds backend projects in multiple languages. Each has its own opti
 
 The CLI ships as a standalone native binary. The invoker differs per language:
 
-| Language | Run the CLI                          |
-| --------- | ------------------------------------ |
-| Python    | `uvx tristack` (PyPI wrapper)        |
-| Go        | `tristack` (curl installer) |
-| Rust      | `tristack` (curl installer) |
+| Language | Run the CLI                   |
+| -------- | ----------------------------- |
+| Python   | `uvx tristack` (PyPI wrapper) |
+| Go       | `tristack` (curl installer)   |
+| Rust     | `tristack` (curl installer)   |
 
 ## Get Started
 
@@ -70,7 +70,7 @@ uvx tristack my-tristack-app \
   --migrations alembic \
   --database sqlite \
   --package-manager uv \
-  --addons docker,ruff,pytest \
+  --addons docker ruff pytest \
   --install
 ```
 
@@ -94,7 +94,7 @@ uvx tristack my-api \
   --migrations alembic \
   --database sqlite \
   --package-manager uv \
-  --addons docker,ruff,pytest
+  --addons docker ruff pytest
 ```
 
 ### Postgres API
@@ -107,7 +107,7 @@ uvx tristack my-api \
   --migrations alembic \
   --database postgres \
   --package-manager uv \
-  --addons docker,pytest
+  --addons docker pytest
 ```
 
 ### Django Monolith
@@ -118,7 +118,7 @@ uvx tristack my-django \
   --framework django \
   --database postgres \
   --package-manager poetry \
-  --addons docker,ruff,mypy,pytest
+  --addons docker ruff mypy pytest
 ```
 
 ### Minimal Flask Service
@@ -146,7 +146,7 @@ tristack my-api \
   --migrations goose \
   --database sqlite \
   --package-manager go \
-  --addons docker,air,golangci-lint
+  --addons docker air golangci-lint
 ```
 
 ### Fiber + sqlx + Postgres
@@ -159,7 +159,7 @@ tristack my-api \
   --migrations golang-migrate \
   --database postgres \
   --package-manager go \
-  --addons docker,air,golangci-lint
+  --addons docker air golangci-lint
 ```
 
 ## Common Setups — Rust
@@ -176,7 +176,7 @@ tristack my-api \
   --migrations none \
   --database sqlite \
   --package-manager cargo \
-  --addons docker,cargo-watch,clippy
+  --addons docker cargo-watch clippy
 ```
 
 ### Actix Web + Diesel + Postgres
@@ -189,7 +189,7 @@ tristack my-api \
   --migrations none \
   --database postgres \
   --package-manager cargo \
-  --addons docker,cargo-watch,clippy
+  --addons docker cargo-watch clippy
 ```
 
 ## Flags Cheat Sheet

@@ -1,0 +1,57 @@
+package service
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+
+	"{{project_slug}}/internal/model"
+	"{{project_slug}}/internal/repository"
+)
+
+var ErrInvalidInput = errors.New("invalid input")
+
+type ItemService struct {
+	repo repository.ItemRepository
+}
+
+func NewItemService(repo repository.ItemRepository) *ItemService {
+	return &ItemService{repo: repo}
+}
+
+func (s *ItemService) CreateItem(ctx context.Context, name string) (model.Item, error) {
+	if err := validateName(name); err != nil {
+		return model.Item{}, err
+	}
+	item := model.Item{
+		ID:        uuid.NewString(),
+		Name:      name,
+		CreatedAt: time.Now(),
+	}
+	if err := s.repo.Create(ctx, &item); err != nil {
+		return model.Item{}, fmt.Errorf("create item: %w", err)
+	}
+	return item, nil
+}
+
+func (s *ItemService) ListItems(ctx context.Context) ([]model.Item, error) {
+	items, err := s.repo.List(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("list items: %w", err)
+	}
+	return items, nil
+}
+
+func validateName(name string) error {
+	if strings.TrimSpace(name) == "" {
+		return fmt.Errorf("%w: name must not be empty", ErrInvalidInput)
+	}
+	if len([]rune(name)) > 200 {
+		return fmt.Errorf("%w: name must be at most 200 characters", ErrInvalidInput)
+	}
+	return nil
+}

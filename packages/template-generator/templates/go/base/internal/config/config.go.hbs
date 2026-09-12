@@ -1,0 +1,22 @@
+package config
+
+import "os"
+
+type Config struct {
+	AppName string
+	Port    string
+}
+
+func Load() Config {
+	return Config{
+		AppName: getenv("APP_NAME", "{{projectName}}"),
+		Port:    getenv("PORT", "8000"),
+	}
+}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}

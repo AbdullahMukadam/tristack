@@ -1,4 +1,4 @@
-use diesel::prelude::*;
+use diesel::{Connection, ConnectionError};
 
 {{#if (eq database "sqlite")}}
 use diesel::SqliteConnection;

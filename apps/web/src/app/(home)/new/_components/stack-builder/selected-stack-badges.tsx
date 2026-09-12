@@ -48,6 +48,7 @@ export function SelectedStackBadges({ stack, onRemove, onJump }: SelectedStackBa
             {tech.icon !== "" && (
               <TechIcon
                 icon={tech.icon}
+                svgl={"svgl" in tech ? tech.svgl : undefined}
                 name={tech.name}
                 className={cn("h-3 w-3", "className" in tech ? tech.className : undefined)}
               />

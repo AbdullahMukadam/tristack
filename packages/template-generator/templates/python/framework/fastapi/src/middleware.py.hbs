@@ -1,0 +1,35 @@
+"""Cross-cutting middleware for {{projectName}}."""
+import logging
+from collections.abc import Awaitable, Callable
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
+
+from .config import get_settings
+
+logger = logging.getLogger(__name__)
+
+
+def add_middleware(app: FastAPI) -> None:
+    """Register middleware on the FastAPI application."""
+    settings = get_settings()
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(BaseHTTPMiddleware, dispatch=request_logging)
+
+
+async def request_logging(
+    request: Request, call_next: Callable[[Request], Awaitable[Response]]
+) -> Response:
+    """Log every request method, path, and response status."""
+    response = await call_next(request)
+    logger.info("%s %s -> %s", request.method, request.url.path, response.status_code)
+    return response

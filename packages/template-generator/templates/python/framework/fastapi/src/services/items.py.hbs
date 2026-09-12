@@ -1,0 +1,36 @@
+"""Item business logic."""
+{{#if (eq orm "tortoise")}}
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(name=payload.name)
+
+
+async def list_items() -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items()
+{{else}}
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(session, name=payload.name)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items(session)
+{{/if}}

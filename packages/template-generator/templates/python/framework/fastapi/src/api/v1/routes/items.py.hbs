@@ -1,0 +1,38 @@
+"""Item endpoints — thin HTTP layer delegating to services."""
+from fastapi import APIRouter
+{{#if (ne orm "tortoise")}}
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ....db import get_session
+{{/if}}
+from ....schemas.items import ItemCreate, ItemResponse
+from ....services.items import create_item, list_items
+
+router = APIRouter()
+
+
+{{#if (eq orm "tortoise")}}
+@router.get("/", response_model=list[ItemResponse])
+async def list_items_endpoint() -> list[ItemResponse]:
+    return await list_items()
+
+
+@router.post("/", response_model=ItemResponse, status_code=201)
+async def create_item_endpoint(payload: ItemCreate) -> ItemResponse:
+    return await create_item(payload)
+{{else}}
+@router.get("/", response_model=list[ItemResponse])
+async def list_items_endpoint(
+    session: AsyncSession = Depends(get_session),
+) -> list[ItemResponse]:
+    return await list_items(session)
+
+
+@router.post("/", response_model=ItemResponse, status_code=201)
+async def create_item_endpoint(
+    payload: ItemCreate,
+    session: AsyncSession = Depends(get_session),
+) -> ItemResponse:
+    return await create_item(session, payload)
+{{/if}}

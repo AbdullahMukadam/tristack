@@ -285,16 +285,16 @@ describe("stack builder command generation", () => {
   test("emits every flag for a customized stack", () => {
     const command = generateStackCommand(createStack({ framework: "django", yolo: "false" }));
     expect(command).toBe(
-      "uvx tristack my-tristack-app --language python --framework django --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker,ruff,pytest --git --install",
+      "uvx tristack my-tristack-app --language python --framework django --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker ruff pytest --git --install",
     );
   });
 
-  test("renders addons as a comma list or none", () => {
+  test("renders addons as a space-separated list or none", () => {
     const noneCommand = generateStackCommand(createStack({ addons: ["none"] }));
     expect(noneCommand).toContain("--addons none");
 
     const twoCommand = generateStackCommand(createStack({ addons: ["ruff", "mypy"] }));
-    expect(twoCommand).toContain("--addons ruff,mypy");
+    expect(twoCommand).toContain("--addons ruff mypy");
   });
 
   test("emits no-git and no-install toggles and the yolo flag", () => {

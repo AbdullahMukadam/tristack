@@ -44,14 +44,17 @@ export async function gatherConfig(
   if (isSilent()) {
     const fw = flags.framework ?? DEFAULT_CONFIG.framework;
     const djangoMode = fw === "django";
+    const orm = djangoMode ? "none" : (flags.orm ?? DEFAULT_CONFIG.orm);
+    const tortoiseMode = orm === "tortoise";
     return {
       projectName,
       projectDir,
       relativePath,
       language: flags.language ?? DEFAULT_CONFIG.language,
       framework: fw,
-      orm: djangoMode ? "none" : (flags.orm ?? DEFAULT_CONFIG.orm),
-      migrations: djangoMode ? "none" : (flags.migrations ?? DEFAULT_CONFIG.migrations),
+      orm,
+      migrations:
+        djangoMode || tortoiseMode ? "none" : (flags.migrations ?? DEFAULT_CONFIG.migrations),
       database: flags.database ?? DEFAULT_CONFIG.database,
       packageManager: flags.packageManager ?? DEFAULT_CONFIG.packageManager,
       addons: flags.addons ?? [...DEFAULT_CONFIG.addons],
@@ -78,7 +81,9 @@ export async function gatherConfig(
       migrations: ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
+        const orm = results.orm ?? flags.orm;
         if (lang === "python" && fw === "django") return "none" as Migrations;
+        if (lang === "python" && orm === "tortoise") return "none" as Migrations;
         return getMigrationsChoice(flags.migrations, lang, previousAnswer);
       },
       database: ({ previousAnswer }) => getDatabaseChoice(flags.database, previousAnswer),
@@ -116,7 +121,10 @@ export async function gatherConfig(
     language: result.language,
     framework: result.framework,
     orm: result.framework === "django" ? ("none" as ORM) : result.orm,
-    migrations: result.framework === "django" ? ("none" as Migrations) : result.migrations,
+    migrations:
+      result.framework === "django" || result.orm === "tortoise"
+        ? ("none" as Migrations)
+        : result.migrations,
     database: result.database,
     packageManager: result.packageManager,
     addons: result.addons,

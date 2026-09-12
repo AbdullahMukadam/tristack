@@ -1,0 +1,19 @@
+"""Repository for items — SQLModel layer."""
+from sqlmodel import AsyncSession, select
+
+from ..models import Item
+from ..schemas.items import ItemResponse
+
+
+async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
+    item = Item(name=name)
+    session.add(item)
+    await session.commit()
+    await session.refresh(item)
+    return ItemResponse.model_validate(item)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    result = await session.exec(select(Item))
+    items = result.all()
+    return [ItemResponse.model_validate(i) for i in items]

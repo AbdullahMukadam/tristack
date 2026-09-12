@@ -111,6 +111,15 @@ function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResul
       );
     }
   }
+  if (config.orm === "tortoise" && config.migrations && config.migrations !== "none") {
+    return Result.err(
+      new ValidationError({
+        message: `Tortoise ORM has no Alembic support — set migrations to "none" (or pick SQLModel/SQLAlchemy plus Alembic).`,
+        field: "migrations",
+        value: config.migrations,
+      }),
+    );
+  }
   return Result.ok(undefined);
 }
 

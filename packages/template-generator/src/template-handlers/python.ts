@@ -5,8 +5,14 @@ import { copyTemplate, copyTemplates, type TemplateData } from "./utils";
 
 function copyPythonBase(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
-  copyTemplates(vfs, data.templates, config, "python/base", (templatePath) =>
-    templatePath.includes("pyproject-"),
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    "python/base",
+    (templatePath) =>
+      templatePath.includes("pyproject-") ||
+      (config.framework === "django" && templatePath.includes("/{{project_slug}}/")),
   );
 
   const fileName =
@@ -20,7 +26,20 @@ function copyPythonBase(vfs: VirtualFileSystem, data: TemplateData): void {
 
 function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
-  copyTemplates(vfs, data.templates, config, `python/framework/${config.framework}`);
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    `python/framework/${config.framework}`,
+    (templatePath) => {
+      if (config.orm !== "none") return false;
+      return (
+        templatePath.includes("/schemas/") ||
+        templatePath.includes("/services/") ||
+        templatePath.includes("/routes/items.")
+      );
+    },
+  );
 }
 
 function copyOrm(vfs: VirtualFileSystem, data: TemplateData): void {

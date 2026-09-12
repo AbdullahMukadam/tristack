@@ -1,0 +1,30 @@
+"""Cross-cutting middleware for {{projectName}}."""
+import logging
+from typing import Any
+
+from litestar.middleware import PureMiddleware
+from litestar.types import ASGIApp, Receive, Scope, Send
+
+logger = logging.getLogger(__name__)
+
+
+class RequestLoggingMiddleware(PureMiddleware):
+    """Log every request method, path, and response status."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        method = scope["method"]
+        path = scope["path"]
+
+        async def send_wrapper(message: dict[str, Any]) -> None:
+            if message["type"] == "http.response.start":
+                logger.info("%s %s -> %s", method, path, message.get("status", "??"))
+            await send(message)
+
+        await self.app(scope, receive, send_wrapper)

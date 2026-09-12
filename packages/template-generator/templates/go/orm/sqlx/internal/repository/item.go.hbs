@@ -1,0 +1,39 @@
+package repository
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
+}
+
+type sqlxItemRepository struct {
+	db *sqlx.DB
+}
+
+func NewItemRepository(db *sqlx.DB) ItemRepository {
+	return &sqlxItemRepository{db: db}
+}
+
+func (r *sqlxItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if _, err := r.db.ExecContext(ctx, r.db.Rebind("INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)"),
+		item.ID, item.Name, item.CreatedAt); err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *sqlxItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	var items []model.Item
+	if err := r.db.SelectContext(ctx, &items, r.db.Rebind("SELECT id, name, created_at FROM items ORDER BY created_at DESC")); err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	return items, nil
+}

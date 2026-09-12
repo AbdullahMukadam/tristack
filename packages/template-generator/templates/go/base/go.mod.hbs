@@ -45,3 +45,7 @@ require github.com/pressly/goose/v3 v3.22.1
 {{else if (eq migrations "golang-migrate")}}
 require github.com/golang-migrate/migrate/v4 v4.18.1
 {{/if}}
+
+{{#if (ne orm "none")}}
+require github.com/google/uuid v1.6.0
+{{/if}}

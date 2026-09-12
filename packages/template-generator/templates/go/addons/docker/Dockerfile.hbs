@@ -7,7 +7,7 @@ COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} ./cmd/api
 
 FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app

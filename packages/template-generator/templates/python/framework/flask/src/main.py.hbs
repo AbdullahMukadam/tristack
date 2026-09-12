@@ -1,0 +1,34 @@
+"""Flask application entrypoint for {{projectName}}."""
+import asyncio
+
+from flask import Flask
+
+from .config import get_settings
+from .exceptions import register_error_handlers
+from .middleware import register_middleware
+
+settings = get_settings()
+
+
+def create_app() -> Flask:
+    """Application factory."""
+    app = Flask(__name__)
+    app.config["DEBUG"] = settings.debug
+
+    register_middleware(app)
+    register_error_handlers(app)
+
+    {{#if (and (ne orm "none") (eq migrations "none"))}}
+    from .db import init_db
+
+    asyncio.run(init_db())
+    {{/if}}
+
+    from .api.v1.router import register_v1_blueprints
+
+    register_v1_blueprints(app)
+
+    return app
+
+
+app = create_app()

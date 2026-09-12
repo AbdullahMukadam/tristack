@@ -1,0 +1,13 @@
+"""Repository for items — Tortoise ORM layer."""
+from ..models import Item
+from ..schemas.items import ItemResponse
+
+
+async def create_item(*, name: str) -> ItemResponse:
+    item = await Item.create(name=name)
+    return ItemResponse.model_validate(item)
+
+
+async def list_items() -> list[ItemResponse]:
+    items = await Item.all()
+    return [ItemResponse.model_validate(item) for item in items]

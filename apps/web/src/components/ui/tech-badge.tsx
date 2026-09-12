@@ -3,10 +3,12 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
+import { SvglIcon } from "@/components/ui/svgl-icon";
 import { cn } from "@/lib/utils";
 
 interface TechBadgeProps {
   icon: string;
+  svgl?: string;
   name: string;
   category: string;
   className?: string;
@@ -36,12 +38,26 @@ const getBadgeColors = (category: string): string => {
   }
 };
 
-function TechIcon({ icon, name, className }: { icon: string; name: string; className?: string }) {
+function TechIcon({
+  icon,
+  svgl,
+  name,
+  className,
+}: {
+  icon: string;
+  svgl?: string;
+  name: string;
+  className?: string;
+}) {
   const { theme } = useTheme();
+
+  if (svgl) {
+    return <SvglIcon svgl={svgl} name={name} className={cn("inline-block", className)} />;
+  }
 
   if (!icon) return null;
 
-  if (!icon.startsWith("https://")) {
+  if (!icon.startsWith("https://") && !icon.startsWith("/")) {
     return <span className={cn("inline-flex items-center text-lg", className)}>{icon}</span>;
   }
 
@@ -74,7 +90,7 @@ function TechIcon({ icon, name, className }: { icon: string; name: string; class
   );
 }
 
-export function TechBadge({ icon, name, category, className }: TechBadgeProps) {
+export function TechBadge({ icon, svgl, name, category, className }: TechBadgeProps) {
   return (
     <span
       className={cn(
@@ -83,7 +99,7 @@ export function TechBadge({ icon, name, category, className }: TechBadgeProps) {
         className,
       )}
     >
-      {icon !== "" && <TechIcon icon={icon} name={name} className={cn("h-3 w-3")} />}
+      {icon !== "" && <TechIcon icon={icon} svgl={svgl} name={name} className={cn("h-3 w-3")} />}
       {name}
     </span>
   );

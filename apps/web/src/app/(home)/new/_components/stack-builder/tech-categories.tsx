@@ -132,6 +132,7 @@ export function TechCategories({
                             {tech.icon !== "" && (
                               <TechIcon
                                 icon={tech.icon}
+                                svgl={"svgl" in tech ? tech.svgl : undefined}
                                 name={tech.name}
                                 className={cn(
                                   "mr-1.5 h-4 w-4 shrink-0",

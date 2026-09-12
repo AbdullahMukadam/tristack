@@ -11,14 +11,20 @@ function copyGoBase(vfs: VirtualFileSystem, data: TemplateData): void {
     data.templates,
     config,
     "go/base",
-    (templatePath) => templatePath.includes("go.mod") || templatePath.includes(".gitkeep"),
+    (templatePath) =>
+      templatePath.includes("go.mod") ||
+      templatePath.includes(".gitkeep") ||
+      (config.orm === "none" && templatePath.includes("internal/service")),
   );
 }
 
 function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   if (config.framework === "none") return;
-  copyTemplates(vfs, data.templates, config, `go/framework/${config.framework}`);
+  copyTemplates(vfs, data.templates, config, `go/framework/${config.framework}`, (templatePath) => {
+    if (config.orm === "none" && templatePath.includes("internal/handler")) return true;
+    return false;
+  });
 }
 
 function copyOrm(vfs: VirtualFileSystem, data: TemplateData): void {

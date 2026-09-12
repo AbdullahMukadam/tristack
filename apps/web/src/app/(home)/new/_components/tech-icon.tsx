@@ -1,22 +1,29 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
+import { SvglIcon } from "@/components/ui/svgl-icon";
 import { cn } from "@/lib/utils";
 
 export function TechIcon({
   icon,
+  svgl,
   name,
   className,
 }: {
   icon: string;
+  svgl?: string;
   name: string;
   className?: string;
 }) {
   const { theme } = useTheme();
 
+  if (svgl) {
+    return <SvglIcon svgl={svgl} name={name} className={cn("inline-block", className)} />;
+  }
+
   if (!icon) return null;
 
-  if (!icon.startsWith("https://")) {
+  if (!icon.startsWith("https://") && !icon.startsWith("/")) {
     return <span className={cn("inline-flex items-center text-lg", className)}>{icon}</span>;
   }
 

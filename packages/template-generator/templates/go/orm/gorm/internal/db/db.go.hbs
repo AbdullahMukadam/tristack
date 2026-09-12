@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -13,6 +14,8 @@ import (
 	{{else if (eq database "mysql")}}
 	"gorm.io/driver/mysql"
 	{{/if}}
+
+	"{{project_slug}}/internal/model"
 )
 
 func databaseURL() string {
@@ -43,12 +46,12 @@ func Connect() (*gorm.DB, error) {
 	})
 	{{/if}}
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("open database: %w", err)
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("access connection pool: %w", err)
 	}
 
 	sqlDB.SetMaxOpenConns(25)
@@ -56,12 +59,12 @@ func Connect() (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := sqlDB.Ping(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping database: %w", err)
 	}
 
 	return db, nil
 }
 
 func AutoMigrate(db *gorm.DB) error {
-	return db.AutoMigrate(&Item{})
+	return db.AutoMigrate(&model.Item{})
 }

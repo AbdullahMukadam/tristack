@@ -43,6 +43,7 @@ export function StackDisplay({ stackState }: StackDisplayProps) {
     <TechBadge
       key={`${tech.category}-${tech.id}`}
       icon={tech.icon}
+      svgl={tech.svgl}
       name={tech.name}
       category={tech.category}
     />

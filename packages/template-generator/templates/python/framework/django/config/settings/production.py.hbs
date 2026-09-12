@@ -1,0 +1,11 @@
+"""Production settings for {{projectName}}."""
+import os
+
+from .base import *  # noqa: F401,F403
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)  # noqa: F405
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")  # type: ignore[assignment]
+
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")  # type: ignore[assignment]

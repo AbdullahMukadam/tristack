@@ -1,0 +1,51 @@
+.PHONY: build run test vet fmt generate migrate-up migrate-down
+
+{{#if (eq orm "sqlc")}}
+build: generate
+run: generate
+{{/if}}
+
+build:
+	go build -o ./bin/{{project_slug}} ./cmd/api
+
+run:
+	go run ./cmd/api
+
+test:
+	go test -race ./...
+
+vet:
+	go vet ./...
+
+fmt:
+	gofmt -l .
+
+{{#if (eq orm "sqlc")}}
+
+generate:
+	sqlc generate
+{{/if}}
+
+{{#if (eq migrations "goose")}}
+
+migrate-up:
+	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up
+
+migrate-down:
+	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations down
+{{else if (eq migrations "golang-migrate")}}
+
+{{#if (eq database "postgres")}}
+MIGRATE_TAGS := postgres
+{{else if (eq database "mysql")}}
+MIGRATE_TAGS := mysql
+{{else}}
+MIGRATE_TAGS := sqlite3
+{{/if}}
+
+migrate-up:
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" up
+
+migrate-down:
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" down
+{{/if}}

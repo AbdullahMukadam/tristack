@@ -1,0 +1,69 @@
+package main
+
+import (
+	"context"
+	"log"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/gofiber/fiber/v2"
+
+	"{{project_slug}}/internal/config"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
+{{/if}}
+)
+
+func main() {
+	cfg := config.Load()
+
+{{#if (ne orm "none")}}
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
+	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
+{{/if}}
+
+	app := fiber.New(fiber.Config{
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	})
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"status": "ok"})
+	})
+{{#if (ne orm "none")}}
+	app.Get("/items", h.ListItems)
+	app.Post("/items", h.CreateItem)
+{{/if}}
+
+	addr := ":" + cfg.Port
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, addr)
+		if err := app.Listen(addr); err != nil {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	if err := app.Shutdown(); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}

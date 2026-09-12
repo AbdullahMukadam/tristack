@@ -16,7 +16,7 @@ The CLI validates option combinations to ensure generated projects are coherent.
 
 Each language has its own option sets (`packages/types`), so a Go/Rust value can never leak into a Python stack:
 
-| Category         | Python                                                                              | Go                                                                                  | Rust                                                                                 |
+| Category         | Python                                                                                | Go                                                                                  | Rust                                                                                 |
 | ---------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `framework`      | `fastapi`, `litestar`, `django`, `flask`                                              | `gin`, `fiber`, `echo`, `chi`, `stdlib`                                             | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`                               |
 | `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                                          | `sqlc`, `gorm`, `sqlx`, `none`                                                      | `seaorm`, `diesel`, `sqlx-rust`, `none`                                              |

@@ -79,7 +79,7 @@ describe("createVirtual - go scaffold", () => {
     const tree = result.value;
     expect(tree.fileCount).toBeGreaterThan(0);
 
-    const main = findFile(tree.root, "main.go");
+    const main = findByPath(tree.root, ["cmd", "api", "main.go"]);
     expect(main).not.toBeNull();
 
     const goMod = findFile(tree.root, "go.mod");
@@ -94,7 +94,15 @@ describe("createVirtual - go scaffold", () => {
     const dbGo = findByPath(tree.root, ["internal", "db", "db.go"]);
     expect(dbGo).not.toBeNull();
     expect(dbGo).toContain("package db");
-    expect(findByPath(tree.root, ["internal", "db", "models.go"])).not.toBeNull();
+    expect(findByPath(tree.root, ["internal", "model", "item.go"])).not.toBeNull();
+
+    expect(findByPath(tree.root, ["internal", "config", "config.go"])).not.toBeNull();
+    expect(findByPath(tree.root, ["internal", "service", "item_service.go"])).not.toBeNull();
+    expect(findByPath(tree.root, ["internal", "repository", "item.go"])).not.toBeNull();
+    expect(findByPath(tree.root, ["internal", "handler", "handler.go"])).not.toBeNull();
+
+    expect(rootFileNames(tree.root)).toContain("Makefile");
+    expect(findByPath(tree.root, ["cmd", "api", "main.go"])).not.toBeNull();
 
     expect(findFile(tree.root, "fastapi")).toBeNull();
   });
@@ -121,7 +129,7 @@ describe("createVirtual - go scaffold", () => {
 });
 
 describe("createVirtual - django scaffold", () => {
-  it("generates a Django + DRF project with no ORM or migrations files", async () => {
+  it("generates a Django + DRF project with the production layout", async () => {
     const result = await createVirtual({
       language: "python",
       framework: "django",
@@ -140,6 +148,7 @@ describe("createVirtual - django scaffold", () => {
 
     const managePy = findFile(tree.root, "manage.py");
     expect(managePy).not.toBeNull();
+    expect(managePy).toContain("config.settings.development");
 
     const pyproject = findFile(tree.root, "pyproject.toml");
     expect(pyproject).not.toBeNull();
@@ -147,6 +156,17 @@ describe("createVirtual - django scaffold", () => {
 
     expect(findFile(tree.root, "db.py")).toBeNull();
     expect(findFile(tree.root, "alembic.ini")).toBeNull();
+
+    expect(findByPath(tree.root, ["config", "settings", "base.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["config", "settings", "development.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["config", "urls.py"])).not.toBeNull();
+
+    expect(findByPath(tree.root, ["apps", "core", "views.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["apps", "users", "models.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["apps", "users", "services.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["templates", "base.html"])).not.toBeNull();
+    expect(findByPath(tree.root, ["static", "README.md"])).not.toBeNull();
+    expect(findByPath(tree.root, ["media", "README.md"])).not.toBeNull();
   });
 });
 

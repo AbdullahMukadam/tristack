@@ -56,7 +56,7 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  cmd = "go build -o ./tmp/{{project_slug}} ."
+  cmd = "go build -o ./tmp/{{project_slug}} ./cmd/api"
   bin = "./tmp/{{project_slug}}"
   include_ext = ["go", "html", "env"]
   exclude_dir = ["tmp", "bin", "vendor"]
@@ -113,7 +113,7 @@ COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} ./cmd/api
 
 FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app
@@ -141,6 +141,12 @@ jobs:
           cache: true
       - name: Install dependencies
         run: go mod tidy
+      {{#if (eq orm "sqlc")}}
+      - name: Generate queries (sqlc)
+        run: |
+          go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+          sqlc generate
+      {{/if}}
       {{#if (includes addons "air")}}
       - name: Verify formatting
         run: test -z "$(gofmt -l .)"
@@ -152,7 +158,7 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: Test
-        run: go test ./...
+        run: go test -race ./...
 `],
   ["go/addons/golangci-lint/.golangci.yml.hbs", `run:
   timeout: 5m
@@ -265,297 +271,789 @@ require github.com/pressly/goose/v3 v3.22.1
 {{else if (eq migrations "golang-migrate")}}
 require github.com/golang-migrate/migrate/v4 v4.18.1
 {{/if}}
+
+{{#if (ne orm "none")}}
+require github.com/google/uuid v1.6.0
+{{/if}}
 `],
-  ["go/framework/chi/main.go.hbs", `package main
+  ["go/base/internal/config/config.go.hbs", `package config
+
+import "os"
+
+type Config struct {
+	AppName string
+	Port    string
+}
+
+func Load() Config {
+	return Config{
+		AppName: getenv("APP_NAME", "{{projectName}}"),
+		Port:    getenv("PORT", "8000"),
+	}
+}
+
+func getenv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}`],
+  ["go/base/internal/service/item_service_test.go.hbs", `package service
 
 import (
+	"errors"
+	"strings"
+	"testing"
+)
+
+func TestValidateName(t *testing.T) {
+	longName := strings.Repeat("a", 201)
+
+	tests := []struct {
+		name string
+		want error
+	}{
+		{name: "abc", want: nil},
+		{name: "  spaced name  ", want: nil},
+		{name: "", want: ErrInvalidInput},
+		{name: "   ", want: ErrInvalidInput},
+		{name: longName, want: ErrInvalidInput},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateName(tt.name)
+			if tt.want == nil {
+				if err != nil {
+					t.Errorf("validateName(%q) = %v, want nil", tt.name, err)
+				}
+				return
+			}
+			if !errors.Is(err, tt.want) {
+				t.Errorf("validateName(%q) = %v, want %v", tt.name, err, tt.want)
+			}
+		})
+	}
+}`],
+  ["go/base/internal/service/item_service.go.hbs", `package service
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+
+	"{{project_slug}}/internal/model"
+	"{{project_slug}}/internal/repository"
+)
+
+var ErrInvalidInput = errors.New("invalid input")
+
+type ItemService struct {
+	repo repository.ItemRepository
+}
+
+func NewItemService(repo repository.ItemRepository) *ItemService {
+	return &ItemService{repo: repo}
+}
+
+func (s *ItemService) CreateItem(ctx context.Context, name string) (model.Item, error) {
+	if err := validateName(name); err != nil {
+		return model.Item{}, err
+	}
+	item := model.Item{
+		ID:        uuid.NewString(),
+		Name:      name,
+		CreatedAt: time.Now(),
+	}
+	if err := s.repo.Create(ctx, &item); err != nil {
+		return model.Item{}, fmt.Errorf("create item: %w", err)
+	}
+	return item, nil
+}
+
+func (s *ItemService) ListItems(ctx context.Context) ([]model.Item, error) {
+	items, err := s.repo.List(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("list items: %w", err)
+	}
+	return items, nil
+}
+
+func validateName(name string) error {
+	if strings.TrimSpace(name) == "" {
+		return fmt.Errorf("%w: name must not be empty", ErrInvalidInput)
+	}
+	if len([]rune(name)) > 200 {
+		return fmt.Errorf("%w: name must be at most 200 characters", ErrInvalidInput)
+	}
+	return nil
+}`],
+  ["go/base/Makefile.hbs", `.PHONY: build run test vet fmt generate migrate-up migrate-down
+
+{{#if (eq orm "sqlc")}}
+build: generate
+run: generate
+{{/if}}
+
+build:
+	go build -o ./bin/{{project_slug}} ./cmd/api
+
+run:
+	go run ./cmd/api
+
+test:
+	go test -race ./...
+
+vet:
+	go vet ./...
+
+fmt:
+	gofmt -l .
+
+{{#if (eq orm "sqlc")}}
+
+generate:
+	sqlc generate
+{{/if}}
+
+{{#if (eq migrations "goose")}}
+
+migrate-up:
+	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up
+
+migrate-down:
+	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations down
+{{else if (eq migrations "golang-migrate")}}
+
+{{#if (eq database "postgres")}}
+MIGRATE_TAGS := postgres
+{{else if (eq database "mysql")}}
+MIGRATE_TAGS := mysql
+{{else}}
+MIGRATE_TAGS := sqlite3
+{{/if}}
+
+migrate-up:
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" up
+
+migrate-down:
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" down
+{{/if}}`],
+  ["go/framework/chi/cmd/api/main.go.hbs", `package main
+
+import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+
+	"{{project_slug}}/internal/config"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
 {{/if}}
 )
 
 func main() {
+	cfg := config.Load()
+
 {{#if (ne orm "none")}}
-	if err := initDatabase(); err != nil {
-		log.Printf("database not ready: %v", err)
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
 	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
 {{/if}}
 
 	r := chi.NewRouter()
-
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(\`{"status":"ok"}\`))
+		_, _ = w.Write([]byte(\`{"status":"ok"}\`))
 	})
-
-	addr := ":" + getenv("PORT", "8000")
-	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
-	if err := http.ListenAndServe(addr, r); err != nil {
-		log.Fatal(err)
-	}
-}
-
 {{#if (ne orm "none")}}
-func initDatabase() error {
-{{#if (eq orm "gorm")}}
-	gormDB, err := db.Connect()
-	if err != nil {
-		return err
-	}
-	return db.AutoMigrate(gormDB)
-{{else if (eq orm "sqlx")}}
-	_, err := db.Connect()
-	return err
-{{else if (eq orm "sqlc")}}
-	_, err := db.Connect()
-	return err
-{{/if}}
-}
+	r.Get("/items", h.ListItems)
+	r.Post("/items", h.CreateItem)
 {{/if}}
 
-func getenv(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+	srv := &http.Server{
+		Addr:              ":" + cfg.Port,
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
-	return fallback
-}
-`],
-  ["go/framework/echo/main.go.hbs", `package main
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, srv.Addr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}`],
+  ["go/framework/chi/internal/handler/handler.go.hbs", `package handler
 
 import (
+	"encoding/json"
+	"errors"
+	"net/http"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
+}
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(w http.ResponseWriter, r *http.Request) {
+	items, err := h.items.ListItems(r.Context())
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "could not list items"})
+		return
+	}
+	writeJSON(w, http.StatusOK, items)
+}
+
+func (h Handler) CreateItem(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Name string \`json:"name"\`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+		return
+	}
+	item, err := h.items.CreateItem(r.Context(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			writeJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+			return
+		}
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "could not create item"})
+		return
+	}
+	writeJSON(w, http.StatusCreated, item)
+}
+
+func writeJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}`],
+  ["go/framework/echo/cmd/api/main.go.hbs", `package main
+
+import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/labstack/echo/v4"
+
+	"{{project_slug}}/internal/config"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
 {{/if}}
 )
 
 func main() {
+	cfg := config.Load()
+
 {{#if (ne orm "none")}}
-	if err := initDatabase(); err != nil {
-		log.Printf("database not ready: %v", err)
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
 	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
 {{/if}}
 
 	e := echo.New()
-
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	})
-
-	addr := ":" + getenv("PORT", "8000")
-	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
-	if err := e.Start(addr); err != nil {
-		log.Fatal(err)
-	}
-}
-
 {{#if (ne orm "none")}}
-func initDatabase() error {
-{{#if (eq orm "gorm")}}
-	gormDB, err := db.Connect()
-	if err != nil {
-		return err
-	}
-	return db.AutoMigrate(gormDB)
-{{else if (eq orm "sqlx")}}
-	_, err := db.Connect()
-	return err
-{{else if (eq orm "sqlc")}}
-	_, err := db.Connect()
-	return err
-{{/if}}
-}
+	e.GET("/items", h.ListItems)
+	e.POST("/items", h.CreateItem)
 {{/if}}
 
-func getenv(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+	addr := ":" + cfg.Port
+	e.Server = &http.Server{
+		Handler:           e,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
-	return fallback
-}
-`],
-  ["go/framework/fiber/main.go.hbs", `package main
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, addr)
+		if err := e.Start(addr); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}`],
+  ["go/framework/echo/internal/handler/handler.go.hbs", `package handler
 
 import (
+	"errors"
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
+}
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(c echo.Context) error {
+	items, err := h.items.ListItems(c.Request().Context())
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "could not list items"})
+	}
+	return c.JSON(http.StatusOK, items)
+}
+
+func (h Handler) CreateItem(c echo.Context) error {
+	var body struct {
+		Name string \`json:"name"\`
+	}
+	if err := c.Bind(&body); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+	item, err := h.items.CreateItem(c.Request().Context(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "could not create item"})
+	}
+	return c.JSON(http.StatusCreated, item)
+}`],
+  ["go/framework/fiber/cmd/api/main.go.hbs", `package main
+
+import (
+	"context"
 	"log"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
+
+	"{{project_slug}}/internal/config"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
 {{/if}}
 )
 
 func main() {
+	cfg := config.Load()
+
 {{#if (ne orm "none")}}
-	if err := initDatabase(); err != nil {
-		log.Printf("database not ready: %v", err)
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
+	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
 	}
 {{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
+{{/if}}
 
-	app := fiber.New()
-
+	app := fiber.New(fiber.Config{
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	})
 	app.Get("/health", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"status": "ok"})
 	})
-
-	addr := ":" + getenv("PORT", "8000")
-	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
-	if err := app.Listen(addr); err != nil {
-		log.Fatal(err)
-	}
-}
-
 {{#if (ne orm "none")}}
-func initDatabase() error {
-{{#if (eq orm "gorm")}}
-	gormDB, err := db.Connect()
-	if err != nil {
-		return err
-	}
-	return db.AutoMigrate(gormDB)
-{{else if (eq orm "sqlx")}}
-	_, err := db.Connect()
-	return err
-{{else if (eq orm "sqlc")}}
-	_, err := db.Connect()
-	return err
-{{/if}}
-}
+	app.Get("/items", h.ListItems)
+	app.Post("/items", h.CreateItem)
 {{/if}}
 
-func getenv(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+	addr := ":" + cfg.Port
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, addr)
+		if err := app.Listen(addr); err != nil {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	if err := app.Shutdown(); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
 	}
-	return fallback
-}
-`],
-  ["go/framework/gin/main.go.hbs", `package main
+	log.Printf("server stopped")
+}`],
+  ["go/framework/fiber/internal/handler/handler.go.hbs", `package handler
 
 import (
+	"errors"
+
+	"github.com/gofiber/fiber/v2"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
+}
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(c *fiber.Ctx) error {
+	items, err := h.items.ListItems(c.UserContext())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "could not list items"})
+	}
+	return c.JSON(items)
+}
+
+func (h Handler) CreateItem(c *fiber.Ctx) error {
+	var body struct {
+		Name string \`json:"name"\`
+	}
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	}
+	item, err := h.items.CreateItem(c.UserContext(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "could not create item"})
+	}
+	return c.Status(fiber.StatusCreated).JSON(item)
+}`],
+  ["go/framework/gin/cmd/api/main.go.hbs", `package main
+
+import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"{{project_slug}}/internal/config"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
 {{/if}}
 )
 
 func main() {
+	cfg := config.Load()
+
 {{#if (ne orm "none")}}
-	if err := initDatabase(); err != nil {
-		log.Printf("database not ready: %v", err)
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
 	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
 {{/if}}
 
 	r := gin.Default()
-
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
-
-	addr := ":" + getenv("PORT", "8000")
-	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
-	if err := r.Run(addr); err != nil {
-		log.Fatal(err)
-	}
-}
-
 {{#if (ne orm "none")}}
-func initDatabase() error {
-{{#if (eq orm "gorm")}}
-	gormDB, err := db.Connect()
-	if err != nil {
-		return err
-	}
-	return db.AutoMigrate(gormDB)
-{{else if (eq orm "sqlx")}}
-	_, err := db.Connect()
-	return err
-{{else if (eq orm "sqlc")}}
-	_, err := db.Connect()
-	return err
-{{/if}}
-}
+	r.GET("/items", h.ListItems)
+	r.POST("/items", h.CreateItem)
 {{/if}}
 
-func getenv(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+	srv := &http.Server{
+		Addr:              ":" + cfg.Port,
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
-	return fallback
-}
-`],
-  ["go/framework/stdlib/main.go.hbs", `package main
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, srv.Addr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}`],
+  ["go/framework/gin/internal/handler/handler.go.hbs", `package handler
 
 import (
+	"errors"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
+}
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(c *gin.Context) {
+	items, err := h.items.ListItems(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not list items"})
+		return
+	}
+	c.JSON(http.StatusOK, items)
+}
+
+func (h Handler) CreateItem(c *gin.Context) {
+	var body struct {
+		Name string \`json:"name"\`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
+	item, err := h.items.CreateItem(c.Request.Context(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create item"})
+		return
+	}
+	c.JSON(http.StatusCreated, item)
+}`],
+  ["go/framework/stdlib/cmd/api/main.go.hbs", `package main
+
+import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"{{project_slug}}/internal/config"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
 {{/if}}
 )
 
 func main() {
+	cfg := config.Load()
+
 {{#if (ne orm "none")}}
-	if err := initDatabase(); err != nil {
-		log.Printf("database not ready: %v", err)
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
 	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	h := handler.NewHandler(service.NewItemService(repo))
 {{/if}}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(\`{"status":"ok"}\`))
+		_, _ = w.Write([]byte(\`{"status":"ok"}\`))
 	})
-
-	addr := ":" + getenv("PORT", "8000")
-	log.Printf("%s listening on %s", getenv("APP_NAME", "{{projectName}}"), addr)
-	if err := http.ListenAndServe(addr, mux); err != nil {
-		log.Fatal(err)
-	}
-}
-
 {{#if (ne orm "none")}}
-func initDatabase() error {
-{{#if (eq orm "gorm")}}
-	gormDB, err := db.Connect()
-	if err != nil {
-		return err
-	}
-	return db.AutoMigrate(gormDB)
-{{else if (eq orm "sqlx")}}
-	_, err := db.Connect()
-	return err
-{{else if (eq orm "sqlc")}}
-	_, err := db.Connect()
-	return err
-{{/if}}
-}
+	mux.HandleFunc("GET /items", h.ListItems)
+	mux.HandleFunc("POST /items", h.CreateItem)
 {{/if}}
 
-func getenv(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+	srv := &http.Server{
+		Addr:              ":" + cfg.Port,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
-	return fallback
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, srv.Addr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}`],
+  ["go/framework/stdlib/internal/handler/handler.go.hbs", `package handler
+
+import (
+	"encoding/json"
+	"errors"
+	"net/http"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
 }
-`],
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(w http.ResponseWriter, r *http.Request) {
+	items, err := h.items.ListItems(r.Context())
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "could not list items"})
+		return
+	}
+	writeJSON(w, http.StatusOK, items)
+}
+
+func (h Handler) CreateItem(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Name string \`json:"name"\`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+		return
+	}
+	item, err := h.items.CreateItem(r.Context(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			writeJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+			return
+		}
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "could not create item"})
+		return
+	}
+	writeJSON(w, http.StatusCreated, item)
+}
+
+func writeJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}`],
   ["go/migrations/golang-migrate/db/migrations/0001_create_items.down.sql.hbs", `DROP TABLE items;`],
   ["go/migrations/golang-migrate/db/migrations/0001_create_items.up.sql.hbs", `CREATE TABLE items (
     id TEXT PRIMARY KEY,
@@ -574,6 +1072,7 @@ DROP TABLE items;`],
   ["go/orm/gorm/internal/db/db.go.hbs", `package db
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -586,6 +1085,8 @@ import (
 	{{else if (eq database "mysql")}}
 	"gorm.io/driver/mysql"
 	{{/if}}
+
+	"{{project_slug}}/internal/model"
 )
 
 func databaseURL() string {
@@ -616,12 +1117,12 @@ func Connect() (*gorm.DB, error) {
 	})
 	{{/if}}
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("open database: %w", err)
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("access connection pool: %w", err)
 	}
 
 	sqlDB.SetMaxOpenConns(25)
@@ -629,17 +1130,16 @@ func Connect() (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := sqlDB.Ping(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping database: %w", err)
 	}
 
 	return db, nil
 }
 
 func AutoMigrate(db *gorm.DB) error {
-	return db.AutoMigrate(&Item{})
-}
-`],
-  ["go/orm/gorm/internal/db/models.go.hbs", `package db
+	return db.AutoMigrate(&model.Item{})
+}`],
+  ["go/orm/gorm/internal/model/item.go.hbs", `package model
 
 import "time"
 
@@ -648,12 +1148,50 @@ type Item struct {
 	Name      string    \`json:"name"\`
 	CreatedAt time.Time \`json:"created_at"\`
 	UpdatedAt time.Time \`json:"updated_at"\`
+}`],
+  ["go/orm/gorm/internal/repository/item.go.hbs", `package repository
+
+import (
+	"context"
+	"fmt"
+
+	"gorm.io/gorm"
+
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
 }
-`],
+
+type gormItemRepository struct {
+	db *gorm.DB
+}
+
+func NewItemRepository(db *gorm.DB) ItemRepository {
+	return &gormItemRepository{db: db}
+}
+
+func (r *gormItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if err := r.db.WithContext(ctx).Create(item).Error; err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *gormItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	var items []model.Item
+	if err := r.db.WithContext(ctx).Order("created_at DESC").Find(&items).Error; err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	return items, nil
+}`],
   ["go/orm/sqlc/internal/db/db.go.hbs", `package db
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"time"
 	{{#if (eq database "sqlite")}}
@@ -687,7 +1225,7 @@ func Connect() (*sql.DB, error) {
 	db, err := sql.Open("mysql", databaseURL())
 	{{/if}}
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("open database: %w", err)
 	}
 
 	db.SetMaxOpenConns(25)
@@ -695,12 +1233,82 @@ func Connect() (*sql.DB, error) {
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := db.Ping(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping database: %w", err)
 	}
 
 	return db, nil
+}`],
+  ["go/orm/sqlc/internal/model/item.go.hbs", `package model
+
+import "time"
+
+type Item struct {
+	ID        string    \`json:"id"\`
+	Name      string    \`json:"name"\`
+	CreatedAt time.Time \`json:"created_at"\`
+}`],
+  ["go/orm/sqlc/internal/repository/item.go.hbs", `package repository
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+
+	"{{project_slug}}/internal/db/sqlc"
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
 }
-`],
+
+type sqlcItemRepository struct {
+	q *sqlc.Queries
+}
+
+func NewItemRepository(db *sql.DB) ItemRepository {
+	return &sqlcItemRepository{q: sqlc.New(db)}
+}
+
+func (r *sqlcItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if err := r.q.CreateItem(ctx, sqlc.CreateItemParams{
+		ID:        item.ID,
+		Name:      item.Name,
+		CreatedAt: item.CreatedAt,
+	}); err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *sqlcItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	rows, err := r.q.ListItems(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	items := make([]model.Item, 0, len(rows))
+	for _, row := range rows {
+		items = append(items, model.Item{
+			ID:        row.ID,
+			Name:      row.Name,
+			CreatedAt: row.CreatedAt,
+		})
+	}
+	return items, nil
+}`],
+  ["go/orm/sqlc/queries/items.sql.hbs", `-- name: ListItems :many
+SELECT id, name, created_at FROM items ORDER BY created_at DESC;
+
+-- name: CreateItem :exec
+INSERT INTO items (id, name, created_at)
+VALUES ({{#if (eq database "postgres")}}$1, $2, $3{{else}}?, ?, ?{{/if}});`],
+  ["go/orm/sqlc/schema/schema.sql.hbs", `CREATE TABLE items (
+    id         TEXT      NOT NULL,
+    name       TEXT      NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (id)
+);`],
   ["go/orm/sqlc/sqlc.yaml.hbs", `version: "2"
 sql:
   - engine: "{{#if (eq database "postgres")}}postgresql{{else if (eq database "mysql")}}mysql{{else}}sqlite{{/if}}"
@@ -717,6 +1325,7 @@ sql:
   ["go/orm/sqlx/internal/db/db.go.hbs", `package db
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -752,7 +1361,7 @@ func Connect() (*sqlx.DB, error) {
 	db, err := sqlx.Open("mysql", databaseURL())
 	{{/if}}
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("open database: %w", err)
 	}
 
 	db.SetMaxOpenConns(25)
@@ -760,12 +1369,59 @@ func Connect() (*sqlx.DB, error) {
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := db.Ping(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping database: %w", err)
 	}
 
 	return db, nil
+}`],
+  ["go/orm/sqlx/internal/model/item.go.hbs", `package model
+
+import "time"
+
+type Item struct {
+	ID        string    \`db:"id" json:"id"\`
+	Name      string    \`db:"name" json:"name"\`
+	CreatedAt time.Time \`db:"created_at" json:"created_at"\`
+}`],
+  ["go/orm/sqlx/internal/repository/item.go.hbs", `package repository
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
 }
-`],
+
+type sqlxItemRepository struct {
+	db *sqlx.DB
+}
+
+func NewItemRepository(db *sqlx.DB) ItemRepository {
+	return &sqlxItemRepository{db: db}
+}
+
+func (r *sqlxItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if _, err := r.db.ExecContext(ctx, r.db.Rebind("INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)"),
+		item.ID, item.Name, item.CreatedAt); err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *sqlxItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	var items []model.Item
+	if err := r.db.SelectContext(ctx, &items, r.db.Rebind("SELECT id, name, created_at FROM items ORDER BY created_at DESC")); err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	return items, nil
+}`],
   ["python/addons/docker/_dockerignore", `.git
 .gitignore
 .venv
@@ -829,13 +1485,13 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 {{#if (eq framework "fastapi")}}
-CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "litestar")}}
-CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "flask")}}
-CMD ["uv", "run", "flask", "--app", "{{project_slug}}.main", "run", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "flask", "--app", "src.main", "run", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "django")}}
-CMD ["uv", "run", "gunicorn", "{{project_slug}}.wsgi", "--bind", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000"]
 {{/if}}
 `],
   ["python/addons/github-actions/.github/workflows/ci.yml.hbs", `name: CI
@@ -876,13 +1532,13 @@ warn_unused_configs = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = "{{project_slug}}.*"
+module = "src.*"
 follow_imports = "normal"
 `],
   ["python/addons/pytest/tests/test_health.py.hbs", `{{#if (eq framework "fastapi")}}
 from fastapi.testclient import TestClient
 
-from {{project_slug}}.main import app
+from src.main import app
 
 client = TestClient(app)
 
@@ -894,7 +1550,7 @@ def test_health():
 {{else if (eq framework "litestar")}}
 from litestar.testing import TestClient
 
-from {{project_slug}}.main import app
+from src.main import app
 
 client = TestClient(app)
 
@@ -905,7 +1561,7 @@ def test_health():
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}
 {{else if (eq framework "flask")}}
-from {{project_slug}}.main import app
+from src.main import app
 
 client = app.test_client()
 
@@ -914,6 +1570,23 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.get_json() == {"status": "ok"}
+{{else if (eq framework "django")}}
+import os
+
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
+django.setup()
+
+from django.test import Client
+
+client = Client()
+
+
+def test_health():
+    response = client.get("/api/health/")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
 {{/if}}
 `],
   ["python/addons/ruff/ruff.toml.hbs", `line-length = 100
@@ -924,37 +1597,17 @@ select = ["E", "F", "I", "UP", "B"]
 ignore = []
 
 [lint.isort]
-known-first-party = ["{{project_slug}}"]
-`],
-  ["python/base/{{project_slug}}/__init__.py.hbs", `"""{{projectName}} - a {{framework}} backend scaffolded with TriStack."""
-`],
-  ["python/base/{{project_slug}}/config.py.hbs", `"""Application configuration loaded from environment variables."""
-from functools import lru_cache
-
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
-    app_name: str = "{{projectName}}"
-    debug: bool = False
-
-    {{#if (eq database "sqlite")}}
-    database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
-    {{else if (eq database "postgres")}}
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
-    {{else if (eq database "mysql")}}
-    database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
-    {{/if}}
-
-
-@lru_cache
-def get_settings() -> Settings:
-    return Settings()
+known-first-party = ["src"]
 `],
   ["python/base/env.example.hbs", `# Copy this file to \`.env\` and adjust the values for your environment.
 
+{{#if (eq framework "django")}}
+# Django settings.
+DJANGO_SECRET_KEY=django-insecure-change-me
+DJANGO_DEBUG=true
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+{{else}}
 # Application settings.
 APP_NAME={{projectName}}
 DEBUG=false
@@ -966,14 +1619,16 @@ DEBUG=false
 # MySQL:   mysql+asyncmy://root:password@localhost:3306/{{project_slug}}
 DATABASE_URL={{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{{project_slug}}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}{{else if (eq database "mysql")}}mysql+asyncmy://root:password@localhost:3306/{{project_slug}}{{/if}}
 {{/if}}
-`],
+{{/if}}`],
   ["python/base/pyproject-pip.toml.hbs", `[project]
 name = "{{project_slug}}"
 version = "0.1.0"
 description = "{{projectName}} - a {{framework}} backend"
 requires-python = ">=3.12"
 dependencies = [
+{{#if (ne framework "django")}}
     "pydantic-settings",
+{{/if}}
 {{#if (eq framework "fastapi")}}
     "fastapi",
     "uvicorn[standard]",
@@ -988,7 +1643,9 @@ dependencies = [
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}
-{{#if (eq orm "sqlmodel")}}
+{{#if (eq framework "django")}}
+    "psycopg[binary]",
+{{else if (eq orm "sqlmodel")}}
     "sqlmodel",
 {{else if (eq orm "sqlalchemy")}}
     "sqlalchemy[asyncio]",
@@ -998,12 +1655,14 @@ dependencies = [
 {{#if (eq migrations "alembic")}}
     "alembic",
 {{/if}}
-{{#if (eq database "postgres")}}
+{{#if (and (ne framework "django") (eq database "postgres"))}}
     "asyncpg",
-{{else if (eq database "mysql")}}
+{{else if (and (ne framework "django") (eq database "mysql"))}}
     "asyncmy",
-{{else if (eq database "sqlite")}}
+{{else if (and (ne framework "django") (eq database "sqlite"))}}
     "aiosqlite",
+{{else if (and (eq framework "django") (eq database "mysql"))}}
+    "mysqlclient",
 {{/if}}
 ]
 
@@ -1018,19 +1677,41 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+{{#if (eq framework "django")}}
 [tool.hatch.build.targets.wheel]
-packages = ["{{project_slug}}"]
-`],
+packages = ["config", "apps"]
+
+[tool.hatch.build.targets.wheel.force-include]
+templates = "templates"
+static = "static"
+{{else}}
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+{{/if}}
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]`],
   ["python/base/pyproject-poetry.toml.hbs", `[tool.poetry]
 name = "{{project_slug}}"
 version = "0.1.0"
 description = "{{projectName}} - a {{framework}} backend"
 authors = []
-packages = [{ include = "{{project_slug}}" }]
+{{#if (eq framework "django")}}
+packages = [
+    { include = "config" },
+    { include = "apps" },
+    { include = "templates" },
+    { include = "static" },
+]
+{{else}}
+packages = [{ include = "src" }]
+{{/if}}
 
 [tool.poetry.dependencies]
 python = ">=3.12"
+{{#if (ne framework "django")}}
 pydantic-settings = "^2.7"
+{{/if}}
 {{#if (eq framework "fastapi")}}
 fastapi = "^0.115"
 uvicorn = { extras = ["standard"], version = "^0.34" }
@@ -1045,7 +1726,9 @@ gunicorn = "^23.0"
 {{else if (eq framework "flask")}}
 flask = "^3.1"
 {{/if}}
-{{#if (eq orm "sqlmodel")}}
+{{#if (eq framework "django")}}
+psycopg = { extras = ["binary"], version = "^3.2" }
+{{else if (eq orm "sqlmodel")}}
 sqlmodel = "^0.0.22"
 {{else if (eq orm "sqlalchemy")}}
 sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
@@ -1055,25 +1738,28 @@ tortoise-orm = "^0.24"
 {{#if (eq migrations "alembic")}}
 alembic = "^1.14"
 {{/if}}
-{{#if (eq database "postgres")}}
+{{#if (and (ne framework "django") (eq database "postgres"))}}
 asyncpg = "^0.30"
-{{else if (eq database "mysql")}}
+{{else if (and (ne framework "django") (eq database "mysql"))}}
 asyncmy = "^0.2"
-{{else if (eq database "sqlite")}}
+{{else if (and (ne framework "django") (eq database "sqlite"))}}
 aiosqlite = "^0.20"
+{{else if (and (eq framework "django") (eq database "mysql"))}}
+mysqlclient = "^2.2"
 {{/if}}
 
 [build-system]
 requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-`],
+build-backend = "poetry.core.masonry.api"`],
   ["python/base/pyproject-uv.toml.hbs", `[project]
 name = "{{project_slug}}"
 version = "0.1.0"
 description = "{{projectName}} - a {{framework}} backend"
 requires-python = ">=3.12"
 dependencies = [
+{{#if (ne framework "django")}}
     "pydantic-settings",
+{{/if}}
 {{#if (eq framework "fastapi")}}
     "fastapi",
     "uvicorn[standard]",
@@ -1088,7 +1774,9 @@ dependencies = [
 {{else if (eq framework "flask")}}
     "flask",
 {{/if}}
-{{#if (eq orm "sqlmodel")}}
+{{#if (eq framework "django")}}
+    "psycopg[binary]",
+{{else if (eq orm "sqlmodel")}}
     "sqlmodel",
 {{else if (eq orm "sqlalchemy")}}
     "sqlalchemy[asyncio]",
@@ -1098,12 +1786,14 @@ dependencies = [
 {{#if (eq migrations "alembic")}}
     "alembic",
 {{/if}}
-{{#if (eq database "postgres")}}
+{{#if (and (ne framework "django") (eq database "postgres"))}}
     "asyncpg",
-{{else if (eq database "mysql")}}
+{{else if (and (ne framework "django") (eq database "mysql"))}}
     "asyncmy",
-{{else if (eq database "sqlite")}}
+{{else if (and (ne framework "django") (eq database "sqlite"))}}
     "aiosqlite",
+{{else if (and (eq framework "django") (eq database "mysql"))}}
+    "mysqlclient",
 {{/if}}
 ]
 
@@ -1125,61 +1815,175 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+{{#if (eq framework "django")}}
 [tool.hatch.build.targets.wheel]
-packages = ["{{project_slug}}"]
+packages = ["config", "apps"]
+
+[tool.hatch.build.targets.wheel.force-include]
+templates = "templates"
+static = "static"
+{{else}}
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+{{/if}}
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]`],
+  ["python/base/src/__init__.py.hbs", `"""{{projectName}} - a {{framework}} backend scaffolded with TriStack."""
 `],
-  ["python/framework/django/{{project_slug}}/__init__.py.hbs", `from .config import get_settings
+  ["python/base/src/config.py.hbs", `"""Application configuration loaded from environment variables."""
+from functools import lru_cache
 
-settings = get_settings()
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    app_name: str = "{{projectName}}"
+    debug: bool = False
+    cors_origins: list[str] = ["http://localhost:3000"]
+
+    {{#if (eq database "sqlite")}}
+    database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
+    {{else if (eq database "postgres")}}
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
+    {{else if (eq database "mysql")}}
+    database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
+    {{/if}}
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
 `],
-  ["python/framework/django/{{project_slug}}/asgi.py.hbs", `"""ASGI config for {{projectName}}."""
-import os
-
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{project_slug}}.settings")
-
-application = get_asgi_application()
+  ["python/framework/django/apps/__init__.py.hbs", `"""Apps package for {{projectName}}."""
 `],
-  ["python/framework/django/{{project_slug}}/core/__init__.py", ``],
-  ["python/framework/django/{{project_slug}}/core/apps.py.hbs", `from django.apps import AppConfig
+  ["python/framework/django/apps/core/__init__.py.hbs", `"""Core app for {{projectName}}."""
+`],
+  ["python/framework/django/apps/core/apps.py.hbs", `"""Core app configuration."""
+from django.apps import AppConfig
 
 
 class CoreConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "{{project_slug}}.core"
-`],
-  ["python/framework/django/{{project_slug}}/core/urls.py", `from django.urls import path
+    name = "apps.core"`],
+  ["python/framework/django/apps/core/models.py.hbs", `"""Domain models for the core app."""
+from django.db import models`],
+  ["python/framework/django/apps/core/urls.py.hbs", `"""URL patterns for the core app."""
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    path("health/", views.health),
-]
+    path("health/", views.health, name="health"),
+]`],
+  ["python/framework/django/apps/core/utils.py.hbs", `"""Shared utilities for {{projectName}}."""
 `],
-  ["python/framework/django/{{project_slug}}/core/views.py", `from rest_framework.decorators import api_view
+  ["python/framework/django/apps/core/views.py.hbs", `"""Core views for {{projectName}}."""
+from django.http import HttpRequest
+
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 
 @api_view(["GET"])
-def health(request):
-    return Response({"status": "ok"})
+def health(request: HttpRequest) -> Response:
+    return Response({"status": "ok"})`],
+  ["python/framework/django/apps/users/__init__.py.hbs", `"""Users app for {{projectName}}."""
 `],
-  ["python/framework/django/{{project_slug}}/settings.py.hbs", `"""
-Django settings for {{projectName}}.
-"""
+  ["python/framework/django/apps/users/apps.py.hbs", `"""Users app configuration."""
+from django.apps import AppConfig
+
+
+class UsersConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.users"`],
+  ["python/framework/django/apps/users/models.py.hbs", `"""User models for {{projectName}}."""
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+class User(AbstractUser):
+    """Custom user model. Extend as needed."""
+
+    class Meta:
+        db_table = "users"`],
+  ["python/framework/django/apps/users/selectors.py.hbs", `"""Selectors for complex read queries."""
+from .models import User
+
+
+def get_user_by_id(user_id: int) -> User | None:
+    """Fetch a single user by primary key."""
+    try:
+        return User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return None`],
+  ["python/framework/django/apps/users/serializers.py.hbs", `"""DRF serializers for the users app."""
+from rest_framework import serializers
+
+from .models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "last_name"]
+        read_only_fields = ["id"]`],
+  ["python/framework/django/apps/users/services.py.hbs", `"""Business logic for user operations."""
+from django.db.models import QuerySet
+
+from .models import User
+
+
+def get_users() -> QuerySet[User]:
+    """Return all active users."""
+    return User.objects.filter(is_active=True)`],
+  ["python/framework/django/apps/users/urls.py.hbs", `"""URL patterns for the users app."""
+from django.urls import path
+
+from . import views
+
+app_name = "users"
+
+urlpatterns = [
+    path("", views.UserListView.as_view(), name="user-list"),
+]`],
+  ["python/framework/django/apps/users/views.py.hbs", `"""User views for {{projectName}}."""
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from .models import User
+from .serializers import UserSerializer
+
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]`],
+  ["python/framework/django/config/__init__.py.hbs", `"""Config package for {{projectName}}."""
+`],
+  ["python/framework/django/config/asgi.py.hbs", `"""ASGI config for {{projectName}}."""
 import os
+
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
+
+application = get_asgi_application()
+`],
+  ["python/framework/django/config/settings/__init__.py.hbs", `"""Settings package for {{projectName}}."""
+`],
+  ["python/framework/django/config/settings/base.py.hbs", `"""Base Django settings for {{projectName}}."""
 from pathlib import Path
 
-from .config import get_settings
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-settings = get_settings()
+SECRET_KEY = "django-insecure-change-me"
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+DEBUG = False
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-change-me")
-DEBUG = settings.debug
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS: list[str] = []
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -1190,8 +1994,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
-    "{{project_slug}}.core",
+    "apps.core",
+    "apps.users",
 ]
+
+AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -1204,12 +2011,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "{{project_slug}}.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -1222,8 +2029,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "{{project_slug}}.wsgi.application"
-ASGI_APPLICATION = "{{project_slug}}.asgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 {{#if (eq database "none")}}
 DATABASES = {}
@@ -1238,22 +2044,22 @@ DATABASES = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "{{project_slug}}"),
-        "USER": os.environ.get("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "NAME": "{{project_slug}}",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 {{else if (eq database "mysql")}}
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("MYSQL_DATABASE", "{{project_slug}}"),
-        "USER": os.environ.get("MYSQL_USER", "root"),
-        "PASSWORD": os.environ.get("MYSQL_PASSWORD", "password"),
-        "HOST": os.environ.get("MYSQL_HOST", "localhost"),
-        "PORT": os.environ.get("MYSQL_PORT", "3306"),
+        "NAME": "{{project_slug}}",
+        "USER": "root",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": "3306",
     }
 }
 {{/if}}
@@ -1271,28 +2077,57 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = True
-
 REST_FRAMEWORK = {}
 `],
-  ["python/framework/django/{{project_slug}}/urls.py.hbs", `"""URL configuration for {{projectName}}."""
+  ["python/framework/django/config/settings/development.py.hbs", `"""Development settings for {{projectName}}."""
+from .base import *  # noqa: F401,F403
+
+DEBUG = True
+
+ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOW_ALL_ORIGINS = True
+`],
+  ["python/framework/django/config/settings/production.py.hbs", `"""Production settings for {{projectName}}."""
+import os
+
+from .base import *  # noqa: F401,F403
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)  # noqa: F405
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")  # type: ignore[assignment]
+
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")  # type: ignore[assignment]
+`],
+  ["python/framework/django/config/urls.py.hbs", `"""URL configuration for {{projectName}}."""
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("{{project_slug}}.core.urls")),
+    path("api/", include("apps.core.urls")),
+    path("api/users/", include("apps.users.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 `],
-  ["python/framework/django/{{project_slug}}/wsgi.py.hbs", `"""WSGI config for {{projectName}}."""
+  ["python/framework/django/config/wsgi.py.hbs", `"""WSGI config for {{projectName}}."""
 import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{project_slug}}.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
 
 application = get_wsgi_application()
 `],
@@ -1303,7 +2138,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{project_slug}}.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -1316,18 +2151,150 @@ def main():
 if __name__ == "__main__":
     main()
 `],
-  ["python/framework/fastapi/{{project_slug}}/main.py.hbs", `"""FastAPI application entrypoint for {{projectName}}."""
+  ["python/framework/django/media/README.md", `"""User-uploaded media files directory."""
+`],
+  ["python/framework/django/static/README.md", `"""Static assets directory — CSS, JS, images."""
+`],
+  ["python/framework/django/templates/base.html.hbs", `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{projectName}}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>`],
+  ["python/framework/fastapi/src/api/__init__.py.hbs", `"""API package for {{projectName}}."""`],
+  ["python/framework/fastapi/src/api/router.py.hbs", `"""Top-level API router for {{projectName}}.
+
+Aggregates versioned routers. Add new versions here as the API grows.
+"""
+from fastapi import APIRouter
+
+from .v1.router import router as v1_router
+
+api_router = APIRouter()
+api_router.include_router(v1_router, prefix="/v1")`],
+  ["python/framework/fastapi/src/api/v1/__init__.py.hbs", `"""API v1 package for {{projectName}}."""`],
+  ["python/framework/fastapi/src/api/v1/router.py.hbs", `"""API v1 router for {{projectName}}.
+
+Aggregates feature route modules. Add \`\`path("users/", ...)\`\` as new
+route modules are created.
+"""
+from fastapi import APIRouter
+
+{{#if (ne orm "none")}}
+from .routes.items import router as items_router
+{{/if}}
+
+router = APIRouter()
+
+
+@router.get("/health")
+async def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+{{#if (ne orm "none")}}
+router.include_router(items_router, prefix="/items", tags=["items"])
+{{/if}}`],
+  ["python/framework/fastapi/src/api/v1/routes/__init__.py.hbs", `"""Route modules for API v1."""`],
+  ["python/framework/fastapi/src/api/v1/routes/items.py.hbs", `"""Item endpoints — thin HTTP layer delegating to services."""
+from fastapi import APIRouter
+{{#if (ne orm "tortoise")}}
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ....db import get_session
+{{/if}}
+from ....schemas.items import ItemCreate, ItemResponse
+from ....services.items import create_item, list_items
+
+router = APIRouter()
+
+
+{{#if (eq orm "tortoise")}}
+@router.get("/", response_model=list[ItemResponse])
+async def list_items_endpoint() -> list[ItemResponse]:
+    return await list_items()
+
+
+@router.post("/", response_model=ItemResponse, status_code=201)
+async def create_item_endpoint(payload: ItemCreate) -> ItemResponse:
+    return await create_item(payload)
+{{else}}
+@router.get("/", response_model=list[ItemResponse])
+async def list_items_endpoint(
+    session: AsyncSession = Depends(get_session),
+) -> list[ItemResponse]:
+    return await list_items(session)
+
+
+@router.post("/", response_model=ItemResponse, status_code=201)
+async def create_item_endpoint(
+    payload: ItemCreate,
+    session: AsyncSession = Depends(get_session),
+) -> ItemResponse:
+    return await create_item(session, payload)
+{{/if}}`],
+  ["python/framework/fastapi/src/exceptions.py.hbs", `"""Application exceptions and global handlers for {{projectName}}."""
+import logging
+
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+
+logger = logging.getLogger(__name__)
+
+
+class AppError(Exception):
+    """Base class for expected application errors.
+
+    Raise from services/repositories to surface a stable JSON error shape
+    (\`\`{"detail": "..."}\`\`) instead of a bare 500.
+    """
+
+    status_code = status.HTTP_400_BAD_REQUEST
+
+
+class NotFoundError(AppError):
+    status_code = status.HTTP_404_NOT_FOUND
+
+
+def register_exception_handlers(app: FastAPI) -> None:
+    """Register global exception handlers on the FastAPI application."""
+
+    @app.exception_handler(AppError)
+    async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:
+        return JSONResponse(status_code=exc.status_code, content={"detail": str(exc)})
+
+    @app.exception_handler(Exception)
+    async def handle_unhandled(request: Request, exc: Exception) -> JSONResponse:
+        logger.exception("Unhandled error: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Internal server error"},
+        )`],
+  ["python/framework/fastapi/src/main.py.hbs", `"""FastAPI application entrypoint for {{projectName}}.
+
+A factory pattern keeps the app import-safe (tests, uvicorn workers, and
+the CLI can each build an instance without side effects).
+"""
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
 from .config import get_settings
+from .exceptions import register_exception_handlers
+from .middleware import add_middleware
 
 settings = get_settings()
 
 
-{{#if (and (ne database "none") (eq migrations "none"))}}
+{{#if (and (ne orm "none") (eq migrations "none"))}}
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from .db import init_db
@@ -1341,46 +2308,578 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 {{/if}}
 
 
-app = FastAPI(title=settings.app_name, lifespan=lifespan)
+def create_app() -> FastAPI:
+    """Application factory."""
+    app = FastAPI(title=settings.app_name, lifespan=lifespan)
+
+    add_middleware(app)
+    register_exception_handlers(app)
+
+    from .api.router import api_router
+
+    app.include_router(api_router)
+
+    return app
 
 
-@app.get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
-`],
-  ["python/framework/flask/{{project_slug}}/main.py.hbs", `"""Flask application entrypoint for {{projectName}}."""
-from flask import Flask, jsonify
+app = create_app()`],
+  ["python/framework/fastapi/src/middleware.py.hbs", `"""Cross-cutting middleware for {{projectName}}."""
+import logging
+from collections.abc import Awaitable, Callable
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 from .config import get_settings
 
-settings = get_settings()
-
-app = Flask(__name__)
-app.config["DEBUG"] = settings.debug
+logger = logging.getLogger(__name__)
 
 
-@app.get("/health")
-def health():
-    return jsonify({"status": "ok"})
-`],
-  ["python/framework/litestar/{{project_slug}}/main.py.hbs", `"""Litestar application entrypoint for {{projectName}}."""
-from litestar import Litestar, get
+def add_middleware(app: FastAPI) -> None:
+    """Register middleware on the FastAPI application."""
+    settings = get_settings()
 
-from .config import get_settings
-
-settings = get_settings()
-
-
-@get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(BaseHTTPMiddleware, dispatch=request_logging)
 
 
-app = Litestar(
-    route_handlers=[health],
-    debug=settings.debug,
+async def request_logging(
+    request: Request, call_next: Callable[[Request], Awaitable[Response]]
+) -> Response:
+    """Log every request method, path, and response status."""
+    response = await call_next(request)
+    logger.info("%s %s -> %s", request.method, request.url.path, response.status_code)
+    return response`],
+  ["python/framework/fastapi/src/schemas/__init__.py.hbs", `"""Request and response schemas for {{projectName}}."""`],
+  ["python/framework/fastapi/src/schemas/items.py.hbs", `"""Request and response schemas for items."""
+from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
+
+class ItemCreate(BaseModel):
+    """Payload for creating a new item."""
+
+    name: str
+
+
+class ItemResponse(BaseModel):
+    """Canonical item representation returned to clients."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    name: str
+    created_at: datetime`],
+  ["python/framework/fastapi/src/services/__init__.py.hbs", `"""Services for {{projectName}}.
+
+Business logic lives here — service functions accept an already-open
+session and delegate persistence to the repository layer. This layer is
+framework-agnostic: FastAPI and Litestar route handlers both call the
+same service functions.
+"""`],
+  ["python/framework/fastapi/src/services/items.py.hbs", `"""Item business logic."""
+{{#if (eq orm "tortoise")}}
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
 )
-`],
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(name=payload.name)
+
+
+async def list_items() -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items()
+{{else}}
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(session, name=payload.name)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items(session)
+{{/if}}`],
+  ["python/framework/flask/src/api/__init__.py.hbs", `"""API package for {{projectName}}."""`],
+  ["python/framework/flask/src/api/v1/__init__.py.hbs", `"""API v1 package for {{projectName}}."""`],
+  ["python/framework/flask/src/api/v1/router.py.hbs", `"""API v1 blueprint registration for {{projectName}}."""
+from flask import Blueprint, Flask, Response, jsonify
+
+{{#if (ne orm "none")}}
+from .routes.items import items_bp
+{{/if}}
+
+v1_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
+
+
+@v1_bp.get("/health")
+def health() -> Response:
+    return jsonify({"status": "ok"})
+
+
+def register_v1_blueprints(app: Flask) -> None:
+    """Register all API v1 blueprints."""
+    {{#if (ne orm "none")}}
+    v1_bp.register_blueprint(items_bp)
+    {{/if}}
+    app.register_blueprint(v1_bp)`],
+  ["python/framework/flask/src/api/v1/routes/__init__.py.hbs", `"""Route modules for API v1."""`],
+  ["python/framework/flask/src/api/v1/routes/items.py.hbs", `"""Item endpoints — thin HTTP layer delegating to services."""
+from flask import Blueprint, Response, jsonify, request
+
+items_bp = Blueprint("items", __name__, url_prefix="/items")
+
+
+@items_bp.get("/")
+async def list_items_endpoint() -> Response:
+    from ....services.items import list_items
+
+    {{#if (eq orm "tortoise")}}
+    items = await list_items()
+    {{else}}
+    from ....db import SessionLocal
+
+    async with SessionLocal() as session:
+        items = await list_items(session)
+    {{/if}}
+    return jsonify([item.model_dump(mode="json") for item in items])
+
+
+@items_bp.post("/")
+async def create_item_endpoint() -> Response:
+    from ....schemas.items import ItemCreate
+    from ....services.items import create_item
+
+    data = ItemCreate(**request.get_json() or {})
+    {{#if (eq orm "tortoise")}}
+    item = await create_item(data)
+    {{else}}
+    from ....db import SessionLocal
+
+    async with SessionLocal() as session:
+        item = await create_item(session, data)
+    {{/if}}
+    return jsonify(item.model_dump(mode="json")), 201`],
+  ["python/framework/flask/src/exceptions.py.hbs", `"""Application exceptions and global handlers for {{projectName}}."""
+import logging
+
+from flask import Flask, Response, jsonify
+
+logger = logging.getLogger(__name__)
+
+
+class AppError(Exception):
+    """Base class for expected application errors.
+
+    Raise from services/repositories to surface a stable JSON error shape
+    (\`\`{"detail": "..."}\`\`) instead of a bare 500.
+    """
+
+    status_code: int = 400
+
+
+class NotFoundError(AppError):
+    status_code: int = 404
+
+
+def register_error_handlers(app: Flask) -> None:
+    """Register global exception handlers on the Flask app."""
+
+    @app.errorhandler(AppError)
+    def handle_app_error(exc: AppError) -> tuple[Response, int]:
+        return jsonify({"detail": str(exc)}), exc.status_code
+
+    @app.errorhandler(NotFoundError)
+    def handle_not_found(exc: NotFoundError) -> tuple[Response, int]:
+        return jsonify({"detail": str(exc)}), exc.status_code
+
+    @app.errorhandler(Exception)
+    def handle_unhandled(exc: Exception) -> tuple[Response, int]:
+        logger.exception("Unhandled error: %s", exc)
+        return jsonify({"detail": "Internal server error"}), 500`],
+  ["python/framework/flask/src/main.py.hbs", `"""Flask application entrypoint for {{projectName}}."""
+import asyncio
+
+from flask import Flask
+
+from .config import get_settings
+from .exceptions import register_error_handlers
+from .middleware import register_middleware
+
+settings = get_settings()
+
+
+def create_app() -> Flask:
+    """Application factory."""
+    app = Flask(__name__)
+    app.config["DEBUG"] = settings.debug
+
+    register_middleware(app)
+    register_error_handlers(app)
+
+    {{#if (and (ne orm "none") (eq migrations "none"))}}
+    from .db import init_db
+
+    asyncio.run(init_db())
+    {{/if}}
+
+    from .api.v1.router import register_v1_blueprints
+
+    register_v1_blueprints(app)
+
+    return app
+
+
+app = create_app()`],
+  ["python/framework/flask/src/middleware.py.hbs", `"""Cross-cutting middleware for {{projectName}}."""
+from flask import Flask, request
+
+
+def register_middleware(app: Flask) -> None:
+    """Register request-scoped middleware hooks."""
+
+    @app.before_request
+    def log_request() -> None:
+        app.logger.info("%s %s", request.method, request.path)`],
+  ["python/framework/flask/src/schemas/__init__.py.hbs", `"""Request and response schemas for {{projectName}}."""`],
+  ["python/framework/flask/src/schemas/items.py.hbs", `"""Request and response schemas for items."""
+from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
+
+class ItemCreate(BaseModel):
+    """Payload for creating a new item."""
+
+    name: str
+
+
+class ItemResponse(BaseModel):
+    """Canonical item representation returned to clients."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    name: str
+    created_at: datetime`],
+  ["python/framework/flask/src/services/__init__.py.hbs", `"""Services for {{projectName}}.
+
+Business logic lives here — service functions accept an already-open
+session and delegate persistence to the repository layer. This layer is
+framework-agnostic: all Python web frameworks call the same service
+functions.
+"""`],
+  ["python/framework/flask/src/services/items.py.hbs", `"""Item business logic."""
+{{#if (eq orm "tortoise")}}
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(name=payload.name)
+
+
+async def list_items() -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items()
+{{else}}
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(session, name=payload.name)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items(session)
+{{/if}}`],
+  ["python/framework/litestar/src/api/v1/__init__.py.hbs", `"""API v1 package for {{projectName}}."""`],
+  ["python/framework/litestar/src/api/v1/router.py.hbs", `"""API v1 router for {{projectName}}."""
+from litestar import Router, get
+
+{{#if (ne orm "none")}}
+from .routes.items import create_item_endpoint, list_items_endpoint
+{{/if}}
+
+
+@get("/health", tags=["health"])
+async def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+{{#if (ne orm "none")}}
+router = Router(
+    path="/v1",
+    route_handlers=[health, list_items_endpoint, create_item_endpoint],
+)
+{{else}}
+router = Router(
+    path="/v1",
+    route_handlers=[health],
+)
+{{/if}}`],
+  ["python/framework/litestar/src/api/v1/routes/__init__.py.hbs", `"""Route modules for API v1."""`],
+  ["python/framework/litestar/src/api/v1/routes/items.py.hbs", `"""Item endpoints — thin HTTP layer delegating to services."""
+from litestar import get, post
+{{#if (ne orm "tortoise")}}
+from litestar import Provide
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ....db import get_session
+{{/if}}
+from ....schemas.items import ItemCreate, ItemResponse
+from ....services.items import create_item, list_items
+
+
+{{#if (eq orm "tortoise")}}
+@get("/", path="/items", response_model=list[ItemResponse])
+async def list_items_endpoint() -> list[ItemResponse]:
+    return await list_items()
+
+
+@post(
+    "/",
+    path="/items",
+    response_model=ItemResponse,
+    status_code=201,
+)
+async def create_item_endpoint(data: ItemCreate) -> ItemResponse:
+    return await create_item(data)
+{{else}}
+@get("/", path="/items", response_model=list[ItemResponse])
+async def list_items_endpoint(
+    session: AsyncSession = Provide(get_session),
+) -> list[ItemResponse]:
+    return await list_items(session)
+
+
+@post(
+    "/",
+    path="/items",
+    response_model=ItemResponse,
+    status_code=201,
+)
+async def create_item_endpoint(
+    data: ItemCreate,
+    session: AsyncSession = Provide(get_session),
+) -> ItemResponse:
+    return await create_item(session, data)
+{{/if}}`],
+  ["python/framework/litestar/src/exceptions.py.hbs", `"""Application exceptions and global handlers for {{projectName}}."""
+import logging
+
+from litestar import Request
+from litestar.responses import JSONResponse
+from litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
+
+logger = logging.getLogger(__name__)
+
+
+class AppError(Exception):
+    """Base class for expected application errors.
+
+    Raise from services/repositories to surface a stable JSON error shape
+    (\`\`{"detail": "..."}\`\`) instead of a bare 500.
+    """
+
+    status_code = HTTP_400_BAD_REQUEST
+
+
+class NotFoundError(AppError):
+    status_code = HTTP_404_NOT_FOUND
+
+
+async def _handle_app_error(request: Request, exc: AppError) -> JSONResponse:
+    return JSONResponse(status_code=exc.status_code, content={"detail": str(exc)})
+
+
+async def _handle_unhandled(request: Request, exc: Exception) -> JSONResponse:
+    logger.exception("Unhandled error: %s", exc)
+    return JSONResponse(
+        status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+        content={"detail": "Internal server error"},
+    )
+
+
+exception_handlers = {
+    AppError: _handle_app_error,
+    Exception: _handle_unhandled,
+}`],
+  ["python/framework/litestar/src/main.py.hbs", `"""Litestar application entrypoint for {{projectName}}.
+
+A factory keeps the app import-safe (tests, CLI, and uvicorn can each
+build an instance without side effects).
+"""
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+from litestar import Litestar
+from litestar.config.cors import CORSConfig
+
+from .config import get_settings
+from .exceptions import exception_handlers
+from .middleware import RequestLoggingMiddleware
+
+settings = get_settings()
+
+
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    from .db import init_db
+
+    await init_db()
+    yield
+{{else}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    yield
+{{/if}}
+
+
+def create_app() -> Litestar:
+    """Application factory."""
+    from .api.v1.router import router as v1_router
+
+    return Litestar(
+        route_handlers=[v1_router],
+        debug=settings.debug,
+        cors_config=CORSConfig(allow_origins=settings.cors_origins),
+        exception_handlers=exception_handlers,
+        middleware=[RequestLoggingMiddleware],
+        lifespan=lifespan,
+    )
+
+
+app = create_app()`],
+  ["python/framework/litestar/src/middleware.py.hbs", `"""Cross-cutting middleware for {{projectName}}."""
+import logging
+from typing import Any
+
+from litestar.middleware import PureMiddleware
+from litestar.types import ASGIApp, Receive, Scope, Send
+
+logger = logging.getLogger(__name__)
+
+
+class RequestLoggingMiddleware(PureMiddleware):
+    """Log every request method, path, and response status."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        method = scope["method"]
+        path = scope["path"]
+
+        async def send_wrapper(message: dict[str, Any]) -> None:
+            if message["type"] == "http.response.start":
+                logger.info("%s %s -> %s", method, path, message.get("status", "??"))
+            await send(message)
+
+        await self.app(scope, receive, send_wrapper)`],
+  ["python/framework/litestar/src/schemas/__init__.py.hbs", `"""Request and response schemas for {{projectName}}."""`],
+  ["python/framework/litestar/src/schemas/items.py.hbs", `"""Request and response schemas for items."""
+from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
+
+class ItemCreate(BaseModel):
+    """Payload for creating a new item."""
+
+    name: str
+
+
+class ItemResponse(BaseModel):
+    """Canonical item representation returned to clients."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    name: str
+    created_at: datetime`],
+  ["python/framework/litestar/src/services/__init__.py.hbs", `"""Services for {{projectName}}.
+
+Business logic lives here — service functions accept an already-open
+session and delegate persistence to the repository layer. This layer is
+framework-agnostic: FastAPI and Litestar route handlers both call the
+same service functions.
+"""`],
+  ["python/framework/litestar/src/services/items.py.hbs", `"""Item business logic."""
+{{#if (eq orm "tortoise")}}
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(name=payload.name)
+
+
+async def list_items() -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items()
+{{else}}
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..repositories.items import (
+    create_item as repo_create_item,
+    list_items as repo_list_items,
+)
+from ..schemas.items import ItemCreate, ItemResponse
+
+
+async def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:
+    """Create and persist a new item."""
+    return await repo_create_item(session, name=payload.name)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    """Return all items."""
+    return await repo_list_items(session)
+{{/if}}`],
   ["python/migrations/alembic/alembic.ini", `# Alembic configuration for {{projectName}}
 [alembic]
 script_location = migrations
@@ -1437,11 +2936,11 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 {{#if (eq orm "sqlmodel")}}
 from sqlmodel import SQLModel
 
-from {{project_slug}}.config import get_settings
-from {{project_slug}}.models import Item  # noqa: F401  (registers tables on SQLModel.metadata)
+from src.config import get_settings
+from src.models import Item  # noqa: F401  (registers tables on SQLModel.metadata)
 {{else if (eq orm "sqlalchemy")}}
-from {{project_slug}}.config import get_settings
-from {{project_slug}}.models import Base
+from src.config import get_settings
+from src.models import Base
 {{/if}}
 
 config = context.config
@@ -1536,7 +3035,72 @@ def downgrade() -> None:
 
 # Generated revisions are placed in this directory.
 `],
-  ["python/orm/sqlmodel/{{project_slug}}/db.py.hbs", `"""Database engine and session management built on SQLModel."""
+  ["python/orm/sqlalchemy/src/db.py.hbs", `"""Database engine and session management built on SQLAlchemy."""
+from collections.abc import AsyncIterator
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
+from .config import get_settings
+
+settings = get_settings()
+
+engine = create_async_engine(settings.database_url, echo=settings.debug)
+SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+async def get_session() -> AsyncIterator[AsyncSession]:
+    """Yield an open database session for a request scope."""
+    async with SessionLocal() as session:
+        yield session
+
+
+{{#if (eq migrations "none")}}
+async def init_db() -> None:
+    """Create tables directly when migrations are not enabled."""
+    from .models import Base
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+{{/if}}`],
+  ["python/orm/sqlalchemy/src/models.py.hbs", `"""Domain models for {{projectName}} — SQLAlchemy declarative base."""
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, String
+from sqlalchemy.orm import DeclarativeBase
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Item(Base):
+    __tablename__ = "items"
+
+    id = Column(String, primary_key=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))`],
+  ["python/orm/sqlalchemy/src/repositories/__init__.py.hbs", `"""Repository layer — persists domain objects and returns response schemas."""`],
+  ["python/orm/sqlalchemy/src/repositories/items.py.hbs", `"""Repository for items — SQLAlchemy layer."""
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..models import Item
+from ..schemas.items import ItemResponse
+
+
+async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
+    item = Item(name=name)
+    session.add(item)
+    await session.commit()
+    await session.refresh(item)
+    return ItemResponse.model_validate(item)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    result = await session.execute(select(Item))
+    items = result.scalars().all()
+    return [ItemResponse.model_validate(i) for i in items]`],
+  ["python/orm/sqlmodel/src/db.py.hbs", `"""Database engine and session management built on SQLModel."""
 from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -1565,7 +3129,7 @@ async def init_db() -> None:
         await conn.run_sync(SQLModel.metadata.create_all)
 {{/if}}
 `],
-  ["python/orm/sqlmodel/{{project_slug}}/models.py.hbs", `"""Domain models for {{projectName}}."""
+  ["python/orm/sqlmodel/src/models.py.hbs", `"""Domain models for {{projectName}}."""
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -1583,13 +3147,71 @@ class Item(SQLModel, table=True):
     name: str
     created_at: datetime = Field(default_factory=utcnow)
 `],
-  ["rust/addons/cargo-watch/cargo-watch.toml.hbs", `watch = ["src", "config", "Cargo.toml"]
+  ["python/orm/sqlmodel/src/repositories/__init__.py.hbs", `"""Repository layer — persists domain objects and returns response schemas."""`],
+  ["python/orm/sqlmodel/src/repositories/items.py.hbs", `"""Repository for items — SQLModel layer."""
+from sqlmodel import AsyncSession, select
 
-commands = { run = "cargo run" }`],
-  ["rust/addons/clippy/clippy.toml.hbs", `# Clippy configuration.
-# See https://rust-lang.github.io/rust-clippy/ for options.
+from ..models import Item
+from ..schemas.items import ItemResponse
 
-off-warnings = true`],
+
+async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
+    item = Item(name=name)
+    session.add(item)
+    await session.commit()
+    await session.refresh(item)
+    return ItemResponse.model_validate(item)
+
+
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    result = await session.exec(select(Item))
+    items = result.all()
+    return [ItemResponse.model_validate(i) for i in items]`],
+  ["python/orm/tortoise/src/db.py.hbs", `"""Database connection management for {{projectName}} — Tortoise ORM."""
+from tortoise import Tortoise
+
+from .config import get_settings
+
+settings = get_settings()
+
+
+async def init_db() -> None:
+    """Initialize the ORM and create tables when migrations are disabled."""
+    await Tortoise.init(
+        db_url=settings.database_url,
+        modules={"models": ["src.models"]},
+    )
+    {{#if (eq migrations "none")}}
+    await Tortoise.generate_schemas()
+    {{/if}}`],
+  ["python/orm/tortoise/src/models.py.hbs", `"""Domain models for {{projectName}} — Tortoise ORM."""
+from tortoise import fields
+from tortoise.models import Model
+
+
+class Item(Model):
+    """Sample model. Replace with your own domain models."""
+
+    id = fields.UUIDField(pk=True)
+    name = fields.CharField(max_length=255)
+    created_at = fields.DatetimeField(auto_now_add=True)
+
+    class Meta:
+        table = "items"`],
+  ["python/orm/tortoise/src/repositories/__init__.py.hbs", `"""Repository layer — persists domain objects and returns response schemas."""`],
+  ["python/orm/tortoise/src/repositories/items.py.hbs", `"""Repository for items — Tortoise ORM layer."""
+from ..models import Item
+from ..schemas.items import ItemResponse
+
+
+async def create_item(*, name: str) -> ItemResponse:
+    item = await Item.create(name=name)
+    return ItemResponse.model_validate(item)
+
+
+async def list_items() -> list[ItemResponse]:
+    items = await Item.all()
+    return [ItemResponse.model_validate(item) for item in items]`],
   ["rust/addons/docker/_dockerignore", `# Copy this file to \`.dockerignore\` and adjust as needed.
 
 target/
@@ -1635,6 +3257,7 @@ FROM rust:1.80-slim AS builder
 WORKDIR /app
 
 COPY Cargo.toml Cargo.lock* ./
+COPY src ./src
 RUN cargo build --release
 
 COPY . .
@@ -1661,12 +3284,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt
+          components: [rustfmt, clippy]
       - name: Build
         run: cargo build --all-targets
+      - name: Test
+        run: cargo test
       {{#if (includes addons "clippy")}}
       - name: Lint
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --all-targets --all-features -- -D warnings
       {{/if}}
       - name: Format check
         run: cargo fmt -- --check`],
@@ -1728,6 +3353,7 @@ sea-orm = { version = "1", features = ["sqlx-mysql", "runtime-tokio-rustls"] }
 {{else if (eq orm "diesel")}}
 {{#if (eq database "sqlite")}}
 diesel = { version = "2", features = ["sqlite"] }
+libsqlite3-sys = { version = "0.32", features = ["bundled"] }
 {{else if (eq database "postgres")}}
 diesel = { version = "2", features = ["postgres"] }
 {{else if (eq database "mysql")}}
@@ -1764,16 +3390,18 @@ use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
     let addr = format!(
         "0.0.0.0:{}",
         env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
@@ -1795,6 +3423,21 @@ async fn health() -> impl Responder {
     HttpResponse::Ok()
         .content_type("application/json")
         .body("{\\"status\\":\\"ok\\"}")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[actix_web::test]
+    async fn health_returns_status_ok() {
+        let app = App::new().route("/health", web::get().to(health));
+        let request = actix_web::test::TestRequest::get()
+            .uri("/health")
+            .to_request();
+        let response = actix_web::test::call_service(&app, request).await;
+        assert!(response.status().is_success());
+    }
 }`],
   ["rust/framework/axum/src/main.rs.hbs", `use std::env;
 
@@ -1803,16 +3446,18 @@ use axum::{routing::get, Router};
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
     let router = Router::new().route("/health", get(health));
 
     let addr = format!(
@@ -1834,6 +3479,16 @@ async fn main() {
 
 async fn health() -> &'static str {
     "{\\"status\\":\\"ok\\"}"
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn health_returns_status_ok() {
+        assert_eq!(health().await, "{\\"status\\":\\"ok\\"}");
+    }
 }`],
   ["rust/framework/loco/src/main.rs.hbs", `use std::env;
 
@@ -1842,16 +3497,18 @@ use loco_rs::prelude::*;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
     println!(
         "{} initialized",
         env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
@@ -1865,7 +3522,6 @@ extern crate rocket;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[get("/health")]
 fn health() -> &'static str {
     "{\\"status\\":\\"ok\\"}"
@@ -1886,8 +3542,25 @@ async fn main() -> Result<(), rocket::Error> {
             .expect("invalid PORT"),
         ..Default::default()
     };
+
+    println!(
+        "{} listening on 0.0.0.0:{}",
+        std::env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
+        config.port,
+    );
+
     let _ = rocket::custom(config).mount("/", routes![health]).launch().await?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn health_returns_status_ok() {
+        assert_eq!(health(), "{\\"status\\":\\"ok\\"}");
+    }
 }`],
   ["rust/framework/salvo/src/main.rs.hbs", `use std::env;
 
@@ -1896,7 +3569,6 @@ use salvo::prelude::*;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[handler]
 async fn health() -> &'static str {
     "{\\"status\\":\\"ok\\"}"
@@ -1906,11 +3578,14 @@ async fn health() -> &'static str {
 async fn main() {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
     let router = Router::new().path("health").get(health);
 
     let addr = format!(
@@ -1924,27 +3599,33 @@ async fn main() {
         addr,
     );
 
-    Server::new(TcpListener::bind(&addr).await.unwrap())
-        .serve(router)
-        .await;
+    let listener = TcpListener::bind(&addr).await.expect("failed to bind");
+    Server::new(listener).serve(router).await;
 }`],
   ["rust/framework/warp/src/main.rs.hbs", `use std::env;
+
+use warp::{Filter, Rejection, Reply};
 
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
+fn routes() -> impl Filter<Extract = impl Reply, Error = Rejection> {
+    let health = warp::path("health").map(|| "{\\"status\\":\\"ok\\"}");
+    health.with(warp::cors().allow_any_origin())
+}
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
-    let health = warp::path("health").map(|| "{\\"status\\":\\"ok\\"}");
-    let routes = health.with(warp::cors().allow_any_origin());
 
     let port = env::var("PORT")
         .unwrap_or_else(|_| "8000".to_string())
@@ -1957,9 +3638,20 @@ async fn main() {
         port,
     );
 
-    warp::serve(routes).run(([0, 0, 0, 0], port)).await;
+    warp::serve(routes()).run(([0, 0, 0, 0], port)).await;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn health_returns_status_ok() {
+        let response = warp::test::request().path("/health").reply(routes()).await;
+        assert_eq!(response.status(), warp::http::StatusCode::OK);
+    }
 }`],
-  ["rust/orm/diesel/src/db.rs.hbs", `use diesel::prelude::*;
+  ["rust/orm/diesel/src/db.rs.hbs", `use diesel::{Connection, ConnectionError};
 
 {{#if (eq database "sqlite")}}
 use diesel::SqliteConnection;
@@ -2066,4 +3758,4 @@ fn database_default() -> &'static str {
 {{/if}}`]
 ]);
 
-export const TEMPLATE_COUNT = 75;
+export const TEMPLATE_COUNT = 149;

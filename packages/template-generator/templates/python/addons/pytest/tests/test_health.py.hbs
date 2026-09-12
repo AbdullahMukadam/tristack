@@ -1,7 +1,7 @@
 {{#if (eq framework "fastapi")}}
 from fastapi.testclient import TestClient
 
-from {{project_slug}}.main import app
+from src.main import app
 
 client = TestClient(app)
 
@@ -13,7 +13,7 @@ def test_health():
 {{else if (eq framework "litestar")}}
 from litestar.testing import TestClient
 
-from {{project_slug}}.main import app
+from src.main import app
 
 client = TestClient(app)
 
@@ -24,7 +24,7 @@ def test_health():
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}
 {{else if (eq framework "flask")}}
-from {{project_slug}}.main import app
+from src.main import app
 
 client = app.test_client()
 
@@ -33,4 +33,21 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.get_json() == {"status": "ok"}
+{{else if (eq framework "django")}}
+import os
+
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
+django.setup()
+
+from django.test import Client
+
+client = Client()
+
+
+def test_health():
+    response = client.get("/api/health/")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
 {{/if}}

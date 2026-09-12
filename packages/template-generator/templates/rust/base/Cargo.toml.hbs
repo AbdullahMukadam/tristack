@@ -36,6 +36,7 @@ sea-orm = { version = "1", features = ["sqlx-mysql", "runtime-tokio-rustls"] }
 {{else if (eq orm "diesel")}}
 {{#if (eq database "sqlite")}}
 diesel = { version = "2", features = ["sqlite"] }
+libsqlite3-sys = { version = "0.32", features = ["bundled"] }
 {{else if (eq database "postgres")}}
 diesel = { version = "2", features = ["postgres"] }
 {{else if (eq database "mysql")}}

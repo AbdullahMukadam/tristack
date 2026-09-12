@@ -1,0 +1,37 @@
+package service
+
+import (
+	"errors"
+	"strings"
+	"testing"
+)
+
+func TestValidateName(t *testing.T) {
+	longName := strings.Repeat("a", 201)
+
+	tests := []struct {
+		name string
+		want error
+	}{
+		{name: "abc", want: nil},
+		{name: "  spaced name  ", want: nil},
+		{name: "", want: ErrInvalidInput},
+		{name: "   ", want: ErrInvalidInput},
+		{name: longName, want: ErrInvalidInput},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateName(tt.name)
+			if tt.want == nil {
+				if err != nil {
+					t.Errorf("validateName(%q) = %v, want nil", tt.name, err)
+				}
+				return
+			}
+			if !errors.Is(err, tt.want) {
+				t.Errorf("validateName(%q) = %v, want %v", tt.name, err, tt.want)
+			}
+		})
+	}
+}

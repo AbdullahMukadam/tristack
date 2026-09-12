@@ -175,9 +175,9 @@ uvx tristack --package-manager poetry
 tristack --package-manager cargo
 ```
 
-### `--addons <types...>`
+### `--addons [values...]`
 
-Additional features, scoped to the selected language. Pass a comma-separated list, or `none`:
+Additional features, scoped to the selected language. Pass a space-separated list (or repeat the flag), or `none`:
 
 Python:
 
@@ -211,8 +211,8 @@ Rust:
 - `none`: No addons
 
 ```bash
-uvx tristack --addons docker,ruff,pytest
-tristack --addons docker,cargo-watch,clippy
+uvx tristack --addons docker ruff pytest
+tristack --addons docker cargo-watch clippy
 uvx tristack --addons none
 ```
 
@@ -300,7 +300,7 @@ uvx tristack my-api \
   --migrations alembic \
   --database postgres \
   --package-manager uv \
-  --addons docker,ruff,mypy,pytest,github-actions \
+  --addons docker ruff mypy pytest github-actions \
   --install
 ```
 

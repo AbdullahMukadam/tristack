@@ -1,0 +1,10 @@
+"""Top-level API router for {{projectName}}.
+
+Aggregates versioned routers. Add new versions here as the API grows.
+"""
+from fastapi import APIRouter
+
+from .v1.router import router as v1_router
+
+api_router = APIRouter()
+api_router.include_router(v1_router, prefix="/v1")

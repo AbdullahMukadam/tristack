@@ -1,0 +1,38 @@
+package repository
+
+import (
+	"context"
+	"fmt"
+
+	"gorm.io/gorm"
+
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
+}
+
+type gormItemRepository struct {
+	db *gorm.DB
+}
+
+func NewItemRepository(db *gorm.DB) ItemRepository {
+	return &gormItemRepository{db: db}
+}
+
+func (r *gormItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if err := r.db.WithContext(ctx).Create(item).Error; err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *gormItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	var items []model.Item
+	if err := r.db.WithContext(ctx).Order("created_at DESC").Find(&items).Error; err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	return items, nil
+}

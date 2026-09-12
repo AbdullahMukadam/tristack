@@ -5,16 +5,18 @@ use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
 {{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
     if let Err(err) = db::connect().await {
+    {{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-
     let addr = format!(
         "0.0.0.0:{}",
         env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
@@ -36,4 +38,19 @@ async fn health() -> impl Responder {
     HttpResponse::Ok()
         .content_type("application/json")
         .body("{\"status\":\"ok\"}")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[actix_web::test]
+    async fn health_returns_status_ok() {
+        let app = App::new().route("/health", web::get().to(health));
+        let request = actix_web::test::TestRequest::get()
+            .uri("/health")
+            .to_request();
+        let response = actix_web::test::call_service(&app, request).await;
+        assert!(response.status().is_success());
+    }
 }

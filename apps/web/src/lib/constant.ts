@@ -39,6 +39,7 @@ type TechOption = {
   default?: boolean;
   className?: string;
   experimental?: boolean;
+  svgl?: string;
 };
 
 const LANGUAGE_META = {
@@ -49,6 +50,7 @@ const LANGUAGE_META = {
     icon: "🐍",
     color: "from-sky-400 to-sky-600",
     default: true,
+    svgl: "Python",
   },
   go: {
     id: "go",
@@ -56,6 +58,7 @@ const LANGUAGE_META = {
     description: "Backend language",
     icon: "🐹",
     color: "from-cyan-400 to-sky-600",
+    svgl: "Go",
   },
   rust: {
     id: "rust",
@@ -63,6 +66,7 @@ const LANGUAGE_META = {
     description: "Backend language",
     icon: "🦀",
     color: "from-orange-400 to-orange-600",
+    svgl: "Rust",
   },
 } satisfies Partial<Record<Language, TechOption>>;
 
@@ -74,6 +78,7 @@ const FRAMEWORK_META = {
     icon: "⚡",
     color: "from-teal-400 to-emerald-600",
     default: true,
+    svgl: "FastAPI",
   },
   litestar: {
     id: "litestar",
@@ -88,6 +93,7 @@ const FRAMEWORK_META = {
     description: "Batteries-included web framework",
     icon: "🎸",
     color: "from-green-500 to-green-700",
+    svgl: "Django",
   },
   flask: {
     id: "flask",
@@ -95,20 +101,22 @@ const FRAMEWORK_META = {
     description: "Minimal, flexible microframework",
     icon: "🧪",
     color: "from-gray-500 to-gray-700",
+    svgl: "Flask",
   },
   gin: {
     id: "gin",
     name: "Gin",
     description: "High-performance HTTP web framework",
-    icon: "🍸",
+    icon: "/icon/gin-original.svg",
     color: "from-sky-400 to-blue-600",
   },
   fiber: {
     id: "fiber",
     name: "Fiber",
     description: "Express-inspired web framework",
-    icon: "🧵",
+    icon: "/icon/fiber-original.svg",
     color: "from-teal-400 to-cyan-600",
+    className: "dark:invert",
   },
   echo: {
     id: "echo",
@@ -142,8 +150,9 @@ const FRAMEWORK_META = {
     id: "actix-web",
     name: "Actix Web",
     description: "Powerful, pragmatic actor-based framework",
-    icon: "🎭",
+    icon: "/icon/actix-original.svg",
     color: "from-cyan-400 to-blue-600",
+    className: "dark:invert",
   },
   rocket: {
     id: "rocket",
@@ -156,7 +165,7 @@ const FRAMEWORK_META = {
     id: "warp",
     name: "Warp",
     description: "Composable, filter-based HTTP framework",
-    icon: "🌀",
+    icon: "/icon/warp-original.svg",
     color: "from-indigo-400 to-violet-600",
   },
   salvo: {
@@ -188,7 +197,7 @@ const ORM_META = {
     id: "sqlalchemy",
     name: "SQLAlchemy",
     description: "Python SQL toolkit & ORM",
-    icon: "🗃️",
+    icon: "/icon/sqlalchemy-original.svg",
     color: "from-red-400 to-red-600",
   },
   tortoise: {
@@ -262,7 +271,7 @@ const MIGRATIONS_META = {
     id: "goose",
     name: "Goose",
     description: "Database migrations for Go",
-    icon: "🦆",
+    icon: "/icon/goose-codename-original.svg",
     color: "from-amber-400 to-orange-600",
   },
   "golang-migrate": {
@@ -289,6 +298,7 @@ const DATABASE_META = {
     icon: `${ICON_BASE_URL}/sqlite.svg`,
     color: "from-blue-400 to-cyan-500",
     default: true,
+    svgl: "SQLite",
   },
   postgres: {
     id: "postgres",
@@ -296,6 +306,7 @@ const DATABASE_META = {
     description: "Advanced SQL database",
     icon: `${ICON_BASE_URL}/postgres.svg`,
     color: "from-indigo-400 to-indigo-600",
+    svgl: "PostgreSQL",
   },
   mysql: {
     id: "mysql",
@@ -303,6 +314,7 @@ const DATABASE_META = {
     description: "Popular relational database",
     icon: `${ICON_BASE_URL}/mysql.svg`,
     color: "from-blue-500 to-blue-700",
+    svgl: "MySQL",
   },
   none: {
     id: "none",
@@ -321,12 +333,13 @@ const PACKAGE_MANAGER_META = {
     icon: "☀️",
     color: "from-amber-400 to-amber-600",
     default: true,
+    svgl: "UV",
   },
   poetry: {
     id: "poetry",
     name: "Poetry",
     description: "Dependency management & packaging",
-    icon: "🖋️",
+    icon: "/icon/poetry-original.svg",
     color: "from-orange-400 to-orange-600",
   },
   pip: {
@@ -342,6 +355,7 @@ const PACKAGE_MANAGER_META = {
     description: "Go's built-in dependency system",
     icon: "🐹",
     color: "from-cyan-400 to-sky-600",
+    svgl: "Go",
   },
   cargo: {
     id: "cargo",
@@ -360,6 +374,7 @@ const ADDONS_META = {
     icon: `${ICON_BASE_URL}/docker.svg`,
     color: "from-blue-500 to-blue-700",
     default: true,
+    svgl: "Docker",
   },
   ruff: {
     id: "ruff",
@@ -373,14 +388,14 @@ const ADDONS_META = {
     id: "mypy",
     name: "Mypy",
     description: "Static type checking for Python",
-    icon: "🔤",
+    icon: "/icon/mypy-original.svg",
     color: "from-sky-400 to-sky-600",
   },
   pytest: {
     id: "pytest",
     name: "Pytest",
     description: "Testing framework for Python",
-    icon: "🧪",
+    icon: "/icon/pytest-original.svg",
     color: "from-blue-400 to-blue-600",
     default: true,
   },
@@ -388,7 +403,7 @@ const ADDONS_META = {
     id: "github-actions",
     name: "GitHub Actions",
     description: "CI/CD pipelines in your repository",
-    icon: "🤖",
+    icon: "/icon/github-actions-original.svg",
     color: "from-gray-500 to-gray-700",
   },
   air: {
@@ -493,7 +508,7 @@ export const TECH_OPTIONS = {
       id: "true",
       name: "Git",
       description: "Initialize Git repository",
-      icon: `${ICON_BASE_URL}/git.svg`,
+      icon: "/icon/git-original.svg",
       color: "from-gray-500 to-gray-700",
       default: true,
     },

@@ -16,11 +16,11 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 {{#if (eq framework "fastapi")}}
-CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "litestar")}}
-CMD ["uv", "run", "uvicorn", "{{project_slug}}.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "flask")}}
-CMD ["uv", "run", "flask", "--app", "{{project_slug}}.main", "run", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "flask", "--app", "src.main", "run", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "django")}}
-CMD ["uv", "run", "gunicorn", "{{project_slug}}.wsgi", "--bind", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000"]
 {{/if}}

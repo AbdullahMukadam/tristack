@@ -152,6 +152,14 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     }
   }
 
+  if (adjustedStack.orm === "tortoise" && adjustedStack.migrations !== "none") {
+    adjustedStack.migrations = "none";
+    changes.push({
+      category: "migrations",
+      message: "Tortoise ORM has no Alembic support — switched to none.",
+    });
+  }
+
   const hasChanges = changes.length > 0;
   return {
     adjustedStack: hasChanges ? adjustedStack : null,

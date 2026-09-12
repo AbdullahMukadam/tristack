@@ -85,12 +85,17 @@ jobs:
         run: bun run build:cli
 
       - name: Build Binary
-        run: bun build --compile apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
+        run: bun build --compile --minify apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
         shell: bash
 
       - name: Create Release Tarball
         if: matrix.platform != 'windows-x64'
         run: tar -czf "${{ matrix.bin }}.tar.gz" "${{ matrix.bin }}"
+        shell: bash
+
+      - name: Create Release Zip
+        if: matrix.platform == 'windows-x64'
+        run: tar -a -c -f "${{ matrix.bin }}.zip" "${{ matrix.bin }}"
         shell: bash
 
       - name: Build Wheel
@@ -169,7 +174,8 @@ jobs:
       - name: Upload binaries to release
         run: |
           VERSION="${{ needs.check.outputs.version }}"
-          for file in artifacts/*; do
+          for file in artifacts/*.tar.gz artifacts/*.zip; do
+            [ -f "$file" ] || continue
             echo "Uploading: $file"
             gh release upload "v$VERSION" "$file" --clobber
           done
@@ -185,7 +191,8 @@ jobs:
           echo "[v$VERSION](https://github.com/${{ github.repository }}/releases/tag/v$VERSION)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Binaries" >> $GITHUB_STEP_SUMMARY
-          for file in artifacts/*; do
+          for file in artifacts/*.tar.gz artifacts/*.zip; do
+            [ -f "$file" ] || continue
             name=$(basename "$file")
             size=$(du -h "$file" | cut -f1)
             echo "- $name ($size)" >> $GITHUB_STEP_SUMMARY

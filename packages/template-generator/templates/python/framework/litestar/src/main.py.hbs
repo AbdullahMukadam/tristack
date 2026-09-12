@@ -1,0 +1,47 @@
+"""Litestar application entrypoint for {{projectName}}.
+
+A factory keeps the app import-safe (tests, CLI, and uvicorn can each
+build an instance without side effects).
+"""
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+from litestar import Litestar
+from litestar.config.cors import CORSConfig
+
+from .config import get_settings
+from .exceptions import exception_handlers
+from .middleware import RequestLoggingMiddleware
+
+settings = get_settings()
+
+
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    from .db import init_db
+
+    await init_db()
+    yield
+{{else}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    yield
+{{/if}}
+
+
+def create_app() -> Litestar:
+    """Application factory."""
+    from .api.v1.router import router as v1_router
+
+    return Litestar(
+        route_handlers=[v1_router],
+        debug=settings.debug,
+        cors_config=CORSConfig(allow_origins=settings.cors_origins),
+        exception_handlers=exception_handlers,
+        middleware=[RequestLoggingMiddleware],
+        lifespan=lifespan,
+    )
+
+
+app = create_app()

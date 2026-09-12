@@ -1,0 +1,50 @@
+package repository
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+
+	"{{project_slug}}/internal/db/sqlc"
+	"{{project_slug}}/internal/model"
+)
+
+type ItemRepository interface {
+	Create(ctx context.Context, item *model.Item) error
+	List(ctx context.Context) ([]model.Item, error)
+}
+
+type sqlcItemRepository struct {
+	q *sqlc.Queries
+}
+
+func NewItemRepository(db *sql.DB) ItemRepository {
+	return &sqlcItemRepository{q: sqlc.New(db)}
+}
+
+func (r *sqlcItemRepository) Create(ctx context.Context, item *model.Item) error {
+	if err := r.q.CreateItem(ctx, sqlc.CreateItemParams{
+		ID:        item.ID,
+		Name:      item.Name,
+		CreatedAt: item.CreatedAt,
+	}); err != nil {
+		return fmt.Errorf("insert item: %w", err)
+	}
+	return nil
+}
+
+func (r *sqlcItemRepository) List(ctx context.Context) ([]model.Item, error) {
+	rows, err := r.q.ListItems(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("select items: %w", err)
+	}
+	items := make([]model.Item, 0, len(rows))
+	for _, row := range rows {
+		items = append(items, model.Item{
+			ID:        row.ID,
+			Name:      row.Name,
+			CreatedAt: row.CreatedAt,
+		})
+	}
+	return items, nil
+}

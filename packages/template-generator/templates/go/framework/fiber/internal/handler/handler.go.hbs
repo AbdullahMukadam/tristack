@@ -1,0 +1,42 @@
+package handler
+
+import (
+	"errors"
+
+	"github.com/gofiber/fiber/v2"
+
+	"{{project_slug}}/internal/service"
+)
+
+type Handler struct {
+	items *service.ItemService
+}
+
+func NewHandler(items *service.ItemService) Handler {
+	return Handler{items: items}
+}
+
+func (h Handler) ListItems(c *fiber.Ctx) error {
+	items, err := h.items.ListItems(c.UserContext())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "could not list items"})
+	}
+	return c.JSON(items)
+}
+
+func (h Handler) CreateItem(c *fiber.Ctx) error {
+	var body struct {
+		Name string `json:"name"`
+	}
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	}
+	item, err := h.items.CreateItem(c.UserContext(), body.Name)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidInput) {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "could not create item"})
+	}
+	return c.Status(fiber.StatusCreated).JSON(item)
+}

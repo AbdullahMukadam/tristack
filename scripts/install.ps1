@@ -20,7 +20,7 @@ function Get-Platform {
     $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription -match "Windows"
 
     if ($isWindows) {
-        if ($arch -eq "x64") { return "tristack-windows-x64.exe" }
+        if ($arch -eq "x64") { return "tristack-windows-x64" }
         return $null
     }
 
@@ -54,9 +54,19 @@ New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 $binaryPath = Join-Path $InstallDir "tristack.exe"
 
 # Download
-$url = "https://github.com/$Repo/releases/download/v$version/$platform"
+$url = "https://github.com/$Repo/releases/download/v$version/$platform.zip"
+$zipPath = Join-Path $env:TEMP "tristack-$version.zip"
 Write-Info "Downloading from $url..."
-Invoke-WebRequest -Uri $url -OutFile $binaryPath -UseBasicParsing
+Invoke-WebRequest -Uri $url -OutFile $zipPath -UseBasicParsing
+
+# Extract
+Write-Info "Extracting..."
+$tmpDir = Join-Path $env:TEMP "tristack-$version"
+if (Test-Path -LiteralPath $tmpDir) { Remove-Item -LiteralPath $tmpDir -Recurse -Force }
+Expand-Archive -Path $zipPath -DestinationPath $tmpDir -Force
+$exe = Get-ChildItem -LiteralPath $tmpDir -Filter "*.exe" -Recurse | Select-Object -First 1
+Move-Item -LiteralPath $exe.FullName -Destination $binaryPath -Force
+Remove-Item -LiteralPath $zipPath, $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
 
 # Add to PATH if not already there
 $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")

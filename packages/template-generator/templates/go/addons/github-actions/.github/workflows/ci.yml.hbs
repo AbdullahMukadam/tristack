@@ -16,6 +16,12 @@ jobs:
           cache: true
       - name: Install dependencies
         run: go mod tidy
+      {{#if (eq orm "sqlc")}}
+      - name: Generate queries (sqlc)
+        run: |
+          go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+          sqlc generate
+      {{/if}}
       {{#if (includes addons "air")}}
       - name: Verify formatting
         run: test -z "$(gofmt -l .)"
@@ -27,4 +33,4 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: Test
-        run: go test ./...
+        run: go test -race ./...

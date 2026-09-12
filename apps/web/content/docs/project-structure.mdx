@@ -7,7 +7,7 @@ description: Understanding the structure of projects created by the TriStack CLI
 
 TriStack scaffolds backend projects in **Python**, **Go**, and **Rust**. Each language follows its own native conventions, so a generated project looks like a real developer wrote it:
 
-- **Python** — `pyproject.toml`, a snake_case import package, `migrations/`
+- **Python** — `pyproject.toml`, sources under `src/`, `migrations/`
 - **Go** — `go.mod`, a root-level `main.go`, `internal/` packages
 - **Rust** — `Cargo.toml`, sources under `src/`
 
@@ -48,7 +48,7 @@ The default stack (`fastapi` + `sqlmodel` + `alembic` + `sqlite` + `uv` + `docke
         <File name="ci.yml" />
       </Folder>
     </Folder>
-    <Folder name="my_tristack_app">
+    <Folder name="src">
       <File name="__init__.py" />
       <File name="config.py" />
       <File name="main.py" />
@@ -71,41 +71,65 @@ The default stack (`fastapi` + `sqlmodel` + `alembic` + `sqlite` + `uv` + `docke
 
 Notes:
 
-- The import package is a snake_case version of your project name (`my_tristack_app` for `my-tristack-app`).
+- The import package is a fixed `src/` directory — the project name never appears inside the tree. The distribution/project name in `pyproject.toml` is still your snake_case project name (`my_tristack_app` for `my-tristack-app`).
 - Docker/CI files exist only when the matching addon is selected; `tests/` only with the `pytest` addon.
 
 ### Framework variations
 
 All Python frameworks share the base + import package, then differ in the entrypoint:
 
-- **FastAPI** — `main.py` with a `FastAPI` app (`uv run fastapi dev`)
-- **Litestar** — `main.py` with a `Litestar` app
-- **Flask** — `main.py` with a `Flask` app (`flask --app main run`)
-- **Django** — no `main.py`; instead `manage.py` and a project package with `settings.py`, `urls.py`, `asgi.py`, `wsgi.py`, plus a `core` app
+- **FastAPI** — `main.py` with a `FastAPI` app (`uv run uvicorn src.main:app --reload`)
+- **Litestar** — `main.py` with a `Litestar` app (`uv run uvicorn src.main:app --reload`)
+- **Flask** — `main.py` with a `Flask` app (`uv run flask --app src.main run --debug`)
+- **Django** — no `main.py`; instead `manage.py` plus a `config` package (settings, `asgi.py`, `wsgi.py`, `urls.py`) and per-domain apps under `apps/` (`core`, `users`)
 
 <Files>
   <Folder name="django-project/" defaultOpen>
     <File name="manage.py" />
-    <Folder name="django_project">
+    <Folder name="config">
       <File name="__init__.py" />
-      <File name="settings.py" />
-      <File name="urls.py" />
       <File name="asgi.py" />
+      <File name="urls.py" />
       <File name="wsgi.py" />
+      <Folder name="settings">
+        <File name="__init__.py" />
+        <File name="base.py" />
+        <File name="development.py" />
+        <File name="production.py" />
+      </Folder>
+    </Folder>
+    <Folder name="apps">
+      <File name="__init__.py" />
       <Folder name="core">
         <File name="__init__.py" />
         <File name="apps.py" />
+        <File name="models.py" />
+        <File name="urls.py" />
+        <File name="views.py" />
+      </Folder>
+      <Folder name="users">
+        <File name="__init__.py" />
+        <File name="apps.py" />
+        <File name="models.py" />
+        <File name="selectors.py" />
+        <File name="serializers.py" />
+        <File name="services.py" />
         <File name="urls.py" />
         <File name="views.py" />
       </Folder>
     </Folder>
+    <Folder name="templates">
+      <File name="base.html" />
+    </Folder>
   </Folder>
 </Files>
 
+Django brings its own ORM and migrations, so it skips the import-package layout entirely — the project name is only used for the root folder, and code lives in `config/` and `apps/`.
+
 ### ORM variations
 
-- **SQLModel** — adds `db.py` (engine/session) and `models.py` (models) to the import package
-- **SQLAlchemy / Tortoise** — adds the data-layer files to the import package
+- **SQLModel** — adds `db.py` (engine/session) and `models.py` (models) to `src/`
+- **SQLAlchemy / Tortoise** — adds the data-layer files to `src/`
 - **None** — no data-layer files
 
 ### Migrations
@@ -126,7 +150,7 @@ With `--migrations alembic`, the CLI writes a `migrations/` directory with `alem
 
 ## Go
 
-Every Go project is a single module with a root-level `main.go` (the entrypoint) and its data layer under `internal/`. Framework and data imports are pinned in `go.mod`.
+Every Go project is a single module with its entrypoint at `cmd/api/main.go` and a layered package tree under `internal/` (`config`, `handler`, `service`, `repository`, `model`, `db`). Framework and data imports are pinned in `go.mod`.
 
 ### Root layout (default stack)
 
@@ -137,6 +161,7 @@ The default stack (`gin` + `gorm` + `goose` + `sqlite` + `go` + `docker, air, go
     <File name="README.md" />
     <File name="tristack.jsonc" />
     <File name="go.mod" />
+    <File name="Makefile" />
     <File name=".env.example" />
     <File name=".gitignore" />
     <File name=".dockerignore" />
@@ -149,11 +174,29 @@ The default stack (`gin` + `gorm` + `goose` + `sqlite` + `go` + `docker, air, go
         <File name="ci.yml" />
       </Folder>
     </Folder>
-    <File name="main.go" />
+    <Folder name="cmd">
+      <Folder name="api">
+        <File name="main.go" />
+      </Folder>
+    </Folder>
     <Folder name="internal">
+      <Folder name="config">
+        <File name="config.go" />
+      </Folder>
+      <Folder name="handler">
+        <File name="handler.go" />
+      </Folder>
+      <Folder name="service">
+        <File name="item_service.go" />
+      </Folder>
+      <Folder name="repository">
+        <File name="item.go" />
+      </Folder>
+      <Folder name="model">
+        <File name="item.go" />
+      </Folder>
       <Folder name="db">
         <File name="db.go" />
-        <File name="models.go" />
       </Folder>
     </Folder>
     <Folder name="migrations">
@@ -165,25 +208,26 @@ The default stack (`gin` + `gorm` + `goose` + `sqlite` + `go` + `docker, air, go
 Notes:
 
 - The module path is the slugged project name (`my_api` for `my-api`) unless your project name is already a module path.
-- The server reads `PORT` (default `8000`) and `APP_NAME` from the environment (`main.go`).
-- The import path for the data layer is `<module>/internal/db`.
+- The server reads `PORT` (default `8000`) and `APP_NAME` from the environment via `internal/config`.
+- The entrypoint wires the layers: `config.Load()` → `db.Connect()` → repository → service → handler, then registers `GET /health`, `GET /items`, and `POST /items`.
+- `orm` must not be `none` for the `handler`/`service`/`repository`/`model` layers to be generated.
 
 ### Framework variations
 
-All frameworks write `main.go` at the module root and differ only in the router and its API:
+All frameworks share the entrypoint at `cmd/api/main.go` and the same `internal/handler` interface (`ListItems`, `CreateItem`); only the router wiring differs:
 
 - **Gin** — `gin.Default()` with `GET /health`
 - **Fiber** — `fiber.New()` with `GET /health`
 - **Echo** — `echo.New()` with `GET /health`
 - **Chi** — `chi.NewRouter()` with `GET /health`
-- **Go stdlib** — `http.NewServeMux()` with `GET /health`
+- **Go stdlib** — `http.NewServeMux()` with method-pattern `GET /health`
 
 ### ORM variations
 
-- **GORM** — `internal/db/db.go` (connection + auto-migration) and `internal/db/models.go`
-- **sqlx** — `internal/db/db.go` (connection only)
-- **sqlc** — `internal/db/db.go` (connection) plus a root `sqlc.yaml` for generating from SQL
-- **None** — no data-layer files
+- **GORM** — `internal/model/item.go` (struct), `internal/db/db.go` (connection + `AutoMigrate(&model.Item{})`), `internal/repository/item.go` (`gorm.DB`)
+- **sqlx** — `internal/model/item.go` (`db:` tags), `internal/db/db.go` (connection), `internal/repository/item.go` (`sqlx.DB`, placeholders via `Rebind`)
+- **sqlc** — `internal/model/item.go` (plain JSON struct), `internal/db/db.go` (connection), `internal/repository/item.go` (wraps generated `internal/db/sqlc` queries), plus root `schema/` + `queries/` + `sqlc.yaml`; run `sqlc generate` via the `generate` Makefile target before building
+- **None** — no persistence layers (`db`, `repository`, `model`, `service`, `handler` are skipped; only `/health` is exposed)
 
 The driver is chosen from the `database` value (`sqlite`, `postgres`, or `mysql`) and pinned in `go.mod`.
 
@@ -221,8 +265,6 @@ The default stack (`axum` + `seaorm` + `cargo` + `docker, cargo-watch, clippy`) 
     <File name=".dockerignore" />
     <File name="Dockerfile" />
     <File name="docker-compose.yml" />
-    <File name="cargo-watch.toml" />
-    <File name="clippy.toml" />
     <Folder name=".github">
       <Folder name="workflows">
         <File name="ci.yml" />
@@ -238,19 +280,19 @@ The default stack (`axum` + `seaorm` + `cargo` + `docker, cargo-watch, clippy`) 
 Notes:
 
 - The package name is the slugged project name (`my_api` for `my-api`).
-- The server reads `PORT` (default `8000`) and `APP_NAME` from the environment (`main.rs`), and exposes `GET /health`.
+- The web framework entrypoints read `PORT` (default `8000`) and `APP_NAME` from the environment (`main.rs`) and expose `GET /health`.
 - Dependencies (`serde`, `tokio`, the framework, and the ORM) are pinned in `Cargo.toml`.
 
 ### Framework variations
 
-Every framework writes its entrypoint to `src/main.rs`. Each exposes `GET /health` returning `{"status":"ok"}`:
+Every framework writes its entrypoint to `src/main.rs`. Each web framework exposes `GET /health` returning `{"status":"ok"}`:
 
 - **Axum** — `axum::Router` with a `#[tokio::main]` async runtime
 - **Actix Web** — the `actix-web` `HttpServer`/`App`
 - **Rocket** — `rocket` routes with the `#[launch]` (or `#[rocket::main]`) runtime
 - **Warp** — a `warp` filter pipeline on `tokio`
 - **Salvo** — a `salvo` `Router` on `tokio`
-- **Loco** — the Rails-like `loco-rs` app (entrypoint layout)
+- **Loco** — a minimal, Rails-like `loco-rs` entrypoint scaffold; generate the full app (controllers, initializers) with `cargo loco new`
 
 ### ORM variations
 
@@ -269,14 +311,14 @@ Rust has no standard migration tool in the option set yet, so `--migrations` is 
 
 ### Addons
 
-| Addon            | Adds                                                |
-| ---------------- | --------------------------------------------------- |
-| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore` |
-| `cargo-watch`    | `cargo-watch.toml` (rerun on change)                |
-| `clippy`         | `clippy.toml`                                       |
-| `github-actions` | `.github/workflows/ci.yml`                          |
-| `fumadocs`       | a Fumadocs documentation site                       |
-| `starlight`      | an Astro Starlight documentation site               |
+| Addon            | Adds                                                      |
+| ---------------- | --------------------------------------------------------- |
+| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore`       |
+| `cargo-watch`    | auto-reload dev server (run with `cargo watch -x run`)    |
+| `clippy`         | strict clippy lints in CI (`cargo clippy -- -D warnings`) |
+| `github-actions` | `.github/workflows/ci.yml`                                |
+| `fumadocs`       | a Fumadocs documentation site                             |
+| `starlight`      | an Astro Starlight documentation site                     |
 
 ## Config file
 
