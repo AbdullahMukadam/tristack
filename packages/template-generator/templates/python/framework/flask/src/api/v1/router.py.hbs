@@ -1,4 +1,3 @@
-"""API v1 blueprint registration for {{projectName}}."""
 from flask import Blueprint, Flask, Response, jsonify
 
 {{#if (ne orm "none")}}
@@ -7,14 +6,12 @@ from .routes.items import items_bp
 
 v1_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 
-
 @v1_bp.get("/health")
 def health() -> Response:
     return jsonify({"status": "ok"})
 
-
 def register_v1_blueprints(app: Flask) -> None:
-    """Register all API v1 blueprints."""
+
     {{#if (ne orm "none")}}
     v1_bp.register_blueprint(items_bp)
     {{/if}}

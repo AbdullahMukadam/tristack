@@ -1,7 +1,7 @@
 [project]
 name = "{{project_slug}}"
 version = "0.1.0"
-description = "{{projectName}} - a {{framework}} backend"
+description = {{#if (eq framework "none")}}"{{projectName}}"{{else}}"{{projectName}} - a {{framework}} project"{{/if}}
 requires-python = ">=3.12"
 dependencies = [
 {{#if (ne framework "django")}}

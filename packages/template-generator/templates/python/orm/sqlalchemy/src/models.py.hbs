@@ -1,13 +1,10 @@
-"""Domain models for {{projectName}} — SQLAlchemy declarative base."""
 from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, String
 from sqlalchemy.orm import DeclarativeBase
 
-
 class Base(DeclarativeBase):
     pass
-
 
 class Item(Base):
     __tablename__ = "items"

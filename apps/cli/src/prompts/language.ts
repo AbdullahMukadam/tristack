@@ -14,7 +14,7 @@ export async function getLanguageChoice(
   const options = OPTIONS;
   const initialValue = preferValidInitial(options, flag ?? previousAnswer, "python");
   return navigableSelect<Language>({
-    message: "Which language is your backend?",
+    message: "Which language do you want?",
     options,
     initialValue,
   });

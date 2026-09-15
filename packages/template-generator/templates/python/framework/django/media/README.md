@@ -1,1 +1,1 @@
-"""User-uploaded media files directory."""
+User-uploaded media files directory.

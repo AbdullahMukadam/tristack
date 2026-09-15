@@ -1,9 +1,7 @@
-"""Core views for {{projectName}}."""
 from django.http import HttpRequest
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 
 @api_view(["GET"])
 def health(request: HttpRequest) -> Response:

@@ -75,7 +75,7 @@ export function SelectedStackBadges({ stack, onRemove, onJump }: SelectedStackBa
                 type="button"
                 onClick={() => onJump(category)}
                 title={`Go to ${categoryLabel}`}
-                className="builder-focus-ring pointer-coarse:py-1.5 flex items-center gap-1.5 py-0.5 transition-colors duration-150 hover:text-primary"
+                className="builder-focus-ring pointer-coarse:py-1.5 flex items-center gap-1.5 py-0.5 transition-colors duration-150 hover:text-brand"
               >
                 {chipContent}
               </button>

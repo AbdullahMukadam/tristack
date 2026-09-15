@@ -24,7 +24,6 @@ export function PageHeader({
           <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-primary" />
           {title}
         </h1>
-        <span aria-hidden="true" className="h-px min-w-4 flex-1 bg-fd-border" />
         {count !== undefined && (
           <span className="text-sm text-fd-muted-foreground tabular-nums">{count}</span>
         )}

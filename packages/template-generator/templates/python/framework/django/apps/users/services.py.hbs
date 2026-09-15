@@ -1,9 +1,7 @@
-"""Business logic for user operations."""
 from django.db.models import QuerySet
 
 from .models import User
 
-
 def get_users() -> QuerySet[User]:
-    """Return all active users."""
+
     return User.objects.filter(is_active=True)

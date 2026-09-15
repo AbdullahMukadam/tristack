@@ -1,4 +1,3 @@
-# Binaries
 *.exe
 *.exe~
 *.dll
@@ -6,29 +5,15 @@
 *.dylib
 bin/
 !bin/
-
-# Test binary
 *.test
-
-# Coverage output
 *.out
 *.prof
-
-# Dependency directories
 vendor/
-
-# Go workspace files
 go.work
 go.work.sum
-
-# Air (live-reload) temp output
 tmp/
-
-# Environment
 .env
 .env.local
-
-# IDE
 .idea
 .vscode
 *.swp

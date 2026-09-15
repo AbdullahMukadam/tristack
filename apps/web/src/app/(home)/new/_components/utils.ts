@@ -152,6 +152,18 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     }
   }
 
+  if (adjustedStack.framework === "none") {
+    for (const category of ["orm", "migrations", "database"] as const) {
+      if (adjustedStack[category] !== "none") {
+        adjustedStack[category] = "none";
+        changes.push({
+          category,
+          message: "No-framework projects are bare — switched to none.",
+        });
+      }
+    }
+  }
+
   if (adjustedStack.orm === "tortoise" && adjustedStack.migrations !== "none") {
     adjustedStack.migrations = "none";
     changes.push({
@@ -178,6 +190,13 @@ export const getDisabledReason = (
   category: keyof typeof TECH_OPTIONS,
   optionId: string,
 ): string | null => {
+  if (
+    currentStack.framework === "none" &&
+    (category === "orm" || category === "migrations" || category === "database") &&
+    optionId !== "none"
+  ) {
+    return "No-framework projects are bare — pick a framework first.";
+  }
   const validIds = getValidIdsForLanguage(currentStack.language, category);
   if (!validIds.includes(optionId)) {
     return `Not available for ${currentStack.language}.`;

@@ -35,7 +35,7 @@ export async function getFrameworkChoice(
   language: Language,
   previousAnswer?: Framework,
 ): Promise<Framework | symbol> {
-  const options = optionsFor(language).filter((option) => option.value !== "none");
+  const options = optionsFor(language);
   const initialValue = preferValidInitial(
     options,
     flag ?? previousAnswer,

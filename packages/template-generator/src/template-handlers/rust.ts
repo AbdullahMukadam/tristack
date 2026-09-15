@@ -15,9 +15,14 @@ function copyRustBase(vfs: VirtualFileSystem, data: TemplateData): void {
   );
 }
 
-function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
+function copyRustCore(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   if (config.framework === "none") return;
+  copyTemplates(vfs, data.templates, config, "rust/core");
+}
+
+function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
+  const { config } = data;
   copyTemplates(vfs, data.templates, config, `rust/framework/${config.framework}`);
 }
 
@@ -47,6 +52,7 @@ export function processRustTemplates(
 ): void {
   const data: TemplateData = { templates, config };
   copyRustBase(vfs, data);
+  copyRustCore(vfs, data);
   copyFramework(vfs, data);
   copyOrm(vfs, data);
   copyMigrations(vfs, data);

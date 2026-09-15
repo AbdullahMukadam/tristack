@@ -1,16 +1,12 @@
-"""Domain models for {{projectName}}."""
 from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlmodel import Field, SQLModel
 
-
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
-
 class Item(SQLModel, table=True):
-    """Sample model. Replace with your own domain models."""
 
     id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
     name: str

@@ -158,9 +158,9 @@ export function buildLlmsIndex(pages: DocumentationPage[]) {
 
 ## When to use TriStack
 
-Use TriStack when a developer or coding agent needs to scaffold a new backend project (Python, Go, or Rust), reproduce a selected stack from a command, inspect compatibility rules, or generate a project through a structured interface.
+Use TriStack when a developer or coding agent needs to scaffold a new project (Python, Go, or Rust), reproduce a selected stack from a command, inspect compatibility rules, or generate a project through a structured interface.
 
-TriStack does not expose a public hosted application API. The supported automation interfaces are the CLI and its JSON-first \`create-json\` command. A native MCP plugin is planned.
+TriStack does not expose a public hosted application API. The supported automation interfaces are the CLI and its JSON-first \`create-json\` command. Native agent plugins are planned.
 
 ## Quick start
 

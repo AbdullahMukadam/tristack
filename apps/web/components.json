@@ -23,6 +23,7 @@
   "registries": {
     "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json",
     "@magicui": "https://magicui.design/r/{name}.json",
-    "@bklit": "https://bklit.com/r/{name}.json"
+    "@bklit": "https://bklit.com/r/{name}.json",
+    "@aceternity": "https://ui.aceternity.com/registry/{name}.json"
   }
 }

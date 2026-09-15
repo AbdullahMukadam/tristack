@@ -1,8 +1,3 @@
-"""FastAPI application entrypoint for {{projectName}}.
-
-A factory pattern keeps the app import-safe (tests, uvicorn workers, and
-the CLI can each build an instance without side effects).
-"""
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -13,7 +8,6 @@ from .exceptions import register_exception_handlers
 from .middleware import add_middleware
 
 settings = get_settings()
-
 
 {{#if (and (ne orm "none") (eq migrations "none"))}}
 @asynccontextmanager
@@ -28,9 +22,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
 {{/if}}
 
-
 def create_app() -> FastAPI:
-    """Application factory."""
+
     app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
     add_middleware(app)
@@ -41,6 +34,5 @@ def create_app() -> FastAPI:
     app.include_router(api_router)
 
     return app
-
 
 app = create_app()

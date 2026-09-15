@@ -1,1 +1,1 @@
-"""Static assets directory — CSS, JS, images."""
+Static assets directory — CSS, JS, images.

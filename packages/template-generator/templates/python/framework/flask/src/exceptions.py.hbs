@@ -1,27 +1,17 @@
-"""Application exceptions and global handlers for {{projectName}}."""
 import logging
 
 from flask import Flask, Response, jsonify
 
 logger = logging.getLogger(__name__)
 
-
 class AppError(Exception):
-    """Base class for expected application errors.
-
-    Raise from services/repositories to surface a stable JSON error shape
-    (``{"detail": "..."}``) instead of a bare 500.
-    """
 
     status_code: int = 400
-
 
 class NotFoundError(AppError):
     status_code: int = 404
 
-
 def register_error_handlers(app: Flask) -> None:
-    """Register global exception handlers on the Flask app."""
 
     @app.errorhandler(AppError)
     def handle_app_error(exc: AppError) -> tuple[Response, int]:

@@ -1,15 +1,12 @@
-"""API v1 router for {{projectName}}."""
 from litestar import Router, get
 
 {{#if (ne orm "none")}}
 from .routes.items import create_item_endpoint, list_items_endpoint
 {{/if}}
 
-
 @get("/health", tags=["health"])
 async def health() -> dict[str, str]:
     return {"status": "ok"}
-
 
 {{#if (ne orm "none")}}
 router = Router(

@@ -1,13 +1,13 @@
-use std::env;
-
 use loco_rs::prelude::*;
 
+mod config;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
 #[tokio::main]
 async fn main() -> Result<()> {
-    dotenvy::dotenv().ok();
+    let app_config = config::Config::from_env();
+
 {{#if (ne orm "none")}}
     {{#if (eq orm "diesel")}}
     if let Err(err) = db::connect() {
@@ -17,10 +17,7 @@ async fn main() -> Result<()> {
         eprintln!("database not ready: {err}");
     }
 {{/if}}
-    println!(
-        "{} initialized",
-        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
-    );
+    println!("{} initialized", app_config.app_name);
 
     Ok(())
 }

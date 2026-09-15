@@ -5,7 +5,6 @@ from src.main import app
 
 client = TestClient(app)
 
-
 def test_health():
     response = client.get("/health")
     assert response.status_code == 200
@@ -17,7 +16,6 @@ from src.main import app
 
 client = TestClient(app)
 
-
 def test_health():
     with client:
         response = client.get("/health")
@@ -27,7 +25,6 @@ def test_health():
 from src.main import app
 
 client = app.test_client()
-
 
 def test_health():
     response = client.get("/health")
@@ -44,7 +41,6 @@ django.setup()
 from django.test import Client
 
 client = Client()
-
 
 def test_health():
     response = client.get("/api/health/")

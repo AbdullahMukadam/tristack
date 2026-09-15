@@ -101,15 +101,16 @@ function normalizeBoolean(value: boolean | string | undefined, fallback: boolean
 }
 
 function stackStateToConfig(state: StackState): ProjectConfig {
+  const bare = state.framework === "none";
   return {
     projectName: state.projectName || "my-tristack-app",
     projectDir: "/virtual",
     relativePath: "./virtual",
     language: state.language as ProjectConfig["language"],
     framework: state.framework as Framework,
-    orm: state.orm as ORM,
-    migrations: state.migrations as Migrations,
-    database: state.database as Database,
+    orm: (bare ? "none" : state.orm) as ORM,
+    migrations: (bare ? "none" : state.migrations) as Migrations,
+    database: (bare ? "none" : state.database) as Database,
     packageManager: state.packageManager as PackageManager,
     addons: (state.addons || []).filter((addon) => addon !== "none") as Addons[],
     git: normalizeBoolean(state.git, false),

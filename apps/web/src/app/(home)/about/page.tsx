@@ -9,7 +9,7 @@ import { REPOSITORY_URL, SITE_URL } from "@/lib/site";
 import { TrustPage, TrustSection, trustPageLinkClass } from "../_components/trust-page";
 
 const description =
-  "How TriStack helps developers and coding agents create modern backend applications across languages.";
+  "How TriStack helps developers and coding agents create modern applications across languages.";
 
 export const metadata: Metadata = {
   title: "About - TriStack",
@@ -29,9 +29,9 @@ export default function AboutPage() {
     <TrustPage icon={Info} title="About" description={description}>
       <TrustSection title="What it is">
         <p>
-          TriStack is a free, MIT-licensed command-line tool for scaffolding backend applications
-          across multiple languages. In the current Python phase, developers choose the framework
-          (FastAPI, Litestar, Django, Flask), ORM, database, migrations, package manager, and
+          TriStack is a free, MIT-licensed command-line tool for scaffolding applications across
+          multiple languages. In the current Python phase, developers choose the framework (FastAPI,
+          Litestar, Django, Flask, or none), ORM, database, migrations, package manager, and
           optional addons that fit their project. Go and Rust phases extend the same flow to their
           own option sets. The generator then creates a focused codebase instead of forcing a fixed
           starter stack.
@@ -44,9 +44,9 @@ export default function AboutPage() {
 
       <TrustSection title="Who it's for">
         <p>
-          The project is intended for backend developers, teams, educators, automation tools, and
-          coding agents that want a reproducible starting point. It supports interactive prompts,
-          explicit CLI flags, and structured JSON commands via the CLI.
+          The project is intended for developers, teams, educators, automation tools, and coding
+          agents that want a reproducible starting point. It supports interactive prompts, explicit
+          CLI flags, and structured JSON commands via the CLI.
         </p>
         <p>
           Start with the{" "}

@@ -244,6 +244,92 @@ describe("createVirtual - rust scaffold", () => {
   });
 });
 
+describe("createVirtual - no framework (bare)", () => {
+  it("generates a bare Python project without a framework entrypoint", async () => {
+    const result = await createVirtual({
+      projectName: "bare smoke",
+      language: "python",
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: ["ruff"],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const pyproject = findFile(tree.root, "pyproject.toml");
+    expect(pyproject).not.toBeNull();
+    expect(pyproject).not.toContain("uvicorn");
+    expect(pyproject).toContain('description = "bare smoke"');
+
+    expect(rootFileNames(tree.root)).not.toContain("main.py");
+    expect(findByPath(tree.root, ["src", "config.py"])).not.toBeNull();
+
+    const main = findByPath(tree.root, ["src", "main.py"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("Hello from bare smoke!");
+
+    const readme = findFile(tree.root, "README.md");
+    expect(readme).not.toBeNull();
+    expect(readme).not.toContain("uvicorn");
+    expect(readme).toContain("no API scaffolded");
+    expect(readme).toContain("uv run python -m src.main");
+  });
+
+  it("generates a bare Go project with a runnable entrypoint", async () => {
+    const result = await createVirtual({
+      language: "go",
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "go",
+      addons: [],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    const main = findByPath(tree.root, ["cmd", "api", "main.go"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("package main");
+
+    expect(findByPath(tree.root, ["internal", "handler", "handler.go"])).toBeNull();
+    expect(findByPath(tree.root, ["internal", "repository", "item.go"])).toBeNull();
+    expect(rootFileNames(tree.root)).toContain("Makefile");
+  });
+
+  it("generates a bare Rust project with a runnable main", async () => {
+    const result = await createVirtual({
+      language: "rust",
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const main = findByPath(result.value.root, ["src", "main.rs"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("fn main");
+
+    const cargoToml = findFile(result.value.root, "Cargo.toml");
+    expect(cargoToml).not.toBeNull();
+    expect(cargoToml).not.toContain("axum");
+  });
+});
+
 describe("validateResolvedConfigCompatibility", () => {
   it("accepts a valid python stack", () => {
     const base = {
@@ -342,5 +428,59 @@ describe("validateResolvedConfigCompatibility", () => {
       install: false,
     });
     expect(result.isOk()).toBe(true);
+  });
+
+  it("accepts a no-framework stack with orm, migrations, and database set to none", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isOk()).toBe(true);
+  });
+
+  it("rejects no-framework with a non-none ORM", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "none",
+      orm: "sqlmodel",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("rejects no-framework with a non-none database", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "go",
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
   });
 });

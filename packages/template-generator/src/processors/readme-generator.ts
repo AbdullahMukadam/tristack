@@ -4,6 +4,7 @@ import { toProjectSlug } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 
 function goRunCommand(config: ProjectConfig): string {
+  if (config.framework === "none") return "go run ./cmd/api";
   return config.addons.includes("air") ? "air" : "go run ./cmd/api";
 }
 
@@ -53,9 +54,11 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
     step++;
   }
   const runLabel =
-    config.orm === "gorm" && config.migrations === "none"
-      ? `# ${step}. Start the dev server (gorm auto-migrates the schema on startup)`
-      : `# ${step}. Start the dev server`;
+    config.framework === "none"
+      ? `# ${step}. Run the entrypoint`
+      : config.orm === "gorm" && config.migrations === "none"
+        ? `# ${step}. Start the dev server (gorm auto-migrates the schema on startup)`
+        : `# ${step}. Start the dev server`;
   setup.push(runLabel, goRunCommand(config));
 
   const common: string[] = [
@@ -76,11 +79,20 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
   }
 
   const endpoints =
-    config.orm === "none"
-      ? "- `GET /health` — liveness probe."
-      : "- `GET /health` — liveness probe.\n- `GET /items` / `POST /items` — example resource; replace with your own models, repositories, and handlers.";
+    config.framework === "none"
+      ? "- `cmd/api` — bare entrypoint; add your own logic."
+      : config.orm === "none"
+        ? "- `GET /health` — liveness probe."
+        : "- `GET /health` — liveness probe.\n- `GET /items` / `POST /items` — example resource; replace with your own models, repositories, and handlers.";
 
-  const layout = `\`\`\`
+  const layout =
+    config.framework === "none"
+      ? `\`\`\`
+cmd/api/             entrypoint
+internal/config/     environment configuration (APP_NAME, PORT)
+Makefile             convenience targets (build, run, test, vet, fmt)
+\`\`\``
+      : `\`\`\`
 cmd/api/             entrypoint: config -> db -> repository -> service -> handler
 internal/config/     environment configuration (PORT, APP_NAME)
 internal/handler/    HTTP handlers (framework-specific)
@@ -93,7 +105,7 @@ Makefile             convenience targets (build, run, test, vet, fmt, generate, 
 
   const content = `# ${config.projectName}
 
-A Go backend scaffolded with [TriStack](https://tristack.dev).
+A Go project scaffolded with [TriStack](https://tristack.dev).
 
 ## Stack
 
@@ -137,10 +149,29 @@ function writeDefaultReadme(
   const database = config.database === "none" ? "none" : config.database;
   const orm = config.orm === "none" ? "none" : config.orm;
   const migrations = config.migrations === "none" ? "none" : config.migrations;
+  const isBare = config.framework === "none";
+
+  const steps: string[] = ["# 1. Install dependencies", installCommand(config)];
+  if (isBare) {
+    if (config.language === "python") {
+      steps.push("# 2. Run the sample script", bareRunCommand(config));
+    }
+  } else {
+    steps.push("# 2. Run database migrations", migrationsCommand(config));
+    steps.push("# 3. Start the dev server", runCommand(config));
+  }
+
+  const apiDocs = isBare
+    ? "Bare project — no API scaffolded yet. Start building under `src/`."
+    : config.language === "rust"
+      ? config.framework === "loco"
+        ? "A minimal Loco entrypoint is scaffolded. Generate a full Rails-like app with `cargo loco new`."
+        : 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.'
+      : "When the dev server is running, interactive API docs are available at `/docs`.";
 
   const content = `# ${config.projectName}
 
-A ${config.language} backend scaffolded with [TriStack](https://tristack.dev).
+A ${config.language} project scaffolded with [TriStack](https://tristack.dev).
 
 ## Stack
 
@@ -153,25 +184,12 @@ A ${config.language} backend scaffolded with [TriStack](https://tristack.dev).
 ## Getting Started
 
 \`\`\`bash
-# 1. Install dependencies
-${installCommand(config)}
-
-# 2. Run database migrations
-${migrationsCommand(config)}
-
-# 3. Start the dev server
-${runCommand(config)}
+${steps.join("\n\n")}
 \`\`\`
 
 ## API Docs
 
-${
-  config.language === "rust"
-    ? config.framework === "loco"
-      ? "A minimal Loco entrypoint is scaffolded. Generate a full Rails-like app with `cargo loco new`."
-      : 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.'
-    : "When the dev server is running, interactive API docs are available at `/docs`."
-}
+${apiDocs}
 
 ## Environment
 
@@ -195,6 +213,17 @@ function installCommand(config: ProjectConfig): string {
       return "poetry install";
     default:
       return "pip install -e .";
+  }
+}
+
+function bareRunCommand(config: ProjectConfig): string {
+  switch (config.packageManager) {
+    case "uv":
+      return "uv run python -m src.main";
+    case "poetry":
+      return "poetry run python -m src.main";
+    default:
+      return "python -m src.main";
   }
 }
 

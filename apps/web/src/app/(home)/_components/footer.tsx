@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="sm:col-span-2 lg:col-span-1">
             <h3 className="mb-3 text-base font-bold text-foreground sm:mb-4">TriStack</h3>
             <p className="mb-4 text-muted-foreground text-sm leading-relaxed sm:mb-6 sm:text-base lg:pr-4">
-              Stack-composable scaffolding for Python, Go, and Rust backend projects.
+              Stack-composable scaffolding for Python, Go, and Rust projects.
             </p>
             <p className="mb-4 text-[13px] text-muted-foreground leading-relaxed sm:mb-6 sm:text-sm lg:pr-4">
               Built as a fork of{" "}
@@ -24,7 +24,7 @@ const Footer = () => {
                 Better-T-Stack
               </a>{" "}
               (MIT licensed) — the CLI engine and Stack Builder UI are adapted from the original
-              project, extended to scaffold Python, Go, and Rust backend stacks.
+              project, extended to scaffold Python, Go, and Rust projects.
             </p>
             <Link
               href={REPOSITORY_URL}

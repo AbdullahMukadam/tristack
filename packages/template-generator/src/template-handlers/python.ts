@@ -24,21 +24,34 @@ function copyPythonBase(vfs: VirtualFileSystem, data: TemplateData): void {
   copyTemplate(vfs, data.templates, config, `python/base/${fileName}`, "pyproject.toml");
 }
 
+const FRAMEWORK_CORE_LAYOUT = new Set(["fastapi", "litestar", "flask"]);
+
+function copyPythonCore(vfs: VirtualFileSystem, data: TemplateData): void {
+  const { config } = data;
+  if (!FRAMEWORK_CORE_LAYOUT.has(config.framework)) return;
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    "python/core",
+    (templatePath) =>
+      config.orm === "none" &&
+      (templatePath.includes("/schemas/") || templatePath.includes("/services/")),
+  );
+}
+
 function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
+  if (config.framework === "none") {
+    copyTemplates(vfs, data.templates, config, "python/framework/none");
+    return;
+  }
   copyTemplates(
     vfs,
     data.templates,
     config,
     `python/framework/${config.framework}`,
-    (templatePath) => {
-      if (config.orm !== "none") return false;
-      return (
-        templatePath.includes("/schemas/") ||
-        templatePath.includes("/services/") ||
-        templatePath.includes("/routes/items.")
-      );
-    },
+    (templatePath) => config.orm === "none" && templatePath.includes("/routes/items."),
   );
 }
 
@@ -52,12 +65,6 @@ function copyMigrations(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   if (config.migrations === "none") return;
   copyTemplates(vfs, data.templates, config, `python/migrations/${config.migrations}`);
-}
-
-function copyDb(vfs: VirtualFileSystem, data: TemplateData): void {
-  const { config } = data;
-  if (config.database === "none") return;
-  copyTemplates(vfs, data.templates, config, `python/db/${config.database}`);
 }
 
 function copyAddons(vfs: VirtualFileSystem, data: TemplateData): void {
@@ -74,9 +81,9 @@ export function processPythonTemplates(
 ): void {
   const data: TemplateData = { templates, config };
   copyPythonBase(vfs, data);
+  copyPythonCore(vfs, data);
   copyFramework(vfs, data);
   copyOrm(vfs, data);
   copyMigrations(vfs, data);
-  copyDb(vfs, data);
   copyAddons(vfs, data);
 }

@@ -7,6 +7,43 @@ description: Practical guides for common setups
 
 Curated, task-focused guides for working with TriStack projects.
 
+## Install the CLI
+
+Install the standalone binary for your OS, or run on demand with `uvx tristack` over Python:
+
+<CodeBlockTabs defaultValue="windows">
+  <CodeBlockTabsList>
+    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
+  </CodeBlockTabsList>
+
+  <CodeBlockTab value="windows">
+    ```powershell
+    irm https://tristack.dev/install.ps1 | iex
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="macos">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="linux">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="python">
+    ```bash
+    uvx tristack
+    ```
+  </CodeBlockTab>
+</CodeBlockTabs>
+
 ### Available Guides
 
 <Cards>

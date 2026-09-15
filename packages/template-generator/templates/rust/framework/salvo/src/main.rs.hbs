@@ -1,7 +1,6 @@
-use std::env;
-
 use salvo::prelude::*;
 
+mod config;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
@@ -12,7 +11,8 @@ async fn health() -> &'static str {
 
 #[tokio::main]
 async fn main() {
-    dotenvy::dotenv().ok();
+    let app_config = config::Config::from_env();
+
 {{#if (ne orm "none")}}
     {{#if (eq orm "diesel")}}
     if let Err(err) = db::connect() {
@@ -24,16 +24,9 @@ async fn main() {
 {{/if}}
     let router = Router::new().path("health").get(health);
 
-    let addr = format!(
-        "0.0.0.0:{}",
-        env::var("PORT").unwrap_or_else(|_| "8000".to_string()),
-    );
+    let addr = format!("0.0.0.0:{}", app_config.port);
 
-    println!(
-        "{} listening on {}",
-        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
-        addr,
-    );
+    println!("{} listening on {}", app_config.app_name, addr);
 
     let listener = TcpListener::bind(&addr).await.expect("failed to bind");
     Server::new(listener).serve(router).await;

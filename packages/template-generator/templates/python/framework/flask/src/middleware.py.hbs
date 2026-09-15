@@ -1,9 +1,6 @@
-"""Cross-cutting middleware for {{projectName}}."""
 from flask import Flask, request
 
-
 def register_middleware(app: Flask) -> None:
-    """Register request-scoped middleware hooks."""
 
     @app.before_request
     def log_request() -> None:

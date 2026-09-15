@@ -3,6 +3,7 @@
 import { Check, ChevronDown, ClipboardCopy, FolderTree, Settings2 } from "lucide-react";
 import { startTransition, useState } from "react";
 
+import { SectionDivider } from "@/app/(home)/_components/landing/section-divider";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -74,6 +75,9 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
   return (
     <TooltipProvider>
       <div className="flex h-full w-full flex-col overflow-hidden bg-fd-background text-fd-foreground">
+        <div className="shrink-0 px-4 md:px-0">
+          <SectionDivider variant="stretch" size="sm" />
+        </div>
         <div className="sticky top-0 z-20 border-b bg-fd-background px-3 py-2 sm:hidden">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-4">
@@ -85,7 +89,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                 className={cn(
                   "builder-focus-ring -m-2 flex items-center gap-1.5 p-2 text-sm font-medium transition-colors duration-150",
                   mobileTab === "build"
-                    ? "text-primary"
+                    ? "text-brand"
                     : "text-fd-muted-foreground hover:text-fd-foreground",
                 )}
               >
@@ -93,7 +97,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                   aria-hidden="true"
                   className={cn(
                     "h-1.5 w-1.5 rounded-full transition-colors",
-                    mobileTab === "build" ? "bg-primary" : "bg-fd-muted-foreground/40",
+                    mobileTab === "build" ? "bg-brand" : "bg-fd-muted-foreground/40",
                   )}
                 />
                 Build
@@ -106,7 +110,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                 className={cn(
                   "builder-focus-ring -m-2 flex items-center gap-1.5 p-2 text-sm font-medium transition-colors duration-150",
                   mobileTab === "preview"
-                    ? "text-primary"
+                    ? "text-brand"
                     : "text-fd-muted-foreground hover:text-fd-foreground",
                 )}
               >
@@ -114,7 +118,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                   aria-hidden="true"
                   className={cn(
                     "h-1.5 w-1.5 rounded-full transition-colors",
-                    mobileTab === "preview" ? "bg-primary" : "bg-fd-muted-foreground/40",
+                    mobileTab === "preview" ? "bg-brand" : "bg-fd-muted-foreground/40",
                   )}
                 />
                 Preview
@@ -128,7 +132,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
           )}
         </div>
 
-        <div className="hidden h-full flex-1 grid-cols-[16rem_minmax(0,1fr)] overflow-hidden sm:grid md:grid-cols-[19rem_minmax(0,1fr)] lg:grid-cols-[24rem_minmax(0,1fr)]">
+        <div className="hidden min-h-0 flex-1 grid-cols-[16rem_minmax(0,1fr)] overflow-hidden sm:grid md:grid-cols-[19rem_minmax(0,1fr)] lg:grid-cols-[24rem_minmax(0,1fr)]">
           <aside className="flex min-h-0 flex-col overflow-hidden border-r bg-fd-background">
             <ScrollArea className="min-h-0 flex-1">
               <div className="p-2">
@@ -150,7 +154,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           "builder-focus-ring w-full border-fd-border px-2.5 py-1.5 text-[13px] focus:outline-none",
                           projectNameError
                             ? "border-destructive text-destructive"
-                            : "focus:border-primary",
+                            : "focus:border-brand",
                         )}
                         placeholder="my-tristack-app"
                       />
@@ -176,7 +180,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                         }}
                         aria-label="Copy CLI command"
                         title="Click to copy command"
-                        className="builder-focus-ring cursor-pointer rounded-md border px-2.5 py-2 transition-colors duration-150 hover:border-primary/50"
+                        className="builder-focus-ring cursor-pointer rounded-lg border px-2.5 py-2 transition-colors duration-150 hover:border-brand/40"
                       >
                         <div className="flex min-w-0 items-start gap-1.5">
                           <code
@@ -214,7 +218,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           className={cn(
                             "builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors duration-150",
                             copied
-                              ? "border-primary text-primary"
+                              ? "border-brand text-brand"
                               : "text-fd-muted-foreground hover:text-fd-foreground",
                           )}
                           title={copied ? "Copied!" : "Copy command"}
@@ -272,7 +276,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                   className={cn(
                     "builder-focus-ring -m-2 flex items-center gap-1.5 p-2 text-sm font-medium transition-colors duration-150",
                     viewMode === "command"
-                      ? "text-primary"
+                      ? "text-brand"
                       : "text-fd-muted-foreground hover:text-fd-foreground",
                   )}
                 >
@@ -289,7 +293,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                   className={cn(
                     "builder-focus-ring -m-2 flex items-center gap-1.5 p-2 text-sm font-medium transition-colors duration-150",
                     viewMode === "preview"
-                      ? "text-primary"
+                      ? "text-brand"
                       : "text-fd-muted-foreground hover:text-fd-foreground",
                   )}
                 >
@@ -350,7 +354,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           "builder-focus-ring w-full border-fd-border px-2.5 py-1.5 text-[13px] focus:outline-none",
                           projectNameError
                             ? "border-destructive text-destructive"
-                            : "focus:border-primary",
+                            : "focus:border-brand",
                         )}
                         placeholder="my-tristack-app"
                       />
@@ -364,9 +368,9 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                     <div className="flex flex-col gap-1.5">
                       <code
                         className={cn(
-                          "builder-focus-ring block min-w-0 cursor-pointer rounded-md border px-2.5 py-2 font-mono text-[12px] text-fd-foreground leading-[1.55] transition-colors duration-150",
+                          "builder-focus-ring block min-w-0 cursor-pointer rounded-lg border px-2.5 py-2 font-mono text-[12px] text-fd-foreground leading-[1.55] transition-colors duration-150",
                           commandExpanded ? "whitespace-pre-wrap break-words" : "truncate",
-                          copied ? "border-primary" : "hover:border-primary/50",
+                          copied ? "border-brand" : "hover:border-brand/50",
                         )}
                         onClick={() => copyToClipboard()}
                         onKeyDown={(event) => {
@@ -407,7 +411,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           className={cn(
                             "builder-focus-ring flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors duration-150",
                             copied
-                              ? "border-primary text-primary"
+                              ? "border-brand text-brand"
                               : "text-fd-muted-foreground hover:text-fd-foreground",
                           )}
                           title={copied ? "Copied!" : "Copy command"}

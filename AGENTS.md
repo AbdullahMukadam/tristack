@@ -59,6 +59,7 @@ This repo is a Bun + Turborepo monorepo.
   - `{{else if (eq orm "sqlmodel")}}`
   - `{{/if}}`
   - Example: `packages/template-generator/templates/python/base/pyproject-uv.toml.hbs`.
+- Canonical generated layouts per language and template-tree layering (base/core/framework/orm/migrations/dimensions/addons): see `docs/template-architecture.md` and `docs/adr/0002-canonical-template-layout-and-project-structure.md`.
 
 ## Testing Guidelines
 

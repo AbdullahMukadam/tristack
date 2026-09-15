@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "{{project_slug}}"
 version = "0.1.0"
-description = "{{projectName}} - a {{framework}} backend"
+description = {{#if (eq framework "none")}}"{{projectName}}"{{else}}"{{projectName}} - a {{framework}} project"{{/if}}
 authors = []
 {{#if (eq framework "django")}}
 packages = [

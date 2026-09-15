@@ -70,6 +70,7 @@
 @theme inline {
   --font-sans: var(--font-bricolage);
   --font-mono: var(--font-geist-mono);
+  --font-gambarino: var(--font-gambarino);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -147,6 +148,13 @@
   --color-chart-foreground-muted: var(--chart-foreground-muted);
   --color-chart-foreground: var(--chart-foreground);
   --color-chart-background: var(--chart-background);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-on-accent: var(--brand-on-accent);
+  --background-image-brand-gradient: var(--brand-gradient);
 }
 
 :root {
@@ -242,6 +250,10 @@
   --chart-scale-04: var(--chart-4);
   --chart-scale-05: var(--chart-5);
   --chart-scale-pattern-color: var(--muted);
+  --brand-color-1: #f84157;
+  --brand-color-2: #fa5b6e;
+  --brand-color-3: #d41847;
+  --brand-gradient2: radial-gradient(in oklch, var(--brand-color-2) 0%, var(--brand-color-3) 80%);
 }
 
 .dark {
@@ -311,6 +323,10 @@
   --shadow-lg: 0px 8px 16px 0px hsl(240 5% 1% / 0.4), 0px 4px 6px -1px hsl(240 5% 1% / 0.35);
   --shadow-xl: 0px 12px 24px 0px hsl(240 5% 1% / 0.45), 0px 8px 10px -1px hsl(240 5% 1% / 0.4);
   --shadow-2xl: 0px 16px 32px 0px hsl(240 5% 1% / 0.5);
+  --brand-color-1: #f84157;
+  --brand-color-2: #fa5b6e;
+  --brand-color-3: #d41847;
+  --brand-gradient2: radial-gradient(in oklch, var(--brand-color-2) 0%, var(--brand-color-3) 80%);
 }
 
 /* @layer base {
@@ -322,6 +338,53 @@
 		letter-spacing: var(--tracking-normal);
 	}
 } */
+
+/* TriStack brand accent (amber). Used by the landing page and, later, the
+   Stack Builder. Everything else stays zinc. */
+:root {
+  --brand: #f6a510;
+  --brand-deep: #e07a00;
+  --brand-bright: #ffd36b;
+  --brand-glow: rgb(246 165 16 / 0.42);
+  --brand-on-accent: #1c1405;
+  --brand-subtle: #fdf3e0;
+  --brand-ink: #7a4a00;
+  --brand-gradient: linear-gradient(180deg, #ffd36b 0%, #f6a510 55%, #e07a00 100%);
+}
+
+.dark {
+  --brand: #ffb52e;
+  --brand-deep: #ff9600;
+  --brand-bright: #ffd36b;
+  --brand-glow: rgb(255 181 46 / 0.4);
+  --brand-on-accent: #1c1405;
+  --brand-subtle: #2b2110;
+  --brand-ink: #ffd36b;
+  --brand-gradient: linear-gradient(180deg, #ffd36b 0%, #ffb52e 55%, #ff9600 100%);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand) 20%, transparent);
+}
+
+@layer utilities {
+  .hero-glow-primary {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in oklab, var(--brand) 26%, transparent) 0%,
+      color-mix(in oklab, var(--brand-deep) 16%, transparent) 34%,
+      transparent 70%
+    );
+  }
+
+  .hero-glow-secondary {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in oklab, var(--brand-bright) 14%, transparent) 0%,
+      transparent 68%
+    );
+  }
+}
 
 .builder-focus-ring:focus-visible {
   outline: 2px solid var(--primary);
@@ -377,8 +440,31 @@
 
 #nd-sidebar a[data-active="true"],
 #nd-sidebar-mobile a[data-active="true"] {
-  background: transparent;
-  color: var(--color-fd-primary);
+  background: color-mix(in oklab, var(--brand) 10%, transparent);
+}
+
+#nd-notebook-layout a[data-active="true"] {
+  color: var(--brand-ink);
+}
+
+#nd-toc .bg-fd-primary {
+  background-color: var(--brand);
+}
+
+#nd-toc .stroke-fd-primary {
+  stroke: var(--brand);
+}
+
+/* Inline prose links between text pick up the brand; list-style reference
+   links and Card / heading-anchor links stay on their defaults. */
+#nd-page .prose a:not([data-card]) {
+  color: var(--brand-ink);
+  text-decoration-color: color-mix(in oklab, var(--brand) 70%, transparent);
+}
+
+#nd-page .prose li a:not([data-card]) {
+  color: revert;
+  text-decoration-color: revert;
 }
 
 /* Drop fumadocs' 97rem cap so the sidebar and TOC sit flush to the viewport

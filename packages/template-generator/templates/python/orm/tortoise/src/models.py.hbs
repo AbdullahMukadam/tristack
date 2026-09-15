@@ -1,10 +1,7 @@
-"""Domain models for {{projectName}} — Tortoise ORM."""
 from tortoise import fields
 from tortoise.models import Model
 
-
 class Item(Model):
-    """Sample model. Replace with your own domain models."""
 
     id = fields.UUIDField(pk=True)
     name = fields.CharField(max_length=255)

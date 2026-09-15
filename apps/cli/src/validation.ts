@@ -111,6 +111,35 @@ function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResul
       );
     }
   }
+  if (config.framework === "none") {
+    if (config.orm && config.orm !== "none") {
+      return Result.err(
+        new ValidationError({
+          message: `No-framework projects are bare — set orm to "none".`,
+          field: "orm",
+          value: config.orm,
+        }),
+      );
+    }
+    if (config.migrations && config.migrations !== "none") {
+      return Result.err(
+        new ValidationError({
+          message: `No-framework projects are bare — set migrations to "none".`,
+          field: "migrations",
+          value: config.migrations,
+        }),
+      );
+    }
+    if (config.database && config.database !== "none") {
+      return Result.err(
+        new ValidationError({
+          message: `No-framework projects are bare — set database to "none".`,
+          field: "database",
+          value: config.database,
+        }),
+      );
+    }
+  }
   if (config.orm === "tortoise" && config.migrations && config.migrations !== "none") {
     return Result.err(
       new ValidationError({

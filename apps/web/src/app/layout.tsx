@@ -1,6 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import Providers from "@/components/providers";
@@ -18,6 +19,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-geist-mono",
+});
+
+const gambarino = localFont({
+  src: "./fonts/Gambarino-Regular.ttf",
+  variable: "--font-gambarino",
+  display: "swap",
 });
 
 const ogImage = `${SITE_URL}/og/site/home.png`;
@@ -62,9 +69,9 @@ const structuredData = {
         priceCurrency: "USD",
       },
       featureList: [
-        "Interactive and non-interactive backend project scaffolding",
-        "Structured JSON commands for coding agents",
-        "Local stdio MCP server",
+        "Interactive and non-interactive project scaffolding",
+        "JSON-first commands for coding agents and automation",
+        "Reproducible tristack.jsonc configuration",
       ],
       sameAs: [REPOSITORY_URL],
     },
@@ -166,7 +173,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={cn(bricolage.variable, geistMono.variable, "font-sans")}
+      className={cn(bricolage.variable, geistMono.variable, gambarino.variable, "font-sans")}
       suppressHydrationWarning
     >
       <body>

@@ -1,5 +1,3 @@
-# Copy this file to `.dockerignore` and adjust as needed.
-
 target/
 .env
 .env.local

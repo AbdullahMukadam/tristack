@@ -7,6 +7,47 @@ description: Scaffold and run your first FastAPI project end to end
 
 This guide walks through the default TriStack flow: scaffold a FastAPI + SQLModel + Alembic + SQLite project, run it, and verify the health endpoint.
 
+## Install the CLI
+
+Python projects run the CLI as `uvx tristack`. If you don't use `uv`, install the standalone binary instead:
+
+<CodeBlockTabs defaultValue="python">
+  <CodeBlockTabsList>
+    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
+  </CodeBlockTabsList>
+
+  <CodeBlockTab value="python">
+    ```bash
+    # run on demand — no install needed
+    uvx tristack
+
+    # or install once with uv
+    uv tool install tristack
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="windows">
+    ```powershell
+    irm https://tristack.dev/install.ps1 | iex
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="macos">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="linux">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+</CodeBlockTabs>
+
 ## 1. Scaffold
 
 ```bash

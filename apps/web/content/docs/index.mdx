@@ -21,13 +21,46 @@ TriStack scaffolds backend projects in multiple languages. Each has its own opti
 | Go       | Scaffolding |
 | Rust     | Scaffolding |
 
-The CLI ships as a standalone native binary. The invoker differs per language:
+## Install the CLI
 
-| Language | Run the CLI                   |
-| -------- | ----------------------------- |
-| Python   | `uvx tristack` (PyPI wrapper) |
-| Go       | `tristack` (curl installer)   |
-| Rust     | `tristack` (curl installer)   |
+TriStack installs as a standalone native binary for Windows, macOS, and Linux, or runs on demand with `uv` over Python. Pick your platform:
+
+<CodeBlockTabs defaultValue="python">
+  <CodeBlockTabsList>
+    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
+  </CodeBlockTabsList>
+
+  <CodeBlockTab value="python">
+    ```bash
+    # run on demand — no install needed
+    uvx tristack
+
+    # or install once with uv
+    uv tool install tristack
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="windows">
+    ```powershell
+    irm https://tristack.dev/install.ps1 | iex
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="macos">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+
+  <CodeBlockTab value="linux">
+    ```bash
+    curl -fsSL https://tristack.dev/install.sh | bash
+    ```
+  </CodeBlockTab>
+</CodeBlockTabs>
 
 ## Get Started
 
@@ -40,8 +73,6 @@ You only need the runtime of whatever language you scaffold, plus **Git** (optio
 | Python   | Python 3.12+ ([python.org](https://www.python.org/)) | `uv` ([astral.sh/uv](https://docs.astral.sh/uv/)) — or `poetry` / `pip` |
 | Go       | Go 1.22+ ([go.dev](https://go.dev/dl/))              | `go`                                                                    |
 | Rust     | Rust 1.75+ ([rustup](https://rustup.rs/))            | `cargo`                                                                 |
-
-To run the CLI itself install it once (`pipx install tristack` / `uv tool install tristack`) or run it on demand with `uvx tristack` (Python path). Go and Rust devs run the standalone `tristack` binary from the curl installers.
 
 ### CLI (prompts)
 
@@ -78,7 +109,7 @@ uvx tristack my-tristack-app \
 
 Let an LLM CLI or CI job scaffold projects for you with the fully JSON-first `create-json` command — no prompts, one machine-readable payload. See [Agent Workflows](/docs/cli/agent-workflows).
 
-A native agent plugin (Claude Code / Codex MCP) ships in a later phase.
+Native Claude Code / Codex plugins ship in a later phase.
 
 ## Common Setups — Python
 

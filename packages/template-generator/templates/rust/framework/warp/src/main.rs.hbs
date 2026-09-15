@@ -1,7 +1,6 @@
-use std::env;
-
 use warp::{Filter, Rejection, Reply};
 
+mod config;
 {{#if (ne orm "none")}}
 mod db;
 {{/if}}
@@ -12,7 +11,8 @@ fn routes() -> impl Filter<Extract = impl Reply, Error = Rejection> {
 
 #[tokio::main]
 async fn main() {
-    dotenvy::dotenv().ok();
+    let app_config = config::Config::from_env();
+
 {{#if (ne orm "none")}}
     {{#if (eq orm "diesel")}}
     if let Err(err) = db::connect() {
@@ -23,18 +23,12 @@ async fn main() {
     }
 {{/if}}
 
-    let port = env::var("PORT")
-        .unwrap_or_else(|_| "8000".to_string())
-        .parse::<u16>()
-        .expect("invalid PORT");
-
     println!(
         "{} listening on 0.0.0.0:{}",
-        env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string()),
-        port,
+        app_config.app_name, app_config.port,
     );
 
-    warp::serve(routes()).run(([0, 0, 0, 0], port)).await;
+    warp::serve(routes()).run(([0, 0, 0, 0], app_config.port)).await;
 }
 
 #[cfg(test)]

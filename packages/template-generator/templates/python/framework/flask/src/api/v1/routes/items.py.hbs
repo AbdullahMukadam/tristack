@@ -1,8 +1,6 @@
-"""Item endpoints — thin HTTP layer delegating to services."""
 from flask import Blueprint, Response, jsonify, request
 
 items_bp = Blueprint("items", __name__, url_prefix="/items")
-
 
 @items_bp.get("/")
 async def list_items_endpoint() -> Response:
@@ -17,7 +15,6 @@ async def list_items_endpoint() -> Response:
         items = await list_items(session)
     {{/if}}
     return jsonify([item.model_dump(mode="json") for item in items])
-
 
 @items_bp.post("/")
 async def create_item_endpoint() -> Response:

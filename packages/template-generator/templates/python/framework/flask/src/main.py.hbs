@@ -1,4 +1,3 @@
-"""Flask application entrypoint for {{projectName}}."""
 import asyncio
 
 from flask import Flask
@@ -9,9 +8,8 @@ from .middleware import register_middleware
 
 settings = get_settings()
 
-
 def create_app() -> Flask:
-    """Application factory."""
+
     app = Flask(__name__)
     app.config["DEBUG"] = settings.debug
 
@@ -29,6 +27,5 @@ def create_app() -> Flask:
     register_v1_blueprints(app)
 
     return app
-
 
 app = create_app()

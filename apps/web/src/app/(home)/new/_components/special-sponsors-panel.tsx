@@ -55,7 +55,7 @@ export function SpecialSponsorsPanel({ sponsors, compact = false }: SpecialSpons
                   width={64}
                   height={64}
                   className={cn(
-                    "shrink-0 rounded-md border transition-colors duration-150 hover:border-primary",
+                    "shrink-0 rounded-md border transition-colors duration-150 hover:border-brand/40",
                     compact ? "h-9 w-9" : "h-10 w-10",
                   )}
                   unoptimized
@@ -97,7 +97,7 @@ export function SpecialSponsorsPanel({ sponsors, compact = false }: SpecialSpons
                       href={entry.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-2 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-primary"
+                      className="group flex items-center gap-2 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-brand"
                     >
                       <FaGithub className="h-3.5 w-3.5" />
                       <span className="truncate">{entry.githubId}</span>
@@ -107,7 +107,7 @@ export function SpecialSponsorsPanel({ sponsors, compact = false }: SpecialSpons
                         href={sponsorUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-2 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-primary"
+                        className="group flex items-center gap-2 text-xs text-fd-muted-foreground transition-colors duration-150 hover:text-brand"
                       >
                         <Globe className="h-3.5 w-3.5" />
                         <span className="truncate">{getSponsorUrlLabel(entry)}</span>
@@ -129,7 +129,7 @@ export function SpecialSponsorsPanel({ sponsors, compact = false }: SpecialSpons
                 rel="noopener noreferrer"
                 aria-label="Become a sponsor"
                 className={cn(
-                  "builder-focus-ring inline-flex shrink-0 items-center justify-center rounded-md border border-dashed text-primary transition-colors duration-150 hover:border-primary",
+                  "builder-focus-ring inline-flex shrink-0 items-center justify-center rounded-md border border-dashed text-brand transition-colors duration-150 hover:border-brand",
                   compact ? "h-9 w-9" : "h-10 w-10",
                 )}
               />

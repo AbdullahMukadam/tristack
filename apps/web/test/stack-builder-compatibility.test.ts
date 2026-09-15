@@ -205,10 +205,13 @@ describe("stack builder removal updates", () => {
     expect(getSelectedTechRemovalUpdate(DEFAULT_STACK, "orm", "sqlmodel")).toEqual({
       orm: "none",
     });
+    expect(getSelectedTechRemovalUpdate(DEFAULT_STACK, "framework", "fastapi")).toEqual({
+      framework: "none",
+    });
   });
 
   test("returns an empty update for single-select categories without a none option", () => {
-    expect(getSelectedTechRemovalUpdate(DEFAULT_STACK, "framework", "fastapi")).toEqual({});
+    expect(getSelectedTechRemovalUpdate(DEFAULT_STACK, "packageManager", "uv")).toEqual({});
   });
 });
 
@@ -274,6 +277,62 @@ describe("stack builder compatibility", () => {
     const yoloStack = createStack({ yolo: "true" });
     expect(isOptionCompatible(yoloStack, "framework", "django")).toBe(true);
     expect(resolveStackCompatibility(yoloStack).stack).toMatchObject({ yolo: "true" });
+  });
+});
+
+describe("no-framework stacks", () => {
+  test("exposes a No framework option for every language", () => {
+    for (const language of ["python", "go", "rust"]) {
+      const options = getOptionsForStack(createStack({ language }), "framework");
+      const none = options.find((option) => option.id === "none");
+      expect(none).toBeDefined();
+      expect(none?.name).toBe("No framework");
+    }
+  });
+
+  test("forces orm, migrations, and database to none when framework is none", () => {
+    const analysis = analyzeStackCompatibility(createStack({ framework: "none" }));
+    expect(analysis.adjustedStack).toMatchObject({
+      framework: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+    });
+    expect(analysis.changes.map((change) => change.category)).toEqual([
+      "orm",
+      "migrations",
+      "database",
+    ]);
+  });
+
+  test("emits none flags for a no-framework stack in the generated command", () => {
+    const resolved = resolveStackCompatibility(createStack({ framework: "none" })).stack;
+    const command = generateStackCommand(resolved);
+    expect(command).toBe(
+      "uvx tristack my-tristack-app --language python --framework none --orm none --migrations none --database none --package-manager uv --addons docker ruff pytest --git --install",
+    );
+  });
+
+  test("disables non-none orm, migrations, and database options when framework is none", () => {
+    const stack = createStack({ framework: "none" });
+    for (const category of ["orm", "migrations", "database"]) {
+      const options = getOptionsForStack(stack, category as keyof typeof TECH_OPTIONS);
+      expect(options.map((option) => option.id)).toContain("none");
+      for (const option of options) {
+        if (option.id === "none") {
+          expect(getDisabledReason(stack, category as keyof typeof TECH_OPTIONS, option.id)).toBe(
+            null,
+          );
+        } else {
+          expect(
+            getDisabledReason(stack, category as keyof typeof TECH_OPTIONS, option.id),
+          ).toContain("pick a framework");
+          expect(isOptionCompatible(stack, category as keyof typeof TECH_OPTIONS, option.id)).toBe(
+            false,
+          );
+        }
+      }
+    }
   });
 });
 

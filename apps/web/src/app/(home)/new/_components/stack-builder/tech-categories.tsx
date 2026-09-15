@@ -110,7 +110,7 @@ export function TechCategories({
                       isDisabled
                         ? "cursor-not-allowed border-dashed opacity-60"
                         : isSelected
-                          ? "border-fd-border bg-primary/5"
+                          ? "border-brand/40 bg-primary/5"
                           : "border-fd-border bg-transparent hover:bg-primary/5",
                     )}
                     onClick={() => {
@@ -159,7 +159,7 @@ export function TechCategories({
                           {isSelected && (
                             <CheckCircle2
                               aria-hidden="true"
-                              className="h-3.5 w-3.5 shrink-0 text-primary"
+                              className="h-3.5 w-3.5 shrink-0 text-brand"
                             />
                           )}
                         </div>

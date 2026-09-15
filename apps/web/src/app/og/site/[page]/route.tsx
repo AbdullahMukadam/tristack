@@ -10,7 +10,7 @@ const PAGES = {
     path: "~",
     section: "home",
     title: "Roll Your Own Stack",
-    description: "Modern CLI for scaffolding backend projects across Python, Go, and Rust",
+    description: "Modern CLI for scaffolding projects across Python, Go, and Rust",
     command: "uvx tristack",
   },
   new: {

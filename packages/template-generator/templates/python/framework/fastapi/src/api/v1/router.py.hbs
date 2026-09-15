@@ -1,8 +1,3 @@
-"""API v1 router for {{projectName}}.
-
-Aggregates feature route modules. Add ``path("users/", ...)`` as new
-route modules are created.
-"""
 from fastapi import APIRouter
 
 {{#if (ne orm "none")}}
@@ -11,11 +6,9 @@ from .routes.items import router as items_router
 
 router = APIRouter()
 
-
 @router.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
-
 
 {{#if (ne orm "none")}}
 router.include_router(items_router, prefix="/items", tags=["items"])

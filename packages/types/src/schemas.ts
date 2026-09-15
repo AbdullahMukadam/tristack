@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const LanguageSchema = z
-  .enum(["python", "go", "rust"])
-  .describe("Programming language for the backend");
+export const LanguageSchema = z.enum(["python", "go", "rust"]).describe("Programming language");
 
 export const FrameworkSchema = z
   .enum([
@@ -26,7 +24,7 @@ export const FrameworkSchema = z
     "loco",
     "none",
   ])
-  .describe("Backend framework");
+  .describe('Web framework (or "none" for a bare project)');
 
 export const ORMSchema = z
   .enum([

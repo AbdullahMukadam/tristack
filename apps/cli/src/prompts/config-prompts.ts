@@ -44,7 +44,8 @@ export async function gatherConfig(
   if (isSilent()) {
     const fw = flags.framework ?? DEFAULT_CONFIG.framework;
     const djangoMode = fw === "django";
-    const orm = djangoMode ? "none" : (flags.orm ?? DEFAULT_CONFIG.orm);
+    const bareMode = fw === "none";
+    const orm = djangoMode || bareMode ? "none" : (flags.orm ?? DEFAULT_CONFIG.orm);
     const tortoiseMode = orm === "tortoise";
     return {
       projectName,
@@ -54,8 +55,10 @@ export async function gatherConfig(
       framework: fw,
       orm,
       migrations:
-        djangoMode || tortoiseMode ? "none" : (flags.migrations ?? DEFAULT_CONFIG.migrations),
-      database: flags.database ?? DEFAULT_CONFIG.database,
+        djangoMode || bareMode || tortoiseMode
+          ? "none"
+          : (flags.migrations ?? DEFAULT_CONFIG.migrations),
+      database: bareMode ? "none" : (flags.database ?? DEFAULT_CONFIG.database),
       packageManager: flags.packageManager ?? DEFAULT_CONFIG.packageManager,
       addons: flags.addons ?? [...DEFAULT_CONFIG.addons],
       git: flags.git ?? DEFAULT_CONFIG.git,
@@ -72,21 +75,27 @@ export async function gatherConfig(
           (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language,
           previousAnswer,
         ),
-      orm: ({ results, previousAnswer }) => {
+      orm: async ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
         if (lang === "python" && fw === "django") return "none" as ORM;
+        if (fw === "none") return "none" as ORM;
         return getORMChoice(flags.orm, lang, previousAnswer);
       },
-      migrations: ({ results, previousAnswer }) => {
+      migrations: async ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
         const orm = results.orm ?? flags.orm;
         if (lang === "python" && fw === "django") return "none" as Migrations;
         if (lang === "python" && orm === "tortoise") return "none" as Migrations;
+        if (fw === "none") return "none" as Migrations;
         return getMigrationsChoice(flags.migrations, lang, previousAnswer);
       },
-      database: ({ previousAnswer }) => getDatabaseChoice(flags.database, previousAnswer),
+      database: async ({ results, previousAnswer }) => {
+        const fw = results.framework ?? flags.framework;
+        if (fw === "none") return "none" as Database;
+        return getDatabaseChoice(flags.database, previousAnswer);
+      },
       packageManager: ({ results, previousAnswer }) =>
         getPackageManagerChoice(
           flags.packageManager,
@@ -120,12 +129,13 @@ export async function gatherConfig(
     relativePath,
     language: result.language,
     framework: result.framework,
-    orm: result.framework === "django" ? ("none" as ORM) : result.orm,
+    orm:
+      result.framework === "django" || result.framework === "none" ? ("none" as ORM) : result.orm,
     migrations:
-      result.framework === "django" || result.orm === "tortoise"
+      result.framework === "django" || result.framework === "none" || result.orm === "tortoise"
         ? ("none" as Migrations)
         : result.migrations,
-    database: result.database,
+    database: result.framework === "none" ? ("none" as Database) : result.database,
     packageManager: result.packageManager,
     addons: result.addons,
     git: result.git,

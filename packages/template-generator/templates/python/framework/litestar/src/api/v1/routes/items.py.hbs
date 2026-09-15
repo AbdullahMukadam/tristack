@@ -1,4 +1,3 @@
-"""Item endpoints — thin HTTP layer delegating to services."""
 from litestar import get, post
 {{#if (ne orm "tortoise")}}
 from litestar import Provide
@@ -9,12 +8,10 @@ from ....db import get_session
 from ....schemas.items import ItemCreate, ItemResponse
 from ....services.items import create_item, list_items
 
-
 {{#if (eq orm "tortoise")}}
 @get("/", path="/items", response_model=list[ItemResponse])
 async def list_items_endpoint() -> list[ItemResponse]:
     return await list_items()
-
 
 @post(
     "/",
@@ -30,7 +27,6 @@ async def list_items_endpoint(
     session: AsyncSession = Provide(get_session),
 ) -> list[ItemResponse]:
     return await list_items(session)
-
 
 @post(
     "/",

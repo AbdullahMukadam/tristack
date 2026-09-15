@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { SectionDivider } from "@/app/(home)/_components/landing/section-divider";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 import { getDocumentationMarkdownUrl } from "@/lib/agent-content";
 import { getPageImage, source } from "@/lib/source";
@@ -55,6 +56,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
       <DocsBody className="[&_:not(pre)>code]:wrap-break-word">
         <MDX components={{ ...defaultMdxComponents, ...TabsComponents, ...FilesComponents }} />
       </DocsBody>
+      <SectionDivider variant="stretch" className="mt-10" />
     </DocsPage>
   );
 }

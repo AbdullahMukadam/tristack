@@ -5,6 +5,7 @@ export const PYTHON_FRAMEWORKS: readonly Framework[] = [
   "litestar",
   "django",
   "flask",
+  "none",
 ] as const;
 
 export const GO_FRAMEWORKS: readonly Framework[] = [
@@ -13,6 +14,7 @@ export const GO_FRAMEWORKS: readonly Framework[] = [
   "echo",
   "chi",
   "stdlib",
+  "none",
 ] as const;
 
 export const RUST_FRAMEWORKS: readonly Framework[] = [
@@ -22,6 +24,7 @@ export const RUST_FRAMEWORKS: readonly Framework[] = [
   "warp",
   "salvo",
   "loco",
+  "none",
 ] as const;
 
 export const PYTHON_ORMS: readonly ORM[] = ["sqlmodel", "sqlalchemy", "tortoise", "none"] as const;
