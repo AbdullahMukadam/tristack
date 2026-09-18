@@ -1,6 +1,8 @@
 import type { ProjectConfig } from "@tristack/types";
 import { TaggedError } from "better-result";
 
+import type { TemplateSource } from "./core/template-processor";
+
 export interface VirtualFile {
   type: "file";
   path: string;
@@ -28,7 +30,7 @@ export interface VirtualFileTree {
 
 export interface GeneratorOptions {
   config: ProjectConfig;
-  templates?: Map<string, string>;
+  templates?: Map<string, TemplateSource>;
   version?: string;
 }
 

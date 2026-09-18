@@ -1,5 +1,6 @@
 import type { ProjectConfig } from "@tristack/types";
 
+import type { TemplateSource } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 import { copyTemplate, copyTemplates, type TemplateData } from "./utils";
 
@@ -55,7 +56,7 @@ function copyAddons(vfs: VirtualFileSystem, data: TemplateData): void {
 
 export function processGoTemplates(
   vfs: VirtualFileSystem,
-  templates: Map<string, string>,
+  templates: Map<string, TemplateSource>,
   config: ProjectConfig,
 ): void {
   const data: TemplateData = { templates, config };

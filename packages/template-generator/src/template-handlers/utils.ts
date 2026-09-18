@@ -1,15 +1,17 @@
 import type { ProjectConfig } from "@tristack/types";
 
 import {
+  isPrecompiledTemplate,
   processFileContent,
   processTemplateString,
   toProjectSlug,
   transformFilename,
+  type TemplateSource,
 } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 
 export interface TemplateData {
-  templates: Map<string, string>;
+  templates: Map<string, TemplateSource>;
   config: ProjectConfig;
 }
 
@@ -27,7 +29,7 @@ export function resolvePathVars(path: string, config: ProjectConfig): string {
 
 export function copyTemplates(
   vfs: VirtualFileSystem,
-  templates: Map<string, string>,
+  templates: Map<string, TemplateSource>,
   config: ProjectConfig,
   prefix: string,
   exclude?: (templatePath: string) => boolean,
@@ -45,19 +47,23 @@ export function copyTemplates(
 
 export function copyTemplate(
   vfs: VirtualFileSystem,
-  templates: Map<string, string>,
+  templates: Map<string, TemplateSource>,
   config: ProjectConfig,
   templatePath: string,
   outputPath?: string,
 ): void {
   const content = templates.get(templatePath);
   if (content === undefined) return;
+  if (!isPrecompiledTemplate(content)) return;
 
   const finalPath = transformFilename(outputPath ?? templatePath);
   const processed = processTemplateString(content, config);
   vfs.writeFile(finalPath, processed, templatePath);
 }
 
-export function templateExists(templates: Map<string, string>, templatePath: string): boolean {
+export function templateExists(
+  templates: Map<string, TemplateSource>,
+  templatePath: string,
+): boolean {
   return templates.has(templatePath);
 }

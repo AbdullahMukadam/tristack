@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import Handlebars from "handlebars";
 import isBinaryPath from "is-binary-path";
 import { glob } from "tinyglobby";
 
@@ -31,21 +32,21 @@ async function generateTemplates() {
 
     if (isBinaryPath(file)) {
       binaryFiles.push(normalizedPath);
-      entries.push(`  ["${normalizedPath}", \`[Binary file]\`]`);
+      entries.push(`  ["${normalizedPath}", "[Binary file]"]`);
     } else {
       const content = fs.readFileSync(fullPath, "utf-8");
-      const escapedContent = content
-        .replace(/\\/g, "\\\\")
-        .replace(/`/g, "\\`")
-        .replace(/\$\{/g, "\\${");
-      entries.push(`  ["${normalizedPath}", \`${escapedContent}\`]`);
+      const specSource = Handlebars.precompile(content, { spec: true } as never);
+      entries.push(`  ["${normalizedPath}", { kind: "precompiled", spec: ${specSource} }]`);
     }
   }
 
-  const output = `// Auto-generated - DO NOT EDIT
+  const output = `// @ts-nocheck
+// Auto-generated - DO NOT EDIT
 // Run 'bun run generate-templates' to regenerate
 
-export const EMBEDDED_TEMPLATES: Map<string, string> = new Map([
+import type { TemplateSource } from "./core/template-processor";
+
+export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 ${entries.join(",\n")}
 ]);
 

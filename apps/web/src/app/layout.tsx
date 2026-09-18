@@ -1,6 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
+import { GeistMono } from "geist/font/mono";
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
@@ -15,11 +16,7 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-geist-mono",
-});
+const geistMono = GeistMono;
 
 const gambarino = localFont({
   src: "./fonts/Gambarino-Regular.ttf",

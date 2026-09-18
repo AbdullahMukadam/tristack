@@ -1,9 +1,12 @@
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import Handlebars from "handlebars";
 import isBinaryPath from "is-binary-path";
 import { dirname, join } from "pathe";
 import { glob } from "tinyglobby";
+
+import type { TemplateSource } from "./template-processor";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,14 +39,14 @@ export function getBinaryTemplatesRoot(): string {
   throw new Error("Binary templates directory not found. Checked: " + possiblePaths.join(", "));
 }
 
-export async function loadTemplates(prefix?: string): Promise<Map<string, string>> {
+export async function loadTemplates(prefix?: string): Promise<Map<string, TemplateSource>> {
   const templatesRoot = getTemplatesRoot();
   const searchDir = prefix ? join(templatesRoot, prefix) : templatesRoot;
 
   if (!fs.existsSync(searchDir)) return new Map();
 
   const files = await glob("**/*", { cwd: searchDir, dot: true, onlyFiles: true });
-  const templates = new Map<string, string>();
+  const templates = new Map<string, TemplateSource>();
 
   for (const file of files) {
     const fullPath = join(searchDir, file);
@@ -53,7 +56,11 @@ export async function loadTemplates(prefix?: string): Promise<Map<string, string
       if (isBinaryPath(file)) {
         templates.set(relativePath, "[Binary file]");
       } else {
-        templates.set(relativePath, fs.readFileSync(fullPath, "utf-8"));
+        const source = fs.readFileSync(fullPath, "utf-8");
+        templates.set(relativePath, {
+          kind: "precompiled",
+          spec: Handlebars.precompile(source, { spec: true } as never),
+        });
       }
     } catch (error) {
       console.warn(`Failed to read template: ${relativePath}`, error);

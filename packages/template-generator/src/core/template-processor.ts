@@ -17,12 +17,24 @@ export function toProjectSlug(name: string): string {
   );
 }
 
-export function processTemplateString(content: string, context: ProjectConfig): string {
+export interface PrecompiledTemplate {
+  kind: "precompiled";
+  spec: object;
+}
+
+export type TemplateSource = string | PrecompiledTemplate;
+
+export function isPrecompiledTemplate(content: TemplateSource): content is PrecompiledTemplate {
+  return content instanceof Object;
+}
+
+export function processTemplateString(content: TemplateSource, context: ProjectConfig): string {
   const renderContext = {
     ...context,
     project_slug: toProjectSlug(context.projectName),
   };
-  return Handlebars.compile(content)(renderContext);
+  if (!isPrecompiledTemplate(content)) return content;
+  return Handlebars.template(content.spec)(renderContext);
 }
 
 export function isBinaryFile(filePath: string): boolean {
@@ -42,22 +54,14 @@ export function transformFilename(filename: string): string {
 
 export function processFileContent(
   filePath: string,
-  content: string,
+  content: TemplateSource,
   context: ProjectConfig,
 ): string {
   if (isBinaryFile(filePath)) return "[Binary file]";
 
-  const originalPath = filePath.endsWith(".hbs") ? filePath : filePath + ".hbs";
-  if (filePath !== originalPath || filePath.includes(".hbs")) {
-    try {
-      return processTemplateString(content, context);
-    } catch (error) {
-      console.warn(`Template processing failed for ${filePath}:`, error);
-      return content;
-    }
-  }
+  if (!isPrecompiledTemplate(content)) return content;
 
-  return content;
+  return processTemplateString(content, context);
 }
 
 export { Handlebars };
