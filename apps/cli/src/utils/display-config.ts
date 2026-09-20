@@ -1,7 +1,7 @@
 import pc from "picocolors";
 
 import type { ProjectConfig } from "../types";
-import { accent } from "./theme";
+import { accent, warning } from "./theme";
 
 export type ConfigDisplayRow = { label: string; value: string };
 export type ConfigDisplaySection = { title: string; rows: ConfigDisplayRow[] };
@@ -37,6 +37,7 @@ const VALUE_LABELS = {
   sqlmodel: "SQLModel",
   sqlalchemy: "SQLAlchemy",
   tortoise: "Tortoise ORM",
+  htmx: "HTMX",
   sqlc: "sqlc",
   gorm: "GORM",
   sqlx: "sqlx",
@@ -61,8 +62,6 @@ const VALUE_LABELS = {
   "golangci-lint": "golangci-lint",
   "cargo-watch": "cargo-watch",
   clippy: "Clippy",
-  fumadocs: "Fumadocs",
-  starlight: "Starlight",
 } satisfies Record<string, string>;
 
 function isKnownValueLabel(value: string): value is keyof typeof VALUE_LABELS {
@@ -105,6 +104,7 @@ export function getConfigSections(config: Partial<ProjectConfig>): ConfigDisplay
     section("Stack", [
       ["Language", config.language],
       ["Framework", config.framework],
+      ["Frontend", config.frontend],
       ["ORM", config.orm],
       ["Migrations", config.migrations],
       ["Database", config.database],
@@ -121,7 +121,7 @@ export function getConfigSections(config: Partial<ProjectConfig>): ConfigDisplay
 export function displayConfig(config: Partial<ProjectConfig>): string {
   const sections = getConfigSections(config);
   if (sections.length === 0) {
-    return pc.yellow("No configuration selected.");
+    return warning("No configuration selected.");
   }
   return sections
     .map(({ title, rows }) => {

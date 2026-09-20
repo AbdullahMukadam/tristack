@@ -1,9 +1,10 @@
 export const triPalette = {
-  iris: "#9D82FF",
-  teal: "#2DD4BF",
+  brand: "#f6a510",
+  brandBright: "#ffd36b",
+  brandDeep: "#ff9600",
   success: "#28C780",
-  warning: "#F5A623",
-  error: "#F45B69",
+  warning: "#ff9600",
+  error: "#ef4444",
 } as const;
 
 function rgb(hex: string, text: string | number): string {
@@ -13,10 +14,11 @@ function rgb(hex: string, text: string | number): string {
   return `\x1b[38;2;${r};${g};${b}m${text}\x1b[39m`;
 }
 
-export const accent = (text: string | number) => rgb(triPalette.iris, text);
-export const teal = (text: string | number) => rgb(triPalette.teal, text);
+export const accent = (text: string | number) => rgb(triPalette.brand, text);
+export const brandBright = (text: string | number) => rgb(triPalette.brandBright, text);
+export const brandDeep = (text: string | number) => rgb(triPalette.brandDeep, text);
 export const success = (text: string | number) => rgb(triPalette.success, text);
 export const warning = (text: string | number) => rgb(triPalette.warning, text);
 export const error = (text: string | number) => rgb(triPalette.error, text);
 
-export const bannerGradient = ["#E0C3FC", "#9D82FF", "#50D8D7", "#2DD4BF"];
+export const bannerGradient = ["#ffd36b", "#f6a510", "#e07a00"];

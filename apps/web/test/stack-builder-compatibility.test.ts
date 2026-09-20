@@ -309,7 +309,7 @@ describe("no-framework stacks", () => {
     const resolved = resolveStackCompatibility(createStack({ framework: "none" })).stack;
     const command = generateStackCommand(resolved);
     expect(command).toBe(
-      "uvx tristack my-tristack-app --language python --framework none --orm none --migrations none --database none --package-manager uv --addons docker ruff pytest --git --install",
+      "uvx tristack my-tristack-app --language python --framework none --frontend none --orm none --migrations none --database none --package-manager uv --addons docker ruff pytest --git --install",
     );
   });
 
@@ -344,7 +344,7 @@ describe("stack builder command generation", () => {
   test("emits every flag for a customized stack", () => {
     const command = generateStackCommand(createStack({ framework: "django", yolo: "false" }));
     expect(command).toBe(
-      "uvx tristack my-tristack-app --language python --framework django --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker ruff pytest --git --install",
+      "uvx tristack my-tristack-app --language python --framework django --frontend none --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker ruff pytest --git --install",
     );
   });
 
@@ -383,6 +383,7 @@ describe("stack builder command generation", () => {
     );
 
     expect(displayCommand).toContain(`my-tristack-app ${"\\"}\n  --language python`);
-    expect(displayCommand).toContain(`--framework django ${"\\"}\n  --orm sqlmodel`);
+    expect(displayCommand).toContain(`--framework django ${"\\"}\n  --frontend none`);
+    expect(displayCommand).toContain(`--frontend none ${"\\"}\n  --orm sqlmodel`);
   });
 });

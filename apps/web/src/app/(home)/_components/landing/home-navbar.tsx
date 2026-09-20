@@ -3,13 +3,16 @@
 import Link from "fumadocs-core/link";
 import { SidebarCollapseTrigger, SidebarTrigger } from "fumadocs-ui/layouts/notebook/slots/sidebar";
 import { Menu, Moon, PanelLeft, Sun, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 import { FaGithub, FaXTwitter } from "react-icons/fa6";
 
 import { GITHUB_REPO_URL, X_PROFILE_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import tristackLogo from "@/public/tristack-logo.png";
 
 import { BrandButton } from "./round-button";
 
@@ -53,7 +56,7 @@ export function HomeNavbar({ variant = "home", className, ...props }: HomeNavbar
     >
       <div
         className={cn(
-          "flex h-16 items-stretch border-border",
+          "flex h-12 items-stretch border-border",
           !isDocs && "mx-auto w-full max-w-6xl border-x",
         )}
       >
@@ -61,9 +64,17 @@ export function HomeNavbar({ variant = "home", className, ...props }: HomeNavbar
         <Link
           href="/"
           aria-label="TriStack home"
-          className="group flex h-full shrink-0 items-center justify-center border-r border-border px-4 transition-colors hover:bg-fd-muted sm:px-6"
+          className="group flex h-full shrink-0 items-center justify-start border-r border-border px-2 transition-colors hover:bg-fd-muted sm:px-2"
         >
-          <span className="text-sm font-bold tracking-tight text-fd-foreground">TriStack</span>
+          <div className="flex items-center gap-0">
+            <Image
+              alt="TriStack logo"
+              src={tristackLogo}
+              className="h-6 w-auto ml-[-10px] mr-[-5px]"
+              priority
+            />
+            <span className="text-sm font-bold tracking-tight text-fd-foreground">TriStack</span>
+          </div>
         </Link>
 
         {/* Nav links - desktop */}
@@ -76,7 +87,7 @@ export function HomeNavbar({ variant = "home", className, ...props }: HomeNavbar
               key={link.href}
               href={link.href}
               className={cn(
-                "flex h-full items-center justify-center border-r border-border px-6 text-sm text-fd-muted-foreground transition-colors hover:bg-fd-muted hover:text-fd-foreground max-md:px-3",
+                "flex h-full items-center justify-center border-r border-border px-4 text-sm text-fd-muted-foreground transition-colors hover:bg-fd-muted hover:text-fd-foreground max-md:px-3",
                 isActive(pathname, link.href) && "text-fd-foreground",
               )}
             >
@@ -141,45 +152,52 @@ export function HomeNavbar({ variant = "home", className, ...props }: HomeNavbar
           )}
 
           {/* CTA - desktop */}
-          <div className={cn("p-4", isDocs ? "hidden md:block" : "hidden sm:block")}>
+          <div className={cn("p-2", isDocs ? "hidden md:block" : "hidden sm:block")}>
             <BrandButton
               href="https://github.com/sponsors/AbdullahMukadam"
               label={<>Sponsor us</>}
+              className="h-8"
             />
           </div>
         </div>
       </div>
 
       {/* Mobile menu - home only */}
-      {!isDocs && open && (
-        <div
-          id="home-menu"
-          className="absolute inset-x-0 top-16 z-50 border-b border-border bg-fd-background px-4 py-3 shadow-lg sm:hidden"
-        >
-          <nav aria-label="Mobile" className="flex flex-col">
-            {navLinks.map((link) => (
+      <AnimatePresence>
+        {!isDocs && open && (
+          <motion.div
+            id="home-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute inset-x-0 top-16 z-50 border-b border-border bg-fd-background px-4 py-3 shadow-lg sm:hidden"
+          >
+            <nav aria-label="Mobile" className="flex flex-col">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "rounded-md px-4 py-2.5 text-sm font-medium text-fd-muted-foreground transition-colors hover:bg-fd-muted hover:text-fd-foreground",
+                    isActive(pathname, link.href) && "text-fd-foreground",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
               <Link
-                key={link.href}
-                href={link.href}
+                href="/new"
                 onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-md px-4 py-2.5 text-sm font-medium text-fd-muted-foreground transition-colors hover:bg-fd-muted hover:text-fd-foreground",
-                  isActive(pathname, link.href) && "text-fd-foreground",
-                )}
+                className="mt-2 flex items-center justify-center gap-1.5 rounded-md bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-brand-on-accent"
               >
-                {link.label}
+                Build your stack
               </Link>
-            ))}
-            <Link
-              href="/new"
-              onClick={() => setOpen(false)}
-              className="mt-2 flex items-center justify-center gap-1.5 rounded-md bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-brand-on-accent"
-            >
-              Build your stack
-            </Link>
-          </nav>
-        </div>
-      )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

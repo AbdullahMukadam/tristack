@@ -1,0 +1,70 @@
+use askama::Template;
+use salvo::prelude::*;
+
+mod config;
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: String,
+}
+
+#[handler]
+async fn health() -> &'static str {
+    "{\"status\":\"ok\"}"
+}
+
+#[handler]
+async fn index() -> Text {
+    let app_name = std::env::var("APP_NAME").unwrap_or_else(|_| "{{projectName}}".to_string());
+    let template = IndexTemplate { app_name };
+    Text::Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+#[handler]
+async fn now() -> Text {
+    let template = NowTemplate { now: unix_now() };
+    Text::Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+fn unix_now() -> String {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs().to_string())
+        .unwrap_or_default()
+}
+
+#[tokio::main]
+async fn main() {
+    let app_config = config::Config::from_env();
+
+{{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
+    if let Err(err) = db::connect().await {
+    {{/if}}
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let router = Router::new()
+        .get(index)
+        .push(Router::with_path("health").get(health))
+        .push(Router::with_path("web/now").get(now));
+
+    let addr = format!("0.0.0.0:{}", app_config.port);
+
+    println!("{} listening on {}", app_config.app_name, addr);
+
+    let listener = TcpListener::bind(&addr).await.expect("failed to bind");
+    Server::new(listener).serve(router).await;
+}

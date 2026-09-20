@@ -1,0 +1,21 @@
+{% if users %}
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>\{{ user.username }}</td>
+            <td>\{{ user.email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<button hx-get="/web/users/" hx-target="#users" hx-swap="innerHTML">Refresh</button>
+{% else %}
+<p>No users yet. Create one via the Django admin.</p>
+{% endif %}

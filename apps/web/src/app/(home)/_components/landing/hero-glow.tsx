@@ -12,7 +12,7 @@ const HeroGlow = () => {
       <div className="hero-glow-secondary absolute left-1/2 bottom-0 h-64 w-150 -translate-x-1/2 translate-y-1/2 rounded-full blur-3xl opacity-40 sm:h-72 sm:w-140" />
 
       {/* Bottom border line soft gradient */}
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(to_top,color-mix(in_oklch,var(--brand)_18%,transparent),transparent)] sm:h-40" />
+      {/* <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(to_top,color-mix(in_oklch,var(--brand)_18%,transparent),transparent)] sm:h-40" /> */}
     </div>
   );
 };

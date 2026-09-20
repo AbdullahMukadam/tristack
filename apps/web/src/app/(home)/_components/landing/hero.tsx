@@ -14,7 +14,7 @@ export function Hero() {
           <BadgeTag version={"v1.0.5"} text="Scaffolds for Python, Go & Rust" />
         </Link>
 
-        <h1 className="text-center text-3xl font-gambarino leading-tight font-bold tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="text-center text-3xl font-gambarino leading-tight font-normal tracking-tight sm:text-5xl md:text-6xl">
           Your <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Stack</span>,
           Scaffolds in{" "}
           <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Seconds</span>
@@ -37,13 +37,6 @@ export function Hero() {
           />
           <NeutralButton href="/docs" label="Read the docs" />
         </div>
-
-        <p className="mt-1 text-xs text-fd-muted-foreground/70">
-          or install the CLI with{" "}
-          <code className="rounded-md bg-fd-muted px-1.5 py-0.5 font-mono text-[0.75rem] text-fd-foreground">
-            uvx tristack
-          </code>
-        </p>
       </div>
       <HeroGlow />
     </section>

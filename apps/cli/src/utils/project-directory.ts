@@ -1,14 +1,15 @@
 import path from "node:path";
 
-import { confirm, isCancel, log, select, spinner } from "@clack/prompts";
 import { Result } from "better-result";
 import fs from "fs-extra";
-import pc from "picocolors";
 
+import { isCancel, isGoBack, navigableConfirm, navigableSelect } from "../prompts/navigable";
 import { getProjectName } from "../prompts/project-name";
 import { isSilent } from "./context";
 import { CLIError, UserCancelledError } from "./errors";
 import { isMissingPathError } from "./fs-error";
+import { cliLog, createSpinner } from "./terminal-output";
+import { error, warning } from "./theme";
 
 export type ProjectPathState =
   | "missing"
@@ -40,11 +41,11 @@ export async function handleDirectoryConflict(currentPathInput: string): Promise
     }
 
     if (pathState === "symbolic-link") {
-      log.warn(`Project path "${pc.yellow(currentPathInput)}" is a symbolic link.`);
+      cliLog.warn(`Project path "${warning(currentPathInput)}" is a symbolic link.`);
     } else if (pathState === "non-directory") {
-      log.warn(`Project path "${pc.yellow(currentPathInput)}" exists and is not a directory.`);
+      cliLog.warn(`Project path "${warning(currentPathInput)}" exists and is not a directory.`);
     } else {
-      log.warn(`Directory "${pc.yellow(currentPathInput)}" already exists and is not empty.`);
+      cliLog.warn(`Directory "${warning(currentPathInput)}" already exists and is not empty.`);
     }
 
     let incrementedPath: string | undefined;
@@ -90,13 +91,13 @@ export async function handleDirectoryConflict(currentPathInput: string): Promise
 
     options.push({ value: "cancel", label: "Cancel", hint: "Leave everything unchanged" });
 
-    const action = await select<DirectoryConflictAction>({
+    const action = await navigableSelect<DirectoryConflictAction>({
       message: "How should we continue?",
       options,
       initialValue: incrementedPath ? "increment" : "rename",
     });
 
-    if (isCancel(action)) {
+    if (isCancel(action) || isGoBack(action)) {
       throw new UserCancelledError({ message: "Operation cancelled." });
     }
 
@@ -104,22 +105,22 @@ export async function handleDirectoryConflict(currentPathInput: string): Promise
       case "increment":
         return { finalPathInput: incrementedPath!, shouldClearDirectory: false };
       case "overwrite": {
-        const confirmed = await confirm({
+        const confirmed = await navigableConfirm({
           message: `Permanently delete every file in "${currentPathInput}"?`,
           initialValue: false,
         });
-        if (isCancel(confirmed)) {
+        if (isCancel(confirmed) || isGoBack(confirmed)) {
           throw new UserCancelledError({ message: "Operation cancelled." });
         }
         if (!confirmed) {
-          log.info("Nothing was deleted. Choose another option.");
+          cliLog.info("Nothing was deleted. Choose another option.");
           continue;
         }
         return { finalPathInput: currentPathInput, shouldClearDirectory: true };
       }
       case "merge":
-        log.info(
-          `Proceeding into existing directory "${pc.yellow(
+        cliLog.info(
+          `Proceeding into existing directory "${warning(
             currentPathInput,
           )}". Files may be overwritten.`,
         );
@@ -162,8 +163,8 @@ export async function setupProjectDirectory(
   if (pathSafetyResult.isErr()) throw pathSafetyResult.error;
 
   if (shouldClearDirectory) {
-    const s = isSilent() ? undefined : spinner();
-    s?.start(`Clearing directory "${finalResolvedPath}"...`);
+    const s = createSpinner();
+    s.start(`Clearing directory "${finalResolvedPath}"...`);
 
     const clearResult = await Result.tryPromise({
       try: () => fs.emptyDir(finalResolvedPath),
@@ -175,11 +176,11 @@ export async function setupProjectDirectory(
     });
 
     if (clearResult.isErr()) {
-      s?.stop(pc.red(`Failed to clear directory "${finalResolvedPath}".`));
+      s.stop(error(`Failed to clear directory "${finalResolvedPath}".`));
       throw clearResult.error;
     }
 
-    s?.stop(`Directory "${finalResolvedPath}" cleared.`);
+    s.stop(`Directory "${finalResolvedPath}" cleared.`);
   } else {
     await fs.ensureDir(finalResolvedPath);
   }

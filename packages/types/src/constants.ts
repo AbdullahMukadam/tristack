@@ -1,4 +1,12 @@
-import type { Language, Framework, ORM, Migrations, PackageManager, Addons } from "./types";
+import type {
+  Language,
+  Framework,
+  ORM,
+  Migrations,
+  PackageManager,
+  Addons,
+  Frontend,
+} from "./types";
 
 export const PYTHON_FRAMEWORKS: readonly Framework[] = [
   "fastapi",
@@ -35,6 +43,12 @@ export const PYTHON_MIGRATIONS: readonly Migrations[] = ["alembic", "none"] as c
 export const GO_MIGRATIONS: readonly Migrations[] = ["goose", "golang-migrate", "none"] as const;
 export const RUST_MIGRATIONS: readonly Migrations[] = ["none"] as const;
 
+export const PYTHON_FRONTENDS: readonly Frontend[] = ["htmx", "none"] as const;
+export const GO_FRONTENDS: readonly Frontend[] = ["htmx", "none"] as const;
+export const RUST_FRONTENDS: readonly Frontend[] = ["htmx", "none"] as const;
+
+export const ALL_FRONTENDS: readonly Frontend[] = ["htmx", "none"] as const;
+
 export const PYTHON_PACKAGE_MANAGERS: readonly PackageManager[] = ["uv", "poetry", "pip"] as const;
 export const GO_PACKAGE_MANAGERS: readonly PackageManager[] = ["go"] as const;
 export const RUST_PACKAGE_MANAGERS: readonly PackageManager[] = ["cargo"] as const;
@@ -45,8 +59,6 @@ export const PYTHON_ADDONS: readonly Addons[] = [
   "mypy",
   "pytest",
   "github-actions",
-  "fumadocs",
-  "starlight",
   "none",
 ] as const;
 
@@ -55,8 +67,6 @@ export const GO_ADDONS: readonly Addons[] = [
   "air",
   "golangci-lint",
   "github-actions",
-  "fumadocs",
-  "starlight",
   "none",
 ] as const;
 
@@ -65,8 +75,6 @@ export const RUST_ADDONS: readonly Addons[] = [
   "cargo-watch",
   "clippy",
   "github-actions",
-  "fumadocs",
-  "starlight",
   "none",
 ] as const;
 
@@ -111,5 +119,16 @@ export function getAddonsForLanguage(language: Language): readonly Addons[] {
       return GO_ADDONS;
     case "rust":
       return RUST_ADDONS;
+  }
+}
+
+export function getFrontendsForLanguage(language: Language): readonly Frontend[] {
+  switch (language) {
+    case "python":
+      return PYTHON_FRONTENDS;
+    case "go":
+      return GO_FRONTENDS;
+    case "rust":
+      return RUST_FRONTENDS;
   }
 }

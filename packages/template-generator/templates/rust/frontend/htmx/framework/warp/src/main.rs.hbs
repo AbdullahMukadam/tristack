@@ -1,0 +1,89 @@
+use askama::Template;
+use warp::{Filter, Rejection, Reply};
+
+mod config;
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: String,
+}
+
+fn routes(app_name: String) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+    let health = warp::path("health").map(|| "{\"status\":\"ok\"}");
+
+    let index_name = app_name.clone();
+    let index = warp::path::end().and(warp::get()).map(move || {
+        let template = IndexTemplate {
+            app_name: index_name.clone(),
+        };
+        warp::reply::html(template.render().unwrap_or_else(|err| err.to_string()))
+    });
+
+    let now = warp::path("web")
+        .and(warp::path("now"))
+        .and(warp::get())
+        .map(|| {
+            let template = NowTemplate { now: unix_now() };
+            warp::reply::html(template.render().unwrap_or_else(|err| err.to_string()))
+        });
+
+    index
+        .or(now)
+        .or(health)
+        .boxed()
+        .with(warp::cors().allow_any_origin())
+}
+
+#[tokio::main]
+async fn main() {
+    let app_config = config::Config::from_env();
+
+{{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
+    if let Err(err) = db::connect().await {
+    {{/if}}
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    println!(
+        "{} listening on 0.0.0.0:{}",
+        app_config.app_name, app_config.port,
+    );
+
+    warp::serve(routes(app_config.app_name))
+        .run(([0, 0, 0, 0], app_config.port))
+        .await;
+}
+
+fn unix_now() -> String {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs().to_string())
+        .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn health_returns_status_ok() {
+        let response = warp::test::request()
+            .path("/health")
+            .reply(&routes("test".to_string()))
+            .await;
+        assert_eq!(response.status(), warp::http::StatusCode::OK);
+    }
+}

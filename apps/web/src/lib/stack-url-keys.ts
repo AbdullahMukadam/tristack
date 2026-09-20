@@ -8,6 +8,7 @@ export const stackUrlKeys: UrlKeys<StackUrlState> = {
   projectName: "name",
   language: "lang",
   framework: "fw",
+  frontend: "fe",
   orm: "orm",
   migrations: "mg",
   database: "db",

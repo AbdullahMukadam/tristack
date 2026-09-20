@@ -13,8 +13,6 @@ const ADDON_LABELS = {
   "golangci-lint": { label: "golangci-lint", hint: "Go linters aggregator" },
   "cargo-watch": { label: "cargo-watch", hint: "Watch & rebuild Rust" },
   clippy: { label: "Clippy", hint: "Rust linter" },
-  fumadocs: { label: "Fumadocs", hint: "Docs site" },
-  starlight: { label: "Starlight", hint: "Docs site" },
   none: { label: "None", hint: "No addons" },
 } satisfies Record<Addons, { label: string; hint: string }>;
 

@@ -1,0 +1,93 @@
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use askama::Template;
+
+mod config;
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: String,
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let app_config = config::Config::from_env();
+
+{{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
+    if let Err(err) = db::connect().await {
+    {{/if}}
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let app_name = app_config.app_name.clone();
+    let addr = format!("0.0.0.0:{}", app_config.port);
+
+    println!("{} listening on {}", app_config.app_name, addr);
+
+    HttpServer::new(move || {
+        App::new()
+            .app_data(web::Data::new(app_name.clone()))
+            .route("/health", web::get().to(health))
+            .route("/", web::get().to(index))
+            .route("/web/now", web::get().to(now))
+    })
+    .bind(addr)?
+    .run()
+    .await
+}
+
+async fn health() -> impl Responder {
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body("{\"status\":\"ok\"}")
+}
+
+async fn index(app_name: web::Data<String>) -> impl Responder {
+    let template = IndexTemplate {
+        app_name: app_name.get_ref().clone(),
+    };
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+async fn now() -> impl Responder {
+    let template = NowTemplate { now: unix_now() };
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+fn unix_now() -> String {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs().to_string())
+        .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[actix_web::test]
+    async fn health_returns_status_ok() {
+        let app = App::new().route("/health", web::get().to(health));
+        let request = actix_web::test::TestRequest::get()
+            .uri("/health")
+            .to_request();
+        let response = actix_web::test::call_service(&app, request).await;
+        assert!(response.status().is_success());
+    }
+}

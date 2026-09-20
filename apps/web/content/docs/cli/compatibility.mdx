@@ -7,7 +7,7 @@ description: Understanding compatibility rules and restrictions between differen
 
 The CLI validates option combinations to ensure generated projects are coherent. Validation happens in two places:
 
-1. **Per-language value checks** — `framework`, `orm`, and `migrations` must belong to the selected language's option set.
+1. **Per-language value checks** — `framework`, `orm`, `migrations`, and `frontend` must belong to the selected language's option set.
 2. **Resolved-config checks** — after prompts (or with `--yes`), the fully-resolved stack is validated again.
 
 `--yolo` skips the compatibility checks entirely.
@@ -16,20 +16,24 @@ The CLI validates option combinations to ensure generated projects are coherent.
 
 Each language has its own option sets (`packages/types`), so a Go/Rust value can never leak into a Python stack:
 
-| Category         | Python                                                                                | Go                                                                                  | Rust                                                                                 |
-| ---------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `framework`      | `fastapi`, `litestar`, `django`, `flask`                                              | `gin`, `fiber`, `echo`, `chi`, `stdlib`                                             | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`                               |
-| `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                                          | `sqlc`, `gorm`, `sqlx`, `none`                                                      | `seaorm`, `diesel`, `sqlx-rust`, `none`                                              |
-| `migrations`     | `alembic`, `none`                                                                     | `goose`, `golang-migrate`, `none`                                                   | `none`                                                                               |
-| `database`       | `sqlite`, `postgres`, `mysql`, `none`                                                 | same                                                                                | same                                                                                 |
-| `packageManager` | `uv`, `poetry`, `pip`                                                                 | `go`                                                                                | `cargo`                                                                              |
-| `addons`         | `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `air`, `golangci-lint`, `github-actions`, `fumadocs`, `starlight`, `none` | `docker`, `cargo-watch`, `clippy`, `github-actions`, `fumadocs`, `starlight`, `none` |
+| Category         | Python                                                       | Go                                                         | Rust                                                        |
+| ---------------- | ------------------------------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------- |
+| `framework`      | `fastapi`, `litestar`, `django`, `flask`                     | `gin`, `fiber`, `echo`, `chi`, `stdlib`                    | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`      |
+| `frontend`       | `htmx`, `none`                                               | `htmx`, `none`                                             | `htmx`, `none`                                              |
+| `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                 | `sqlc`, `gorm`, `sqlx`, `none`                             | `seaorm`, `diesel`, `sqlx-rust`, `none`                     |
+| `migrations`     | `alembic`, `none`                                            | `goose`, `golang-migrate`, `none`                          | `none`                                                      |
+| `database`       | `sqlite`, `postgres`, `mysql`, `none`                        | same                                                       | same                                                        |
+| `packageManager` | `uv`, `poetry`, `pip`                                        | `go`                                                       | `cargo`                                                     |
+| `addons`         | `docker`, `ruff`, `mypy`, `pytest`, `github-actions`, `none` | `docker`, `air`, `golangci-lint`, `github-actions`, `none` | `docker`, `cargo-watch`, `clippy`, `github-actions`, `none` |
 
 > **Status:** Python, Go, and Rust scaffolds are all generated today.
 
 ## What gets validated today
 
 - `framework` not in the language's set → error, e.g. `--language python --framework gin`
+- `frontend` not in the language's set → error
+- `frontend htmx` with `framework none` → error (HTMX needs a backend to serve the rendered pages)
+- `frontend htmx` with `framework loco` (Rust) → error (Loco doesn't support HTMX yet)
 - `orm` not in the language's set → error, e.g. `--language python --orm seaorm`
 - `migrations` not in the language's set → error, e.g. `--language python --migrations goose`
 - `addons` passed as a list must be valid enum values; `none` is normalized away
@@ -57,7 +61,7 @@ tristack my-api --language rust --framework axum --orm seaorm
 The CLI validates resolved configs in this order:
 
 1. **Flag input validation**: valid enum values, project-name rules (see below)
-2. **Per-language value checks**: framework/orm/migrations belong to the language
+2. **Per-language value checks**: framework/orm/migrations/frontend belong to the language
 3. **Path checks**: target directory must be within the current directory and not a symlink (unless `--directory-conflict increment`)
 
 ## Project name rules

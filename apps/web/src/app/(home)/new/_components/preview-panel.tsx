@@ -33,8 +33,7 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
   const [selectedFile, setSelectedFile] = useState<VirtualFile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // On mobile, track whether we're viewing the file tree or the code
-  const [mobileView, setMobileView] = useState<"tree" | "code">("tree");
+  const [mobileView, setMobileView] = useState<"tree" | "code">("tree"); // On mobile, track whether we're viewing the file tree or the code
   const requestIdRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
   const selectedFilePathRef = useRef<string | null>(selectedFilePath);
@@ -77,8 +76,7 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
         setFileCount(data.tree.fileCount);
         setDirectoryCount(data.tree.directoryCount);
 
-        // Restore selected file from query state if it exists
-        const currentSelectedFilePath = selectedFilePathRef.current;
+        const currentSelectedFilePath = selectedFilePathRef.current; // Restore selected file from query state if it exists
         if (currentSelectedFilePath) {
           const file = findFileByPath(data.tree.root, currentSelectedFilePath);
           if (file) {
@@ -109,8 +107,8 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
     }
   }, [stack]);
 
-  // Debounced fetch on stack change
   useEffect(() => {
+    // Debounced fetch on stack change
     const timeoutId = setTimeout(fetchPreview, 300);
     return () => {
       clearTimeout(timeoutId);
@@ -128,8 +126,8 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
     setMobileView("tree");
   };
 
-  // Helper function to find a file by path in the tree
   function findFileByPath(node: VirtualDirectory, path: string): VirtualFile | null {
+    // Helper function to find a file by path in the tree
     for (const child of node.children) {
       if (child.type === "file" && child.path === path) {
         return child;

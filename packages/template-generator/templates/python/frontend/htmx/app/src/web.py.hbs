@@ -1,0 +1,113 @@
+from pathlib import Path
+
+from .config import get_settings
+
+settings = get_settings()
+
+pkg_dir = Path(__file__).resolve().parent
+templates_dir = pkg_dir / "templates"
+
+{{#if (eq framework "fastapi")}}
+from fastapi import APIRouter, HTMLResponse, Request
+from fastapi.templating import Jinja2Templates
+
+web_router = APIRouter()
+
+templates = Jinja2Templates(directory=str(templates_dir))
+
+@web_router.get("/", response_class=HTMLResponse, include_in_schema=False)
+async def home(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "home.html",
+        {"app_name": settings.app_name},
+    )
+
+{{#if (ne orm "none")}}
+{{#if (eq orm "tortoise")}}
+@web_router.get("/web/items", response_class=HTMLResponse, include_in_schema=False)
+async def items_fragment(request: Request) -> HTMLResponse:
+    from .services.items import list_items
+
+    items = await list_items()
+    return templates.TemplateResponse(request, "items.html", {"items": items})
+{{else}}
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from .db import get_session
+from .services.items import list_items
+
+@web_router.get("/web/items", response_class=HTMLResponse, include_in_schema=False)
+async def items_fragment(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> HTMLResponse:
+    items = await list_items(session)
+    return templates.TemplateResponse(request, "items.html", {"items": items})
+{{/if}}
+{{/if}}
+{{else if (eq framework "litestar")}}
+from litestar import get
+from litestar.response import Template
+
+web_routes: list = []
+
+@get("/", sync_to_thread=False, include_in_schema=False)
+def home() -> Template:
+    return Template(template_name="home.html", context={"app_name": settings.app_name})
+
+web_routes.append(home)
+
+{{#if (ne orm "none")}}
+{{#if (eq orm "tortoise")}}
+@get("/web/items", sync_to_thread=False, include_in_schema=False)
+async def items_fragment() -> Template:
+    from .services.items import list_items
+
+    items = await list_items()
+    return Template(template_name="items.html", context={"items": items})
+{{else}}
+from litestar import Provide
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from .db import get_session
+from .services.items import list_items
+
+@get("/web/items", sync_to_thread=False, include_in_schema=False)
+async def items_fragment(session: AsyncSession = Provide(get_session)) -> Template:
+    items = await list_items(session)
+    return Template(template_name="items.html", context={"items": items})
+{{/if}}
+
+web_routes.append(items_fragment)
+{{/if}}
+{{else if (eq framework "flask")}}
+from flask import Blueprint, Flask, render_template
+
+web_bp = Blueprint("web", __name__)
+
+@web_bp.get("/")
+def home() -> str:
+    return render_template("home.html", app_name=settings.app_name)
+
+{{#if (ne orm "none")}}
+@web_bp.get("/web/items")
+async def items_fragment() -> str:
+    {{#if (eq orm "tortoise")}}
+    from .services.items import list_items
+
+    items = await list_items()
+    {{else}}
+    from .db import SessionLocal
+    from .services.items import list_items
+
+    async with SessionLocal() as session:
+        items = await list_items(session)
+    {{/if}}
+    return render_template("items.html", items=items)
+{{/if}}
+
+def register_web_blueprints(app: Flask) -> None:
+    app.register_blueprint(web_bp)
+{{/if}}

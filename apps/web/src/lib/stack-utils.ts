@@ -5,6 +5,7 @@ import { stackUrlKeys } from "@/lib/stack-url-keys";
 export const CATEGORY_ORDER: Array<keyof typeof TECH_OPTIONS> = [
   "language",
   "framework",
+  "frontend",
   "orm",
   "migrations",
   "database",
@@ -115,6 +116,7 @@ export function generateStackCommand(stack: StackState) {
   const flags = [
     `--language ${stack.language}`,
     `--framework ${stack.framework}`,
+    `--frontend ${stack.frontend}`,
     `--orm ${stack.orm}`,
     `--migrations ${stack.migrations}`,
     `--database ${stack.database}`,

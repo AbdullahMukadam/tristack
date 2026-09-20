@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>\{{ app_name }}</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --text: #1a1a1a;
+            --muted: #666;
+            --border: #d9d9d9;
+            --accent: #f6a510;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            margin: 0;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        header {
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        header a:hover {
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 56rem;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        code {
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            background: #f2f2f2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text: #e8e8e8;
+                --border: #333;
+            }
+
+            code {
+                background: #222;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js" defer></script>
+</head>
+<body>
+    <header>
+        <a href="/">\{{ app_name }}</a>
+    </header>
+    <main>
+        <h1>\{{ app_name }}</h1>
+        <p>A TriStack project with an HTMX-powered web frontend.</p>
+        <section id="clock"
+                 hx-get="/web/now"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+            <p>Loading…</p>
+        </section>
+    </main>
+</body>
+</html>

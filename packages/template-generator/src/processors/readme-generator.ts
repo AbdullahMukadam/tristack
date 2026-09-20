@@ -1,4 +1,4 @@
-import type { ProjectConfig } from "@tristack/types";
+import type { Language, ProjectConfig } from "@tristack/types";
 
 import { toProjectSlug } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
@@ -169,6 +169,12 @@ function writeDefaultReadme(
         : 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.'
       : "When the dev server is running, interactive API docs are available at `/docs`.";
 
+  const webDocs = {
+    python: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/items\` — items fragment (the canonical example; only present when an ORM is configured)\n- \`/api/v1/items\` — the JSON API, unchanged\n`,
+    go: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/items\` — items fragment (the canonical example; only present when an ORM is configured)\n- \`/health\` and the JSON API routes, unchanged\n`,
+    rust: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/now\` — server-time fragment (the canonical example, ready to swap for real data)\n`,
+  } satisfies Partial<Record<Language, string>>;
+
   const content = `# ${config.projectName}
 
 A ${config.language} project scaffolded with [TriStack](https://tristack.dev).
@@ -180,6 +186,7 @@ A ${config.language} project scaffolded with [TriStack](https://tristack.dev).
 - **Database:** ${database}
 - **Migrations:** ${migrations}
 - **Package manager:** ${config.packageManager}
+${config.frontend !== "none" ? `- **Frontend:** ${config.frontend}` : ""}
 
 ## Getting Started
 
@@ -190,8 +197,7 @@ ${steps.join("\n\n")}
 ## API Docs
 
 ${apiDocs}
-
-## Environment
+${config.frontend !== "none" ? (webDocs[config.language] ?? "") : ""}## Environment
 
 Copy \`.env.example\` to \`.env\` and fill in the values (database URLs, etc.).
 `;

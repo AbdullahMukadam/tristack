@@ -1,0 +1,94 @@
+package web
+
+import (
+	"embed"
+	"fmt"
+	"html/template"
+	"io/fs"
+	"net/http"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/model"
+	"{{project_slug}}/internal/service"
+{{/if}}
+)
+
+//go:embed templates static
+var content embed.FS
+
+// Web serves the server-rendered HTMX frontend. It is framework-agnostic:
+// each framework mounts Mux() alongside the JSON API.
+type Web struct {
+	appName string
+	tmpl    *template.Template
+{{#if (ne orm "none")}}
+	items *service.ItemService
+{{/if}}
+}
+
+func New(appName string{{#if (ne orm "none")}}, items *service.ItemService{{/if}}) (*Web, error) {
+	tmpl, err := template.ParseFS(content, "templates/*.html")
+	if err != nil {
+		return nil, fmt.Errorf("parse web templates: %w", err)
+	}
+	return &Web{
+		appName: appName,
+		tmpl:    tmpl,
+{{#if (ne orm "none")}}
+		items: items,
+{{/if}}
+	}, nil
+}
+
+// Mux returns a net/http handler mounting the web routes: the home page,
+{{#if (ne orm "none")}}
+// the ORM-backed items fragment, and
+{{/if}}
+// the static assets under /static.
+func (w *Web) Mux() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", w.home)
+{{#if (ne orm "none")}}
+	mux.HandleFunc("GET /web/items", w.renderItems)
+{{/if}}
+	mux.Handle("GET /static/", http.StripPrefix("/static/", Static()))
+	return mux
+}
+
+// Static serves the embedded static assets (css, etc.).
+func Static() http.Handler {
+	sub, err := fs.Sub(content, "static")
+	if err != nil {
+		panic(fmt.Errorf("missing static assets: %w", err))
+	}
+	return http.FileServer(http.FS(sub))
+}
+
+type homeData struct {
+	AppName string
+}
+
+func (w *Web) home(wr http.ResponseWriter, r *http.Request) {
+	page := homeData{AppName: w.appName}
+	if err := w.tmpl.ExecuteTemplate(wr, "index.html", page); err != nil {
+		http.Error(wr, "could not render home", http.StatusInternalServerError)
+		return
+	}
+}
+
+{{#if (ne orm "none")}}
+type itemsData struct {
+	Items []model.Item
+}
+
+func (w *Web) renderItems(wr http.ResponseWriter, r *http.Request) {
+	items, err := w.items.ListItems(r.Context())
+	if err != nil {
+		http.Error(wr, "could not get items", http.StatusInternalServerError)
+		return
+	}
+	if err := w.tmpl.ExecuteTemplate(wr, "items.html", itemsData{Items: items}); err != nil {
+		http.Error(wr, "could not render items", http.StatusInternalServerError)
+		return
+	}
+}
+{{/if}}

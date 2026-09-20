@@ -3,6 +3,7 @@ import type {
   Addons,
   Database,
   Framework,
+  Frontend,
   Language,
   Migrations,
   ORM,
@@ -14,6 +15,7 @@ import { UserCancelledError } from "../utils/errors";
 import { getAddonsChoice } from "./addons";
 import { getDatabaseChoice } from "./database";
 import { getFrameworkChoice } from "./framework";
+import { getFrontendChoice } from "./frontend";
 import { getGitChoice } from "./git";
 import { getInstallChoice } from "./install";
 import { getLanguageChoice } from "./language";
@@ -25,6 +27,7 @@ import { getPackageManagerChoice } from "./package-manager";
 type PromptGroupResults = {
   language: Language;
   framework: Framework;
+  frontend: Frontend;
   orm: ORM;
   migrations: Migrations;
   database: Database;
@@ -53,6 +56,7 @@ export async function gatherConfig(
       relativePath,
       language: flags.language ?? DEFAULT_CONFIG.language,
       framework: fw,
+      frontend: flags.frontend ?? DEFAULT_CONFIG.frontend,
       orm,
       migrations:
         djangoMode || bareMode || tortoiseMode
@@ -75,6 +79,12 @@ export async function gatherConfig(
           (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language,
           previousAnswer,
         ),
+      frontend: async ({ results, previousAnswer }) => {
+        const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
+        const fw = results.framework ?? flags.framework;
+        if (lang !== "python" || fw === "none") return "none" as Frontend;
+        return getFrontendChoice(flags.frontend, lang, previousAnswer);
+      },
       orm: async ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
@@ -114,7 +124,10 @@ export async function gatherConfig(
     {
       preselected: options.skipCompatibilityChecks ? flags : undefined,
       sections: [
-        { label: "Stack", prompts: ["language", "framework", "orm", "migrations", "database"] },
+        {
+          label: "Stack",
+          prompts: ["language", "framework", "frontend", "orm", "migrations", "database"],
+        },
         { label: "Tooling", prompts: ["packageManager", "addons", "git", "install"] },
       ],
       onCancel: () => {
@@ -129,6 +142,7 @@ export async function gatherConfig(
     relativePath,
     language: result.language,
     framework: result.framework,
+    frontend: result.framework === "none" ? ("none" as Frontend) : result.frontend,
     orm:
       result.framework === "django" || result.framework === "none" ? ("none" as ORM) : result.orm,
     migrations:

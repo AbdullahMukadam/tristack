@@ -12,6 +12,7 @@ import {
   GroupMultiSelectPrompt,
   MultiSelectPrompt,
   SelectPrompt,
+  TextPrompt,
   isCancel,
 } from "@clack/core";
 import { limitOptions } from "@clack/prompts";
@@ -92,8 +93,8 @@ function getMultiHint(): string {
 function activePromptTitle(message: string, state: "active" | "error" = "active"): string {
   const progress = getPromptProgress();
   const eyebrow = progress
-    ? `${accent(pc.bold(progress.section.toUpperCase()))} ${pc.dim(`· ${progress.current}/${progress.total}`)}`
-    : pc.dim("SETUP");
+    ? `${accent(pc.bold(progress.section))} ${pc.dim(`${progress.sectionCurrent}/${progress.sectionTotal}`)}`
+    : pc.dim("Setup");
 
   return `\n${pc.gray(S_BAR)}  ${eyebrow}\n${symbol(state)}  ${pc.bold(message)}\n`;
 }
@@ -120,7 +121,7 @@ async function runWithNavigation<T>(prompt: Prompt<T>): Promise<T | symbol> {
   let goBack = false;
 
   prompt.on("key", (char: string | undefined) => {
-    if ((char === "b" || char === "B") && !ctxIsFirstPrompt()) {
+    if ((char === "b" || char === "B") && !ctxIsFirstPrompt() && !(prompt instanceof TextPrompt)) {
       goBack = true;
       promptsNavigatingBack.add(prompt);
       // Use Clack's public state field so the normal keypress finalize path
@@ -137,6 +138,9 @@ async function runWithNavigation<T>(prompt: Prompt<T>): Promise<T | symbol> {
     promptsNavigatingBack.delete(prompt);
   }
 }
+
+/** Pass the rendered frame through unchanged. */
+const frame = (raw: string): string => raw;
 
 interface NavigableCommonOptions {
   /** Abort this prompt through Clack's normal cancellation path. */
@@ -190,10 +194,14 @@ export async function navigableSelect<T>(opts: NavigableSelectOptions<T>): Promi
     render() {
       switch (this.state) {
         case "submit": {
-          return resolvedPrompt(opts.message, opt(this.options[this.cursor], "selected"), "submit");
+          return frame(
+            resolvedPrompt(opts.message, opt(this.options[this.cursor], "selected"), "submit"),
+          );
         }
         case "cancel": {
-          return canceledPrompt(this, opts.message, opt(this.options[this.cursor], "cancelled"));
+          return frame(
+            canceledPrompt(this, opts.message, opt(this.options[this.cursor], "cancelled")),
+          );
         }
         default: {
           const optionsText = limitOptions({
@@ -207,7 +215,9 @@ export async function navigableSelect<T>(opts: NavigableSelectOptions<T>): Promi
               opt(option, option.disabled ? "disabled" : active ? "active" : "inactive"),
           }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return frame(
+            `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`,
+          );
         }
       }
     },
@@ -302,7 +312,7 @@ export async function navigableMultiselect<T>(
               .filter(({ value: optionValue }) => value.includes(optionValue))
               .map((option) => opt(option, "submitted"))
               .join(pc.dim(", ")) || pc.dim("none");
-          return resolvedPrompt(opts.message, submitText, "submit");
+          return frame(resolvedPrompt(opts.message, submitText, "submit"));
         }
         case "cancel": {
           const label =
@@ -310,7 +320,7 @@ export async function navigableMultiselect<T>(
               .filter(({ value: optionValue }) => value.includes(optionValue))
               .map((option) => opt(option, "cancelled"))
               .join(pc.dim(", ")) || pc.dim("none");
-          return canceledPrompt(this, opts.message, label);
+          return frame(canceledPrompt(this, opts.message, label));
         }
         case "error": {
           const footer = this.error
@@ -326,7 +336,9 @@ export async function navigableMultiselect<T>(
             rowPadding: footer.split("\n").length + 4,
             style: styleOption,
           }).join(`\n${warning(S_BAR)}  `);
-          return `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`;
+          return frame(
+            `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`,
+          );
         }
         default: {
           const optionsText = limitOptions({
@@ -339,7 +351,9 @@ export async function navigableMultiselect<T>(
             style: styleOption,
           }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getMultiHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return frame(
+            `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`,
+          );
         }
       }
     },
@@ -371,26 +385,85 @@ export async function navigableConfirm(opts: NavigableConfirmOptions): Promise<b
 
       switch (this.state) {
         case "submit":
-          return resolvedPrompt(opts.message, pc.dim(value), "submit");
+          return frame(resolvedPrompt(opts.message, pc.dim(value), "submit"));
         case "cancel":
-          return canceledPrompt(this, opts.message, pc.strikethrough(pc.dim(value)));
+          return frame(canceledPrompt(this, opts.message, pc.strikethrough(pc.dim(value))));
         default: {
           const hint = `${pc.gray(S_BAR_END)}  ${getHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${
-            this.value
-              ? `${accent(S_RADIO_ACTIVE)} ${active}`
-              : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(active)}`
-          } ${pc.dim("/")} ${
-            !this.value
-              ? `${accent(S_RADIO_ACTIVE)} ${inactive}`
-              : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(inactive)}`
-          }\n${hint}\n`;
+          return frame(
+            `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${
+              this.value
+                ? `${accent(S_RADIO_ACTIVE)} ${active}`
+                : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(active)}`
+            } ${pc.dim("/")} ${
+              !this.value
+                ? `${accent(S_RADIO_ACTIVE)} ${inactive}`
+                : `${pc.dim(S_RADIO_INACTIVE)} ${pc.dim(inactive)}`
+            }\n${hint}\n`,
+          );
         }
       }
     },
   });
 
   return runWithNavigation(prompt) as Promise<boolean | symbol>;
+}
+
+export interface NavigableTextOptions extends NavigableCommonOptions {
+  message: string;
+  placeholder?: string;
+  defaultValue?: string;
+  initialValue?: string;
+  validate?: (value: string) => string | Error | undefined;
+}
+
+export async function navigableText(opts: NavigableTextOptions): Promise<string | symbol> {
+  const placeholderText =
+    opts.placeholder && opts.placeholder.length > 0
+      ? `${pc.inverse(opts.placeholder[0])}${pc.dim(opts.placeholder.slice(1))}`
+      : pc.inverse(" ");
+
+  const prompt = new TextPrompt({
+    placeholder: opts.placeholder,
+    defaultValue: opts.defaultValue,
+    initialValue: opts.initialValue,
+    signal: opts.signal,
+    input: opts.input,
+    output: opts.output,
+    validate: (value) => opts.validate?.(value ?? ""),
+    render() {
+      const input = this.userInput ? this.userInputWithCursor : placeholderText;
+      const value = this.value ?? "";
+
+      switch (this.state) {
+        case "error": {
+          const footer = this.error
+            .split("\n")
+            .map((ln, i) => (i === 0 ? `${warning(S_BAR_END)}  ${warning(ln)}` : `   ${ln}`))
+            .join("\n");
+          return frame(
+            `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${input}\n${footer}\n`,
+          );
+        }
+        case "submit": {
+          const submitted = (
+            value && value.trim() !== "" ? value : (opts.defaultValue ?? "")
+          ).trim();
+          return frame(resolvedPrompt(opts.message, submitted, "submit"));
+        }
+        case "cancel": {
+          const label = value && value.trim() !== "" ? pc.strikethrough(pc.dim(value)) : "";
+          return frame(canceledPrompt(this, opts.message, label));
+        }
+        default: {
+          const hint = `${pc.gray(S_BAR_END)}  ${getHint()}`;
+          return frame(`${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${input}\n${hint}\n`);
+        }
+      }
+    },
+  });
+
+  return runWithNavigation(prompt) as Promise<string | symbol>;
 }
 
 export interface GroupMultiSelectOption<T> {
@@ -541,7 +614,7 @@ export async function navigableGroupMultiselect<T>(
             .filter(({ value: optionValue }) => value.includes(optionValue))
             .map((option) => opt(option, "submitted"));
           const optionsText = selectedOptions.join(pc.dim(", ")) || pc.dim("none");
-          return resolvedPrompt(opts.message, optionsText, "submit");
+          return frame(resolvedPrompt(opts.message, optionsText, "submit"));
         }
         case "cancel": {
           const label =
@@ -549,7 +622,7 @@ export async function navigableGroupMultiselect<T>(
               .filter(({ value: optionValue }) => value.includes(optionValue))
               .map((option) => opt(option, "cancelled"))
               .join(pc.dim(", ")) || pc.dim("none");
-          return canceledPrompt(this, opts.message, label);
+          return frame(canceledPrompt(this, opts.message, label));
         }
         case "error": {
           const footer = this.error
@@ -565,7 +638,9 @@ export async function navigableGroupMultiselect<T>(
             rowPadding: footer.split("\n").length + 4,
             style: styleOption,
           }).join(`\n${warning(S_BAR)}  `);
-          return `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`;
+          return frame(
+            `${activePromptTitle(opts.message, "error")}${warning(S_BAR)}  ${optionsText}\n${footer}\n`,
+          );
         }
         default: {
           const optionsText = limitOptions({
@@ -578,7 +653,9 @@ export async function navigableGroupMultiselect<T>(
             style: styleOption,
           }).join(`\n${pc.dim(S_BAR)}  `);
           const hint = `${pc.gray(S_BAR_END)}  ${getMultiHint()}`;
-          return `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`;
+          return frame(
+            `${activePromptTitle(opts.message)}${pc.dim(S_BAR)}  ${optionsText}\n${hint}\n`,
+          );
         }
       }
     },

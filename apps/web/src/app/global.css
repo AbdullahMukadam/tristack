@@ -68,7 +68,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-bricolage);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-gambarino: var(--font-gambarino);
   --radius-sm: calc(var(--radius) - 4px);
@@ -349,7 +349,7 @@
   --brand-on-accent: #1c1405;
   --brand-subtle: #fdf3e0;
   --brand-ink: #7a4a00;
-  --brand-gradient: linear-gradient(180deg, #ffd36b 0%, #f6a510 55%, #e07a00 100%);
+  --brand-gradient: linear-gradient(180deg, #ffe08a 0%, #ffd36b 25%, #f6a510 60%, #e07a00 100%);
 }
 
 .dark {
@@ -360,7 +360,7 @@
   --brand-on-accent: #1c1405;
   --brand-subtle: #2b2110;
   --brand-ink: #ffd36b;
-  --brand-gradient: linear-gradient(180deg, #ffd36b 0%, #ffb52e 55%, #ff9600 100%);
+  --brand-gradient: linear-gradient(180deg, #ffe08a 0%, #ffd36b 25%, #ffb52e 60%, #ff9600 100%);
 }
 
 ::selection {
@@ -391,9 +391,6 @@
   outline-offset: 2px;
 }
 
-/* Docs in the same flat mono language as the rail. Everything here is unlayered,
-   which beats fumadocs' @layer utilities without !important, and every selector is
-   scoped to the notebook layout so the home rail and other routes are untouched. */
 #nd-notebook-layout,
 #nd-subnav,
 #nd-sidebar-mobile {
@@ -404,7 +401,6 @@
   --color-fd-accent-foreground: var(--color-fd-foreground);
 }
 
-/* neutral.css scopes muted/secondary to .dark #nd-sidebar, which outranks the above. */
 #nd-sidebar,
 .dark #nd-sidebar {
   --color-fd-muted: transparent;
@@ -428,7 +424,6 @@
   font-weight: 400;
 }
 
-/* Mono is kept for the micro labels only: prose stays Geist Sans for readability. */
 #nd-sidebar [aria-expanded],
 #nd-sidebar-mobile [aria-expanded],
 #toc-title {

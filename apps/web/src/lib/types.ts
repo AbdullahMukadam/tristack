@@ -2,6 +2,7 @@
 export type TechCategory =
   | "language"
   | "framework"
+  | "frontend"
   | "orm"
   | "migrations"
   | "database"

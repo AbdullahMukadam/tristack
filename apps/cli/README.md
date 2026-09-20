@@ -70,7 +70,6 @@ Options:
   --git / --no-git                Initialize a Git repository (default on)
   --install / --no-install        Install dependencies after creation (default on)
   --directory-conflict <strategy> merge, overwrite, increment, error
-  --render-title / --no-render-title  Show/hide the ASCII art title
   --disable-analytics             Disable analytics (no telemetry is transmitted today)
   -h, --help                      Display help
 ```

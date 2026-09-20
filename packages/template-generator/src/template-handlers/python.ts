@@ -75,6 +75,19 @@ function copyAddons(vfs: VirtualFileSystem, data: TemplateData): void {
   }
 }
 
+function copyFrontends(vfs: VirtualFileSystem, data: TemplateData): void {
+  const { config } = data;
+  if (config.frontend === "none") return;
+
+  const prefix = `python/frontend/${config.frontend}`;
+  copyTemplates(vfs, data.templates, config, `${prefix}/common`);
+  if (config.framework === "django") {
+    copyTemplates(vfs, data.templates, config, `${prefix}/django`);
+  } else {
+    copyTemplates(vfs, data.templates, config, `${prefix}/app`);
+  }
+}
+
 export function processPythonTemplates(
   vfs: VirtualFileSystem,
   templates: Map<string, TemplateSource>,
@@ -86,5 +99,6 @@ export function processPythonTemplates(
   copyFramework(vfs, data);
   copyOrm(vfs, data);
   copyMigrations(vfs, data);
+  copyFrontends(vfs, data);
   copyAddons(vfs, data);
 }

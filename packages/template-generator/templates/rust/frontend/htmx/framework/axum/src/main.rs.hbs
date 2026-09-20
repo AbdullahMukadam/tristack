@@ -1,0 +1,96 @@
+use askama::Template;
+use axum::{
+    extract::State,
+    response::{Html, IntoResponse},
+    routing::get,
+    Router,
+};
+
+mod config;
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[derive(Clone)]
+struct AppState {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: String,
+}
+
+#[tokio::main]
+async fn main() {
+    let app_config = config::Config::from_env();
+
+{{#if (ne orm "none")}}
+    {{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+    {{else}}
+    if let Err(err) = db::connect().await {
+    {{/if}}
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let state = AppState {
+        app_name: app_config.app_name.clone(),
+    };
+
+    let router = Router::new()
+        .route("/health", get(health))
+        .route("/", get(index))
+        .route("/web/now", get(now))
+        .with_state(state);
+
+    let addr = format!("0.0.0.0:{}", app_config.port);
+
+    println!("{} listening on {}", app_config.app_name, addr);
+
+    let listener = tokio::net::TcpListener::bind(&addr)
+        .await
+        .expect("failed to bind");
+
+    axum::serve(listener, router).await.expect("server error");
+}
+
+async fn health() -> &'static str {
+    "{\"status\":\"ok\"}"
+}
+
+async fn index(State(state): State<AppState>) -> impl IntoResponse {
+    let template = IndexTemplate {
+        app_name: state.app_name,
+    };
+    Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+async fn now() -> impl IntoResponse {
+    let template = NowTemplate { now: unix_now() };
+    Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+fn unix_now() -> String {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs().to_string())
+        .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn health_returns_status_ok() {
+        assert_eq!(health().await, "{\"status\":\"ok\"}");
+    }
+}

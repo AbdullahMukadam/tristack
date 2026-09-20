@@ -1,5 +1,6 @@
 import {
   DatabaseSchema,
+  FrontendSchema,
   FrameworkSchema,
   LanguageSchema,
   ORMSchema,
@@ -33,6 +34,10 @@ export function getMigrationsJsonSchema() {
 
 export function getDatabaseJsonSchema() {
   return DatabaseSchema;
+}
+
+export function getFrontendJsonSchema() {
+  return FrontendSchema;
 }
 
 export function getPackageManagerJsonSchema() {
@@ -78,6 +83,7 @@ export function getAllJsonSchemas() {
     orm: getORMJsonSchema(),
     migrations: getMigrationsJsonSchema(),
     database: getDatabaseJsonSchema(),
+    frontend: getFrontendJsonSchema(),
     packageManager: getPackageManagerJsonSchema(),
     addons: getAddonsJsonSchema(),
     directoryConflict: getDirectoryConflictJsonSchema(),

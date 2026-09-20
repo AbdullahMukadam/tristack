@@ -1,7 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque } from "next/font/google";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
@@ -11,10 +11,7 @@ import { REPOSITORY_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SUPPORT_EMAIL } 
 import "./global.css";
 import { cn } from "@/lib/utils";
 
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-bricolage",
-});
+const geistSans = GeistSans;
 
 const geistMono = GeistMono;
 
@@ -34,7 +31,7 @@ const structuredData = {
       "@type": "Organization",
       name: SITE_NAME,
       url: SITE_URL,
-      logo: `${SITE_URL}/favicon/web-app-manifest-512x512.png`,
+      logo: `${SITE_URL}/favicons/android-chrome-512x512.png`,
       sameAs: [REPOSITORY_URL, "https://x.com/abd_mukadam"],
       contactPoint: {
         "@type": "ContactPoint",
@@ -89,22 +86,13 @@ export const metadata: Metadata = {
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
   keywords: [
-    "TypeScript",
     "project scaffolding",
     "boilerplate",
-    "type safety",
-    "Drizzle",
-    "Prisma",
-    "hono",
-    "elysia",
-    "turborepo",
-    "trpc",
-    "orpc",
-    "turso",
-    "neon",
-    "Better-Auth",
-    "convex",
-    "monorepo",
+    "Python",
+    "Go",
+    "Rust",
+    "CLI",
+    "stack builder",
     "TriStack",
     "create-tristack",
   ],
@@ -116,6 +104,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL(SITE_URL),
+  manifest: "/manifest.webmanifest",
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
@@ -152,12 +141,13 @@ export const metadata: Metadata = {
   category: "Technology",
   icons: {
     icon: [
-      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
-      { url: "/logo-light.svg", media: "(prefers-color-scheme: light)", type: "image/svg+xml" },
-      { url: "/logo-dark.svg", media: "(prefers-color-scheme: dark)", type: "image/svg+xml" },
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicons/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicons/favicon.ico", sizes: "any" },
     ],
-    shortcut: "/favicon/favicon.svg",
-    apple: "/favicon/apple-touch-icon.png",
+    shortcut: "/favicons/favicon.ico",
+    apple: [{ url: "/favicons/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 
@@ -170,7 +160,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={cn(bricolage.variable, geistMono.variable, gambarino.variable, "font-sans")}
+      className={cn(geistSans.variable, geistMono.variable, gambarino.variable, "font-sans")}
       suppressHydrationWarning
     >
       <body>

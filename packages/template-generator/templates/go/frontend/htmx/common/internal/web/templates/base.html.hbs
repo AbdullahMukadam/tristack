@@ -1,0 +1,21 @@
+\{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>\{{block "title" .}}\{{.AppName}}{{end}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js" defer></script>
+</head>
+<body>
+    <header>
+        <a href="/">\{{.AppName}}</a>
+        <a href="/items">API</a>
+    </header>
+    <main>
+        \{{template "content" .}}
+    </main>
+</body>
+</html>
+\{{end}}

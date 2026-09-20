@@ -5,7 +5,7 @@ description: What tristack.jsonc does and why it matters
 
 ## What is it?
 
-`tristack.jsonc` is a small config file written to your project root when you create a project. It captures the stack choices you selected (language, framework, ORM, migrations, database, package manager, addons) and the command that reproduces them.
+`tristack.jsonc` is a small config file written to your project root when you create a project. It captures the stack choices you selected (language, framework, frontend, ORM, migrations, database, package manager, addons) and the command that reproduces them.
 
 Where: `./tristack.jsonc`
 
@@ -18,9 +18,10 @@ The file is JSONC (JSON with comments) and mirrors the resolved `ProjectConfig`:
 {
   "version": "0.1.0",
   "createdAt": "2026-01-01T00:00:00.000Z",
-  "reproducibleCommand": "uvx tristack my-api --language python --framework fastapi --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker ruff pytest --git --install",
+  "reproducibleCommand": "uvx tristack my-api --language python --framework fastapi --frontend none --orm sqlmodel --migrations alembic --database sqlite --package-manager uv --addons docker ruff pytest --git --install",
   "language": "python",
   "framework": "fastapi",
+  "frontend": "none",
   "orm": "sqlmodel",
   "migrations": "alembic",
   "database": "sqlite",

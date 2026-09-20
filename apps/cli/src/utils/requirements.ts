@@ -35,13 +35,15 @@ export function getDefaultPackageManager(language: ProjectConfig["language"]): P
 }
 
 async function readToolVersion(tool: string): Promise<string | null> {
+  const args = tool === "go" ? ["version"] : ["--version"];
   const result = await Result.tryPromise({
     try: async () => {
-      const { stdout } = await execa(tool, ["--version"], {
+      const { stdout } = await execa(tool, args, {
         cwd: os.tmpdir(),
         stderr: "pipe",
       });
-      return stdout.trim().split(/\s+/)[1] ?? stdout.trim();
+      const parts = stdout.trim().split(/\s+/);
+      return parts[2] ?? parts[1] ?? stdout.trim();
     },
     catch: () => null,
   });

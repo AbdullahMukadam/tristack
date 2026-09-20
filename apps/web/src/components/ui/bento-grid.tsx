@@ -41,9 +41,6 @@ function BentoGridItem({ area, icon, title, description }: BentoGridItemProps) {
         />
         <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-fd-muted/10 p-6">
           <div className="relative flex flex-1 flex-col justify-between gap-3">
-            <div className="flex w-fit items-center justify-center rounded-md border border-border bg-brand-subtle p-2 text-brand-ink">
-              {icon}
-            </div>
             <div className="space-y-3">
               <h3 className="pt-0.5 text-xl/[1.375rem] font-semibold tracking-tight text-balance text-fd-foreground md:text-2xl/[1.875rem]">
                 {title}

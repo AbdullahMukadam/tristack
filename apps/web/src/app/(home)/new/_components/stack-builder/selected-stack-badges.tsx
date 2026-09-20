@@ -45,7 +45,7 @@ export function SelectedStackBadges({ stack, onRemove, onJump }: SelectedStackBa
         const categoryLabel = getCategoryDisplayName(category);
         const chipContent = (
           <>
-            {tech.icon !== "" && (
+            {(tech.icon !== "" || "svgl" in tech) && (
               <TechIcon
                 icon={tech.icon}
                 svgl={"svgl" in tech ? tech.svgl : undefined}

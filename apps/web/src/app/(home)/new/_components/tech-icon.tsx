@@ -10,7 +10,7 @@ export function TechIcon({
   name,
   className,
 }: {
-  icon: string;
+  icon?: string;
   svgl?: string;
   name: string;
   className?: string;

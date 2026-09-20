@@ -39,6 +39,17 @@ function copyMigrations(vfs: VirtualFileSystem, data: TemplateData): void {
   copyTemplates(vfs, data.templates, config, `rust/migrations/${config.migrations}`);
 }
 
+function copyFrontends(vfs: VirtualFileSystem, data: TemplateData): void {
+  const { config } = data;
+  if (config.frontend === "none") return;
+
+  const prefix = `rust/frontend/${config.frontend}`;
+  copyTemplates(vfs, data.templates, config, `${prefix}/common`);
+  if (config.framework !== "none") {
+    copyTemplates(vfs, data.templates, config, `${prefix}/framework/${config.framework}`);
+  }
+}
+
 function copyAddons(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   for (const addon of config.addons) {
@@ -57,5 +68,6 @@ export function processRustTemplates(
   copyFramework(vfs, data);
   copyOrm(vfs, data);
   copyMigrations(vfs, data);
+  copyFrontends(vfs, data);
   copyAddons(vfs, data);
 }

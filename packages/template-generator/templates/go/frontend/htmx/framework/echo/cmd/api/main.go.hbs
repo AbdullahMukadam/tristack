@@ -1,0 +1,85 @@
+package main
+
+import (
+	"context"
+	"errors"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/labstack/echo/v4"
+
+	"{{project_slug}}/internal/config"
+	"{{project_slug}}/internal/web"
+{{#if (ne orm "none")}}
+	"{{project_slug}}/internal/db"
+	"{{project_slug}}/internal/handler"
+	"{{project_slug}}/internal/repository"
+	"{{project_slug}}/internal/service"
+{{/if}}
+)
+
+func main() {
+	cfg := config.Load()
+
+{{#if (ne orm "none")}}
+	conn, err := db.Connect()
+	if err != nil {
+		log.Fatalf("database not ready: %v", err)
+	}
+{{#if (and (eq orm "gorm") (eq migrations "none"))}}
+	if err := db.AutoMigrate(conn); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+	repo := repository.NewItemRepository(conn)
+	items := service.NewItemService(repo)
+	h := handler.NewHandler(items)
+{{/if}}
+
+	webSrv, err := web.New(cfg.AppName{{#if (ne orm "none")}}, items{{/if}})
+	if err != nil {
+		log.Fatalf("web templates: %v", err)
+	}
+
+	e := echo.New()
+	e.GET("/health", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
+	})
+{{#if (ne orm "none")}}
+	e.GET("/items", h.ListItems)
+	e.POST("/items", h.CreateItem)
+{{/if}}
+	e.GET("/*", echo.WrapHandler(webSrv.Mux()))
+
+	addr := ":" + cfg.Port
+	e.Server = &http.Server{
+		Handler:           e,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("%s listening on %s", cfg.AppName, addr)
+		if err := e.Start(addr); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("graceful shutdown failed: %v", err)
+	}
+	log.Printf("server stopped")
+}

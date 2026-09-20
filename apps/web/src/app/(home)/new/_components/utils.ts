@@ -1,6 +1,7 @@
 import {
   getAddonsForLanguage,
   getFrameworksForLanguage,
+  getFrontendsForLanguage,
   getMigrationsForLanguage,
   getOrmsForLanguage,
 } from "@tristack/types";
@@ -49,6 +50,8 @@ export function getValidIdsForLanguage(
   switch (category) {
     case "framework":
       return [...getFrameworksForLanguage(language as "python" | "go" | "rust")];
+    case "frontend":
+      return [...getFrontendsForLanguage(language as "python" | "go" | "rust")];
     case "orm":
       return [...getOrmsForLanguage(language as "python" | "go" | "rust")];
     case "migrations":
@@ -99,12 +102,13 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
 
   const categoryDefaults = {
     framework: stack.language === "go" ? "gin" : stack.language === "rust" ? "axum" : "fastapi",
+    frontend: "none",
     orm: stack.language === "go" ? "sqlc" : stack.language === "rust" ? "seaorm" : "sqlmodel",
     migrations: stack.language === "go" ? "goose" : stack.language === "rust" ? "none" : "alembic",
     packageManager: stack.language === "go" ? "go" : stack.language === "rust" ? "cargo" : "uv",
-  } satisfies Record<"framework" | "orm" | "migrations" | "packageManager", string>;
+  } satisfies Record<"framework" | "frontend" | "orm" | "migrations" | "packageManager", string>;
 
-  const categories = ["framework", "orm", "migrations", "packageManager"] as const;
+  const categories = ["framework", "frontend", "orm", "migrations", "packageManager"] as const;
   for (const category of categories) {
     const value = stack[category];
     if (!value) continue;
@@ -164,6 +168,22 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     }
   }
 
+  if (adjustedStack.frontend === "htmx" && adjustedStack.framework === "none") {
+    adjustedStack.frontend = "none";
+    changes.push({
+      category: "frontend",
+      message: "HTMX needs a backend to serve rendered pages — switched to none.",
+    });
+  }
+
+  if (adjustedStack.framework === "loco" && adjustedStack.frontend === "htmx") {
+    adjustedStack.frontend = "none";
+    changes.push({
+      category: "frontend",
+      message: "HTMX isn't available for Loco yet — switched to none.",
+    });
+  }
+
   if (adjustedStack.orm === "tortoise" && adjustedStack.migrations !== "none") {
     adjustedStack.migrations = "none";
     changes.push({
@@ -196,6 +216,12 @@ export const getDisabledReason = (
     optionId !== "none"
   ) {
     return "No-framework projects are bare — pick a framework first.";
+  }
+  if (currentStack.framework === "none" && category === "frontend" && optionId !== "none") {
+    return "Pick a framework first to serve the rendered pages.";
+  }
+  if (currentStack.framework === "loco" && category === "frontend" && optionId !== "none") {
+    return "HTMX isn't available for Loco yet.";
   }
   const validIds = getValidIdsForLanguage(currentStack.language, category);
   if (!validIds.includes(optionId)) {

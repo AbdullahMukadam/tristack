@@ -16,7 +16,7 @@ const faqs = [
     value: "what-is-tristack",
     question: "What is TriStack?",
     answer:
-      "TriStack is a CLI and browser-based Stack Builder that scaffolds projects. It started as a fork of Better-T-Stack (MIT) and installs as `tristack` or `uvx tristack`.",
+      "TriStack is a CLI and browser-based Stack Builder that scaffolds projects. It installs as `tristack` or `uvx tristack`.",
   },
   {
     value: "which-languages",

@@ -12,3 +12,4 @@ export const S_CHECKBOX_ACTIVE = unicode ? "◻" : "[•]";
 export const S_CHECKBOX_SELECTED = unicode ? "◼" : "[+]";
 export const S_CHECKBOX_INACTIVE = unicode ? "◻" : "[ ]";
 export const SPINNER_FRAMES = unicode ? ["◒", "◐", "◓", "◑"] : ["•", "o", "O", "0"];
+export const S_BAR_START = unicode ? "┌" : "T";

@@ -6,6 +6,7 @@ import { SidebarCollapseTrigger, SidebarTrigger } from "fumadocs-ui/layouts/note
 import { type LinkItemType, LinkItem, resolveLinkItems } from "fumadocs-ui/layouts/shared";
 import { FullSearchTrigger, SearchTrigger } from "fumadocs-ui/layouts/shared/slots/search-trigger";
 import { Menu, Moon, PanelLeft, Sun, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { type ComponentProps, type ReactNode, useEffect, useState } from "react";
 
@@ -197,48 +198,56 @@ export function SiteHeader({ leading, trailing, className, ...props }: SiteHeade
         </button>
       </div>
 
-      {open && (
-        <div className="md:hidden">
-          {/* Absolute, not fixed: backdrop-filter on the header makes it the containing block. */}
-          <button
-            type="button"
-            aria-label="Close menu"
-            tabIndex={-1}
-            onClick={() => setOpen(false)}
-            className="absolute inset-x-0 top-14 h-svh cursor-default"
-          />
-          <div
-            id="site-header-menu"
-            className="absolute inset-x-0 top-14 max-h-[calc(100svh-3.5rem)] overflow-y-auto border-b bg-fd-background px-4 pt-1 pb-3"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="md:hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
           >
-            <nav aria-label="Mobile" className="flex flex-col">
-              {primaryItems.map((item) => (
-                <NavLink
-                  className="py-2.5"
-                  item={item}
-                  key={item.url}
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                />
-              ))}
-            </nav>
-            <div className="mt-1 flex items-center gap-1 border-t pt-2">
-              {secondaryItems.map((item) => (
-                <IconLink
-                  item={item}
-                  key={item.url}
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                />
-              ))}
-              <span className="flex-1" />
-              <ThemeToggle />
+            {/* Absolute, not fixed: backdrop-filter on the header makes it the containing block. */}
+            <button
+              type="button"
+              aria-label="Close menu"
+              tabIndex={-1}
+              onClick={() => setOpen(false)}
+              className="absolute inset-x-0 top-14 h-svh cursor-default"
+            />
+            <div
+              id="site-header-menu"
+              className="absolute inset-x-0 top-14 max-h-[calc(100svh-3.5rem)] overflow-y-auto border-b bg-fd-background px-4 pt-1 pb-3"
+            >
+              <nav aria-label="Mobile" className="flex flex-col">
+                {primaryItems.map((item) => (
+                  <NavLink
+                    className="py-2.5"
+                    item={item}
+                    key={item.url}
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  />
+                ))}
+              </nav>
+              <div className="mt-1 flex items-center gap-1 border-t pt-2">
+                {secondaryItems.map((item) => (
+                  <IconLink
+                    item={item}
+                    key={item.url}
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  />
+                ))}
+                <span className="flex-1" />
+                <ThemeToggle />
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

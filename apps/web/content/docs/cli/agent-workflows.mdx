@@ -22,6 +22,7 @@ uvx tristack create-json --input '{
   "projectName": "my-api",
   "language": "python",
   "framework": "fastapi",
+  "frontend": "htmx",
   "orm": "sqlmodel",
   "migrations": "alembic",
   "database": "postgres",
@@ -41,9 +42,9 @@ This is the best path when:
 The input is validated against `CreateInputSchema` (strict mode). Unknown keys are rejected, so keep the payload to the documented fields:
 
 - `projectName`, `yes`, `yolo`, `dryRun`, `verbose`
-- `language`, `framework`, `orm`, `migrations`, `database`, `packageManager`, `addons`
+- `language`, `framework`, `frontend`, `orm`, `migrations`, `database`, `packageManager`, `addons`
 - `git`, `install`
-- `directoryConflict`, `renderTitle`, `disableAnalytics`
+- `directoryConflict`, `disableAnalytics`
 
 ## Dry Runs
 

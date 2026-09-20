@@ -1,5 +1,6 @@
 import {
   getFrameworksForLanguage,
+  getFrontendsForLanguage,
   getMigrationsForLanguage,
   getOrmsForLanguage,
   ProjectNameSchema,
@@ -46,6 +47,7 @@ function processFlags(options: CLIInput, projectName?: string): Partial<ProjectC
     migrations: options.migrations,
     database: options.database,
     packageManager: options.packageManager,
+    frontend: options.frontend,
     addons: options.addons,
     git: options.git,
     install: options.install,
@@ -83,6 +85,16 @@ export function validatePerLanguageValues(config: Partial<ProjectConfig>): Valid
         message: `Migrations tool "${config.migrations}" is not available for the "${config.language}" language.`,
         field: "migrations",
         value: config.migrations,
+      }),
+    );
+  }
+
+  if (config.frontend && !getFrontendsForLanguage(config.language).includes(config.frontend)) {
+    return Result.err(
+      new ValidationError({
+        message: `Frontend "${config.frontend}" is not available for the "${config.language}" language.`,
+        field: "frontend",
+        value: config.frontend,
       }),
     );
   }
@@ -149,6 +161,24 @@ function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResul
       }),
     );
   }
+  if (config.frontend === "htmx" && config.framework === "none") {
+    return Result.err(
+      new ValidationError({
+        message: `HTMX needs a backend to serve the rendered pages — set framework to a web framework (or frontend to "none").`,
+        field: "frontend",
+        value: config.frontend,
+      }),
+    );
+  }
+  if (config.framework === "loco" && config.frontend === "htmx") {
+    return Result.err(
+      new ValidationError({
+        message: `The Loco interface does not support the HTMX frontend yet — use one of axum, actix-web, rocket, warp, or salvo (or set frontend to "none").`,
+        field: "frontend",
+        value: config.frontend,
+      }),
+    );
+  }
   return Result.ok(undefined);
 }
 
@@ -181,6 +211,7 @@ export function applyFlagDefaults(
     migrations: flags.migrations ?? defaults.migrations,
     database: flags.database ?? defaults.database,
     packageManager: flags.packageManager ?? defaults.packageManager,
+    frontend: flags.frontend ?? defaults.frontend,
     addons: flags.addons ?? defaults.addons,
     git: flags.git ?? defaults.git,
     install: flags.install ?? defaults.install,

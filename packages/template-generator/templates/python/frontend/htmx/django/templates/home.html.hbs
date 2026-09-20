@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome</h1>
+<p>A TriStack project with an HTMX-powered web frontend.</p>
+<section id="users"
+         hx-get="/web/users/"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+    <p>Loading users…</p>
+</section>
+{% endblock %}

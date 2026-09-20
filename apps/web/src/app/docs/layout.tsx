@@ -15,8 +15,8 @@ const docsOptions: DocsLayoutProps = {
   },
   sidebar: {
     banner: (
-      <div className="flex flex-col gap-3">
-        <FullSearchTrigger className="w-full" />
+      <div className="flex flex-col gap-4">
+        <FullSearchTrigger className="w-full rounded-xl bg-fd-muted/5 transition-all hover:bg-fd-muted/10" />
         <SpecialSponsorBanner />
       </div>
     ),

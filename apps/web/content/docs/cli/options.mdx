@@ -83,6 +83,31 @@ uvx tristack --framework litestar
 tristack --framework axum
 ```
 
+### `--frontend <frontend>`
+
+Frontend strategy, scoped to the selected language. When set, pages are served by the same backend (no separate UI server).
+
+Python:
+
+- `htmx`: server-rendered pages with HTMX for interactivity
+- `none`: API-only project with no rendered pages
+
+Go:
+
+- `htmx`: server-rendered pages with HTMX for interactivity
+- `none`: API-only project with no rendered pages
+
+Rust:
+
+- `htmx`: server-rendered pages with HTMX for interactivity
+- `none`: API-only project with no rendered pages
+
+> **Note:** Loco (`--framework loco`) doesn't support `htmx` yet — the CLI rejects that combination.
+
+```bash
+uvx tristack --frontend htmx
+```
+
 ### `--orm <orm>`
 
 ORM or data layer, scoped to the selected language:
@@ -186,8 +211,6 @@ Python:
 - `mypy`: MyPy type-checking config
 - `pytest`: Test suite with health-check tests
 - `github-actions`: CI workflow
-- `fumadocs`: Fumadocs documentation site
-- `starlight`: Astro Starlight documentation site
 - `none`: No addons
 
 Go:
@@ -196,8 +219,6 @@ Go:
 - `air`: Live-reloading for Go apps
 - `golangci-lint`: Fast Go linters runner
 - `github-actions`: CI workflow
-- `fumadocs`: Fumadocs documentation site
-- `starlight`: Astro Starlight documentation site
 - `none`: No addons
 
 Rust:
@@ -206,8 +227,6 @@ Rust:
 - `cargo-watch`: Rerun on file changes
 - `clippy`: Lints to catch common mistakes
 - `github-actions`: CI workflow
-- `fumadocs`: Fumadocs documentation site
-- `starlight`: Astro Starlight documentation site
 - `none`: No addons
 
 ```bash
@@ -251,15 +270,6 @@ uvx tristack my-api --yes --directory-conflict overwrite
 uvx tristack my-api --yes --directory-conflict increment
 ```
 
-### `--render-title / --no-render-title`
-
-Control whether the ASCII art title is shown. Enabled by default.
-
-```bash
-# Hide the title (useful in CI)
-uvx tristack --no-render-title
-```
-
 ### `--disable-analytics`
 
 Opt out of telemetry for this run. The CLI does not transmit telemetry today; the flag is reserved for future telemetry.
@@ -276,6 +286,7 @@ Running with no flags (or with only `--yes`) produces:
 | ---------------- | ---------------------- |
 | `language`       | `python`               |
 | `framework`      | `fastapi`              |
+| `frontend`       | `none`                 |
 | `orm`            | `sqlmodel`             |
 | `migrations`     | `alembic`              |
 | `database`       | `sqlite`               |
@@ -286,7 +297,7 @@ Running with no flags (or with only `--yes`) produces:
 
 ## Option Validation
 
-The CLI validates that `framework`, `orm`, and `migrations` values belong to the selected language. See the [Compatibility](/docs/cli/compatibility) page for the full rule set.
+The CLI validates that `framework`, `orm`, `migrations`, and `frontend` values belong to the selected language. See the [Compatibility](/docs/cli/compatibility) page for the full rule set.
 
 ## Examples
 
@@ -296,6 +307,7 @@ The CLI validates that `framework`, `orm`, and `migrations` values belong to the
 uvx tristack my-api \
   --language python \
   --framework fastapi \
+  --frontend htmx \
   --orm sqlmodel \
   --migrations alembic \
   --database postgres \

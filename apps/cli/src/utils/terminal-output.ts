@@ -1,4 +1,4 @@
-import { log } from "@clack/prompts";
+import { intro, log, outro } from "@clack/prompts";
 import { consola, createConsola } from "consola";
 import pc from "picocolors";
 
@@ -60,7 +60,8 @@ function createTerminalSpinner(): SpinnerLike {
 
   const render = () => {
     const suffix = ".".repeat(Math.floor(dots)).slice(0, 3);
-    out.write(`${CLEAR_LINE}${accent(SPINNER_FRAMES[frame])}  ${text}${suffix}`);
+    const content = `${accent(SPINNER_FRAMES[frame])}  ${text}${suffix}`;
+    out.write(`${CLEAR_LINE}${content}`);
     frame = (frame + 1) % SPINNER_FRAMES.length;
     dots = dots < 4 ? dots + 0.125 : 0;
   };
@@ -93,11 +94,10 @@ function createTerminalSpinner(): SpinnerLike {
         showCursor();
       }
       const cancelled = wasInterrupted() && !interruptedBefore;
-      out.write(
-        cancelled
-          ? `${warning(S_STEP_CANCEL)}  ${text} (cancelled)\n`
-          : `${success(S_STEP_SUBMIT)}  ${message || text}\n`,
-      );
+      const content = cancelled
+        ? `${warning(S_STEP_CANCEL)}  ${text} (cancelled)`
+        : `${success(S_STEP_SUBMIT)}  ${message || text}`;
+      out.write(`${content}\n`);
     },
   };
 }
@@ -126,12 +126,24 @@ export const cliLog = {
   },
   /** Silent after a Ctrl-C in the current step: the cancelled line already said it. */
   error(message: string) {
-    if (!isSilent() && !wasInterrupted()) log.error(message);
+    if (isSilent()) return;
+    if (wasInterrupted()) return;
+    log.error(message);
   },
   message(message: string) {
     if (!isSilent()) log.message(message);
   },
 };
+
+/** Intro line for the CLI banner. */
+export function clackIntro(text: string): void {
+  intro(text);
+}
+
+/** Outro line for the CLI result. */
+export function clackOutro(text: string): void {
+  outro(text);
+}
 
 export const cliConsola = {
   error(message: string) {

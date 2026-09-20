@@ -6,6 +6,7 @@ import type {
   ORMSchema,
   MigrationsSchema,
   DatabaseSchema,
+  FrontendSchema,
   PackageManagerSchema,
   AddonsSchema,
   DirectoryConflictSchema,
@@ -23,6 +24,7 @@ export type Framework = z.infer<typeof FrameworkSchema>;
 export type ORM = z.infer<typeof ORMSchema>;
 export type Migrations = z.infer<typeof MigrationsSchema>;
 export type Database = z.infer<typeof DatabaseSchema>;
+export type Frontend = z.infer<typeof FrontendSchema>;
 export type PackageManager = z.infer<typeof PackageManagerSchema>;
 export type Addons = z.infer<typeof AddonsSchema>;
 export type DirectoryConflict = z.infer<typeof DirectoryConflictSchema>;

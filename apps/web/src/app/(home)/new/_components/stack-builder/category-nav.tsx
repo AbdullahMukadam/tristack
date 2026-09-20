@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -19,7 +20,6 @@ function getScrollViewport(el: HTMLElement) {
 export function scrollToCategorySection(idPrefix: string, category: string, retryFrames = 60) {
   const section = document.getElementById(`${idPrefix}-${category}`);
   if (!section) {
-    // The section may still be mounting (e.g. right after switching back from preview mode)
     if (retryFrames > 0) {
       requestAnimationFrame(() => scrollToCategorySection(idPrefix, category, retryFrames - 1));
     }
@@ -50,7 +50,6 @@ export function CategoryNav({ progress, idPrefix }: CategoryNavProps) {
     if (!viewport) return;
 
     const onScroll = () => {
-      // Hidden trees (desktop rail at mobile width and vice versa) measure as 0-sized
       if (viewport.clientHeight === 0) return;
       const atBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2;
       if (atBottom) {
@@ -89,7 +88,7 @@ export function CategoryNav({ progress, idPrefix }: CategoryNavProps) {
   return (
     <div
       ref={railRef}
-      className="-my-1 flex items-center gap-1 overflow-x-auto overscroll-x-contain px-0.5 py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="-my-1 flex items-center gap-1.5 overflow-x-auto overscroll-x-contain px-1 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {progress.map(({ category, done, selected }) => {
         const isActive = category === activeCategory;
@@ -98,25 +97,36 @@ export function CategoryNav({ progress, idPrefix }: CategoryNavProps) {
             key={category}
             type="button"
             data-category={category}
-            onClick={() => {
-              scrollToCategorySection(idPrefix, category);
-            }}
+            onClick={() => scrollToCategorySection(idPrefix, category)}
             title={`Jump to ${getCategoryDisplayName(category)}`}
             className={cn(
-              "builder-focus-ring pointer-coarse:min-h-8 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+              "builder-focus-ring relative pointer-coarse:min-h-8 flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors duration-200",
               isActive
-                ? "border-fd-border bg-primary/5 text-fd-foreground"
+                ? "text-foreground"
                 : done
-                  ? "border-fd-border text-primary"
-                  : "border-fd-border text-fd-muted-foreground hover:bg-primary/5 hover:text-fd-foreground",
+                  ? "text-foreground/85 hover:text-foreground hover:bg-muted/50"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
             )}
           >
-            <span
-              aria-hidden="true"
-              className={cn("h-1 w-1 shrink-0", done ? "bg-primary" : "bg-fd-muted-foreground/40")}
-            />
-            {getCategoryDisplayName(category)}
-            {selected > 1 && <span className="tabular-nums">({selected})</span>}
+            {isActive && (
+              <motion.div
+                layoutId="nav-active-pill"
+                className="absolute inset-0 rounded-lg bg-primary/10"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "h-1.5 w-1.5 shrink-0 rounded-full transition-colors",
+                  done ? "bg-primary" : "bg-muted-foreground/30",
+                  isActive && !done && "bg-primary/50",
+                )}
+              />
+              {getCategoryDisplayName(category)}
+              {selected > 1 && <span className="tabular-nums opacity-60">({selected})</span>}
+            </span>
           </button>
         );
       })}

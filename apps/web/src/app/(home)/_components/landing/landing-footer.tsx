@@ -1,8 +1,12 @@
+"use client";
+
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FaGithub, FaXTwitter } from "react-icons/fa6";
 
 import { REPOSITORY_URL, SUPPORT_EMAIL } from "@/lib/site";
+import tristackLogo from "@/public/tristack-logo.png";
 
 import { BrandButton } from "./round-button";
 
@@ -58,13 +62,15 @@ export function LandingFooter() {
       <div className="mx-auto max-w-6xl border-x border-border">
         {/* CTA band */}
         <div className="relative overflow-hidden bg-brand-gradient">
-          <div className="flex flex-col items-center gap-6 px-4 py-16 text-center sm:py-24">
-            <h2 className="relative z-10 max-w-3xl text-3xl leading-tight font-semibold tracking-tight text-black sm:text-4xl lg:text-5xl lg:leading-tight">
+          <div className="relative flex flex-col items-center justify-center gap-8 px-4 py-20 text-center sm:py-28 min-h-[320px]">
+            {/* Content */}
+            <h2 className="relative z-10 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl lg:text-5xl lg:leading-tight">
               Ready to roll your own stack?
             </h2>
+
             <BrandButton
               href="/new"
-              className="relative z-10 bg-black"
+              className="relative z-10 bg-black hover:scale-[1.02] shadow-md"
               innerClassName="bg-black text-brand ring-brand/40 [text-shadow:0_0_14px_var(--brand-glow)]"
               label={
                 <>
@@ -79,7 +85,14 @@ export function LandingFooter() {
         {/* Columns */}
         <div className="grid gap-8 border-t border-border px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:pr-6">
-            <h3 className="mb-4 text-base font-bold text-fd-foreground">TriStack</h3>
+            <div className="mb-4 flex items-center gap-2.5">
+              <Image
+                alt="TriStack logo"
+                src={tristackLogo}
+                className="ml-[-10px] mr-[-10px] h-6 w-auto"
+              />
+              <h3 className="text-base font-bold text-fd-foreground">TriStack</h3>
+            </div>
             <p className="text-sm leading-relaxed text-fd-muted-foreground">
               Stack-composable scaffolding for Python, Go, and Rust projects.
             </p>
@@ -122,16 +135,7 @@ export function LandingFooter() {
             ))}
           </div>
           <p className="text-xs text-fd-muted-foreground sm:text-sm">
-            © {new Date().getFullYear()} TriStack. Fork of{" "}
-            <a
-              href="https://github.com/AmanVarshney01/create-better-t-stack"
-              target="_blank"
-              rel="noreferrer"
-              className="underline decoration-border underline-offset-2 transition-colors hover:text-fd-foreground"
-            >
-              Better-T-Stack
-            </a>{" "}
-            (MIT).
+            © {new Date().getFullYear()} TriStack. Fork of Better-T-Stack (MIT).
           </p>
         </div>
 
@@ -140,7 +144,7 @@ export function LandingFooter() {
           aria-hidden
           className="flex w-full select-none items-end justify-center overflow-hidden"
         >
-          <span className="translate-y-[18%] cursor-default text-[24vw] leading-none font-bold tracking-tighter text-foreground opacity-[0.04] transition-opacity duration-300 hover:opacity-[0.18]">
+          <span className="translate-y-[18%] cursor-default text-[24vw] font-bold leading-none tracking-tighter text-foreground opacity-[0.04] transition-opacity duration-300 hover:opacity-[0.18]">
             TriStack
           </span>
         </div>

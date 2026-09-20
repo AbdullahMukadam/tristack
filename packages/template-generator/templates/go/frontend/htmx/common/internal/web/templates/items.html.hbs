@@ -1,0 +1,21 @@
+\{{if .Items}}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        \{{range .Items}}
+        <tr>
+            <td>\{{.Name}}</td>
+            <td>\{{.CreatedAt.Format "2006-01-02 15:04"}}</td>
+        </tr>
+        \{{end}}
+    </tbody>
+</table>
+<button hx-get="/web/items" hx-target="#items" hx-swap="innerHTML">Refresh</button>
+\{{else}}
+<p>No items yet. Create one with <code>POST /items</code>.</p>
+\{{end}}

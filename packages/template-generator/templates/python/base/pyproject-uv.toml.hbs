@@ -11,7 +11,7 @@ dependencies = [
     "fastapi",
     "uvicorn[standard]",
 {{else if (eq framework "litestar")}}
-    "litestar",
+    {{#if (eq frontend "htmx")}}"litestar[jinja]"{{else}}"litestar"{{/if}},
     "uvicorn[standard]",
 {{else if (eq framework "django")}}
     "django",
@@ -29,6 +29,9 @@ dependencies = [
     "sqlalchemy[asyncio]",
 {{else if (eq orm "tortoise")}}
     "tortoise-orm",
+{{/if}}
+{{#if (and (ne framework "django") (ne framework "flask") (eq frontend "htmx"))}}
+    "jinja2",
 {{/if}}
 {{#if (eq migrations "alembic")}}
     "alembic",

@@ -170,6 +170,161 @@ describe("createVirtual - django scaffold", () => {
   });
 });
 
+describe("createVirtual - python htmx scaffold", () => {
+  it("generates FastAPI + SQLModel with server-rendered HTMX pages", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "fastapi",
+      frontend: "htmx",
+      orm: "sqlmodel",
+      migrations: "alembic",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: ["docker", "ruff", "pytest"],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const web = findByPath(tree.root, ["src", "web.py"]);
+    expect(web).not.toBeNull();
+    expect(web).toContain("TemplateResponse");
+    expect(web).toContain("/web/items");
+
+    const baseTemplate = findByPath(tree.root, ["src", "templates", "base.html"]);
+    expect(baseTemplate).not.toBeNull();
+    expect(baseTemplate).toContain("htmx.org@2.0.10");
+
+    const home = findByPath(tree.root, ["src", "templates", "home.html"]);
+    expect(home).not.toBeNull();
+    expect(home).toContain('hx-get="/web/items"');
+
+    const items = findByPath(tree.root, ["src", "templates", "items.html"]);
+    expect(items).not.toBeNull();
+
+    const style = findByPath(tree.root, ["static", "css", "style.css"]);
+    expect(style).not.toBeNull();
+
+    const main = findByPath(tree.root, ["src", "main.py"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("web_router");
+
+    const pyproject = findFile(tree.root, "pyproject.toml");
+    expect(pyproject).not.toBeNull();
+    expect(pyproject).toContain("jinja2");
+  });
+
+  it("generates a Django + HTMX project with the web app and root templates", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "django",
+      frontend: "htmx",
+      orm: "none",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    const urls = findByPath(tree.root, ["config", "urls.py"]);
+    expect(urls).not.toBeNull();
+    expect(urls).toContain('include("apps.web.urls")');
+
+    const baseTemplate = findByPath(tree.root, ["templates", "base.html"]);
+    expect(baseTemplate).not.toBeNull();
+    expect(baseTemplate).toContain("htmx.org@2.0.10");
+
+    const home = findByPath(tree.root, ["templates", "home.html"]);
+    expect(home).not.toBeNull();
+    expect(home).toContain('hx-get="/web/users/"');
+
+    const fragment = findByPath(tree.root, ["templates", "users_fragment.html"]);
+    expect(fragment).not.toBeNull();
+
+    expect(findByPath(tree.root, ["apps", "web", "views.py"])).not.toBeNull();
+    expect(findByPath(tree.root, ["apps", "web", "urls.py"])).not.toBeNull();
+  });
+
+  it("rejects HTMX with no framework", async () => {
+    const htmxWithNoFramework = await createVirtual({
+      language: "python",
+      framework: "none",
+      frontend: "htmx",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: [],
+    });
+    expect(htmxWithNoFramework.isErr()).toBe(true);
+  });
+
+  it("rejects HTMX for Loco", async () => {
+    const locoWithHtmx = await createVirtual({
+      language: "rust",
+      framework: "loco",
+      frontend: "htmx",
+      orm: "seaorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+      addons: [],
+    });
+    expect(locoWithHtmx.isErr()).toBe(true);
+  });
+});
+
+describe("createVirtual - go htmx scaffold", () => {
+  it("generates a Gin + GORM project with server-rendered HTMX pages", async () => {
+    const result = await createVirtual({
+      language: "go",
+      framework: "gin",
+      frontend: "htmx",
+      orm: "gorm",
+      migrations: "goose",
+      database: "sqlite",
+      packageManager: "go",
+      addons: ["docker"],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const web = findByPath(tree.root, ["internal", "web", "web.go"]);
+    expect(web).not.toBeNull();
+    expect(web).toContain("func New");
+    expect(web).toContain("/web/items");
+
+    const baseTemplate = findByPath(tree.root, ["internal", "web", "templates", "base.html"]);
+    expect(baseTemplate).not.toBeNull();
+    expect(baseTemplate).toContain("htmx.org@2.0.10");
+
+    const home = findByPath(tree.root, ["internal", "web", "templates", "index.html"]);
+    expect(home).not.toBeNull();
+    expect(home).toContain('hx-get="/web/items"');
+
+    const items = findByPath(tree.root, ["internal", "web", "templates", "items.html"]);
+    expect(items).not.toBeNull();
+
+    const style = findByPath(tree.root, ["internal", "web", "static", "css", "style.css"]);
+    expect(style).not.toBeNull();
+
+    const main = findByPath(tree.root, ["cmd", "api", "main.go"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("web.New");
+  });
+});
+
 describe("createVirtual - rust scaffold", () => {
   it("generates an Axum + SeaORM project", async () => {
     const result = await createVirtual({
@@ -241,6 +396,44 @@ describe("createVirtual - rust scaffold", () => {
     const ci = findByPath(tree.root, [".github", "workflows", "ci.yml"]);
     expect(ci).not.toBeNull();
     expect(rootFileNames(tree.root)).not.toContain(".gitkeep");
+  });
+
+  it("generates an Axum project with server-rendered HTMX pages", async () => {
+    const result = await createVirtual({
+      language: "rust",
+      framework: "axum",
+      frontend: "htmx",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+
+    expect(result.isOk()).toBe(true);
+    if (result.isErr()) throw result.error;
+
+    const tree = result.value;
+    expect(tree.fileCount).toBeGreaterThan(0);
+
+    const cargoToml = findFile(tree.root, "Cargo.toml");
+    expect(cargoToml).not.toBeNull();
+    expect(cargoToml).toContain("axum");
+    expect(cargoToml).toContain("askama");
+    expect(cargoToml).not.toContain("sea-orm");
+
+    const main = findByPath(tree.root, ["src", "main.rs"]);
+    expect(main).not.toBeNull();
+    expect(main).toContain("IndexTemplate");
+    expect(main).toContain(`route("/web/now", get(now))`);
+
+    const home = findByPath(tree.root, ["templates", "index.html"]);
+    expect(home).not.toBeNull();
+    expect(home).toContain("htmx.org@2.0.10");
+
+    const fragment = findByPath(tree.root, ["templates", "now.html"]);
+    expect(fragment).not.toBeNull();
+    expect(fragment).toContain("Server time:");
   });
 });
 
@@ -338,6 +531,7 @@ describe("validateResolvedConfigCompatibility", () => {
       relativePath: "x",
       language: "python",
       framework: "fastapi",
+      frontend: "none",
       orm: "sqlmodel",
       migrations: "alembic",
       database: "sqlite",
@@ -473,10 +667,87 @@ describe("validateResolvedConfigCompatibility", () => {
       relativePath: "x",
       language: "go",
       framework: "none",
+      frontend: "none",
       orm: "none",
       migrations: "none",
       database: "sqlite",
       packageManager: "go",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("accepts HTMX with a Python web framework", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "fastapi",
+      frontend: "htmx",
+      orm: "sqlmodel",
+      migrations: "alembic",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isOk()).toBe(true);
+  });
+
+  it("rejects HTMX when no framework is selected", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "python",
+      framework: "none",
+      frontend: "htmx",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("accepts HTMX for the Go language", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "go",
+      framework: "gin",
+      frontend: "htmx",
+      orm: "gorm",
+      migrations: "goose",
+      database: "sqlite",
+      packageManager: "go",
+      addons: [],
+      git: false,
+      install: false,
+    });
+    expect(result.isOk()).toBe(true);
+  });
+
+  it("rejects HTMX for Loco", () => {
+    const result = validateResolvedConfigCompatibility({
+      projectName: "x",
+      projectDir: "/x",
+      relativePath: "x",
+      language: "rust",
+      framework: "loco",
+      frontend: "htmx",
+      orm: "seaorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
       addons: [],
       git: false,
       install: false,

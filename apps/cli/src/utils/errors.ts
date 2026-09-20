@@ -1,8 +1,8 @@
 import { cancel } from "@clack/prompts";
 import { Result, TaggedError } from "better-result";
-import pc from "picocolors";
 
 import { cliConsola } from "./terminal-output";
+import { error as errorColor } from "./theme";
 
 // ============================================================================
 // Tagged Error Classes
@@ -220,9 +220,9 @@ export function addonSetupError(
  */
 export function displayError(error: AppError): void {
   if (UserCancelledError.is(error)) {
-    cancel(pc.red(error.message));
+    cancel(errorColor(error.message));
   } else {
-    cliConsola.error(pc.red(error.message));
+    cliConsola.error(errorColor(error.message));
   }
 }
 

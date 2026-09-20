@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa6";
 
 import { REPOSITORY_URL, SUPPORT_EMAIL } from "@/lib/site";
+import tristackLogo from "@/public/tristack-logo.png";
 
 const Footer = () => {
   return (
@@ -9,22 +11,12 @@ const Footer = () => {
       <div className="mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto grid max-w-5xl gap-8 sm:mb-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
           <div className="sm:col-span-2 lg:col-span-1">
-            <h3 className="mb-3 text-base font-bold text-foreground sm:mb-4">TriStack</h3>
+            <div className="mb-3 flex items-center gap-2.5 sm:mb-4">
+              <Image alt="TriStack logo" src={tristackLogo} className="h-6 w-auto" />
+              <h3 className="text-base font-bold text-foreground">TriStack</h3>
+            </div>
             <p className="mb-4 text-muted-foreground text-sm leading-relaxed sm:mb-6 sm:text-base lg:pr-4">
               Stack-composable scaffolding for Python, Go, and Rust projects.
-            </p>
-            <p className="mb-4 text-[13px] text-muted-foreground leading-relaxed sm:mb-6 sm:text-sm lg:pr-4">
-              Built as a fork of{" "}
-              <a
-                href="https://github.com/AmanVarshney01/create-better-t-stack"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline decoration-primary/40 underline-offset-2 transition-colors hover:text-primary"
-              >
-                Better-T-Stack
-              </a>{" "}
-              (MIT licensed) — the CLI engine and Stack Builder UI are adapted from the original
-              project, extended to scaffold Python, Go, and Rust projects.
             </p>
             <Link
               href={REPOSITORY_URL}
@@ -95,8 +87,7 @@ const Footer = () => {
 
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 border-border border-t pt-6 sm:flex-row sm:gap-6 sm:pt-8">
           <p className="text-center text-muted-foreground text-xs sm:text-left sm:text-sm">
-            © {new Date().getFullYear()} TriStack. All rights reserved. Fork of Better-T-Stack,
-            released under the MIT License.
+            © {new Date().getFullYear()} TriStack. All rights reserved.
           </p>
         </div>
       </div>

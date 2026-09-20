@@ -25,6 +25,10 @@ tokio = { version = "1", features = ["full"] }
 loco-rs = "0.4"
 {{/if}}
 
+{{#if (eq frontend "htmx")}}
+askama = "0.14"
+{{/if}}
+
 {{#if (eq orm "seaorm")}}
 {{#if (eq database "sqlite")}}
 sea-orm = { version = "1", features = ["sqlx-sqlite", "runtime-tokio-rustls"] }

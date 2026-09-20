@@ -1,0 +1,92 @@
+use askama::Template;
+use rocket::response::content::Html;
+
+#[macro_use]
+extern crate rocket;
+
+mod config;
+{{#if (ne orm "none")}}
+mod db;
+{{/if}}
+
+#[derive(Clone)]
+struct AppState {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    app_name: String,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: String,
+}
+
+#[get("/health")]
+fn health() -> &'static str {
+    "{\"status\":\"ok\"}"
+}
+
+#[get("/")]
+fn index(state: &rocket::State<AppState>) -> Html<String> {
+    let template = IndexTemplate {
+        app_name: state.app_name.clone(),
+    };
+    Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+#[get("/web/now")]
+fn now() -> Html<String> {
+    let template = NowTemplate { now: unix_now() };
+    Html(template.render().unwrap_or_else(|err| err.to_string()))
+}
+
+fn unix_now() -> String {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs().to_string())
+        .unwrap_or_default()
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    let app_config = config::Config::from_env();
+
+{{#if (ne orm "none")}}
+    if let Err(err) = db::connect().await {
+        eprintln!("database not ready: {err}");
+    }
+{{/if}}
+    let config = rocket::Config {
+        port: app_config.port,
+        ..Default::default()
+    };
+
+    println!(
+        "{} listening on 0.0.0.0:{}",
+        app_config.app_name, config.port,
+    );
+
+    let _ = rocket::custom(config)
+        .manage(AppState {
+            app_name: app_config.app_name,
+        })
+        .mount("/", routes![health, index, now])
+        .launch()
+        .await?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn health_returns_status_ok() {
+        assert_eq!(health(), "{\"status\":\"ok\"}");
+    }
+}

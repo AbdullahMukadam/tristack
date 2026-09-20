@@ -25,12 +25,14 @@ function SectionHeader({
   count: number;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-brand-subtle text-brand-ink">
+    <div className="flex items-center gap-3">
+      <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand shadow-sm ring-1 ring-brand/20">
         {icon}
+      </div>
+      <h2 className="text-lg font-semibold tracking-tight text-fd-foreground">{title}</h2>
+      <span className="ml-auto rounded-full bg-fd-muted/50 px-2.5 py-0.5 text-xs font-medium text-fd-muted-foreground ring-1 ring-border/50">
+        {count}
       </span>
-      <h2 className="text-sm font-semibold text-fd-foreground">{title}</h2>
-      <span className="ml-auto text-xs text-fd-muted-foreground tabular-nums">{count}</span>
     </div>
   );
 }
@@ -38,19 +40,19 @@ function SectionHeader({
 function SponsorLinks({ sponsor, muted = false }: { sponsor: Sponsor; muted?: boolean }) {
   const sponsorUrl = getSponsorUrl(sponsor);
   const linkClass = muted
-    ? "flex items-center gap-2 text-[13px] leading-[1.55] text-fd-muted-foreground/70 transition-colors duration-150 hover:text-fd-muted-foreground"
-    : "flex items-center gap-2 text-[13px] leading-[1.55] text-fd-muted-foreground transition-colors duration-150 hover:text-fd-foreground";
+    ? "flex items-center gap-2 text-xs font-medium text-fd-muted-foreground/60 transition-colors duration-200 hover:text-fd-muted-foreground"
+    : "flex items-center gap-2 text-xs font-medium text-fd-muted-foreground transition-colors duration-200 hover:text-fd-foreground";
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-1.5 mt-1">
       <a href={sponsor.githubUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
-        <FaGithub aria-hidden="true" className="size-3 shrink-0" />
-        <span className="wrap-anywhere">{sponsor.githubId}</span>
+        <FaGithub aria-hidden="true" className="size-3.5 shrink-0" />
+        <span className="truncate">{sponsor.githubId}</span>
       </a>
       {sponsor.websiteUrl && (
         <a href={sponsorUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
-          <Globe aria-hidden="true" className="size-3 shrink-0" />
-          <span className="wrap-anywhere">{getSponsorUrlLabel(sponsor)}</span>
+          <Globe aria-hidden="true" className="size-3.5 shrink-0" />
+          <span className="truncate">{getSponsorUrlLabel(sponsor)}</span>
         </a>
       )}
     </div>
@@ -59,36 +61,46 @@ function SponsorLinks({ sponsor, muted = false }: { sponsor: Sponsor; muted?: bo
 
 function SpecialSponsorCard({ sponsor }: { sponsor: Sponsor }) {
   return (
-    <div className="@container flex flex-col rounded-lg border border-border bg-fd-muted/10">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <span className="inline-flex items-center gap-1 rounded-md bg-brand-subtle px-1.5 py-0.5 text-xs font-medium text-brand-ink">
-          <Star aria-hidden="true" className="size-3" />
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-b from-fd-muted/10 to-transparent transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-lg hover:shadow-brand/5">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <div className="flex items-center justify-between border-b border-border/40 px-4 py-3">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-2.5 py-1 text-xs font-semibold text-brand ring-1 ring-brand/20">
+          <Star aria-hidden="true" className="size-3.5 fill-brand/20" />
           Special
         </span>
-        <span className="ml-auto text-xs text-fd-muted-foreground">since {sponsor.sinceWhen}</span>
+        <span className="text-xs font-medium text-fd-muted-foreground">
+          since {sponsor.sinceWhen}
+        </span>
       </div>
-      <div className="flex flex-1 gap-4 p-4">
-        <Image
-          src={sponsor.avatarUrl}
-          alt={sponsor.name}
-          width={112}
-          height={112}
-          className="@2xs:size-24 @sm:size-28 size-20 shrink-0 self-start rounded-lg border border-border"
-          unoptimized
-        />
-        <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
+
+      <div className="flex flex-1 gap-5 p-5">
+        <div className="relative shrink-0">
+          <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-brand/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <Image
+            src={sponsor.avatarUrl}
+            alt={sponsor.name}
+            width={112}
+            height={112}
+            className="relative size-20 sm:size-24 rounded-xl border border-border/50 bg-background object-cover shadow-sm transition-transform duration-300 group-hover:scale-[1.02]"
+            unoptimized
+          />
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
           <div className="min-w-0">
-            <h3 className="wrap-anywhere text-base font-medium leading-[1.5] text-fd-foreground">
+            <h3 className="truncate text-base font-semibold tracking-tight text-fd-foreground transition-colors group-hover:text-brand">
               {sponsor.name}
             </h3>
-            <p className="text-xs leading-[1.55] text-fd-muted-foreground">{sponsor.tierName}</p>
+            <p className="text-sm text-fd-muted-foreground">{sponsor.tierName}</p>
           </div>
           <SponsorLinks sponsor={sponsor} />
         </div>
       </div>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-border px-3 py-2">
-        <span className="text-xs text-fd-muted-foreground">Lifetime support</span>
-        <span className="text-[13px] font-semibold text-brand tabular-nums">
+
+      <div className="flex items-center justify-between border-t border-border/40 bg-fd-muted/5 px-4 py-3">
+        <span className="text-xs font-medium text-fd-muted-foreground">Lifetime support</span>
+        <span className="text-sm font-bold tracking-tight text-brand">
           {sponsor.formattedAmount}
         </span>
       </div>
@@ -98,27 +110,31 @@ function SpecialSponsorCard({ sponsor }: { sponsor: Sponsor }) {
 
 function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
   return (
-    <div className="@container flex flex-col rounded-lg border border-border bg-fd-muted/10">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <span className="ml-auto text-xs text-fd-muted-foreground">since {sponsor.sinceWhen}</span>
+    <div className="group flex flex-col rounded-2xl border border-border/60 bg-fd-muted/5 transition-all duration-300 hover:border-border hover:bg-fd-muted/10 hover:shadow-md">
+      <div className="flex items-center justify-end border-b border-border/40 px-4 py-2.5">
+        <span className="text-xs font-medium text-fd-muted-foreground">
+          since {sponsor.sinceWhen}
+        </span>
       </div>
-      <div className="flex flex-1 gap-4 p-4">
+
+      <div className="flex flex-1 gap-4 p-5">
         <Image
           src={sponsor.avatarUrl}
           alt={sponsor.name}
-          width={100}
-          height={100}
-          className="@2xs:size-20 @xs:size-24 size-16 shrink-0 self-start rounded-lg border border-border"
+          width={80}
+          height={80}
+          className="size-16 shrink-0 rounded-xl border border-border/50 bg-background object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
           unoptimized
         />
-        <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
+
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
           <div className="min-w-0">
-            <h3 className="wrap-anywhere text-[13px] font-medium leading-[1.55] text-fd-foreground">
+            <h3 className="truncate text-sm font-semibold tracking-tight text-fd-foreground">
               {sponsor.name}
             </h3>
-            <p className="text-xs leading-[1.55] text-fd-muted-foreground">{sponsor.tierName}</p>
+            <p className="text-xs font-medium text-fd-muted-foreground">{sponsor.tierName}</p>
             {shouldShowLifetimeTotal(sponsor) && (
-              <p className="text-xs leading-[1.55] text-fd-muted-foreground tabular-nums">
+              <p className="mt-0.5 text-xs font-medium text-fd-muted-foreground/70">
                 Total: {sponsor.formattedAmount}
               </p>
             )}
@@ -136,20 +152,24 @@ function BackerChip({ sponsor }: { sponsor: Sponsor }) {
       href={sponsor.githubUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-2 rounded-lg border border-border bg-fd-muted/10 px-3 py-2 transition-colors duration-150 hover:bg-fd-muted"
+      className="group flex items-center gap-3 rounded-full border border-border/60 bg-fd-muted/5 py-1.5 pl-1.5 pr-4 transition-all duration-300 hover:border-brand/30 hover:bg-brand/5 hover:shadow-sm"
     >
       <Image
         src={sponsor.avatarUrl}
         alt={sponsor.name}
         width={28}
         height={28}
-        className="size-7 shrink-0 rounded-md border border-border"
+        className="size-7 shrink-0 rounded-full border border-border/50 shadow-sm transition-transform duration-300 group-hover:scale-110"
         unoptimized
       />
-      <span className="wrap-anywhere text-[13px] leading-[1.55] text-fd-foreground transition-colors duration-150 group-hover:text-brand">
-        {sponsor.name}
-      </span>
-      <span className="shrink-0 text-xs text-fd-muted-foreground">{sponsor.tierName}</span>
+      <div className="flex flex-col justify-center">
+        <span className="truncate text-sm font-medium leading-tight text-fd-foreground transition-colors group-hover:text-brand">
+          {sponsor.name}
+        </span>
+        <span className="text-[10px] font-medium uppercase tracking-wider text-fd-muted-foreground/70">
+          {sponsor.tierName}
+        </span>
+      </div>
     </a>
   );
 }
@@ -161,24 +181,24 @@ function PastSponsorRow({ sponsor }: { sponsor: Sponsor }) {
       href={sponsor.githubUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-lg border border-border bg-fd-muted/10 px-3 py-2 transition-colors duration-150 hover:bg-fd-muted"
+      className="group flex items-center gap-3 rounded-xl border border-border/40 bg-transparent px-3 py-2.5 transition-all duration-200 hover:border-border/80 hover:bg-fd-muted/10"
     >
       <Image
         src={sponsor.avatarUrl}
         alt={sponsor.name}
         width={36}
         height={36}
-        className="size-9 shrink-0 rounded-lg border border-border"
+        className="size-9 shrink-0 rounded-lg border border-border/50 opacity-80 transition-all duration-200 group-hover:opacity-100"
         unoptimized
       />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <span className="wrap-anywhere text-[13px] leading-[1.55] text-fd-muted-foreground transition-colors duration-150 group-hover:text-fd-foreground">
+          <span className="truncate text-sm font-medium text-fd-muted-foreground transition-colors group-hover:text-fd-foreground">
             {sponsor.name}
           </span>
-          {wasSpecial && <Star aria-hidden="true" className="size-3 shrink-0 text-brand/70" />}
+          {wasSpecial && <Star aria-hidden="true" className="size-3.5 shrink-0 text-brand/70" />}
         </div>
-        <span className="text-xs text-fd-muted-foreground/70 tabular-nums">
+        <span className="text-xs font-medium text-fd-muted-foreground/60">
           {sponsor.formattedAmount}
         </span>
       </div>
@@ -193,8 +213,8 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-6xl border-x border-border px-4 pt-16 pb-16 font-normal text-fd-foreground">
-        <div className="flex flex-col">
+      <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8">
           <PageHeader
             icon={Heart}
             title="Sponsors"
@@ -205,69 +225,69 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
           <SectionDivider />
 
           {activeCount === 0 && (
-            <div className="rounded-xl border border-border m-4 md:m-6 bg-fd-muted/10 px-6 py-16 text-center">
-              <span className="mx-auto flex size-10 items-center justify-center rounded-lg bg-brand-subtle text-brand-ink">
-                <Heart aria-hidden="true" className="size-5" />
-              </span>
-              <p className="mt-4 mb-1 text-sm font-medium text-fd-foreground">
+            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/60 bg-fd-muted/5 px-6 py-24 text-center">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-fd-muted/20 text-fd-muted-foreground ring-1 ring-border/50">
+                <Heart aria-hidden="true" className="size-6" />
+              </div>
+              <h3 className="mt-6 text-lg font-semibold tracking-tight text-fd-foreground">
                 No active sponsors yet
-              </p>
-              <p className="mx-auto max-w-sm text-[13px] leading-[1.55] text-fd-muted-foreground">
-                Be the first to support this project — every contribution keeps TriStack free and
-                open source.
+              </h3>
+              <p className="mt-2 max-w-md text-sm text-fd-muted-foreground">
+                Be the first to support this project. Every contribution helps keep TriStack free,
+                actively maintained, and open source.
               </p>
             </div>
           )}
 
           {specialSponsors.length > 0 && (
-            <>
-              <section className="space-y-4 m-6 pt-4 pb-6">
-                <SectionHeader
-                  icon={<Star aria-hidden="true" className="h-3.5 w-3.5" />}
-                  title="Special sponsors"
-                  count={specialSponsors.length}
-                />
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {specialSponsors.map((sponsor) => (
-                    <SpecialSponsorCard key={sponsor.githubId} sponsor={sponsor} />
-                  ))}
-                </div>
-              </section>
-            </>
+            <section className="flex flex-col gap-6">
+              <SectionHeader
+                icon={<Star aria-hidden="true" className="size-4" />}
+                title="Special sponsors"
+                count={specialSponsors.length}
+              />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {specialSponsors.map((sponsor) => (
+                  <SpecialSponsorCard key={sponsor.githubId} sponsor={sponsor} />
+                ))}
+              </div>
+            </section>
           )}
 
           {(sponsors.length > 0 || backers.length > 0) && (
-            <section className="space-y-6 pt-4 pb-6">
+            <div className="flex flex-col gap-12">
               {sponsors.length > 0 && (
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {sponsors.map((sponsor) => (
-                    <SponsorCard key={sponsor.githubId} sponsor={sponsor} />
-                  ))}
-                </div>
+                <section className="flex flex-col gap-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {sponsors.map((sponsor) => (
+                      <SponsorCard key={sponsor.githubId} sponsor={sponsor} />
+                    ))}
+                  </div>
+                </section>
               )}
 
               {backers.length > 0 && (
-                <section className="space-y-4 pt-4 pb-6">
+                <section className="flex flex-col gap-6">
                   <SectionHeader
-                    icon={<Users aria-hidden="true" className="h-3.5 w-3.5" />}
+                    icon={<Users aria-hidden="true" className="size-4" />}
                     title="Backers"
                     count={backers.length}
                   />
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-wrap gap-3">
                     {backers.map((sponsor) => (
                       <BackerChip key={sponsor.githubId} sponsor={sponsor} />
                     ))}
                   </div>
                 </section>
               )}
-            </section>
+            </div>
           )}
 
           {pastSponsors.length > 0 && (
-            <section className="space-y-4">
+            <section className="flex flex-col gap-6 pt-8">
               <SectionDivider />
               <SectionHeader
-                icon={<Archive aria-hidden="true" className="h-3.5 w-3.5" />}
+                icon={<Archive aria-hidden="true" className="size-4" />}
                 title="Past sponsors"
                 count={pastSponsors.length}
               />
@@ -281,28 +301,35 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
 
           <SectionDivider />
 
-          <div className="rounded-xl border border-border m-4 mb:m-6 bg-fd-muted/10 p-10 sm:p-12">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <p className="max-w-md text-[15px] leading-[1.6] text-fd-muted-foreground">
-                Sponsorship funds development and infrastructure for TriStack.
-              </p>
-              <BrandButton
-                href="https://github.com/sponsors/AbdullahMukadam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-black"
-                innerClassName="bg-black text-brand ring-brand/40 [text-shadow:0_0_14px_var(--brand-glow)]"
-                label={
-                  <span className="flex items-center gap-2">
-                    <Heart aria-hidden="true" className="size-4" />
-                    Become a sponsor
-                  </span>
-                }
-              />
-              <p className="max-w-md text-[13px] leading-[1.55] text-fd-muted-foreground">
-                One-time sponsorships count too: every $100 one-time equals a month of special
-                placement.
-              </p>
+          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-b from-fd-muted/10 to-fd-muted/5 px-6 py-16 sm:px-12 sm:py-20">
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
+            <div className="relative flex flex-col items-center gap-6 text-center">
+              <div className="flex flex-col gap-2">
+                <h3 className="text-2xl font-bold tracking-tight text-fd-foreground">
+                  Support TriStack's Future
+                </h3>
+                <p className="mx-auto max-w-lg text-base text-fd-muted-foreground">
+                  Sponsorship directly funds ongoing development, infrastructure, and maintenance.
+                  One-time sponsorships count too: every $100 one-time equals a month of special
+                  placement.
+                </p>
+              </div>
+
+              <div className="mt-2">
+                <BrandButton
+                  href="https://github.com/sponsors/AbdullahMukadam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className=" transition-transform duration-300 hover:scale-105"
+                  innerClassName="bg-black text-brand ring-brand/40 [text-shadow:0_0_14px_var(--brand-glow)] px-6 py-2.5"
+                  label={
+                    <span className="flex items-center gap-2 text-sm font-semibold">
+                      <Heart aria-hidden="true" className="size-4 fill-brand/20" />
+                      Become a sponsor
+                    </span>
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

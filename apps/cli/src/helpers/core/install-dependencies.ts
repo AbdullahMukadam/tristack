@@ -1,12 +1,12 @@
 import { Result } from "better-result";
 import { execa } from "execa";
-import pc from "picocolors";
 
 import type { PackageManager } from "../../types";
 import { ProjectCreationError } from "../../utils/errors";
 import { shouldSkipExternalCommands } from "../../utils/external-commands";
 import { getInterruptSignal, startInterruptibleStep, wasInterrupted } from "../../utils/interrupt";
 import { createSpinner } from "../../utils/terminal-output";
+import { error } from "../../utils/theme";
 
 export type InstallStatus = "installed" | "cancelled";
 
@@ -74,6 +74,6 @@ export async function installDependencies({
     return Result.ok("installed");
   }
 
-  s.stop(pc.red("Failed to install dependencies"));
+  s.stop(error("Failed to install dependencies"));
   return Result.err(result.error);
 }

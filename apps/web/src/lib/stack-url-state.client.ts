@@ -19,6 +19,9 @@ export const stackParsers = {
   framework: parseAsStringEnum<StackState["framework"]>(getValidIds("framework")).withDefault(
     DEFAULT_STACK.framework,
   ),
+  frontend: parseAsStringEnum<StackState["frontend"]>(getValidIds("frontend")).withDefault(
+    DEFAULT_STACK.frontend,
+  ),
   orm: parseAsStringEnum<StackState["orm"]>(getValidIds("orm")).withDefault(DEFAULT_STACK.orm),
   migrations: parseAsStringEnum<StackState["migrations"]>(getValidIds("migrations")).withDefault(
     DEFAULT_STACK.migrations,
@@ -53,6 +56,7 @@ function getStackFromQueryState(queryState: StackState): StackState {
     projectName: queryState.projectName,
     language: queryState.language,
     framework: queryState.framework,
+    frontend: queryState.frontend,
     orm: queryState.orm,
     migrations: queryState.migrations,
     database: queryState.database,

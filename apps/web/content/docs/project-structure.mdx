@@ -21,8 +21,9 @@ Files come from these layers, in order:
 2. **Framework** — the HTTP entrypoint per framework
 3. **ORM** — the data layer
 4. **Migrations** — migration files/tooling
-5. **Database** — database choice drives configuration and env values
-6. **Addons** — one set of files per selected addon
+5. **Frontend** — the server-rendered UI layer (per selected frontend)
+6. **Database** — database choice drives configuration and env values
+7. **Addons** — one set of files per selected addon
 
 `tristack.jsonc` records the stack and its reproducible command. See [`tristack.jsonc`](/docs/tristack-config).
 
@@ -136,6 +137,59 @@ Django brings its own ORM and migrations, so it skips the import-package layout 
 
 With `--migrations alembic`, the CLI writes a `migrations/` directory with `alembic.ini`, `env.py`, `script.py.mako`, and a `versions/` folder for your migration files. Django uses its own bundled migrations.
 
+### Frontend
+
+The frontend layer adds server-rendered pages served by the same backend (no separate UI server). With `--frontend htmx`, all Python frameworks except Django use the import-package layout:
+
+<Files>
+  <Folder name="htmx-project/" defaultOpen>
+    <Folder name="src">
+      <File name="web.py" />
+      <Folder name="templates">
+        <File name="base.html" />
+        <File name="home.html" />
+        <File name="items.html" />
+      </Folder>
+    </Folder>
+    <Folder name="static">
+      <Folder name="css">
+        <File name="style.css" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+- `web.py` — the page routes (`/` and a fragment route like `/web/items`) returning Jinja2 templates
+- `templates/` — `base.html` (layout with the HTMX script), `home.html`, and the fragment (e.g. `items.html`)
+- `static/css/style.css` — the shared stylesheet
+- `pyproject.toml` installs `jinja2` (or `litestar[jinja]` for Litestar)
+
+Django instead gets a `web` app plus root templates:
+
+<Files>
+  <Folder name="django-htmx-project/" defaultOpen>
+    <Folder name="apps">
+      <Folder name="web">
+        <File name="__init__.py" />
+        <File name="urls.py" />
+        <File name="views.py" />
+      </Folder>
+    </Folder>
+    <Folder name="templates">
+      <File name="base.html" />
+      <File name="home.html" />
+      <File name="users_fragment.html" />
+    </Folder>
+    <Folder name="static">
+      <Folder name="css">
+        <File name="style.css" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+`config/urls.py` includes `apps.web.urls`, `apps.web` is registered in `INSTALLED_APPS`, and `STATICFILES_DIRS` picks up the project `static/` folder. Django ships its own template engine and static handling, so no extra dependencies are added.
+
 ### Addons
 
 | Addon            | Adds                                                |
@@ -145,8 +199,6 @@ With `--migrations alembic`, the CLI writes a `migrations/` directory with `alem
 | `mypy`           | `mypy.ini`                                          |
 | `pytest`         | `tests/test_health.py`                              |
 | `github-actions` | `.github/workflows/ci.yml`                          |
-| `fumadocs`       | a Fumadocs documentation site                       |
-| `starlight`      | an Astro Starlight documentation site               |
 
 ## Go
 
@@ -236,6 +288,35 @@ The driver is chosen from the `database` value (`sqlite`, `postgres`, or `mysql`
 - **goose** — a `migrations/` folder of `.sql` files (`0001_create_items.sql`)
 - **golang-migrate** — a `db/migrations/` folder with paired `.up.sql` / `.down.sql` files
 
+### Frontend
+
+With `--frontend htmx`, Go adds a web layer under `internal/web` that registers page routes alongside the API. The handlers — `GET /` and a fragment like `GET /web/items` — render `html/template`, so no extra dependency is added:
+
+<Files>
+  <Folder name="go-htmx-project/" defaultOpen>
+    <Folder name="internal">
+      <Folder name="web">
+        <File name="web.go" />
+        <Folder name="templates">
+          <File name="base.html" />
+          <File name="index.html" />
+          <File name="items.html" />
+        </Folder>
+        <Folder name="static">
+          <Folder name="css">
+            <File name="style.css" />
+          </Folder>
+        </Folder>
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+- `web.go` — a package `internal/web` exposing a `New` constructor that returns a handler wiring the page routes (`/` and a fragment like `/web/items`) to their templates
+- `templates/` — `base.html` (layout with the HTMX script), `index.html`, and the fragment (e.g. `items.html`)
+- `static/css/style.css` — the shared stylesheet, mounted at `/static/`
+- `cmd/api/main.go` — mounts the web handler under the framework's router alongside the API routes
+
 ### Addons
 
 | Addon            | Adds                                                |
@@ -244,8 +325,6 @@ The driver is chosen from the `database` value (`sqlite`, `postgres`, or `mysql`
 | `air`            | `air.toml` (live reload)                            |
 | `golangci-lint`  | `.golangci.yml`                                     |
 | `github-actions` | `.github/workflows/ci.yml`                          |
-| `fumadocs`       | a Fumadocs documentation site                       |
-| `starlight`      | an Astro Starlight documentation site               |
 
 ## Rust
 
@@ -309,6 +388,28 @@ The database driver is chosen from the `database` value and enabled via Cargo fe
 
 Rust has no standard migration tool in the option set yet, so `--migrations` is `none`. Run migrations with your ORM's own tooling (e.g. `diesel migration run`, `sqlx migrate run`).
 
+### Frontend
+
+With `--frontend htmx`, Rust adds Askama templates under `src/templates/`. The page templates are ORM-agnostic — the `IndexTemplate` / `NowTemplate` render data computed in `main.rs`, so the htmx frontend works with any ORM (or none):
+
+<Files>
+  <Folder name="rust-htmx-project/" defaultOpen>
+    <Folder name="src">
+      <File name="main.rs" />
+      <Folder name="templates">
+        <File name="index.html" />
+        <File name="now.html" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+- `main.rs` — registers `GET /` (rendering `IndexTemplate`) and `GET /web/now` (rendering the `NowTemplate` fragment with the current Unix time)
+- `src/templates/` — `index.html` (layout with the HTMX script and inline CSS) and `now.html` (the fragment)
+- `Cargo.toml` — adds `askama = "0.14"`
+
+Loco doesn't support `htmx` yet — the CLI rejects `--framework loco --frontend htmx`.
+
 ### Addons
 
 | Addon            | Adds                                                      |
@@ -317,9 +418,20 @@ Rust has no standard migration tool in the option set yet, so `--migrations` is 
 | `cargo-watch`    | auto-reload dev server (run with `cargo watch -x run`)    |
 | `clippy`         | strict clippy lints in CI (`cargo clippy -- -D warnings`) |
 | `github-actions` | `.github/workflows/ci.yml`                                |
-| `fumadocs`       | a Fumadocs documentation site                             |
-| `starlight`      | an Astro Starlight documentation site                     |
 
 ## Config file
 
 `tristack.jsonc` at the project root captures the resolved stack and a `reproducibleCommand` that reproduces it, regardless of language. See [`tristack.jsonc`](/docs/tristack-config).
+
+## Frontend roadmap
+
+The frontend dimension is language-aware: the CLI only offers options that exist for the selected language. This table tracks the full roadmap as frontends land.
+
+| Language | Frontend             | Status    |
+| -------- | -------------------- | --------- |
+| Python   | `htmx`               | Available |
+| Python   | `reflex` / `nicegui` | Planned   |
+| Go       | `htmx`               | Available |
+| Go       | `templ`              | Planned   |
+| Rust     | `htmx`               | Available |
+| Rust     | `leptos`             | Planned   |

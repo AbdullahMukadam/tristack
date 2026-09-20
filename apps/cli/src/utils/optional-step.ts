@@ -1,9 +1,9 @@
 import type { Result } from "better-result";
-import pc from "picocolors";
 
 import { UserCancelledError } from "./errors";
 import { startInterruptibleStep, wasInterrupted } from "./interrupt";
 import { cliConsola, cliLog } from "./terminal-output";
+import { error, warning } from "./theme";
 
 /**
  * Runs a setup step after the files are on disk. A failure is reported and the run continues;
@@ -18,8 +18,8 @@ export async function runOptionalStep<T>(
   if (result.isOk()) return;
 
   if (UserCancelledError.is(result.error) || wasInterrupted()) {
-    cliLog.warn(pc.yellow(cancelledMessage));
+    cliLog.warn(warning(cancelledMessage));
     return;
   }
-  cliConsola.error(pc.red(result.error.message));
+  cliConsola.error(error(result.error.message));
 }

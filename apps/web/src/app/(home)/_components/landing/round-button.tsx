@@ -21,7 +21,7 @@ const BrandButton = React.forwardRef<HTMLAnchorElement, BrandButtonProps>(
         ref={ref}
         href={href}
         className={cn(
-          "inline-flex rounded-lg p-0.5 bg-brand-gradient shadow-[0_0_12px_var(--brand-glow)] transition duration-200 hover:shadow-[0_0_24px_var(--brand-glow)] hover:scale-[1.01] active:scale-[0.98]",
+          "inline-flex rounded-lg p-0.5 bg-brand-gradient shadow-[0_4px_20px_-4px_rgba(246,165,16,0.55)] transition duration-200 hover:shadow-[0_6px_28px_-4px_rgba(246,165,16,0.65)] hover:scale-[1.01] active:scale-[0.98]",
           className,
         )}
         {...props}

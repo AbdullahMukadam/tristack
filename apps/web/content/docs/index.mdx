@@ -77,7 +77,7 @@ You only need the runtime of whatever language you scaffold, plus **Git** (optio
 uvx tristack
 ```
 
-Follow the interactive prompts to pick your language, framework, ORM/migrations, database, package manager, and addons.
+Follow the interactive prompts to pick your language, framework, frontend, ORM/migrations, database, package manager, and addons.
 
 Skip prompts and use the default stack:
 
@@ -94,6 +94,7 @@ uvx tristack --yes
 uvx tristack my-tristack-app \
   --language python \
   --framework fastapi \
+  --frontend none \
   --orm sqlmodel \
   --migrations alembic \
   --database sqlite \
@@ -158,6 +159,20 @@ uvx tristack my-micro \
   --database none \
   --package-manager uv \
   --addons pytest
+```
+
+### Server-rendered (HTMX)
+
+```bash
+uvx tristack my-app \
+  --language python \
+  --framework fastapi \
+  --frontend htmx \
+  --orm sqlmodel \
+  --migrations alembic \
+  --database sqlite \
+  --package-manager uv \
+  --addons ruff pytest
 ```
 
 ## Common Setups — Go
@@ -228,6 +243,9 @@ See the full list in the [CLI Reference](/docs/cli). Option sets are per languag
 - `--framework` (python): fastapi, litestar, django, flask
 - `--framework` (go): gin, fiber, echo, chi, stdlib
 - `--framework` (rust): axum, actix-web, rocket, warp, salvo, loco
+- `--frontend` (python): htmx, none
+- `--frontend` (go): htmx, none
+- `--frontend` (rust): htmx, none
 - `--orm` (python): sqlmodel, sqlalchemy, tortoise, none
 - `--orm` (go): sqlc, gorm, sqlx, none
 - `--orm` (rust): seaorm, diesel, sqlx-rust, none
@@ -238,9 +256,9 @@ See the full list in the [CLI Reference](/docs/cli). Option sets are per languag
 - `--package-manager` (python): uv, poetry, pip
 - `--package-manager` (go): go
 - `--package-manager` (rust): cargo
-- `--addons` (python): docker, ruff, mypy, pytest, github-actions, fumadocs, starlight, none
-- `--addons` (go): docker, air, golangci-lint, github-actions, fumadocs, starlight, none
-- `--addons` (rust): docker, cargo-watch, clippy, github-actions, fumadocs, starlight, none
+- `--addons` (python): docker, ruff, mypy, pytest, github-actions, none
+- `--addons` (go): docker, air, golangci-lint, github-actions, none
+- `--addons` (rust): docker, cargo-watch, clippy, github-actions, none
 
 ## Next Steps
 

@@ -1,6 +1,5 @@
 import path from "node:path";
 
-import { intro, log, outro } from "@clack/prompts";
 import { generateReproducibleCommand } from "@tristack/template-generator";
 import { Result, UnhandledException } from "better-result";
 import pc from "picocolors";
@@ -31,9 +30,9 @@ import {
   validateSafeProjectDirectoryPath,
 } from "../../utils/project-directory";
 import { validateProjectName } from "../../utils/project-name-validation";
-import { renderTitle } from "../../utils/render-title";
 import { checkBaselineRequirements, checkLocalRequirements } from "../../utils/requirements";
-import { accent, success } from "../../utils/theme";
+import { clackIntro, clackOutro, cliLog } from "../../utils/terminal-output";
+import { accent, success, warning } from "../../utils/theme";
 import {
   applyFlagDefaults,
   getProvidedFlags,
@@ -87,6 +86,7 @@ function getEmptyProjectConfig(): ProjectConfig {
     relativePath: "",
     language: "python",
     framework: "fastapi",
+    frontend: "none",
     orm: "sqlmodel",
     migrations: "alembic",
     database: "none",
@@ -167,10 +167,9 @@ async function createProjectHandlerInternal(
   timeScaffolded: string,
 ): Promise<Result<CreateProjectResult, CreateHandlerError>> {
   return Result.gen(async function* () {
-    if (!isSilent() && input.renderTitle !== false) {
-      renderTitle();
+    if (!isSilent()) {
+      clackIntro(accent("Configure your new project"));
     }
-    if (!isSilent()) intro(accent("Configure your new project"));
 
     if (!isSilent()) {
       const baseline = yield* Result.await(
@@ -179,8 +178,8 @@ async function createProjectHandlerInternal(
           input.packageManager !== undefined,
         ),
       );
-      for (const warning of baseline.warnings) {
-        log.warn(pc.yellow(warning));
+      for (const text of baseline.warnings) {
+        cliLog.warn(warning(text));
       }
     }
 
@@ -276,8 +275,8 @@ async function createProjectHandlerInternal(
 
     const localRequirements = yield* Result.await(checkLocalRequirements(config));
     if (!isSilent()) {
-      for (const warning of localRequirements.warnings) {
-        log.warn(pc.yellow(warning));
+      for (const text of localRequirements.warnings) {
+        cliLog.warn(warning(text));
       }
     }
 
@@ -297,8 +296,8 @@ async function createProjectHandlerInternal(
     }
 
     if (!isSilent()) {
-      log.info(accent(pc.bold("Stack ready")));
-      log.message(displayConfig(config));
+      cliLog.info(accent(pc.bold("Stack ready")));
+      cliLog.message(displayConfig(config));
     }
 
     const reproducibleCommand = generateReproducibleCommand(config);
@@ -306,10 +305,10 @@ async function createProjectHandlerInternal(
     if (input.dryRun) {
       const elapsedTimeMs = Date.now() - startTime;
       if (!isSilent()) {
-        log.success(success("Configuration ready. No files were written."));
-        log.message(pc.dim(`Target directory: ${finalResolvedPath}`));
-        log.message(pc.dim(`Run without --dry-run to create the project.`));
-        outro(accent("Dry run complete."));
+        cliLog.success(success("Configuration ready. No files were written."));
+        cliLog.message(pc.dim(`Target directory: ${finalResolvedPath}`));
+        cliLog.message(pc.dim(`Run without --dry-run to create the project.`));
+        clackOutro(accent("Dry run complete."));
       }
       return Result.ok({
         success: true,
@@ -335,8 +334,8 @@ async function createProjectHandlerInternal(
     const elapsedTimeMs = Date.now() - startTime;
     if (!isSilent()) {
       const elapsedTimeInSeconds = (elapsedTimeMs / 1000).toFixed(1);
-      outro(accent(`Project ready in ${pc.bold(`${elapsedTimeInSeconds}s`)}`));
-      log.message(`${pc.dim("Recreate this stack")}\n${accent(reproducibleCommand)}`);
+      clackOutro(accent(`Project ready in ${pc.bold(`${elapsedTimeInSeconds}s`)}`));
+      cliLog.message(`${pc.dim("Recreate this stack")}\n${accent(reproducibleCommand)}`);
     }
 
     return Result.ok({

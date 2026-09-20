@@ -23,7 +23,11 @@ pydantic-settings = "^2.7"
 fastapi = "^0.115"
 uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "litestar")}}
+{{#if (eq frontend "htmx")}}
+litestar = { extras = ["jinja"], version = "^2.14" }
+{{else}}
 litestar = "^2.14"
+{{/if}}
 uvicorn = { extras = ["standard"], version = "^0.34" }
 {{else if (eq framework "django")}}
 django = "^5.1"
@@ -41,6 +45,9 @@ sqlmodel = "^0.0.22"
 sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
 {{else if (eq orm "tortoise")}}
 tortoise-orm = "^0.24"
+{{/if}}
+{{#if (and (ne framework "django") (ne framework "flask") (eq frontend "htmx"))}}
+jinja2 = "^3.1"
 {{/if}}
 {{#if (eq migrations "alembic")}}
 alembic = "^1.14"

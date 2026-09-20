@@ -1,9 +1,9 @@
 import { Result } from "better-result";
 import { $ } from "execa";
-import pc from "picocolors";
 
 import { ProjectCreationError } from "../../utils/errors";
 import { cliLog } from "../../utils/terminal-output";
+import { warning } from "../../utils/theme";
 
 export async function initializeGit(
   projectDir: string,
@@ -29,7 +29,7 @@ export async function initializeGit(
   if (signal?.aborted) return cancelled();
 
   if (gitVersionResult.exitCode !== 0) {
-    cliLog.warn(pc.yellow("Git is not installed"));
+    cliLog.warn(warning("Git is not installed"));
     return Result.ok(undefined);
   }
 

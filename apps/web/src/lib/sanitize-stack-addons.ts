@@ -3,6 +3,7 @@ import { DEFAULT_STACK, type StackState, TECH_OPTIONS } from "./constant";
 const validIdsByCategory = {
   language: new Set(TECH_OPTIONS.language.map((option) => option.id)),
   framework: new Set(TECH_OPTIONS.framework.map((option) => option.id)),
+  frontend: new Set(TECH_OPTIONS.frontend.map((option) => option.id)),
   orm: new Set(TECH_OPTIONS.orm.map((option) => option.id)),
   migrations: new Set(TECH_OPTIONS.migrations.map((option) => option.id)),
   database: new Set(TECH_OPTIONS.database.map((option) => option.id)),
@@ -62,6 +63,11 @@ export function sanitizeStackState(stack: StackState): StackState {
       stack.framework,
       validIdsByCategory.framework,
       DEFAULT_STACK.framework,
+    ),
+    frontend: sanitizeSingleSelection(
+      stack.frontend,
+      validIdsByCategory.frontend,
+      DEFAULT_STACK.frontend,
     ),
     orm: sanitizeSingleSelection(stack.orm, validIdsByCategory.orm, DEFAULT_STACK.orm),
     migrations: sanitizeSingleSelection(

@@ -60,6 +60,10 @@ export const DatabaseSchema = z
   .enum(["sqlite", "postgres", "mysql", "none"])
   .describe("Database type");
 
+export const FrontendSchema = z
+  .enum(["htmx", "none"])
+  .describe("Client-side interactivity library (server-rendered)");
+
 export const PackageManagerSchema = z
   .enum([
     // Python
@@ -84,8 +88,6 @@ export const AddonsSchema = z
     "golangci-lint",
     "cargo-watch",
     "clippy",
-    "fumadocs",
-    "starlight",
     "none",
   ])
   .describe("Additional addons");
@@ -124,12 +126,12 @@ export const CreateInputSchema = z
     orm: ORMSchema.optional(),
     migrations: MigrationsSchema.optional(),
     database: DatabaseSchema.optional(),
+    frontend: FrontendSchema.optional(),
     packageManager: PackageManagerSchema.optional(),
     addons: AddonsListSchema.optional(),
     git: z.boolean().optional(),
     install: z.boolean().optional(),
     directoryConflict: DirectoryConflictSchema.optional(),
-    renderTitle: z.boolean().optional(),
     disableAnalytics: z.boolean().optional(),
   })
   .strict();
@@ -158,6 +160,7 @@ export const ProjectConfigSchema = z.object({
   orm: ORMSchema,
   migrations: MigrationsSchema,
   database: DatabaseSchema,
+  frontend: FrontendSchema,
   packageManager: PackageManagerSchema,
   addons: AddonsListSchema,
   git: z.boolean(),
@@ -173,6 +176,7 @@ export const TriStackConfigSchema = z.object({
   orm: ORMSchema,
   migrations: MigrationsSchema,
   database: DatabaseSchema,
+  frontend: FrontendSchema,
   packageManager: PackageManagerSchema,
   addons: AddonsListSchema,
 });
@@ -204,6 +208,7 @@ export const FRAMEWORK_VALUES = FrameworkSchema.options;
 export const ORM_VALUES = ORMSchema.options;
 export const MIGRATIONS_VALUES = MigrationsSchema.options;
 export const DATABASE_VALUES = DatabaseSchema.options;
+export const FRONTEND_VALUES = FrontendSchema.options;
 export const PACKAGE_MANAGER_VALUES = PackageManagerSchema.options;
 export const ADDONS_VALUES = AddonsSchema.options;
 export const DIRECTORY_CONFLICT_VALUES = DirectoryConflictSchema.options;

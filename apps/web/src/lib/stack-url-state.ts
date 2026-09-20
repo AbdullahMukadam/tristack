@@ -23,6 +23,9 @@ const serverStackParsers = {
   framework: parseAsStringEnumServer<StackState["framework"]>(getValidIds("framework")).withDefault(
     DEFAULT_STACK.framework,
   ),
+  frontend: parseAsStringEnumServer<StackState["frontend"]>(getValidIds("frontend")).withDefault(
+    DEFAULT_STACK.frontend,
+  ),
   orm: parseAsStringEnumServer<StackState["orm"]>(getValidIds("orm")).withDefault(
     DEFAULT_STACK.orm,
   ),

@@ -32,6 +32,7 @@ export function generateReproducibleCommand(config: ProjectConfig): string {
   const flags: string[] = [];
   flags.push(`--language ${config.language}`);
   flags.push(`--framework ${config.framework}`);
+  flags.push(`--frontend ${config.frontend}`);
   flags.push(`--orm ${config.orm}`);
   flags.push(`--migrations ${config.migrations}`);
   flags.push(`--database ${config.database}`);

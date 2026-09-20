@@ -35,7 +35,7 @@ const agentPageMarkdown = {
 
 ${SITE_DESCRIPTION}
 
-TriStack is a free, MIT-licensed open-source project forked from Better-T-Stack. It generates source code under the developer's control and does not add a required hosted runtime.
+TriStack is a free, MIT-licensed open-source project. It generates source code under the developer's control and does not add a required hosted runtime.
 - [Documentation](${SITE_URL}/docs)
 - [Source code](${REPOSITORY_URL})
 - [Contact](${SITE_URL}/contact)`,
@@ -80,6 +80,7 @@ const stackCategoryLabels = {
   addons: "Addon",
   database: "Database",
   framework: "Framework",
+  frontend: "Frontend",
   git: "Git",
   install: "Dependency installation",
   language: "Language",

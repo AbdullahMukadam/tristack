@@ -17,24 +17,22 @@ export async function POST(request: Request) {
   try {
     const body = sanitizeStackState((await request.json()) as StackState);
 
-    // Convert StackState from web to CLI options format
-    const config = stackStateToConfig(body);
+    const config = stackStateToConfig(body); // Convert StackState from web to CLI options format
 
-    // Generate project to virtual filesystem using Result-based API
     const result = await generate({
+      // Generate project to virtual filesystem using Result-based API
       config,
       templates: EMBEDDED_TEMPLATES,
     });
 
-    // Handle Result type
     if (result.isErr()) {
+      // Handle Result type
       throw new Error(result.error.message);
     }
 
     const tree = result.value;
 
-    // Transform VirtualFileTree to web's expected format
-    const transformedRoot = transformTree(tree.root);
+    const transformedRoot = transformTree(tree.root); // Transform VirtualFileTree to web's expected format
 
     return NextResponse.json({
       success: true,
@@ -108,6 +106,7 @@ function stackStateToConfig(state: StackState): ProjectConfig {
     relativePath: "./virtual",
     language: state.language as ProjectConfig["language"],
     framework: state.framework as Framework,
+    frontend: (bare ? "none" : state.frontend) as ProjectConfig["frontend"],
     orm: (bare ? "none" : state.orm) as ORM,
     migrations: (bare ? "none" : state.migrations) as Migrations,
     database: (bare ? "none" : state.database) as Database,

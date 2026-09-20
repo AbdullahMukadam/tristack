@@ -1,0 +1,145 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+{{#if (eq framework "fastapi")}}
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
+from .config import get_settings
+from .exceptions import register_exception_handlers
+from .middleware import add_middleware
+
+settings = get_settings()
+
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    from .db import init_db
+
+    await init_db()
+    yield
+{{else}}
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    yield
+{{/if}}
+
+def create_app() -> FastAPI:
+
+    app = FastAPI(title=settings.app_name, lifespan=lifespan)
+    add_middleware(app)
+    register_exception_handlers(app)
+
+    from .api.router import api_router
+
+    app.include_router(api_router)
+
+    from .web import web_router
+
+    app.include_router(web_router)
+
+    static_dir = Path(__file__).resolve().parent.parent.parent / "static"
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+
+    return app
+
+app = create_app()
+{{else if (eq framework "litestar")}}
+from litestar import Litestar
+from litestar.config.cors import CORSConfig
+from litestar.plugins.jinja import JinjaTemplateEngine
+from litestar.static_files import create_static_files_router
+from litestar.template import TemplateConfig
+
+from .config import get_settings
+from .exceptions import exception_handlers
+from .middleware import RequestLoggingMiddleware
+
+settings = get_settings()
+
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    from .db import init_db
+
+    await init_db()
+    yield
+{{else}}
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncIterator[None]:
+    yield
+{{/if}}
+
+def create_app() -> Litestar:
+
+    from .api.v1.router import router as v1_router
+    from .web import web_routes
+
+    pkg_dir = Path(__file__).resolve().parent
+    static_dir = pkg_dir.parent.parent / "static"
+
+    return Litestar(
+        route_handlers=[
+            v1_router,
+            *web_routes,
+            create_static_files_router(path="/static", directories=[str(static_dir)]),
+        ],
+        debug=settings.debug,
+        cors_config=CORSConfig(allow_origins=settings.cors_origins),
+        template_config=TemplateConfig(
+            directory=pkg_dir / "templates",
+            engine=JinjaTemplateEngine,
+        ),
+        exception_handlers=exception_handlers,
+        middleware=[RequestLoggingMiddleware],
+        lifespan=lifespan,
+    )
+
+app = create_app()
+{{else if (eq framework "flask")}}
+import asyncio
+from pathlib import Path
+
+from flask import Flask
+
+from .config import get_settings
+from .exceptions import register_error_handlers
+from .middleware import register_middleware
+
+settings = get_settings()
+
+def create_app() -> Flask:
+
+    pkg_dir = Path(__file__).resolve().parent
+    root_dir = pkg_dir.parent.parent.parent
+
+    app = Flask(
+        __name__,
+        template_folder=str(pkg_dir / "templates"),
+        static_folder=str(root_dir / "static"),
+        static_url_path="/static",
+    )
+    app.config["DEBUG"] = settings.debug
+
+    register_middleware(app)
+    register_error_handlers(app)
+
+    {{#if (and (ne orm "none") (eq migrations "none"))}}
+    from .db import init_db
+
+    asyncio.run(init_db())
+    {{/if}}
+
+    from .api.v1.router import register_v1_blueprints
+
+    register_v1_blueprints(app)
+
+    from .web import register_web_blueprints
+
+    register_web_blueprints(app)
+
+    return app
+
+app = create_app()
+{{/if}}

@@ -2,14 +2,13 @@ import type { BaseLayoutProps, LinkItemType } from "fumadocs-ui/layouts/shared";
 import Image from "next/image";
 
 import xLogo from "@/public/icon/x.svg";
-import mainLogoDark from "@/public/logo-dark.svg";
-import mainLogoLight from "@/public/logo-light.svg";
+import tristackLogo from "@/public/tristack-logo.png";
 
 export const logo = (
-  <>
-    <Image alt="tristack" src={mainLogoLight} className="w-8 dark:hidden" />
-    <Image alt="tristack" src={mainLogoDark} className="hidden w-8 dark:block" />
-  </>
+  <div className="flex items-center gap-2">
+    <Image alt="TriStack logo" src={tristackLogo} className="h-6 w-auto" />
+    <span className="text-sm font-bold tracking-tight">TriStack</span>
+  </div>
 );
 
 export const links: LinkItemType[] = [
@@ -39,14 +38,7 @@ export const links: LinkItemType[] = [
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
-    title: (
-      <>
-        {logo}
-        <span className="inline shrink-0 whitespace-nowrap font-bold text-lg tracking-tight md:hidden xl:inline">
-          TriStack
-        </span>
-      </>
-    ),
+    title: logo,
   },
   links: links,
   githubUrl: "https://github.com/AbdullahMukadam/tristack",

@@ -45,7 +45,7 @@ This repo is a Bun + Turborepo monorepo.
 - **CLI distribution:** `tristack`/`uvx` for Python, `tristack` for Go/Rust (curl/PowerShell installers). No npm/npx distribution channel; packages are workspace-private (no `publishConfig`, no npm release scripts, no npm-publish CI steps).
 - **Home page rail:** a single-pane init-only rail (sponsors/videos/tweets panes and the `StatusBar` footer removed). Hero is a centered, clean text wordmark ("TriStack"), NOT a terminal/ASCII banner.
 - **Branding:** TriStack is a fork of Better-T-Stack (MIT). Attribution to Better-T-Stack is required in READMEs and LICENSE. The `SITE_DESCRIPTION` and all site copy are language-agnostic (Python Phase 1, Go Phase 2, Rust Phase 3).
-- **`TRISTACK` wordmark:** the CLI keeps the ANSI Shadow banner (`apps/cli/src/utils/render-title.ts`); the web hero uses a plain sans-serif text wordmark. Do not reintroduce the old GoiStack/OWN STACK ASCII or the "type-safe TypeScript projects" tagline.
+- **`TRISTACK` wordmark:** the web hero uses a plain sans-serif text wordmark. Do not reintroduce the old GoiStack/OWN STACK ASCII or the "type-safe TypeScript projects" tagline.
 - **Web design language:** clean and simple, no terminal aesthetic. Use sans-serif UI text (mono reserved for actual commands/code), sentence case labels, `rounded-md`, no `$` prompts, no `.SH`/`.TXT`/`.ENV` micro-labels, no ASCII banners. `--font-mono` maps to Geist Mono (`--font-geist-mono`).
 - **Pre-existing unrelated typecheck error:** `packages/template-generator/src/utils/add-deps.ts:13` (Go/Rust framework stubs missing) — existed before this work, do not fix unless scoped.
 - **Never commit untracked `discord_backup_codes.txt`.**

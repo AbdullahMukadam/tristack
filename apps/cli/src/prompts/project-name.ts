@@ -1,8 +1,6 @@
 import path from "node:path";
 
-import { isCancel, text } from "@clack/prompts";
 import fs from "fs-extra";
-import pc from "picocolors";
 
 import { DEFAULT_CONFIG } from "../constants";
 import { ProjectNameSchema } from "../types";
@@ -10,6 +8,8 @@ import { markPromptShown } from "../utils/context";
 import { UserCancelledError } from "../utils/errors";
 import { isMissingPathError } from "../utils/fs-error";
 import { cliConsola } from "../utils/terminal-output";
+import { error } from "../utils/theme";
+import { isCancel, navigableText } from "./navigable";
 
 function isPathWithinCwd(targetPath: string) {
   const resolved = path.resolve(targetPath);
@@ -39,7 +39,7 @@ export async function getProjectName(initialName?: string): Promise<string> {
       if (isPathWithinCwd(projectDir)) {
         return initialName;
       }
-      cliConsola.error(pc.red("Project path must be within current directory"));
+      cliConsola.error(error("Project path must be within current directory"));
     }
   }
 
@@ -67,7 +67,7 @@ export async function getProjectName(initialName?: string): Promise<string> {
 
   while (!isValid) {
     markPromptShown();
-    const response = await text({
+    const response = await navigableText({
       message: "Where should we create your project?",
       placeholder: defaultName,
       initialValue: initialName,
