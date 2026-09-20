@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, Copy, Edit, Layers, Share2 } from "lucide-react";
+import { Check, Copy, Edit, Layers, Share2, ExternalLink } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -16,6 +17,7 @@ import {
   generateStackUrlFromState,
   getSelectedTechs,
 } from "@/lib/stack-utils";
+import { cn } from "@/lib/utils";
 
 type StackDisplayProps = {
   stackState: LoadedStackState;
@@ -60,88 +62,150 @@ export function StackDisplay({ stackState }: StackDisplayProps) {
     }
   };
 
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(stackUrl);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy link");
+    }
+  };
+
   return (
     <main className="container mx-auto min-h-svh">
-      <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 pt-12">
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
-          <div className="flex items-center gap-2">
-            <Layers className="h-5 w-5 text-primary" />
-            <span className="text-lg font-bold tracking-tight sm:text-xl">Your stack</span>
-          </div>
-          <div className="hidden h-px flex-1 bg-border sm:block" />
-          <span className="w-full text-right text-muted-foreground text-xs sm:w-auto sm:text-left">
-            {techBadges.length} technology selection{techBadges.length === 1 ? "" : "s"}
-          </span>
-        </div>
-
-        <p className="text-[15px] leading-[1.6] text-muted-foreground">{stackSummary}</p>
-
-        <div className="flex items-center gap-3">
-          <Link href={editUrl}>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-muted-foreground/30 hover:bg-muted hover:text-foreground"
-            >
-              <Edit className="h-3 w-3" />
-              <span>Edit in builder</span>
-            </button>
-          </Link>
-
-          <ShareDialog stackUrl={stackUrl} stackState={stackState}>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-muted-foreground/30 hover:bg-muted hover:text-foreground"
-            >
-              <Share2 className="h-3 w-3" />
-              <span>Share</span>
-            </button>
-          </ShareDialog>
-        </div>
-
-        <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-foreground">Generated command</h2>
-
-          <div
-            role="button"
-            tabIndex={0}
-            className="flex cursor-pointer items-center justify-between gap-3 rounded-md border border-border bg-fd-background p-3"
-            onClick={copyCommand}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                copyCommand();
-              }
-            }}
-            aria-label="Copy generated command"
-            title="Click to copy command"
-          >
-            <div className="min-w-0 flex-1 truncate font-mono text-sm text-foreground">
-              {command}
+      <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 pt-12 pb-16">
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 300, ease: "easeOut" }}
+        >
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Layers className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+                  {stack.projectName || "my-tristack-app"}
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {techBadges.length} technology{techBadges.length === 1 ? "" : "s"} selected
+                </p>
+              </div>
             </div>
-            <span
-              className={
-                copied
-                  ? "flex shrink-0 items-center gap-1 rounded-md border border-green-500/20 bg-green-500/10 px-2 py-1 text-green-600 text-xs font-medium transition-colors dark:text-green-400"
-                  : "flex shrink-0 items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium transition-colors"
-              }
-            >
-              {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-              {copied ? "Copied" : "Copy"}
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={copyUrl}
+                className="builder-focus-ring pointer-coarse:min-h-8 flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                title="Copy link"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Copy link</span>
+              </button>
+              <Link href={editUrl}>
+                <button
+                  type="button"
+                  className="builder-focus-ring pointer-coarse:min-h-8 flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                >
+                  <Edit className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Edit in builder</span>
+                </button>
+              </Link>
+              <ShareDialog stackUrl={stackUrl} stackState={stackState}>
+                <button
+                  type="button"
+                  className="builder-focus-ring pointer-coarse:min-h-8 flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                >
+                  <Share2 className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Share</span>
+                </button>
+              </ShareDialog>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-foreground">
-            Dependencies ({techBadges.length})
-          </h2>
+          <p className="text-base leading-[1.7] text-muted-foreground">{stackSummary}</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 300, delay: 100, ease: "easeOut" }}
+          className="rounded-lg border border-border bg-fd-background"
+        >
+          <div className="border-b border-border px-4 py-3 bg-muted/30">
+            <h2 className="text-sm font-semibold text-foreground">Generated command</h2>
+          </div>
+          <div className="p-4">
+            <button
+              type="button"
+              onClick={copyCommand}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  copyCommand();
+                }
+              }}
+              className="builder-focus-ring w-full rounded-md border border-border bg-muted/30 p-3 text-left transition-colors hover:border-primary/30 hover:bg-primary/5"
+              aria-label="Copy generated command"
+              title="Click to copy command"
+              tabIndex={0}
+              role="button"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <code className="min-w-0 flex-1 truncate font-mono text-sm text-foreground break-all">
+                  {command}
+                </code>
+                <span
+                  className={cn(
+                    "flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-all",
+                    copied
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      : "border-border text-muted-foreground hover:border-primary/30 hover:bg-primary/5 hover:text-primary",
+                  )}
+                >
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </span>
+              </div>
+            </button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 300, delay: 200, ease: "easeOut" }}
+          className="space-y-4"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground">
+              Dependencies ({techBadges.length})
+            </h2>
+            {techBadges.length > 0 && (
+              <span className="text-xs text-muted-foreground">Hover for details</span>
+            )}
+          </div>
 
           {techBadges.length > 0 ? (
-            <div className="flex flex-wrap gap-3">{techBadges}</div>
+            <div className="flex flex-wrap gap-2.5">
+              {techBadges.map((badge, index) => (
+                <motion.span
+                  key={badge.key}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 200, delay: index * 30 }}
+                >
+                  {badge}
+                </motion.span>
+              ))}
+            </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No technologies selected</p>
+            <div className="rounded-lg border border-dashed bg-muted/30 p-8 text-center">
+              <p className="text-sm text-muted-foreground">No technologies selected</p>
+            </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </main>
   );

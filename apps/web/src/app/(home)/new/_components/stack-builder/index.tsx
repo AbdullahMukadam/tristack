@@ -54,6 +54,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
   const displayCommand = formatStackCommandForDisplay(command);
   const [commandExpanded, setCommandExpanded] = useState(false);
   const isCommandMultiline = displayCommand !== command;
+  const [searchQuery, setSearchQuery] = useState("");
 
   const actionButtons = (
     <ActionButtons
@@ -132,7 +133,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
           )}
         </div>
 
-        <div className="hidden min-h-0 flex-1 grid-cols-[16rem_minmax(0,1fr)] overflow-hidden sm:grid md:grid-cols-[19rem_minmax(0,1fr)] lg:grid-cols-[24rem_minmax(0,1fr)]">
+        <div className="hidden min-h-0 flex-1 grid-cols-[16rem_minmax(0,1fr)_16rem] overflow-hidden sm:grid md:grid-cols-[19rem_minmax(0,1fr)_16rem] lg:grid-cols-[20rem_minmax(0,1fr)_18rem]">
           <aside className="flex min-h-0 flex-col overflow-hidden border-r bg-fd-background">
             <ScrollArea className="min-h-0 flex-1">
               <div className="p-2">
@@ -165,6 +166,10 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       )}
                     </label>
                   </section>
+
+                  <div className="px-2">
+                    <SectionDivider variant="stretch" size="sm" />
+                  </div>
 
                   <section className="border-b px-3 py-3">
                     <div className="flex flex-col gap-1.5">
@@ -234,6 +239,10 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                     </div>
                   </section>
 
+                  <div className="px-2">
+                    <SectionDivider variant="stretch" size="sm" />
+                  </div>
+
                   <section className="px-3 py-3">
                     <SelectedStackBadges
                       stack={effectiveStack}
@@ -253,13 +262,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
             </ScrollArea>
 
             <div className="border-t bg-fd-background p-2">
-              <div className="@container p-2">
-                <SpecialSponsorsPanel sponsors={specialSponsors} />
-                {specialSponsors.length > 0 ? (
-                  <span aria-hidden="true" className="my-3 block h-px w-full bg-fd-border" />
-                ) : null}
-                {actionButtons}
-              </div>
+              <div className="@container p-2">{actionButtons}</div>
             </div>
           </aside>
 
@@ -316,6 +319,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       compatibilityNotes={compatibilityAnalysis.notes}
                       onSelect={handleTechSelect}
                       showAllCategories
+                      searchQuery={searchQuery}
                     />
                   </main>
                 </ScrollArea>
@@ -328,6 +332,105 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
               />
             )}
           </section>
+
+          <aside className="flex min-h-0 flex-col overflow-hidden border-l bg-fd-background/50 lg:border-l lg:bg-fd-background">
+            <ScrollArea className="min-h-0 flex-1">
+              <div className="p-3 space-y-4">
+                <div className="relative">
+                  <Input
+                    type="search"
+                    placeholder="Search tech..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full text-[12px] px-2.5 py-1.5 pl-8"
+                    aria-label="Search technologies"
+                  />
+                  <svg
+                    className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-fd-muted-foreground pointer-events-none"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+
+                {Object.values(compatibilityAnalysis.notes).some((n) => n.notes.length > 0) && (
+                  <section className="space-y-2">
+                    <h3 className="flex items-center gap-1.5 text-xs font-semibold text-fd-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+                      Compatibility
+                    </h3>
+                    <ul className="space-y-1.5" role="list">
+                      {Object.values(compatibilityAnalysis.notes)
+                        .filter((n) => n.notes.length > 0)
+                        .flatMap((n) => n.notes)
+                        .map((note, i) => (
+                          <li
+                            key={i}
+                            className="text-xs text-amber-700 dark:text-amber-300 leading-[1.5]"
+                          >
+                            {note}
+                          </li>
+                        ))}
+                    </ul>
+                  </section>
+                )}
+
+                <SectionDivider variant="stretch" size="sm" className="my-2" />
+
+                <section className="space-y-2">
+                  <h3 className="text-xs font-semibold text-fd-foreground">Quick tips</h3>
+                  <ul
+                    className="space-y-1.5 text-xs text-fd-muted-foreground leading-[1.5]"
+                    role="list"
+                  >
+                    <li>• Click a category in the sidebar to jump</li>
+                    <li>• Hover a tech for description</li>
+                    <li>• "Flags" shows full CLI command</li>
+                    <li>• YOLO mode skips confirmations</li>
+                    <li>• Preview tab shows generated file tree</li>
+                  </ul>
+                </section>
+
+                <SectionDivider variant="stretch" size="sm" className="my-2" />
+
+                <section className="space-y-2">
+                  <h3 className="text-xs font-semibold text-fd-foreground">Shortcuts</h3>
+                  <dl className="space-y-1 text-xs text-fd-muted-foreground" role="list">
+                    <div className="flex justify-between gap-2">
+                      <kbd className="px-1.5 py-0.5 rounded bg-fd-muted border">Tab</kbd>
+                      <span>Next category</span>
+                    </div>
+                    <div className="flex justify-between gap-2">
+                      <kbd className="px-1.5 py-0.5 rounded bg-fd-muted border">Shift+Tab</kbd>
+                      <span>Prev category</span>
+                    </div>
+                    <div className="flex justify-between gap-2">
+                      <kbd className="px-1.5 py-0.5 rounded bg-fd-muted border">Enter</kbd>
+                      <span>Select option</span>
+                    </div>
+                    <div className="flex justify-between gap-2">
+                      <kbd className="px-1.5 py-0.5 rounded bg-fd-muted border">Cmd+C</kbd>
+                      <span>Copy command</span>
+                    </div>
+                  </dl>
+                </section>
+
+                {specialSponsors.length > 0 && (
+                  <section>
+                    <SpecialSponsorsPanel sponsors={specialSponsors} />
+                  </section>
+                )}
+              </div>
+            </ScrollArea>
+          </aside>
         </div>
 
         <div className="flex flex-1 flex-col overflow-hidden sm:hidden">
@@ -433,6 +536,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                     compatibilityNotes={compatibilityAnalysis.notes}
                     onSelect={handleTechSelect}
                     showAllCategories
+                    searchQuery={searchQuery}
                   />
                 </main>
               </ScrollArea>

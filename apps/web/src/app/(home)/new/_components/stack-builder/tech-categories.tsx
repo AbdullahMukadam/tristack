@@ -1,4 +1,5 @@
 import { CheckCircle2, InfoIcon } from "lucide-react";
+import { type KeyboardEvent, useRef } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { StackState } from "@/lib/constant";
@@ -21,6 +22,7 @@ type TechCategoriesProps = {
   compatibilityNotes: Record<string, { hasIssue: boolean; notes: string[] }>;
   onSelect: (category: keyof typeof TECH_OPTIONS, techId: string) => void;
   showAllCategories?: boolean;
+  searchQuery?: string;
 };
 
 function getIsSelected(stack: StackState, category: keyof StackState, techId: string) {
@@ -33,23 +35,112 @@ function getIsSelected(stack: StackState, category: keyof StackState, techId: st
   return currentValue === techId;
 }
 
+// Tech ids like "none" repeat across categories, so refs must be keyed per category.
+function optionRefKey(categoryKey: string, techId: string) {
+  return `${categoryKey}:${techId}`;
+}
+
 export function TechCategories({
   mode,
   stack,
   compatibilityNotes,
   onSelect,
   showAllCategories = false,
+  searchQuery = "",
 }: TechCategoriesProps) {
   const isDesktop = mode === "desktop";
   const categories = showAllCategories ? CATEGORY_ORDER : [CATEGORY_ORDER[0]];
+  const query = searchQuery.toLowerCase().trim();
+  const optionRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+
+  // Options in a category that match the search query (includes disabled ones).
+  const getFilteredOptions = (categoryKey: string) =>
+    getOptionsForStack(stack, categoryKey as keyof typeof TECH_OPTIONS).filter(
+      (tech) =>
+        !query ||
+        tech.name.toLowerCase().includes(query) ||
+        tech.description.toLowerCase().includes(query),
+    );
+
+  // Options the keyboard can actually land on (matching + enabled).
+  const getNavigableOptions = (categoryKey: string) =>
+    getFilteredOptions(categoryKey).filter((tech) =>
+      isOptionCompatible(stack, categoryKey as TechCategory, tech.id),
+    );
+
+  const visibleCategories = categories.filter(
+    (categoryKey) => getFilteredOptions(categoryKey).length > 0,
+  );
+  const hasMatches = visibleCategories.length > 0;
+
+  const focusOption = (categoryKey: string, techId: string) => {
+    optionRefs.current.get(optionRefKey(categoryKey, techId))?.focus();
+  };
+
+  // Focuses the first enabled option in the nearest category in the given direction.
+  // Returns false when there is nowhere to go.
+  const moveToCategory = (fromIndex: number, step: 1 | -1) => {
+    for (let i = fromIndex + step; i >= 0 && i < visibleCategories.length; i += step) {
+      const categoryKey = visibleCategories[i];
+      const first = getNavigableOptions(categoryKey)[0];
+      if (first) {
+        focusOption(categoryKey, first.id);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // Position is read from the focused button itself, so there is no index state
+  // that can drift out of sync with filtering or disabled options.
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+    const target = (e.target as HTMLElement).closest<HTMLElement>("[data-category][data-tech-id]");
+    const categoryKey = target?.dataset.category;
+    const techId = target?.dataset.techId;
+    if (!categoryKey || !techId) return;
+
+    const categoryIndex = visibleCategories.findIndex((key) => key === categoryKey);
+    if (categoryIndex === -1) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+      case "ArrowUp": {
+        e.preventDefault();
+        const options = getNavigableOptions(categoryKey);
+        const currentIndex = options.findIndex((tech) => tech.id === techId);
+        const next = options[currentIndex + (e.key === "ArrowDown" ? 1 : -1)];
+        if (next) focusOption(categoryKey, next.id);
+        break;
+      }
+      case "ArrowRight":
+      case "ArrowLeft": {
+        e.preventDefault();
+        moveToCategory(categoryIndex, e.key === "ArrowRight" ? 1 : -1);
+        break;
+      }
+      case "Tab": {
+        // Jump between categories; at either end fall through to native Tab.
+        if (moveToCategory(categoryIndex, e.shiftKey ? -1 : 1)) {
+          e.preventDefault();
+        }
+        break;
+      }
+      // Enter / Space are handled natively by the <button>, which fires onClick.
+    }
+  };
 
   return (
-    <>
-      {categories.map((categoryKey) => {
-        const categoryOptions = getOptionsForStack(stack, categoryKey as keyof typeof TECH_OPTIONS);
+    <div onKeyDown={handleKeyDown}>
+      {!hasMatches && query && (
+        <div className="flex items-center justify-center py-12 text-center">
+          <p className="text-sm text-fd-muted-foreground">No technologies match "{searchQuery}"</p>
+        </div>
+      )}
+      {visibleCategories.map((categoryKey) => {
+        const filteredOptions = getFilteredOptions(categoryKey);
         const categoryDisplayName = getCategoryDisplayName(categoryKey);
-
-        if (categoryOptions.length === 0) return null;
 
         return (
           <section
@@ -87,7 +178,7 @@ export function TechCategories({
                 isDesktop && "auto-rows-fr",
               )}
             >
-              {categoryOptions.map((tech) => {
+              {filteredOptions.map((tech) => {
                 const category = categoryKey as keyof StackState;
                 const isSelected = getIsSelected(stack, category, tech.id);
                 const isDisabled = !isOptionCompatible(stack, categoryKey as TechCategory, tech.id);
@@ -100,7 +191,17 @@ export function TechCategories({
 
                 const card = (
                   <button
+                    ref={(el) => {
+                      const refKey = optionRefKey(categoryKey, tech.id);
+                      if (el) {
+                        optionRefs.current.set(refKey, el);
+                      } else {
+                        optionRefs.current.delete(refKey);
+                      }
+                    }}
                     type="button"
+                    data-category={categoryKey}
+                    data-tech-id={tech.id}
                     disabled={isDisabled}
                     aria-disabled={isDisabled}
                     aria-pressed={isSelected}
@@ -203,6 +304,6 @@ export function TechCategories({
         );
       })}
       <div className="h-24" />
-    </>
+    </div>
   );
 }
