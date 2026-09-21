@@ -5,10 +5,10 @@ import type { Metadata } from "next";
 import { Faq } from "./_components/landing/faq";
 import { Features } from "./_components/landing/features";
 import { Hero } from "./_components/landing/hero";
-import { InstallSection } from "./_components/landing/install";
 import { LandingFooter } from "./_components/landing/landing-footer";
 import { SectionDivider } from "./_components/landing/section-divider";
 import { TechStacks } from "./_components/landing/tech-stacks";
+import Terminal from "./_components/landing/terminal";
 
 export const metadata: Metadata = {
   alternates: {
@@ -27,9 +27,9 @@ export default function HomePage() {
         <SectionDivider />
         <TechStacks />
         <SectionDivider />
-        <Features />
+        <Terminal />
         <SectionDivider />
-        <InstallSection />
+        <Features />
         <SectionDivider />
         <Faq />
         <SectionDivider />

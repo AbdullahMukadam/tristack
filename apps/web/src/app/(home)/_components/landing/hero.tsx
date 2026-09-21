@@ -3,7 +3,6 @@ import { ArrowUpRight } from "lucide-react";
 
 import { BadgeTag } from "@/components/badge-tag";
 
-import HeroGlow from "./hero-glow";
 import { BrandButton, NeutralButton } from "./round-button";
 
 export function Hero() {
@@ -11,13 +10,12 @@ export function Hero() {
     <section className="relative flex max-md:px-0 items-center justify-center px-4 py-20">
       <div className="relative z-10 flex max-w-3xl flex-col items-center gap-6 text-center">
         <Link href="/docs">
-          <BadgeTag version={"v1.0.5"} text="Scaffolds for Python, Go & Rust" />
+          <BadgeTag version={"v1.0.8"} text="Scaffolds for Python, Go & Rust" />
         </Link>
 
-        <h1 className="text-center text-3xl font-gambarino leading-tight font-normal tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
           Your <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Stack</span>,
-          Scaffolds in{" "}
-          <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Seconds</span>
+          Scaffolds in Seconds.
         </h1>
 
         <p className="max-w-2xl text-base leading-relaxed text-fd-muted-foreground sm:text-lg">
@@ -38,7 +36,6 @@ export function Hero() {
           <NeutralButton href="/docs" label="Read the docs" />
         </div>
       </div>
-      <HeroGlow />
     </section>
   );
 }

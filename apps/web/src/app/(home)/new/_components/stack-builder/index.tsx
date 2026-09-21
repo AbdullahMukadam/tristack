@@ -447,7 +447,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                     Next Steps
                   </h3>
 
-                  <div className="relative space-y-4 before:absolute before:inset-0 before:ml-3 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-border before:to-transparent">
+                  <div className="relative space-y-4">
                     {/* Step 1 */}
                     <div className="relative pl-8 md:pl-0">
                       <div className="md:hidden absolute left-0 top-0.5 flex h-6 w-6 items-center justify-center rounded-full border bg-fd-background text-[11px] font-bold text-fd-foreground shadow-sm">
@@ -456,21 +456,19 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       <p className="font-medium text-[13px] text-foreground mb-2">
                         Install the CLI
                       </p>
-                      <div className="rounded-lg border bg-[#0d1117] p-3 shadow-inner overflow-x-auto">
+                      <div className="rounded-lg border bg-primary/10 p-3 shadow-inner overflow-x-auto">
                         <div className="space-y-2.5 font-mono text-[11px] text-zinc-300 whitespace-nowrap">
                           <div>
-                            <span className="text-zinc-500 block mb-0.5"># Python (uvx)</span>
+                            <span className="text-white block mb-0.5"># Python (uvx)</span>
                             <span className="text-primary/80">uvx</span> tristack create my-app
                           </div>
                           <div>
-                            <span className="text-zinc-500 block mb-0.5"># Go / Rust (curl)</span>
+                            <span className="text-white block mb-0.5"># Go / Rust (curl)</span>
                             <span className="text-primary/80">curl</span> -fsSL
                             https://tristack.dev/install.sh | bash
                           </div>
                           <div>
-                            <span className="text-zinc-500 block mb-0.5">
-                              # Windows (PowerShell)
-                            </span>
+                            <span className="text-white block mb-0.5"># Windows (PowerShell)</span>
                             <span className="text-primary/80">irm</span> tristack.dev/install.ps1 |
                             iex
                           </div>
@@ -486,7 +484,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                       <p className="font-medium text-[13px] text-foreground mb-2">
                         Run the command
                       </p>
-                      <div className="rounded-lg border bg-[#0d1117] p-3 shadow-inner">
+                      <div className="rounded-lg border bg-primary/10 p-3 shadow-inner">
                         <div className="font-mono text-[11px] text-zinc-300">
                           <span className="text-green-400">tristack</span> create my-app
                         </div>
@@ -505,7 +503,7 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                         <p className="font-medium text-[13px] text-foreground mb-2">
                           {stack.language === "rust" ? "Build & run" : "Install deps & run"}
                         </p>
-                        <div className="rounded-lg border bg-[#0d1117] p-3 shadow-inner">
+                        <div className="rounded-lg border bg-primary/10 p-3 shadow-inner">
                           <div className="space-y-1.5 font-mono text-[11px] text-zinc-300">
                             <div className="flex gap-2">
                               <span className="text-zinc-500">$</span>

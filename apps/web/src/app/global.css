@@ -427,10 +427,8 @@
 #nd-sidebar [aria-expanded],
 #nd-sidebar-mobile [aria-expanded],
 #toc-title {
-  font-family: var(--font-geist-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 #nd-sidebar a[data-active="true"],

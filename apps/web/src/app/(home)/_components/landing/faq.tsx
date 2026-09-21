@@ -46,7 +46,7 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section className="max-md:px-0 px-4 py-16 sm:py-20">
+    <section className="max-md:px-0 mx-auto px-4 py-16 sm:py-20">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -54,40 +54,50 @@ export function Faq() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center"
       >
-        <SectionTitle accent="questions.">Frequently Asked</SectionTitle>
+        <h1 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
+          Frequently{" "}
+          <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Asked </span>
+          Questions.
+        </h1>
         <p className="max-w-xl text-sm leading-relaxed text-fd-muted-foreground sm:text-base">
           Here are answers to some of the most common questions about our platform.
         </p>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mt-10 rounded-lg border border-border"
-      >
-        <Accordion className="divide-y divide-border">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={faq.value}
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
-            >
-              <AccordionItem value={faq.value}>
-                <AccordionTrigger className="px-6 py-5! font-medium text-[15px]! text-fd-foreground hover:no-underline! sm:text-base!">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="px-6 text-sm! leading-relaxed text-fd-muted-foreground sm:text-base!">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            </motion.div>
-          ))}
-        </Accordion>
-      </motion.div>
+      <div className="w-full flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mt-10 rounded-lg border border-border w-4xl"
+        >
+          <Accordion className="divide-y divide-border">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={faq.value}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: index * 0.08,
+                  duration: 0.4,
+                  ease: "easeOut",
+                }}
+              >
+                <AccordionItem value={faq.value}>
+                  <AccordionTrigger className="px-6 py-5! font-medium text-[15px]! text-fd-foreground hover:no-underline! sm:text-base!">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 text-sm! leading-relaxed text-fd-muted-foreground sm:text-base!">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              </motion.div>
+            ))}
+          </Accordion>
+        </motion.div>
+      </div>
     </section>
   );
 }
