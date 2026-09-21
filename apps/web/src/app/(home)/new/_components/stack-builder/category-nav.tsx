@@ -41,6 +41,8 @@ export function scrollToCategorySection(idPrefix: string, category: string, retr
 export function CategoryNav({ progress, idPrefix }: CategoryNavProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const railRef = useRef<HTMLDivElement | null>(null);
+  const [showLeftFade, setShowLeftFade] = useState(false);
+  const [showRightFade, setShowRightFade] = useState(false);
 
   useEffect(() => {
     const sections = progress
@@ -85,51 +87,91 @@ export function CategoryNav({ progress, idPrefix }: CategoryNavProps) {
     }
   }, [activeCategory]);
 
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const updateFade = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = rail;
+      setShowLeftFade(scrollLeft > 8);
+      setShowRightFade(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 8);
+    };
+
+    updateFade();
+    rail.addEventListener("scroll", updateFade, { passive: true });
+
+    const observer = new ResizeObserver(updateFade);
+    observer.observe(rail);
+
+    return () => {
+      rail.removeEventListener("scroll", updateFade);
+      observer.disconnect();
+    };
+  }, [progress]);
+
   return (
-    <div
-      ref={railRef}
-      className="-my-1 flex items-center gap-1.5 overflow-x-auto overscroll-x-contain px-1 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    >
-      {progress.map(({ category, done, selected }) => {
-        const isActive = category === activeCategory;
-        return (
-          <button
-            key={category}
-            type="button"
-            data-category={category}
-            onClick={() => scrollToCategorySection(idPrefix, category)}
-            title={`Jump to ${getCategoryDisplayName(category)}`}
-            className={cn(
-              "builder-focus-ring relative pointer-coarse:min-h-8 flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors duration-200",
-              isActive
-                ? "text-foreground"
-                : done
-                  ? "text-foreground/85 hover:text-foreground hover:bg-muted/50"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-            )}
-          >
-            {isActive && (
-              <motion.div
-                layoutId="nav-active-pill"
-                className="absolute inset-0 rounded-lg bg-primary/10"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "h-1.5 w-1.5 shrink-0 rounded-full transition-colors",
-                  done ? "bg-primary" : "bg-muted-foreground/30",
-                  isActive && !done && "bg-primary/50",
-                )}
-              />
-              {getCategoryDisplayName(category)}
-              {selected > 1 && <span className="tabular-nums opacity-60">({selected})</span>}
-            </span>
-          </button>
-        );
-      })}
+    <div className="relative">
+      <div
+        ref={railRef}
+        className="-my-1 flex items-center gap-1.5 overflow-x-auto overscroll-x-contain px-1 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {progress.map(({ category, done, selected }) => {
+          const isActive = category === activeCategory;
+          return (
+            <button
+              key={category}
+              type="button"
+              data-category={category}
+              onClick={() => scrollToCategorySection(idPrefix, category)}
+              title={`Jump to ${getCategoryDisplayName(category)}`}
+              className={cn(
+                "builder-focus-ring relative pointer-coarse:min-h-8 flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors duration-200",
+                isActive
+                  ? "text-foreground"
+                  : done
+                    ? "text-foreground/85 hover:text-foreground hover:bg-muted/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+              )}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="nav-active-pill"
+                  className="absolute inset-0 rounded-lg bg-primary/10"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "h-1.5 w-1.5 shrink-0 rounded-full transition-colors",
+                    done ? "bg-primary" : "bg-muted-foreground/30",
+                    isActive && !done && "bg-primary/50",
+                  )}
+                />
+                {getCategoryDisplayName(category)}
+                {selected > 1 && <span className="tabular-nums opacity-60">({selected})</span>}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
+        className={cn(
+          "absolute left-0 top-0 bottom-0 w-12 pointer-events-none z-20 bg-gradient-to-r from-fd-background via-fd-background/90 to-transparent transition-opacity duration-300",
+          showLeftFade ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden="true"
+      />
+
+      <div
+        className={cn(
+          "absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-20 bg-gradient-to-l from-fd-background via-fd-background/90 to-transparent transition-opacity duration-300",
+          showRightFade ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden="true"
+      />
     </div>
   );
 }

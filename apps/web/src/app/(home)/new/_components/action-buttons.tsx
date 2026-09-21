@@ -7,7 +7,6 @@ import type { StackState } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 
 import { PresetDropdown } from "./preset-dropdown";
-import { ShareButton } from "./share-button";
 
 type ActionButtonsProps = {
   onReset: () => void;
@@ -16,8 +15,6 @@ type ActionButtonsProps = {
   onLoad: () => void;
   hasSavedStack: boolean;
   onApplyPreset: (presetId: string) => void;
-  stackUrl: string;
-  stackState: StackState;
   yolo: boolean;
   onYoloToggle: (yolo: string) => void;
 };
@@ -32,8 +29,6 @@ export function ActionButtons({
   onLoad,
   hasSavedStack,
   onApplyPreset,
-  stackUrl,
-  stackState,
   yolo,
   onYoloToggle,
 }: ActionButtonsProps) {
@@ -49,7 +44,6 @@ export function ActionButtons({
           <Shuffle className="h-3 w-3" />
           Randomize
         </button>
-        <ShareButton stackUrl={stackUrl} stackState={stackState} />
         <PresetDropdown onApplyPreset={onApplyPreset} />
         <button
           type="button"

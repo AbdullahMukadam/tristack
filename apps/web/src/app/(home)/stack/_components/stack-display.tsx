@@ -1,18 +1,16 @@
 "use client";
 
-import { Check, Copy, Edit, Layers, Share2, ExternalLink } from "lucide-react";
+import { Check, Copy, Edit, Layers, ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { ShareDialog } from "@/components/ui/share-dialog";
 import { TechBadge } from "@/components/ui/tech-badge";
 import type { LoadedStackState } from "@/lib/stack-url-state";
 import {
   formatProjectName,
   generateStackCommand,
-  generateStackSharingUrl,
   generateStackSummary,
   generateStackUrlFromState,
   getSelectedTechs,
@@ -25,11 +23,9 @@ type StackDisplayProps = {
 
 export function StackDisplay({ stackState }: StackDisplayProps) {
   const [copied, setCopied] = useState(false);
-  const [stackUrl, setStackUrl] = useState<string>("");
   const [editUrl, setEditUrl] = useState<string>("");
 
   useEffect(() => {
-    setStackUrl(generateStackSharingUrl(stackState, window.location.origin));
     setEditUrl(generateStackUrlFromState(stackState, window.location.origin));
   }, [stackState]);
 
@@ -62,15 +58,6 @@ export function StackDisplay({ stackState }: StackDisplayProps) {
     }
   };
 
-  const copyUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(stackUrl);
-      toast.success("Link copied to clipboard!");
-    } catch {
-      toast.error("Failed to copy link");
-    }
-  };
-
   return (
     <main className="container mx-auto min-h-svh">
       <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 pt-12 pb-16">
@@ -94,15 +81,6 @@ export function StackDisplay({ stackState }: StackDisplayProps) {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={copyUrl}
-                className="builder-focus-ring pointer-coarse:min-h-8 flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
-                title="Copy link"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Copy link</span>
-              </button>
               <Link href={editUrl}>
                 <button
                   type="button"
@@ -112,15 +90,6 @@ export function StackDisplay({ stackState }: StackDisplayProps) {
                   <span className="hidden sm:inline">Edit in builder</span>
                 </button>
               </Link>
-              <ShareDialog stackUrl={stackUrl} stackState={stackState}>
-                <button
-                  type="button"
-                  className="builder-focus-ring pointer-coarse:min-h-8 flex items-center gap-2 rounded-md border border-border bg-fd-background px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
-                >
-                  <Share2 className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Share</span>
-                </button>
-              </ShareDialog>
             </div>
           </div>
 

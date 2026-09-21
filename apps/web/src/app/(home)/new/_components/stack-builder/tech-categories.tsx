@@ -35,7 +35,6 @@ function getIsSelected(stack: StackState, category: keyof StackState, techId: st
   return currentValue === techId;
 }
 
-// Tech ids like "none" repeat across categories, so refs must be keyed per category.
 function optionRefKey(categoryKey: string, techId: string) {
   return `${categoryKey}:${techId}`;
 }
@@ -53,7 +52,6 @@ export function TechCategories({
   const query = searchQuery.toLowerCase().trim();
   const optionRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-  // Options in a category that match the search query (includes disabled ones).
   const getFilteredOptions = (categoryKey: string) =>
     getOptionsForStack(stack, categoryKey as keyof typeof TECH_OPTIONS).filter(
       (tech) =>
@@ -62,7 +60,6 @@ export function TechCategories({
         tech.description.toLowerCase().includes(query),
     );
 
-  // Options the keyboard can actually land on (matching + enabled).
   const getNavigableOptions = (categoryKey: string) =>
     getFilteredOptions(categoryKey).filter((tech) =>
       isOptionCompatible(stack, categoryKey as TechCategory, tech.id),
@@ -77,8 +74,6 @@ export function TechCategories({
     optionRefs.current.get(optionRefKey(categoryKey, techId))?.focus();
   };
 
-  // Focuses the first enabled option in the nearest category in the given direction.
-  // Returns false when there is nowhere to go.
   const moveToCategory = (fromIndex: number, step: 1 | -1) => {
     for (let i = fromIndex + step; i >= 0 && i < visibleCategories.length; i += step) {
       const categoryKey = visibleCategories[i];
@@ -91,8 +86,6 @@ export function TechCategories({
     return false;
   };
 
-  // Position is read from the focused button itself, so there is no index state
-  // that can drift out of sync with filtering or disabled options.
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
 
@@ -121,13 +114,11 @@ export function TechCategories({
         break;
       }
       case "Tab": {
-        // Jump between categories; at either end fall through to native Tab.
         if (moveToCategory(categoryIndex, e.shiftKey ? -1 : 1)) {
           e.preventDefault();
         }
         break;
       }
-      // Enter / Space are handled natively by the <button>, which fires onClick.
     }
   };
 
