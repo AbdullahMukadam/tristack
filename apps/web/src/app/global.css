@@ -428,7 +428,6 @@
 #nd-sidebar-mobile [aria-expanded],
 #toc-title {
   font-family: var(--font-sans);
-  text-transform: uppercase;
 }
 
 #nd-sidebar a[data-active="true"],
