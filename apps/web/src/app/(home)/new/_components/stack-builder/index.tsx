@@ -165,10 +165,6 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                     </label>
                   </section>
 
-                  <div className="px-2">
-                    <SectionDivider variant="stretch" size="sm" />
-                  </div>
-
                   <section className="border-b px-3 py-3">
                     <div className="flex flex-col gap-1.5">
                       <div

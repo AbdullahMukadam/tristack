@@ -4,7 +4,7 @@ A modern CLI for scaffolding backend projects across **Python, Go, and Rust** �
 
 The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fiber, Echo, Chi, stdlib), and **Rust** (Axum, Actix-Web, Rocket, Warp) backends — all in the same binary. The Python path is fully shipped (`uvx tristack`); the Go/Rust installers (curl/PowerShell) and full per-language parity are on the roadmap.
 
-> **Built as a fork of [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack) (MIT licensed)** — the prompt UX framework, virtual file-system template engine, and Stack Builder web UI are adapted from the original project, extended to scaffold Python, Go, and Rust backend stacks instead of TypeScript/JavaScript.
+> **Built as a fork of [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack) (MIT licensed)** — the prompt UX framework, virtual file-system template engine, and Stack Builder web UI are adapted from the original project, extended to scaffold Python, Go, and Rust stacks instead of TypeScript/JavaScript.
 
 <br />
 
@@ -13,7 +13,7 @@ The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fi
 - **Roll your own stack**: you pick only the parts you need, nothing extra.
 - **Minimal templates**: bare-bones scaffolds with zero bloat.
 - **Latest dependencies**: always use current, stable versions by default.
-- **Native-first distribution**: Python devs use `uvx tristack`; Go and Rust get their own curl/PowerShell installers (on the roadmap).
+- **Native-first distribution**: Python devs use `uvx tristack`; Go and Rust get their own curl/PowerShell installers.
 - **Free and open source**: forever, under the MIT License.
 
 ## Quick Start
