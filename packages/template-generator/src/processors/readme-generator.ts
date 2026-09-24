@@ -105,7 +105,7 @@ Makefile             convenience targets (build, run, test, vet, fmt, generate, 
 
   const content = `# ${config.projectName}
 
-A Go project scaffolded with [TriStack](https://tristack.dev).
+A Go project scaffolded with [TriStack](https://tristack.space).
 
 ## Stack
 
@@ -177,7 +177,7 @@ function writeDefaultReadme(
 
   const content = `# ${config.projectName}
 
-A ${config.language} project scaffolded with [TriStack](https://tristack.dev).
+A ${config.language} project scaffolded with [TriStack](https://tristack.space).
 
 ## Stack
 

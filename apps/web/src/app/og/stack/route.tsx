@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
     <OgShell
       path={`~/stack/${projectName}`}
       section="stack"
-      footerRight={`${techs.length} techs · tristack.dev`}
+      footerRight={`${techs.length} techs · tristack.space`}
     >
       <div
         style={{

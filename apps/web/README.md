@@ -36,4 +36,4 @@ To add or modify documentation:
 
 - [Next.js Documentation](https://nextjs.org/docs) - Next.js features and API
 - [Fumadocs](https://fumadocs.vercel.app) - The documentation framework used
-- [TriStack](https://tristack.dev) - Main project site
+- [TriStack](https://tristack.space) - Main project site

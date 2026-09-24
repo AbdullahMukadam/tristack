@@ -45,10 +45,10 @@ Go and Rust developers run the same `tristack` binary. The native installers are
 
 ```bash
 # Windows (PowerShell)
-irm https://tristack.dev/install.ps1 | iex
+irm https://tristack.space/install.ps1 | iex
 
 # macOS / Linux
-curl -fsSL https://tristack.dev/install.sh | bash
+curl -fsSL https://tristack.space/install.sh | bash
 ```
 
 ## Features
@@ -65,11 +65,11 @@ Type-safe, dependency-pinned scaffolding with no lock-in: you choose only what y
 
 ## Visual Stack Builder
 
-Use the [Stack Builder](https://tristack.dev/new) to pick a language, framework, ORM, migrations, database, package manager, and addons — then copy the ready-to-run `uvx tristack` command for your exact stack.
+Use the [Stack Builder](https://tristack.space/new) to pick a language, framework, ORM, migrations, database, package manager, and addons — then copy the ready-to-run `uvx tristack` command for your exact stack.
 
 ## Documentation
 
-Visit [tristack.dev](https://tristack.dev) for full documentation, guides, and examples.
+Visit [tristack.space](https://tristack.space) for full documentation, guides, and examples.
 
 ## Repository Structure
 

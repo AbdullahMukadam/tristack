@@ -186,7 +186,7 @@ export const TriStackConfigFileSchema = TriStackConfigSchema.safeExtend({
 })
   .strict()
   .meta({
-    id: "https://tristack.dev/schema.json",
+    id: "https://tristack.space/schema.json",
     title: "TriStack Configuration",
     description: "Configuration file for TriStack projects",
   });

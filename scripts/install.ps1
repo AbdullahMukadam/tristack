@@ -1,5 +1,5 @@
 # TriStack Installer (PowerShell)
-# Usage: irm https://tristack.dev/install.ps1 | iex
+# Usage: irm https://tristack.space/install.ps1 | iex
 #
 # Installs the latest tristack binary to $env:LOCALAPPDATA\tristack\bin
 # and adds it to your PATH.
@@ -33,7 +33,7 @@ Write-Info "Installing TriStack..."
 $platform = Get-Platform
 if (-not $platform) {
     Write-Error "This installer is for 64-bit Windows only."
-    Write-Error "On macOS/Linux use: curl -fsSL https://tristack.dev/install.sh | bash"
+    Write-Error "On macOS/Linux use: curl -fsSL https://tristack.space/install.sh | bash"
     exit 1
 }
 

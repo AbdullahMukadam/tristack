@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://tristack.dev"
+Homepage = "https://tristack.space"
 Repository = "https://github.com/tristack/tristack"
 Issues = "https://github.com/tristack/tristack/issues"
 

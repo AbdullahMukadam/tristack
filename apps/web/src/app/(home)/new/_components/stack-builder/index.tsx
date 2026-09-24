@@ -461,12 +461,12 @@ export function StackBuilder({ specialSponsors = [] }: StackBuilderProps) {
                           <div>
                             <span className="text-white block mb-0.5"># Go / Rust (curl)</span>
                             <span className="text-primary/80">curl</span> -fsSL
-                            https://tristack.dev/install.sh | bash
+                            https://tristack.space/install.sh | bash
                           </div>
                           <div>
                             <span className="text-white block mb-0.5"># Windows (PowerShell)</span>
-                            <span className="text-primary/80">irm</span> tristack.dev/install.ps1 |
-                            iex
+                            <span className="text-primary/80">irm</span> tristack.space/install.ps1
+                            | iex
                           </div>
                         </div>
                       </div>

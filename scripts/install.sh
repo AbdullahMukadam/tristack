@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # TriStack Installer
-# Usage: curl -fsSL https://tristack.dev/install.sh | bash
+# Usage: curl -fsSL https://tristack.space/install.sh | bash
 #
 # Installs the latest tristack binary to /usr/local/bin.
 # Supports macOS (arm64/x64) and Linux (x64/arm64).
@@ -44,7 +44,7 @@ detect_platform() {
       ;;
     *)
       error "Unsupported OS: $os"
-      error "For Windows, use: irm https://tristack.dev/install.ps1 | iex"
+      error "For Windows, use: irm https://tristack.space/install.ps1 | iex"
       exit 1
       ;;
   esac

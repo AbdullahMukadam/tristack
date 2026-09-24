@@ -61,7 +61,7 @@ export const OG_FONT_FAMILY = "Geist Mono, ui-monospace, monospace";
 export function OgShell({
   path,
   section,
-  footerRight = "tristack.dev",
+  footerRight = "tristack.space",
   children,
 }: {
   path: string;

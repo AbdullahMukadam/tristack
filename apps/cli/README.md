@@ -38,10 +38,10 @@ Go and Rust developers run the same `tristack` binary. The native installers are
 
 ```bash
 # Windows (PowerShell)
-irm https://tristack.dev/install.ps1 | iex
+irm https://tristack.space/install.ps1 | iex
 
 # macOS / Linux
-curl -fsSL https://tristack.dev/install.sh | bash
+curl -fsSL https://tristack.space/install.sh | bash
 ```
 
 ## Requirements
@@ -84,7 +84,7 @@ uvx tristack create-json --input '{"projectName":"my-api","language":"python","f
 uvx tristack create-json --input '{"projectName":"my-api","dryRun":true}'
 ```
 
-The payload is validated against `CreateInputSchema` — the same schema that backs `--yes`. See the [Agent Workflows](https://tristack.dev/docs/cli/agent-workflows) docs for details.
+The payload is validated against `CreateInputSchema` — the same schema that backs `--yes`. See the [Agent Workflows](https://tristack.space/docs/cli/agent-workflows) docs for details.
 
 ## Examples
 
@@ -105,7 +105,7 @@ uvx tristack my-api --yes --dry-run
 
 ## Telemetry & Privacy
 
-The CLI does not currently transmit telemetry; `--disable-analytics` (or the `DO_NOT_TRACK=1` convention) is reserved for if it ever does. No project names, paths, file contents, or secrets are ever collected. See the [Privacy Policy](https://tristack.dev/privacy) for details.
+The CLI does not currently transmit telemetry; `--disable-analytics` (or the `DO_NOT_TRACK=1` convention) is reserved for if it ever does. No project names, paths, file contents, or secrets are ever collected. See the [Privacy Policy](https://tristack.space/privacy) for details.
 
 ## License & Attribution
 
