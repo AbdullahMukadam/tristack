@@ -1,4 +1,5 @@
-from sqlmodel import AsyncSession, select
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..models import Item
 from ..schemas.items import ItemResponse

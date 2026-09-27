@@ -10,12 +10,12 @@ async def health() -> dict[str, str]:
 
 {{#if (ne orm "none")}}
 router = Router(
-    path="/v1",
-    route_handlers=[health, list_items_endpoint, create_item_endpoint],
+    path="/api/v1",
+    route_handlers=[list_items_endpoint, create_item_endpoint],
 )
 {{else}}
 router = Router(
-    path="/v1",
-    route_handlers=[health],
+    path="/api/v1",
+    route_handlers=[],
 )
 {{/if}}

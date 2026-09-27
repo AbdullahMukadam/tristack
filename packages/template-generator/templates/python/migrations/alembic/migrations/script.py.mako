@@ -3,6 +3,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+import sqlmodel
 ${imports if imports else ""}
 
 revision: str = ${repr(up_revision)}

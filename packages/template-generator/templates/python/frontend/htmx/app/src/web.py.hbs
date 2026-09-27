@@ -8,7 +8,8 @@ pkg_dir = Path(__file__).resolve().parent
 templates_dir = pkg_dir / "templates"
 
 {{#if (eq framework "fastapi")}}
-from fastapi import APIRouter, HTMLResponse, Request
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 web_router = APIRouter()

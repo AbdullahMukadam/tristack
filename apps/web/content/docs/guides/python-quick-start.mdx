@@ -65,14 +65,15 @@ After scaffolding you'll see the reproducible command, which is also saved to `t
 cd my-api
 cp .env.example .env
 uv sync
-uv run uvicorn my_api.main:app --reload
+uv run uvicorn src.main:app --reload
 ```
 
 Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
 
 <Callout title="Note">
-  The import package is a snake_case version of your project name: `my-api` → `my_api`. The health
-  endpoint, database URLs, and docs all follow from your selections.
+  The import package is a fixed `src/` directory — the project name never appears inside the tree.
+  The distribution/project name in `pyproject.toml` is still your snake_case project name (`my_api`
+  for `my-api`). The health endpoint, database URLs, and docs all follow from your selections.
 </Callout>
 
 ## 3. Common commands
@@ -109,9 +110,9 @@ The stack varies by framework — same flow, different runner:
 
 | Framework         | Scaffold flag          | Run                                                      |
 | ----------------- | ---------------------- | -------------------------------------------------------- |
-| FastAPI (default) | `--framework fastapi`  | `uv run uvicorn my_api.main:app --reload`                |
+| FastAPI (default) | `--framework fastapi`  | `uv run uvicorn src.main:app --reload`                   |
 | Litestar          | `--framework litestar` | `uv run litestar run --reload`                           |
-| Flask             | `--framework flask`    | `uv run flask --app my_api.main run`                     |
+| Flask             | `--framework flask`    | `uv run flask --app src.main run --debug`                |
 | Django            | `--framework django`   | `uv run manage.py migrate && uv run manage.py runserver` |
 
 ## 5. Reproduce the same stack

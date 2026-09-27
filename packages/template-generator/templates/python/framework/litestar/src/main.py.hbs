@@ -25,10 +25,10 @@ async def lifespan(app: Litestar) -> AsyncIterator[None]:
 
 def create_app() -> Litestar:
 
-    from .api.v1.router import router as v1_router
+    from .api.v1.router import health, router as v1_router
 
     return Litestar(
-        route_handlers=[v1_router],
+        route_handlers=[health, v1_router],
         debug=settings.debug,
         cors_config=CORSConfig(allow_origins=settings.cors_origins),
         exception_handlers=exception_handlers,

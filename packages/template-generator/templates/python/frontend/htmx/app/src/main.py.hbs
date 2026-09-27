@@ -39,7 +39,7 @@ def create_app() -> FastAPI:
 
     app.include_router(web_router)
 
-    static_dir = Path(__file__).resolve().parent.parent.parent / "static"
+    static_dir = Path(__file__).resolve().parent.parent / "static"
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
     return app
@@ -73,14 +73,15 @@ async def lifespan(app: Litestar) -> AsyncIterator[None]:
 
 def create_app() -> Litestar:
 
-    from .api.v1.router import router as v1_router
+    from .api.v1.router import health, router as v1_router
     from .web import web_routes
 
     pkg_dir = Path(__file__).resolve().parent
-    static_dir = pkg_dir.parent.parent / "static"
+    static_dir = pkg_dir.parent / "static"
 
     return Litestar(
         route_handlers=[
+            health,
             v1_router,
             *web_routes,
             create_static_files_router(path="/static", directories=[str(static_dir)]),
@@ -112,7 +113,7 @@ settings = get_settings()
 def create_app() -> Flask:
 
     pkg_dir = Path(__file__).resolve().parent
-    root_dir = pkg_dir.parent.parent.parent
+    root_dir = pkg_dir.parent
 
     app = Flask(
         __name__,

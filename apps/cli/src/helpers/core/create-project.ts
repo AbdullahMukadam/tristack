@@ -133,14 +133,19 @@ async function runPostScaffoldSteps(
 }
 
 function runCommandHint(options: ProjectConfig): string {
-  const slug = toProjectSlug(options.projectName);
   switch (options.packageManager) {
     case "uv":
-      return `uv run uvicorn ${slug}.main:app --reload`;
+      return options.framework === "flask"
+        ? "uv run flask --app src.main run --debug"
+        : "uv run uvicorn src.main:app --reload";
     case "poetry":
-      return `poetry run uvicorn ${slug}.main:app --reload`;
+      return options.framework === "flask"
+        ? "poetry run flask --app src.main run --debug"
+        : "poetry run uvicorn src.main:app --reload";
     case "pip":
-      return `uvicorn ${slug}.main:app --reload`;
+      return options.framework === "flask"
+        ? "flask --app src.main run --debug"
+        : "uvicorn src.main:app --reload";
     case "go":
       return "go run .";
     case "cargo":
