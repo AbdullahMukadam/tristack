@@ -391,27 +391,10 @@
   outline-offset: 2px;
 }
 
-#nd-notebook-layout,
-#nd-subnav,
-#nd-sidebar-mobile {
-  --color-fd-card: transparent;
-  --color-fd-secondary: transparent;
-  --color-fd-muted: transparent;
-  --color-fd-accent: transparent;
-  --color-fd-accent-foreground: var(--color-fd-foreground);
-}
-
 #nd-sidebar,
 .dark #nd-sidebar {
   --color-fd-muted: transparent;
   --color-fd-secondary: transparent;
-}
-
-#nd-notebook-layout *:not(img),
-#nd-subnav *:not(img),
-#nd-sidebar-mobile *:not(img) {
-  border-radius: 4px;
-  box-shadow: none;
 }
 
 #nd-notebook-layout :is(a, button):focus-visible,

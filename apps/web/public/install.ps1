@@ -54,7 +54,7 @@ New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 $binaryPath = Join-Path $InstallDir "tristack.exe"
 
 # Download
-$url = "https://github.com/$Repo/releases/download/v$version/$platform.zip"
+$url = "https://github.com/$Repo/releases/download/v$version/$platform.exe.zip"
 $zipPath = Join-Path $env:TEMP "tristack-$version.zip"
 Write-Info "Downloading from $url..."
 Invoke-WebRequest -Uri $url -OutFile $zipPath -UseBasicParsing

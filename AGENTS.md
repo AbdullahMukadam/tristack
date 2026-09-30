@@ -32,6 +32,7 @@ This repo is a Bun + Turborepo monorepo.
 - File naming: prefer kebab-case files (for example `database-setup.ts`).
 - Symbols: `camelCase` for functions/variables, `PascalCase` for types/components.
 - Keep feature logic near domain folders (`helpers`, `utils`, `template-handlers`).
+- **No comments in templates.** Anything under `packages/template-generator/templates/**` is emitted verbatim into a user's generated project. Never add comments, docstrings, or explanatory prose to template files (including `.hbs`, `.mako`, and any config file). The same applies to generated README content in `readme-generator.ts`. Comments belong in the generator source (`packages/template-generator/src/**`) or the repo's own docs, not in scaffold output.
 
 ## Error Handling Conventions
 

@@ -1,10 +1,12 @@
+import { getRuntimeProfile } from "@tristack/types";
 import { Result } from "better-result";
 import { execa } from "execa";
 
-import type { PackageManager } from "../../types";
+import type { ProjectConfig } from "../../types";
 import { ProjectCreationError } from "../../utils/errors";
 import { shouldSkipExternalCommands } from "../../utils/external-commands";
 import { getInterruptSignal, startInterruptibleStep, wasInterrupted } from "../../utils/interrupt";
+import { resolvePipCommand } from "../../utils/pip-command";
 import { createSpinner } from "../../utils/terminal-output";
 import { error } from "../../utils/theme";
 
@@ -14,33 +16,27 @@ const FORCE_KILL_AFTER_MS = 2000;
 
 type InstallCommand = { bin: string; args: string[]; label: string };
 
-function installCommand(packageManager: PackageManager): InstallCommand {
-  switch (packageManager) {
-    case "uv":
-      return { bin: "uv", args: ["sync"], label: "uv sync" };
-    case "poetry":
-      return { bin: "poetry", args: ["install"], label: "poetry install" };
-    case "pip":
-      return { bin: "pip", args: ["install", "-e", "."], label: "pip install -e ." };
-    case "go":
-      return { bin: "go", args: ["mod", "tidy"], label: "go mod tidy" };
-    case "cargo":
-      return { bin: "cargo", args: ["build"], label: "cargo build" };
+async function installCommand(config: ProjectConfig): Promise<InstallCommand> {
+  const profile = getRuntimeProfile(config);
+  if (config.packageManager === "pip") {
+    const { bin, baseArgs } = await resolvePipCommand();
+    return { bin, args: [...baseArgs, ...profile.install.args], label: profile.install.label };
   }
+  return profile.install;
 }
 
 export async function installDependencies({
   projectDir,
-  packageManager,
+  config,
 }: {
   projectDir: string;
-  packageManager: PackageManager;
+  config: ProjectConfig;
 }): Promise<Result<InstallStatus, ProjectCreationError>> {
   if (shouldSkipExternalCommands()) {
     return Result.ok("installed");
   }
 
-  const cmd = installCommand(packageManager);
+  const cmd = await installCommand(config);
 
   startInterruptibleStep();
   const s = createSpinner();

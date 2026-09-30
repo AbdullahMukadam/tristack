@@ -35,7 +35,7 @@ djangorestframework = "^3.15"
 django-cors-headers = "^4.6"
 gunicorn = "^23.0"
 {{else if (eq framework "flask")}}
-flask = "^3.1"
+flask = { extras = ["async"], version = "^3.1" }
 {{/if}}
 {{#if (eq framework "django")}}
 psycopg = { extras = ["binary"], version = "^3.2" }
@@ -45,6 +45,7 @@ sqlmodel = "^0.0.22"
 sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
 {{else if (eq orm "tortoise")}}
 tortoise-orm = "^0.24"
+tzdata = "^2025.2"
 {{/if}}
 {{#if (and (ne framework "django") (ne framework "flask") (eq frontend "htmx"))}}
 jinja2 = "^3.1"

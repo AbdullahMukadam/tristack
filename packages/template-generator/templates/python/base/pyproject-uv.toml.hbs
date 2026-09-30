@@ -19,7 +19,7 @@ dependencies = [
     "django-cors-headers",
     "gunicorn",
 {{else if (eq framework "flask")}}
-    "flask",
+    "flask[async]",
 {{/if}}
 {{#if (eq framework "django")}}
     "psycopg[binary]",
@@ -29,6 +29,7 @@ dependencies = [
     "sqlalchemy[asyncio]",
 {{else if (eq orm "tortoise")}}
     "tortoise-orm",
+    "tzdata",
 {{/if}}
 {{#if (and (ne framework "django") (ne framework "flask") (eq frontend "htmx"))}}
     "jinja2",

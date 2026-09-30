@@ -6,6 +6,7 @@ import { execa } from "execa";
 import type { PackageManager, ProjectConfig } from "../types";
 import { CLIError } from "./errors";
 import { shouldSkipExternalCommands } from "./external-commands";
+import { resolvePipCommand } from "./pip-command";
 
 type Tool = "python" | "node" | PackageManager;
 
@@ -50,6 +51,22 @@ async function readToolVersion(tool: string): Promise<string | null> {
   return result.isOk() ? result.value : null;
 }
 
+async function readPipVersion(): Promise<string | null> {
+  const { bin, baseArgs } = await resolvePipCommand();
+  const result = await Result.tryPromise({
+    try: async () => {
+      const { stdout } = await execa(bin, [...baseArgs, "--version"], {
+        cwd: os.tmpdir(),
+        stderr: "pipe",
+      });
+      const parts = stdout.trim().split(/\s+/);
+      return parts[2] ?? parts[1] ?? stdout.trim();
+    },
+    catch: () => null,
+  });
+  return result.isOk() ? result.value : null;
+}
+
 export type BaselineCheck = { warnings: string[] };
 
 /**
@@ -64,7 +81,7 @@ export async function checkBaselineRequirements(
 
   const warnings: string[] = [];
   const tool = packageManager ? PACKAGE_MANAGER_COMMAND[packageManager] : "uv";
-  const version = await readToolVersion(tool);
+  const version = packageManager === "pip" ? await readPipVersion() : await readToolVersion(tool);
   if (version === null) {
     warnings.push(
       `"${tool}" was not found on your PATH. Install it or choose a different package manager.`,
@@ -83,7 +100,8 @@ export async function checkLocalRequirements(
   const warnings: string[] = [];
   const tool = PACKAGE_MANAGER_COMMAND[config.packageManager];
   let packageManagerVersion = "latest";
-  const version = await readToolVersion(tool);
+  const version =
+    config.packageManager === "pip" ? await readPipVersion() : await readToolVersion(tool);
   if (version === null) {
     warnings.push(`"${tool}" was not found on your PATH. Install it before continuing.`);
   } else {

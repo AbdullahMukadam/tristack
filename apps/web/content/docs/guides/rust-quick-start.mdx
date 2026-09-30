@@ -11,27 +11,21 @@ This guide walks through the default Rust flow: scaffold an Axum + SeaORM + SQLi
 
 Install the `tristack` binary for your OS:
 
-<CodeBlockTabs defaultValue="windows">
-  <CodeBlockTabsList>
-    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
-  </CodeBlockTabsList>
+<Tabs items={["Windows", "macOS", "Linux"]} defaultIndex={0}>
+  <Tab value="Windows">
+    ```powershell
+    irm https://tristack.space/install.ps1 | iex
+    ```
+  </Tab>
 
-<CodeBlockTab value="windows">
-  ```powershell irm https://tristack.space/install.ps1 | iex ```
-</CodeBlockTab>
+<Tab value="macOS">```bash curl -fsSL https://tristack.space/install.sh | bash ```</Tab>
 
-<CodeBlockTab value="macos">
-  ```bash curl -fsSL https://tristack.space/install.sh | bash ```
-</CodeBlockTab>
-
-  <CodeBlockTab value="linux">
+  <Tab value="Linux">
     ```bash
     curl -fsSL https://tristack.space/install.sh | bash
     ```
-  </CodeBlockTab>
-</CodeBlockTabs>
+  </Tab>
+</Tabs>
 
 ## 1. Scaffold
 

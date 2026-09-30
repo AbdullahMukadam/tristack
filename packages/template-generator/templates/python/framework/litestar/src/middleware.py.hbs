@@ -1,21 +1,23 @@
 import logging
 from typing import Any
 
-from litestar.middleware import PureMiddleware
+from litestar.enums import ScopeType
+from litestar.middleware import ASGIMiddleware
 from litestar.types import ASGIApp, Receive, Scope, Send
 
 logger = logging.getLogger(__name__)
 
-class RequestLoggingMiddleware(PureMiddleware):
+class RequestLoggingMiddleware(ASGIMiddleware):
 
-    def __init__(self, app: ASGIApp) -> None:
-        self.app = app
+    scopes = (ScopeType.HTTP,)
 
-    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        if scope["type"] != "http":
-            await self.app(scope, receive, send)
-            return
-
+    async def handle(
+        self,
+        scope: Scope,
+        receive: Receive,
+        send: Send,
+        next_app: ASGIApp,
+    ) -> None:
         method = scope["method"]
         path = scope["path"]
 
@@ -24,4 +26,4 @@ class RequestLoggingMiddleware(PureMiddleware):
                 logger.info("%s %s -> %s", method, path, message.get("status", "??"))
             await send(message)
 
-        await self.app(scope, receive, send_wrapper)
+        await next_app(scope, receive, send_wrapper)

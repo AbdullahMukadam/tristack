@@ -11,32 +11,23 @@ Curated, task-focused guides for working with TriStack projects.
 
 Install the standalone binary for your OS, or run on demand with `uvx tristack` over Python:
 
-<CodeBlockTabs defaultValue="windows">
-  <CodeBlockTabsList>
-    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
-  </CodeBlockTabsList>
+<Tabs items={["Windows", "macOS", "Linux", "Python (any OS)"]} defaultIndex={0}>
+  <Tab value="Windows">
+    ```powershell
+    irm https://tristack.space/install.ps1 | iex
+    ```
+  </Tab>
 
-<CodeBlockTab value="windows">
-  ```powershell irm https://tristack.space/install.ps1 | iex ```
-</CodeBlockTab>
+<Tab value="macOS">```bash curl -fsSL https://tristack.space/install.sh | bash ```</Tab>
 
-<CodeBlockTab value="macos">
-  ```bash curl -fsSL https://tristack.space/install.sh | bash ```
-</CodeBlockTab>
+<Tab value="Linux">```bash curl -fsSL https://tristack.space/install.sh | bash ```</Tab>
 
-<CodeBlockTab value="linux">
-  ```bash curl -fsSL https://tristack.space/install.sh | bash ```
-</CodeBlockTab>
-
-  <CodeBlockTab value="python">
+  <Tab value="Python (any OS)">
     ```bash
     uvx tristack
     ```
-  </CodeBlockTab>
-</CodeBlockTabs>
+  </Tab>
+</Tabs>
 
 ### Available Guides
 

@@ -11,15 +11,8 @@ This guide walks through the default TriStack flow: scaffold a FastAPI + SQLMode
 
 Python projects run the CLI as `uvx tristack`. If you don't use `uv`, install the standalone binary instead:
 
-<CodeBlockTabs defaultValue="python">
-  <CodeBlockTabsList>
-    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
-  </CodeBlockTabsList>
-
-  <CodeBlockTab value="python">
+<Tabs items={["Python (any OS)", "Windows", "macOS", "Linux"]} defaultIndex={0}>
+  <Tab value="Python (any OS)">
     ```bash
     # run on demand — no install needed
     uvx tristack
@@ -28,22 +21,18 @@ Python projects run the CLI as `uvx tristack`. If you don't use `uv`, install th
     uv tool install tristack
     ```
 
-  </CodeBlockTab>
+  </Tab>
 
-<CodeBlockTab value="windows">
-  ```powershell irm https://tristack.space/install.ps1 | iex ```
-</CodeBlockTab>
+<Tab value="Windows">```powershell irm https://tristack.space/install.ps1 | iex ```</Tab>
 
-<CodeBlockTab value="macos">
-  ```bash curl -fsSL https://tristack.space/install.sh | bash ```
-</CodeBlockTab>
+<Tab value="macOS">```bash curl -fsSL https://tristack.space/install.sh | bash ```</Tab>
 
-  <CodeBlockTab value="linux">
+  <Tab value="Linux">
     ```bash
     curl -fsSL https://tristack.space/install.sh | bash
     ```
-  </CodeBlockTab>
-</CodeBlockTabs>
+  </Tab>
+</Tabs>
 
 ## 1. Scaffold
 
@@ -108,12 +97,12 @@ docker compose up --build
 
 The stack varies by framework — same flow, different runner:
 
-| Framework         | Scaffold flag          | Run                                                      |
-| ----------------- | ---------------------- | -------------------------------------------------------- |
-| FastAPI (default) | `--framework fastapi`  | `uv run uvicorn src.main:app --reload`                   |
-| Litestar          | `--framework litestar` | `uv run litestar run --reload`                           |
-| Flask             | `--framework flask`    | `uv run flask --app src.main run --debug`                |
-| Django            | `--framework django`   | `uv run manage.py migrate && uv run manage.py runserver` |
+| Framework         | Scaffold flag          | Run                                                                    |
+| ----------------- | ---------------------- | ---------------------------------------------------------------------- |
+| FastAPI (default) | `--framework fastapi`  | `uv run uvicorn src.main:app --reload`                                 |
+| Litestar          | `--framework litestar` | `uv run litestar run --reload`                                         |
+| Flask             | `--framework flask`    | `uv run flask --app src.main run --debug`                              |
+| Django            | `--framework django`   | `uv run python manage.py migrate && uv run python manage.py runserver` |
 
 ## 5. Reproduce the same stack
 
