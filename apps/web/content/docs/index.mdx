@@ -25,15 +25,8 @@ TriStack scaffolds backend projects in multiple languages. Each has its own opti
 
 TriStack installs as a standalone native binary for Windows, macOS, and Linux, or runs on demand with `uv` over Python. Pick your platform:
 
-<CodeBlockTabs defaultValue="python">
-  <CodeBlockTabsList>
-    <CodeBlockTabsTrigger value="python">Python (any OS)</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="windows">Windows</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="macos">macOS</CodeBlockTabsTrigger>
-    <CodeBlockTabsTrigger value="linux">Linux</CodeBlockTabsTrigger>
-  </CodeBlockTabsList>
-
-  <CodeBlockTab value="python">
+<Tabs items={["Python (any OS)", "Windows", "macOS", "Linux"]} defaultIndex={0}>
+  <Tab value="Python (any OS)">
     ```bash
     # run on demand — no install needed
     uvx tristack
@@ -42,22 +35,18 @@ TriStack installs as a standalone native binary for Windows, macOS, and Linux, o
     uv tool install tristack
     ```
 
-  </CodeBlockTab>
+  </Tab>
 
-<CodeBlockTab value="windows">
-  ```powershell irm https://tristack.space/install.ps1 | iex ```
-</CodeBlockTab>
+<Tab value="Windows">```powershell irm https://tristack.space/install.ps1 | iex ```</Tab>
 
-<CodeBlockTab value="macos">
-  ```bash curl -fsSL https://tristack.space/install.sh | bash ```
-</CodeBlockTab>
+<Tab value="macOS">```bash curl -fsSL https://tristack.space/install.sh | bash ```</Tab>
 
-  <CodeBlockTab value="linux">
+  <Tab value="Linux">
     ```bash
     curl -fsSL https://tristack.space/install.sh | bash
     ```
-  </CodeBlockTab>
-</CodeBlockTabs>
+  </Tab>
+</Tabs>
 
 ## Get Started
 

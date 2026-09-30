@@ -1,33 +1,18 @@
 import type { Language, ProjectConfig } from "@tristack/types";
+import { getRuntimeProfile } from "@tristack/types";
 
 import { toProjectSlug } from "../core/template-processor";
 import type { VirtualFileSystem } from "../core/virtual-fs";
 
 function goRunCommand(config: ProjectConfig): string {
-  if (config.framework === "none") return "go run ./cmd/api";
-  return config.addons.includes("air") ? "air" : "go run ./cmd/api";
-}
-
-function goMigrateTags(config: ProjectConfig): string {
-  switch (config.database) {
-    case "postgres":
-      return "postgres";
-    case "mysql":
-      return "mysql";
-    default:
-      return "sqlite3";
-  }
+  return getRuntimeProfile(config).run().label;
 }
 
 function goMigrationsCommand(config: ProjectConfig): string {
-  switch (config.migrations) {
-    case "goose":
-      return "go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up";
-    case "golang-migrate":
-      return `go run -tags '${goMigrateTags(config)}' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$DATABASE_URL" up`;
-    default:
-      return "# no migrations configured";
-  }
+  const migrate = getRuntimeProfile(config).prepare.find(
+    (cmd) => cmd.label.includes("goose") || cmd.label.includes("golang-migrate"),
+  );
+  return migrate?.label ?? "# no migrations configured";
 }
 
 function bashBlock(lines: string[]): string {
@@ -157,8 +142,11 @@ function writeDefaultReadme(
       steps.push("# 2. Run the sample script", bareRunCommand(config));
     }
   } else {
-    steps.push("# 2. Run database migrations", migrationsCommand(config));
-    steps.push("# 3. Start the dev server", runCommand(config));
+    const migrationSteps = migrationsSteps(config);
+    if (migrationSteps.length > 0) {
+      steps.push(`# 2. ${migrationSteps[0]}`, ...migrationSteps.slice(1));
+    }
+    steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, runCommand(config));
   }
 
   const apiDocs = isBare
@@ -206,69 +194,62 @@ Copy \`.env.example\` to \`.env\` and fill in the values (database URLs, etc.).
 }
 
 function installCommand(config: ProjectConfig): string {
-  if (config.language === "go") {
-    return "go mod tidy";
-  }
-  if (config.language === "rust") {
-    return "cargo build";
-  }
-  switch (config.packageManager) {
-    case "uv":
-      return "uv sync";
-    case "poetry":
-      return "poetry install";
-    default:
-      return "pip install -e .";
-  }
+  return getRuntimeProfile(config).install.label;
 }
 
 function bareRunCommand(config: ProjectConfig): string {
-  switch (config.packageManager) {
-    case "uv":
-      return "uv run python -m src.main";
-    case "poetry":
-      return "poetry run python -m src.main";
-    default:
-      return "python -m src.main";
-  }
+  return getRuntimeProfile(config).run().label;
 }
 
-function migrationsCommand(config: ProjectConfig): string {
+function migrationsSteps(config: ProjectConfig): string[] {
   if (config.language === "go") {
-    return goMigrationsCommand(config);
+    return ["Run database migrations", goMigrationsCommand(config)];
   }
   if (config.language === "rust") {
-    return "# no migrations configured";
+    return config.database === "none"
+      ? []
+      : ["Run database migrations", "# no migrations configured"];
   }
   if (config.database === "none") {
-    return "# no database configured";
+    return [];
   }
-  return config.migrations === "alembic"
-    ? "uv run alembic upgrade head"
-    : "# see your migration tooling";
+  const profile = getRuntimeProfile(config);
+  if (config.framework === "django") {
+    return [
+      "Run database migrations",
+      profile.prepare[0]?.label ?? `${pyRunPrefix(config)}python manage.py migrate`,
+    ];
+  }
+  if (config.migrations === "alembic") {
+    return [
+      "Create and run a database migration",
+      profile.prepare[0]?.label ??
+        `${pyRunPrefix(config)}alembic revision --autogenerate -m "initial"`,
+      profile.prepare[1]?.label ?? `${pyRunPrefix(config)}alembic upgrade head`,
+    ];
+  }
+  if (config.orm === "tortoise") {
+    return ["The Tortoise ORM auto-creates the schema on startup (src/db.py init_db)."];
+  }
+  if (config.orm === "sqlmodel" || config.orm === "sqlalchemy") {
+    return ["The SQLAlchemy metadata auto-creates the schema on startup via create_all."];
+  }
+  return [];
+}
+
+function pyRunPrefix(config: ProjectConfig): string {
+  switch (config.packageManager) {
+    case "uv":
+      return "uv run ";
+    case "poetry":
+      return "poetry run ";
+    default:
+      return "";
+  }
 }
 
 function runCommand(config: ProjectConfig): string {
-  if (config.language === "go") {
-    return goRunCommand(config);
-  }
-  if (config.language === "rust") {
-    return config.addons.includes("cargo-watch") ? "cargo watch -x run" : "cargo run";
-  }
-  switch (config.packageManager) {
-    case "uv":
-      return config.framework === "flask"
-        ? "uv run flask --app src.main run --debug"
-        : "uv run uvicorn src.main:app --reload";
-    case "poetry":
-      return config.framework === "flask"
-        ? "poetry run flask --app src.main run --debug"
-        : "poetry run uvicorn src.main:app --reload";
-    default:
-      return config.framework === "flask"
-        ? "pip install -e . && flask --app src.main run --debug"
-        : "pip install -e . && uvicorn src.main:app --reload";
-  }
+  return getRuntimeProfile(config).run({ dev: true }).label;
 }
 
 export function processReadme(

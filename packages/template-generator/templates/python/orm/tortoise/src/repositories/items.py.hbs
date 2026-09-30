@@ -3,8 +3,8 @@ from ..schemas.items import ItemResponse
 
 async def create_item(*, name: str) -> ItemResponse:
     item = await Item.create(name=name)
-    return ItemResponse.model_validate(item)
+    return ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at)
 
 async def list_items() -> list[ItemResponse]:
     items = await Item.all()
-    return [ItemResponse.model_validate(item) for item in items]
+    return [ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at) for item in items]

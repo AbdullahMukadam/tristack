@@ -1,6 +1,6 @@
-import { toProjectSlug } from "@tristack/template-generator";
 import { generate, EMBEDDED_TEMPLATES } from "@tristack/template-generator";
 import { writeTree } from "@tristack/template-generator/fs-writer";
+import { getRuntimeProfile } from "@tristack/types";
 import { Result } from "better-result";
 import fs from "fs-extra";
 
@@ -107,7 +107,7 @@ async function runPostScaffoldSteps(
   if (options.install) {
     const installResult = await installDependencies({
       projectDir,
-      packageManager: options.packageManager,
+      config: options,
     });
     if (installResult.isErr()) {
       install = "failed";
@@ -133,22 +133,5 @@ async function runPostScaffoldSteps(
 }
 
 function runCommandHint(options: ProjectConfig): string {
-  switch (options.packageManager) {
-    case "uv":
-      return options.framework === "flask"
-        ? "uv run flask --app src.main run --debug"
-        : "uv run uvicorn src.main:app --reload";
-    case "poetry":
-      return options.framework === "flask"
-        ? "poetry run flask --app src.main run --debug"
-        : "poetry run uvicorn src.main:app --reload";
-    case "pip":
-      return options.framework === "flask"
-        ? "flask --app src.main run --debug"
-        : "uvicorn src.main:app --reload";
-    case "go":
-      return "go run .";
-    case "cargo":
-      return "cargo run";
-  }
+  return getRuntimeProfile(options).run({ dev: true }).label;
 }

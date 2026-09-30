@@ -64,6 +64,18 @@ _Avoid_: Mini exhaustive test
 The sharded long-running matrix job that exercises the complete normalized core-stack matrix.
 _Avoid_: Default tests
 
+**Boot Verification**:
+Proving a scaffolded project actually installs, starts, and serves its documented routes, by driving the runtime profile against the generated project.
+_Avoid_: Smoke test, sanity check
+
+**Runtime Profile**:
+The model of a project configuration's install, prepare, run, and probe commands, derived from the project configuration and shared by the CLI, the generated README, and boot verification. Also distinguishes serving programs from non-serving ones.
+_Avoid_: Command list, run script
+
+**Toolchain Skip**:
+A matrix case that does not execute because a required tool or interpreter version is absent from the host, recorded with a reason and never counted as coverage.
+_Avoid_: Ignored case, disabled test
+
 **Create Path**:
 The CLI workflow that turns a project configuration into a new scaffolded project.
 _Avoid_: Init path, generation path
@@ -89,6 +101,9 @@ _Avoid_: MCP addon
 - A **Compatibility Oracle** predicts expected pass/fail before production validation runs
 - A **Matrix Job** provides broad confidence without making the default test suite slow
 - The **Default Suite**, **Matrix Smoke**, and **Full Matrix Job** are the three testing tiers
+- A **Runtime Profile** is derived from a **Project Configuration** and supplies the commands **Boot Verification** drives
+- **Boot Verification** proves **Matrix Smoke** cases serve their documented routes, not merely that their tree generates
+- A **Toolchain Skip** records an absent host toolchain and is never treated as coverage or as a pass
 - The **Create Path** owns exhaustive project-configuration coverage
 - The **Add Path** has a focused suite over existing-project state and addon behavior
 - The **MCP Surface** is a critical CLI surface alongside the **Create Path** and **Add Path**
@@ -106,3 +121,5 @@ _Avoid_: MCP addon
 - "all tests" was ambiguous between the default test suite and long-running exhaustive coverage; resolved: use a separate **Matrix Job** for broad matrix coverage.
 - "test the MCP" was ambiguous between matrix participation and protocol contract coverage; resolved: the **MCP Surface** gets focused contract coverage.
 - "complete CLI tests" was ambiguous between new-project creation and adding to existing projects; resolved: the **Create Path** gets exhaustive matrix coverage first, while the **Add Path** gets a focused complete suite.
+- "verified" was ambiguous between a project whose tree generates and one whose server answers requests; resolved: only **Boot Verification** counts, because it requires the probes to return their expected statuses.
+- "skip" was ambiguous between a deliberately disabled case and an unproven pass; resolved: a **Toolchain Skip** is explicitly unproven, states its reason, and never counts as coverage.
