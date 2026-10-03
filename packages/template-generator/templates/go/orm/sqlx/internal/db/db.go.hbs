@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
@@ -49,4 +50,16 @@ func Connect() (*sqlx.DB, error) {
 	}
 
 	return db, nil
+}
+
+func EnsureSchema(ctx context.Context) error {
+	_, err := db.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS items (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);`)
+	if err != nil {
+		return fmt.Errorf("create items table: %w", err)
+	}
+	return nil
 }

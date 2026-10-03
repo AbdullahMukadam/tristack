@@ -93,10 +93,12 @@ jobs:
         run: tar -czf "${{ matrix.bin }}.tar.gz" "${{ matrix.bin }}"
         shell: bash
 
+      # `tar -a` cannot produce a zip: GNU tar only auto-suffixes gzip/bzip2/xz/zstd,
+      # so it silently wrote an uncompressed tar named .zip, which Expand-Archive rejects.
       - name: Create Release Zip
         if: matrix.platform == 'windows-x64'
-        run: tar -a -c -f "${{ matrix.bin }}.zip" "${{ matrix.bin }}"
-        shell: bash
+        run: Compress-Archive -Path "${{ matrix.bin }}" -DestinationPath "${{ matrix.bin }}.zip" -Force
+        shell: pwsh
 
       - name: Build Wheel
         run: python scripts/build-wheel.py "${{ matrix.bin }}" "${{ needs.check.outputs.version }}" --tag "${{ matrix.tag }}"

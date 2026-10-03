@@ -330,6 +330,9 @@ async function createProjectHandlerInternal(
     if (created.installError) {
       warnings.push(created.installError.message);
     }
+    if (created.prepareError) {
+      warnings.push(created.prepareError.message);
+    }
 
     const elapsedTimeMs = Date.now() - startTime;
     if (!isSilent()) {

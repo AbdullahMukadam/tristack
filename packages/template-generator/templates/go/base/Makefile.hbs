@@ -23,29 +23,41 @@ fmt:
 {{#if (eq orm "sqlc")}}
 
 generate:
-	sqlc generate
+	go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate
 {{/if}}
 
 {{#if (eq migrations "goose")}}
+{{#if (eq database "sqlite")}}
+GOOSE_DRIVER := sqlite3
+{{else if (eq database "postgres")}}
+GOOSE_DRIVER := postgres
+{{else}}
+GOOSE_DRIVER := mysql
+{{/if}}
+GOOSE_DBSTRING ?= {{project_slug}}.db
+GOOSE_MIGRATION_DIR := migrations
 
 migrate-up:
-	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up
+	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up
 
 migrate-down:
-	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations down
+	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 down
 {{else if (eq migrations "golang-migrate")}}
 
 {{#if (eq database "postgres")}}
 MIGRATE_TAGS := postgres
+MIGRATE_URL ?= pgx://postgres:postgres@localhost:5432/{{project_slug}}
 {{else if (eq database "mysql")}}
 MIGRATE_TAGS := mysql
+MIGRATE_URL ?= mysql://root:password@localhost:3306/{{project_slug}}
 {{else}}
 MIGRATE_TAGS := sqlite3
+MIGRATE_URL ?= sqlite3://{{project_slug}}.db
 {{/if}}
 
 migrate-up:
-	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" up
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database '$(MIGRATE_URL)' up
 
 migrate-down:
-	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$$DATABASE_URL" down
+	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database '$(MIGRATE_URL)' down
 {{/if}}
