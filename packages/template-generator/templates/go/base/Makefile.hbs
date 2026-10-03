@@ -29,30 +29,32 @@ generate:
 {{#if (eq migrations "goose")}}
 {{#if (eq database "sqlite")}}
 GOOSE_DRIVER := sqlite3
+GOOSE_DBSTRING ?= {{project_slug}}.db
 {{else if (eq database "postgres")}}
 GOOSE_DRIVER := postgres
+GOOSE_DBSTRING ?= postgres://postgres:postgres@localhost:5432/{{project_slug}}
 {{else}}
 GOOSE_DRIVER := mysql
+GOOSE_DBSTRING ?= root:password@tcp(localhost:3306)/{{project_slug}}?parseTime=true
 {{/if}}
-GOOSE_DBSTRING ?= {{project_slug}}.db
 GOOSE_MIGRATION_DIR := migrations
 
 migrate-up:
-	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up
+	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING='$(GOOSE_DBSTRING)' GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up
 
 migrate-down:
-	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 down
+	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING='$(GOOSE_DBSTRING)' GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 down
 {{else if (eq migrations "golang-migrate")}}
 
 {{#if (eq database "postgres")}}
 MIGRATE_TAGS := postgres
-MIGRATE_URL ?= pgx://postgres:postgres@localhost:5432/{{project_slug}}
+MIGRATE_URL ?= postgres://postgres:postgres@localhost:5432/{{project_slug}}?sslmode=disable
 {{else if (eq database "mysql")}}
 MIGRATE_TAGS := mysql
-MIGRATE_URL ?= mysql://root:password@localhost:3306/{{project_slug}}
+MIGRATE_URL ?= mysql://root:password@tcp(localhost:3306)/{{project_slug}}
 {{else}}
-MIGRATE_TAGS := sqlite3
-MIGRATE_URL ?= sqlite3://{{project_slug}}.db
+MIGRATE_TAGS := sqlite
+MIGRATE_URL ?= sqlite://{{project_slug}}.db
 {{/if}}
 
 migrate-up:

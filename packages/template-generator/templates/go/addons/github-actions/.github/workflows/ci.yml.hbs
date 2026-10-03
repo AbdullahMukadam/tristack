@@ -18,9 +18,7 @@ jobs:
         run: go mod tidy
       {{#if (eq orm "sqlc")}}
       - name: Generate queries (sqlc)
-        run: |
-          go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-          sqlc generate
+        run: go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate
       {{/if}}
       {{#if (includes addons "air")}}
       - name: Verify formatting
@@ -28,7 +26,9 @@ jobs:
       {{/if}}
       {{#if (includes addons "golangci-lint")}}
       - name: Lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.14.0
       {{/if}}
       - name: Vet
         run: go vet ./...

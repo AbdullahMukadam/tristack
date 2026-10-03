@@ -113,7 +113,7 @@ describe("getRuntimeProfile", () => {
     });
     expect(runtime.prepare.map((c) => c.label)).toEqual([
       "go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate",
-      "go run -tags postgres github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database pgx://postgres:postgres@localhost:5432/profile_api up",
+      "go run -tags postgres github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database 'postgres://postgres:postgres@localhost:5432/profile_api?sslmode=disable' up",
     ]);
     expect(runtime.prepare[0]?.env).toEqual({ CGO_ENABLED: "0" });
   });
@@ -135,6 +135,31 @@ describe("getRuntimeProfile", () => {
       GOOSE_DBSTRING: "profile_api.db",
       GOOSE_MIGRATION_DIR: "migrations",
     });
+  });
+
+  test("go + mysql: goose gets the go-sql-driver DSN, golang-migrate the mysql:// form", () => {
+    const go = { language: "go", framework: "gin", orm: "sqlx", database: "mysql" } as const;
+    const goose = profile({ ...go, migrations: "goose", packageManager: "go" });
+    expect(goose.prepare[0]?.env?.GOOSE_DBSTRING).toBe(
+      "root:password@tcp(localhost:3306)/profile_api?parseTime=true",
+    );
+    const migrate = profile({ ...go, migrations: "golang-migrate", packageManager: "go" });
+    expect(migrate.prepare[0]?.args).toContain(
+      "mysql://root:password@tcp(localhost:3306)/profile_api",
+    );
+  });
+
+  test("go + sqlite + golang-migrate: uses the pure-Go sqlite driver", () => {
+    const runtime = profile({
+      language: "go",
+      framework: "gin",
+      orm: "sqlx",
+      migrations: "golang-migrate",
+      packageManager: "go",
+    });
+    expect(runtime.prepare[0]?.args).toEqual(
+      expect.arrayContaining(["-tags", "sqlite", "sqlite://profile_api.db"]),
+    );
   });
 
   test("go bare is a oneshot like python", () => {

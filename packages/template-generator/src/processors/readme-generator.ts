@@ -20,7 +20,7 @@ function goMigrationsCommand(config: ProjectConfig): string {
   const relevant = Object.entries(migrate.env ?? {}).filter(
     ([key]) => !key.startsWith("CGO_") && !key.startsWith("GOFLAGS"),
   );
-  const envPrefix = relevant.map(([key, value]) => `${key}=${value}`).join(" ");
+  const envPrefix = relevant.map(([key, value]) => `${key}='${value}'`).join(" ");
   return envPrefix ? `${envPrefix} ${migrate.label}` : migrate.label;
 }
 

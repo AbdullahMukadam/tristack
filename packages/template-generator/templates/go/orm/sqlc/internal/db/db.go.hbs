@@ -1,40 +1,42 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
 	"time"
-	{{#if (eq database "sqlite")}}
+
+{{#if (eq database "sqlite")}}
 	_ "modernc.org/sqlite"
-	{{else if (eq database "postgres")}}
+{{else if (eq database "postgres")}}
 	_ "github.com/jackc/pgx/v5/stdlib"
-	{{else if (eq database "mysql")}}
+{{else if (eq database "mysql")}}
 	_ "github.com/go-sql-driver/mysql"
-	{{/if}}
+{{/if}}
 )
 
 func databaseURL() string {
 	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
 		return dsn
 	}
-	{{#if (eq database "sqlite")}}
+{{#if (eq database "sqlite")}}
 	return "{{project_slug}}.db"
-	{{else if (eq database "postgres")}}
+{{else if (eq database "postgres")}}
 	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
-	{{else if (eq database "mysql")}}
-	return "mysql://root:password@localhost:3306/{{project_slug}}"
-	{{/if}}
+{{else if (eq database "mysql")}}
+	return "root:password@tcp(localhost:3306)/{{project_slug}}?parseTime=true"
+{{/if}}
 }
 
 func Connect() (*sql.DB, error) {
-	{{#if (eq database "sqlite")}}
+{{#if (eq database "sqlite")}}
 	db, err := sql.Open("sqlite", databaseURL())
-	{{else if (eq database "postgres")}}
+{{else if (eq database "postgres")}}
 	db, err := sql.Open("pgx", databaseURL())
-	{{else if (eq database "mysql")}}
+{{else if (eq database "mysql")}}
 	db, err := sql.Open("mysql", databaseURL())
-	{{/if}}
+{{/if}}
 	if err != nil {
 		return nil, fmt.Errorf("open database: %w", err)
 	}
@@ -48,4 +50,16 @@ func Connect() (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func EnsureSchema(ctx context.Context, conn *sql.DB) error {
+	_, err := conn.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS items (
+    id VARCHAR(36) PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);`)
+	if err != nil {
+		return fmt.Errorf("create items table: %w", err)
+	}
+	return nil
 }

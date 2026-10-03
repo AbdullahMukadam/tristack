@@ -13,19 +13,19 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"{{project_slug}}/internal/config"
-	"{{project_slug}}/internal/web"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
 	"{{project_slug}}/internal/handler"
 	"{{project_slug}}/internal/repository"
 	"{{project_slug}}/internal/service"
 {{/if}}
+	"{{project_slug}}/internal/web"
 )
 
 func main() {
 	cfg := config.Load()
-
 {{#if (ne orm "none")}}
+
 	conn, err := db.Connect()
 	if err != nil {
 		log.Fatalf("database not ready: %v", err)
@@ -35,7 +35,7 @@ func main() {
 		log.Fatalf("auto-migrate failed: %v", err)
 	}
 {{/if}}
-{{#if (and (eq orm "sqlx") (eq migrations "none"))}}
+{{#if (and (or (eq orm "sqlx") (eq orm "sqlc")) (eq migrations "none"))}}
 	if err := db.EnsureSchema(context.Background(), conn); err != nil {
 		log.Fatalf("schema bootstrap failed: %v", err)
 	}

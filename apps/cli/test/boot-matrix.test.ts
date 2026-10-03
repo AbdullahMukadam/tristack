@@ -317,6 +317,32 @@ const BOOT_CASES: BootCase[] = [
     },
   },
   {
+    id: "gin-sqlx-migrate",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "gin",
+      frontend: "none",
+      orm: "sqlx",
+      migrations: "golang-migrate",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "chi-sqlc-none",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "chi",
+      frontend: "none",
+      orm: "sqlc",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
     id: "bare-go",
     requiresTool: "go",
     config: {

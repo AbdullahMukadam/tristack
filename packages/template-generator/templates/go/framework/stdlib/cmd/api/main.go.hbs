@@ -21,8 +21,8 @@ import (
 
 func main() {
 	cfg := config.Load()
-
 {{#if (ne orm "none")}}
+
 	conn, err := db.Connect()
 	if err != nil {
 		log.Fatalf("database not ready: %v", err)
@@ -32,7 +32,7 @@ func main() {
 		log.Fatalf("auto-migrate failed: %v", err)
 	}
 {{/if}}
-{{#if (and (eq orm "sqlx") (eq migrations "none"))}}
+{{#if (and (or (eq orm "sqlx") (eq orm "sqlc")) (eq migrations "none"))}}
 	if err := db.EnsureSchema(context.Background(), conn); err != nil {
 		log.Fatalf("schema bootstrap failed: %v", err)
 	}

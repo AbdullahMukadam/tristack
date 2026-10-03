@@ -1,8 +1,6 @@
 CREATE TABLE items (
-    id TEXT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     name TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    {{#if (eq orm "gorm")}},
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    {{/if}}
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP{{#if (eq orm "gorm")}},
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP{{/if}}
 );
