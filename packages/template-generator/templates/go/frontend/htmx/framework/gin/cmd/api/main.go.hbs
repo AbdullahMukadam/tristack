@@ -35,6 +35,11 @@ func main() {
 		log.Fatalf("auto-migrate failed: %v", err)
 	}
 {{/if}}
+{{#if (and (eq orm "sqlx") (eq migrations "none"))}}
+	if err := db.EnsureSchema(context.Background(), conn); err != nil {
+		log.Fatalf("schema bootstrap failed: %v", err)
+	}
+{{/if}}
 	repo := repository.NewItemRepository(conn)
 	items := service.NewItemService(repo)
 	h := handler.NewHandler(items)
@@ -53,7 +58,12 @@ func main() {
 	r.GET("/items", h.ListItems)
 	r.POST("/items", h.CreateItem)
 {{/if}}
-	r.NoRoute(gin.WrapH(webSrv.Mux()))
+	webHandler := gin.WrapH(webSrv.Mux())
+	r.GET("/", webHandler)
+{{#if (ne orm "none")}}
+	r.GET("/web/items", webHandler)
+{{/if}}
+	r.GET("/static/*filepath", webHandler)
 
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,

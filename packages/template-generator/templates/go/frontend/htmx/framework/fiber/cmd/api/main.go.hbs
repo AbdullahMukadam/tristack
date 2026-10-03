@@ -34,6 +34,11 @@ func main() {
 		log.Fatalf("auto-migrate failed: %v", err)
 	}
 {{/if}}
+{{#if (and (eq orm "sqlx") (eq migrations "none"))}}
+	if err := db.EnsureSchema(context.Background(), conn); err != nil {
+		log.Fatalf("schema bootstrap failed: %v", err)
+	}
+{{/if}}
 	repo := repository.NewItemRepository(conn)
 	items := service.NewItemService(repo)
 	h := handler.NewHandler(items)

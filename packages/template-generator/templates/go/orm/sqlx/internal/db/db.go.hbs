@@ -52,9 +52,9 @@ func Connect() (*sqlx.DB, error) {
 	return db, nil
 }
 
-func EnsureSchema(ctx context.Context) error {
-	_, err := db.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS items (
-    id TEXT PRIMARY KEY,
+func EnsureSchema(ctx context.Context, conn *sqlx.DB) error {
+	_, err := conn.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS items (
+    id VARCHAR(36) PRIMARY KEY,
     name TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );`)

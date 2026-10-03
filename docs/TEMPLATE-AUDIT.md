@@ -117,8 +117,10 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 
 ### P0
 
-- [ ] **GO-1 Every Go + HTMX app fails at startup** (confirmed by rendering). In `frontend/htmx/common/internal/web/templates/base.html.hbs:7` and `index.html.hbs:1`, the `{{end}}` isn't escaped, so Handlebars deletes it. The emitted `{{block "title" .}}{{.AppName}}</title>` has no closing `end`, and `template.ParseFS` fails. Fix: `\{{end}}`.
-- [ ] **GO-2 sqlx `EnsureSchema` does not compile** (confirmed with `go build`: `undefined: db`). In the uncommitted `orm/sqlx/internal/db/db.go.hbs`, `db` is the package name, not a variable; take `*sqlx.DB` as a parameter. Only `framework/gin/cmd/api/main.go.hbs` calls it, so chi, echo, fiber, stdlib, and every HTMX `main.go` would still have no `items` table. ROADMAP "Go boot coverage" row 3 claims this path works.
+- [x] **GO-1 Every Go + HTMX app fails at startup** (confirmed by rendering). In `frontend/htmx/common/internal/web/templates/base.html.hbs:7` and `index.html.hbs:1`, the `{{end}}` isn't escaped, so Handlebars deletes it. The emitted `{{block "title" .}}{{.AppName}}</title>` has no closing `end`, and `template.ParseFS` fails. Fix: `\{{end}}`.
+  - **Fixed 2026-10-03.** Both `{{end}}` tags are escaped. Running the boot cases exposed a second bug behind it: Gin + HTMX mounted the web mux with `r.NoRoute(...)`, and Gin sets status 404 before a NoRoute handler runs, so the home page rendered with a 404. Gin now registers `/`, `/web/items` and `/static/*filepath` explicitly. Boot cases `stdlib-sqlx-htmx`, `gin-gorm-htmx`, `chi-sqlc-htmx`, `echo-gorm-htmx` and `fiber-sqlx-htmx` were added (one per framework), and the Go HTMX profile now also probes `/static/css/style.css`. All five fail on the old templates (`base.html:21: unexpected EOF`) and pass on the new ones.
+- [x] **GO-2 sqlx `EnsureSchema` does not compile** (confirmed with `go build`: `undefined: db`). In the uncommitted `orm/sqlx/internal/db/db.go.hbs`, `db` is the package name, not a variable; take `*sqlx.DB` as a parameter. Only `framework/gin/cmd/api/main.go.hbs` calls it, so chi, echo, fiber, stdlib, and every HTMX `main.go` would still have no `items` table. ROADMAP "Go boot coverage" row 3 claims this path works.
+  - **Fixed 2026-10-03.** `EnsureSchema(ctx, conn *sqlx.DB)` is now called from every sqlx + `migrations: none` `main.go` (5 frameworks, 5 HTMX overlays). Its `id` column is `VARCHAR(36)`, which also covers the `EnsureSchema` part of GO-4. Boot case `chi-sqlx-none` was added. `gin-sqlx-none`, `chi-sqlx-none`, `stdlib-sqlx-htmx` and `fiber-sqlx-htmx` fail on the old templates (`undefined: db`) and pass on the new ones. Only SQLite was booted.
 
 ### P1
 
@@ -196,7 +198,7 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 ## Docs drift found during the audit
 
 - [ ] **D-1** ROADMAP Phase 1 says "shipped", and its exit criterion is phrased as universal, but only SQLite was ever booted (see X-3, PY-6, PY-7).
-- [ ] **D-2** ROADMAP "Go boot coverage" row 3 (`EnsureSchema` bootstrap) is listed as covered, but the working-tree code doesn't compile (GO-2).
+- [x] **D-2** (fixed 2026-10-03 with GO-2) ROADMAP "Go boot coverage" row 3 (`EnsureSchema` bootstrap) is listed as covered, but the working-tree code doesn't compile (GO-2).
 - [x] **D-3** (fixed 2026-10-02: the PRD says lockfile-reproducible, per the PY-15 decision) PRD §1 and §6 promise "dependency-pinned" scaffolds; uv and pip output is unpinned (PY-15).
 - [ ] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11).
 - [ ] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go `migrations/` vs `db/migrations/` and Rust Askama parts are still open._

@@ -233,6 +233,7 @@ function goProbes(config: ProjectConfig): Probe[] {
     probes.push({ method: "GET", path: "/", expectStatus: 200 });
     if (config.orm !== "none")
       probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+    probes.push({ method: "GET", path: "/static/css/style.css", expectStatus: 200 });
   }
   return probes;
 }

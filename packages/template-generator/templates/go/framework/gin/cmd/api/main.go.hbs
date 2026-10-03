@@ -35,7 +35,7 @@ func main() {
 	}
 {{/if}}
 {{#if (and (eq orm "sqlx") (eq migrations "none"))}}
-	if err := db.EnsureSchema(context.Background()); err != nil {
+	if err := db.EnsureSchema(context.Background(), conn); err != nil {
 		log.Fatalf("schema bootstrap failed: %v", err)
 	}
 {{/if}}

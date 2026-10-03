@@ -68,6 +68,8 @@ A minimal high-coverage manual set is 8 combinations:
 | 7   | chi       | sqlc | none           | postgres | sqlc without migrations                               |
 | 8   | none      | none | none           | none     | bare oneshot entrypoint                               |
 
+The boot matrix also runs `chi-sqlx-none` and one HTMX case per framework (`stdlib-sqlx-htmx`, `gin-gorm-htmx`, `chi-sqlc-htmx`, `echo-gorm-htmx`, `fiber-sqlx-htmx`), all on SQLite.
+
 If time is short, rows 1, 3, 5, and 8 cover gorm, sqlx, sqlc, and bare. Two known host limits: golang-migrate with SQLite needs CGO and fails on this Windows host (`cc1.exe: sorry, unimplemented: 64-bit mode not compiled in`), and the postgres rows need a live server to run — their `sqlc generate` step works regardless.
 
 Exit: every Matrix Smoke case installs, boots, and returns the expected status for each probe; a missing toolchain is a skip, never a pass.
