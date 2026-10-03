@@ -251,9 +251,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "require gorm.io/gorm v1.25.12\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":28}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":28}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "");
 },"8":function(container,depth0,helpers,partials,data) {
-    return "require github.com/glebarez/sqlite v1.11.0\r\n";
+    return "require github.com/glebarez/sqlite v1.11.0\r\nrequire modernc.org/sqlite v1.34.1\r\n";
 },"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -262,7 +262,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":34}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":10},"end":{"line":20,"column":34}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":20,"column":0},"end":{"line":24,"column":0}}})) != null ? stack1 : "");
 },"10":function(container,depth0,helpers,partials,data) {
     return "require gorm.io/driver/postgres v1.5.9\r\n";
 },"11":function(container,depth0,helpers,partials,data) {
@@ -273,7 +273,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":31}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":10},"end":{"line":22,"column":31}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":24,"column":0}}})) != null ? stack1 : "");
 },"12":function(container,depth0,helpers,partials,data) {
     return "require gorm.io/driver/mysql v1.5.7\r\n";
 },"13":function(container,depth0,helpers,partials,data) {
@@ -284,7 +284,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":10},"end":{"line":24,"column":25}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(20, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":41,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":25}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(20, data, 0),"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":42,"column":0}}})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -294,7 +294,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "require github.com/jmoiron/sqlx v1.4.0\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":6},"end":{"line":26,"column":28}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":32,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":27,"column":28}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "");
 },"15":function(container,depth0,helpers,partials,data) {
     return "require modernc.org/sqlite v1.34.1\r\n";
 },"16":function(container,depth0,helpers,partials,data) {
@@ -305,7 +305,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":34}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":32,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":34}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
 },"17":function(container,depth0,helpers,partials,data) {
     return "require github.com/jackc/pgx/v5 v5.7.1\r\n";
 },"18":function(container,depth0,helpers,partials,data) {
@@ -316,7 +316,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":30,"column":10},"end":{"line":30,"column":31}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":30,"column":0},"end":{"line":32,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":31}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
 },"19":function(container,depth0,helpers,partials,data) {
     return "require github.com/go-sql-driver/mysql v1.8.1\r\n";
 },"20":function(container,depth0,helpers,partials,data) {
@@ -327,7 +327,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlc",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":10},"end":{"line":33,"column":25}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":41,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlc",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":34,"column":10},"end":{"line":34,"column":25}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":34,"column":0},"end":{"line":42,"column":0}}})) != null ? stack1 : "");
 },"21":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -336,7 +336,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":34,"column":6},"end":{"line":34,"column":28}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":34,"column":0},"end":{"line":40,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":6},"end":{"line":35,"column":28}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":41,"column":7}}})) != null ? stack1 : "");
 },"22":function(container,depth0,helpers,partials,data) {
     return "require github.com/pressly/goose/v3 v3.22.1\r\n";
 },"23":function(container,depth0,helpers,partials,data) {
@@ -347,7 +347,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"golang-migrate",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":42}}}),{"name":"if","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":47,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"golang-migrate",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":42}}}),{"name":"if","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
 },"24":function(container,depth0,helpers,partials,data) {
     return "require github.com/golang-migrate/migrate/v4 v4.18.1\r\n";
 },"25":function(container,depth0,helpers,partials,data) {
@@ -365,11 +365,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + "\r\n\r\ngo 1.22\r\n\r\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"gin",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":26}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":13,"column":7}}})) != null ? stack1 : "")
     + "\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"gorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":41,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"gorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "")
     + "\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"goose",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":43,"column":6},"end":{"line":43,"column":29}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.program(23, data, 0),"data":data,"loc":{"start":{"line":43,"column":0},"end":{"line":47,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"goose",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":6},"end":{"line":44,"column":29}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.program(23, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":48,"column":7}}})) != null ? stack1 : "")
     + "\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":49,"column":6},"end":{"line":49,"column":21}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":49,"column":0},"end":{"line":51,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":21}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":52,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["go/base/internal/config/config.go.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -386,18 +386,21 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   ["go/base/Makefile.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "build: generate\nrun: generate\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "\ngenerate:\n	sqlc generate\n";
+    return "\ngenerate:\n	go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "\nmigrate-up:\n	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up\n\nmigrate-down:\n	go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations down\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"golang-migrate",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":36,"column":10},"end":{"line":36,"column":42}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":36,"column":0},"end":{"line":51,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":30,"column":6},"end":{"line":30,"column":28}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":30,"column":0},"end":{"line":36,"column":7}}})) != null ? stack1 : "")
+    + "GOOSE_DBSTRING ?= "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":37,"column":18},"end":{"line":37,"column":34}}}) : helper)))
+    + ".db\nGOOSE_MIGRATION_DIR := migrations\n\nmigrate-up:\n	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up\n\nmigrate-down:\n	GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) GOOSE_MIGRATION_DIR=$(GOOSE_MIGRATION_DIR) go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 down\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "GOOSE_DRIVER := sqlite3\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -406,12 +409,12 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":38,"column":6},"end":{"line":38,"column":30}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":38,"column":0},"end":{"line":44,"column":7}}})) != null ? stack1 : "")
-    + "\nmigrate-up:\n	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database \"$$DATABASE_URL\" up\n\nmigrate-down:\n	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database \"$$DATABASE_URL\" down\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":10},"end":{"line":32,"column":34}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":36,"column":0}}})) != null ? stack1 : "");
 },"5":function(container,depth0,helpers,partials,data) {
-    return "MIGRATE_TAGS := postgres\n";
+    return "GOOSE_DRIVER := postgres\n";
 },"6":function(container,depth0,helpers,partials,data) {
+    return "GOOSE_DRIVER := mysql\n";
+},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -419,11 +422,60 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":10},"end":{"line":40,"column":31}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":44,"column":0}}})) != null ? stack1 : "");
-},"7":function(container,depth0,helpers,partials,data) {
-    return "MIGRATE_TAGS := mysql\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"golang-migrate",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":42}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":63,"column":0}}})) != null ? stack1 : "");
 },"8":function(container,depth0,helpers,partials,data) {
-    return "MIGRATE_TAGS := sqlite3\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":6},"end":{"line":47,"column":30}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + "\nmigrate-up:\n	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database '$(MIGRATE_URL)' up\n\nmigrate-down:\n	go run -tags '$(MIGRATE_TAGS)' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database '$(MIGRATE_URL)' down\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "MIGRATE_TAGS := postgres\nMIGRATE_URL ?= pgx://postgres:postgres@localhost:5432/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":49,"column":54},"end":{"line":49,"column":70}}}) : helper)))
+    + "\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":50,"column":10},"end":{"line":50,"column":31}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":56,"column":0}}})) != null ? stack1 : "");
+},"11":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "MIGRATE_TAGS := mysql\nMIGRATE_URL ?= mysql://root:password@localhost:3306/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":52,"column":52},"end":{"line":52,"column":68}}}) : helper)))
+    + "\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "MIGRATE_TAGS := sqlite3\nMIGRATE_URL ?= sqlite3://"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":55,"column":25},"end":{"line":55,"column":41}}}) : helper)))
+    + ".db\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -439,7 +491,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + " ./cmd/api\n\nrun:\n	go run ./cmd/api\n\ntest:\n	go test -race ./...\n\nvet:\n	go vet ./...\n\nfmt:\n	gofmt -l .\n\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlc",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":6},"end":{"line":23,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":23,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"goose",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":6},"end":{"line":29,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":51,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"goose",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":6},"end":{"line":29,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":63,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["go/core/internal/service/item_service_test.go.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "package service\n\nimport (\n	\"errors\"\n	\"strings\"\n	\"testing\"\n)\n\nfunc TestValidateName(t *testing.T) {\n	longName := strings.Repeat(\"a\", 201)\n\n	tests := []struct {\n		name string\n		want error\n	}{\n		{name: \"abc\", want: nil},\n		{name: \"  spaced name  \", want: nil},\n		{name: \"\", want: ErrInvalidInput},\n		{name: \"   \", want: ErrInvalidInput},\n		{name: longName, want: ErrInvalidInput},\n	}\n\n	for _, tt := range tests {\n		t.Run(tt.name, func(t *testing.T) {\n			err := validateName(tt.name)\n			if tt.want == nil {\n				if err != nil {\n					t.Errorf(\"validateName(%q) = %v, want nil\", tt.name, err)\n				}\n				return\n			}\n			if !errors.Is(err, tt.want) {\n				t.Errorf(\"validateName(%q) = %v, want %v\", tt.name, err, tt.want)\n			}\n		})\n	}\n}";
@@ -671,10 +723,13 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "	conn, err := db.Connect()\n	if err != nil {\n		log.Fatalf(\"database not ready: %v\", err)\n	}\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"gorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":11},"end":{"line":32,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":27},"end":{"line":32,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":32,"column":6},"end":{"line":32,"column":50}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":36,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":11},"end":{"line":37,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":27},"end":{"line":37,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":50}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":41,"column":7}}})) != null ? stack1 : "")
     + "	repo := repository.NewItemRepository(conn)\n	h := handler.NewHandler(service.NewItemService(repo))\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "	if err := db.AutoMigrate(conn); err != nil {\n		log.Fatalf(\"auto-migrate failed: %v\", err)\n	}\n";
 },"3":function(container,depth0,helpers,partials,data) {
+    return "	if err := db.EnsureSchema(context.Background()); err != nil {\n		log.Fatalf(\"schema bootstrap failed: %v\", err)\n	}\n";
+},"4":function(container,depth0,helpers,partials,data) {
     return "	r.GET(\"/items\", h.ListItems)\n	r.POST(\"/items\", h.CreateItem)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -689,9 +744,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + "/internal/config\"\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
     + ")\n\nfunc main() {\n	cfg := config.Load()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":27,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":39,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":27,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":44,"column":7}}})) != null ? stack1 : "")
     + "\n	r := gin.Default()\n	r.GET(\"/health\", func(c *gin.Context) {\n		c.JSON(http.StatusOK, gin.H{\"status\": \"ok\"})\n	})\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":45,"column":6},"end":{"line":45,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":48,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":21}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":53,"column":7}}})) != null ? stack1 : "")
     + "\n	srv := &http.Server{\n		Addr:              \":\" + cfg.Port,\n		Handler:           r,\n		ReadHeaderTimeout: 5 * time.Second,\n		ReadTimeout:       10 * time.Second,\n		WriteTimeout:      10 * time.Second,\n		IdleTimeout:       60 * time.Second,\n	}\n\n	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)\n	defer stop()\n\n	go func() {\n		log.Printf(\"%s listening on %s\", cfg.AppName, srv.Addr)\n		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {\n			log.Fatalf(\"server error: %v\", err)\n		}\n	}()\n\n	<-ctx.Done()\n\n	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)\n	defer cancel()\n	if err := srv.Shutdown(shutdownCtx); err != nil {\n		log.Fatalf(\"graceful shutdown failed: %v\", err)\n	}\n	log.Printf(\"server stopped\")\n}";
 },"useData":true} }],
   ["go/framework/gin/internal/handler/handler.go.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -1145,11 +1200,33 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   ["go/migrations/golang-migrate/db/migrations/0001_create_items.down.sql.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "DROP TABLE items;";
 },"useData":true} }],
-  ["go/migrations/golang-migrate/db/migrations/0001_create_items.up.sql.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "CREATE TABLE items (\r\n    id TEXT PRIMARY KEY,\r\n    name TEXT NOT NULL,\r\n    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\r\n);";
+  ["go/migrations/golang-migrate/db/migrations/0001_create_items.up.sql.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return ",\n    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "CREATE TABLE items (\n    id TEXT PRIMARY KEY,\n    name TEXT NOT NULL,\n    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n    "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"gorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":4},"end":{"line":7,"column":11}}})) != null ? stack1 : "")
+    + ");";
 },"useData":true} }],
-  ["go/migrations/goose/migrations/0001_create_items.sql.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "-- +goose Up\r\nCREATE TABLE items (\r\n    id TEXT PRIMARY KEY,\r\n    name TEXT NOT NULL,\r\n    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\r\n);\r\n\r\n-- +goose Down\r\nDROP TABLE items;";
+  ["go/migrations/goose/migrations/0001_create_items.sql.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return ",\n    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "-- +goose Up\nCREATE TABLE items (\n    id TEXT PRIMARY KEY,\n    name TEXT NOT NULL,\n    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n    "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"gorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":6,"column":10},"end":{"line":6,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":6,"column":4},"end":{"line":8,"column":11}}})) != null ? stack1 : "")
+    + ");\n\n-- +goose Down\nDROP TABLE items;";
 },"useData":true} }],
   ["go/orm/gorm/internal/db/db.go.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "	\"github.com/glebarez/sqlite\"\n";
@@ -1471,7 +1548,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":11},"end":{"line":11,"column":35}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":11,"column":1},"end":{"line":15,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":11},"end":{"line":12,"column":35}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":1},"end":{"line":16,"column":1}}})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
     return "	_ \"github.com/jackc/pgx/v5/stdlib\"\n";
 },"3":function(container,depth0,helpers,partials,data) {
@@ -1482,7 +1559,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":11},"end":{"line":13,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":13,"column":1},"end":{"line":15,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":11},"end":{"line":14,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":14,"column":1},"end":{"line":16,"column":1}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
     return "	_ \"github.com/go-sql-driver/mysql\"\n	";
 },"5":function(container,depth0,helpers,partials,data) {
@@ -1494,7 +1571,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "	return \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":23,"column":9},"end":{"line":23,"column":25}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":24,"column":9},"end":{"line":24,"column":25}}}) : helper)))
     + ".db\"\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -1504,7 +1581,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":11},"end":{"line":24,"column":35}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":24,"column":1},"end":{"line":28,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":11},"end":{"line":25,"column":35}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":25,"column":1},"end":{"line":29,"column":1}}})) != null ? stack1 : "");
 },"7":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1514,7 +1591,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "	return \"postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":25,"column":53},"end":{"line":25,"column":69}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":26,"column":53},"end":{"line":26,"column":69}}}) : helper)))
     + "\"\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -1524,7 +1601,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":11},"end":{"line":26,"column":32}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":26,"column":1},"end":{"line":28,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":11},"end":{"line":27,"column":32}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":1},"end":{"line":29,"column":1}}})) != null ? stack1 : "");
 },"9":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1534,7 +1611,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "	return \"mysql://root:password@localhost:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":27,"column":46},"end":{"line":27,"column":62}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":28,"column":46},"end":{"line":28,"column":62}}}) : helper)))
     + "\"\n	";
 },"10":function(container,depth0,helpers,partials,data) {
     return "	db, err := sqlx.Open(\"sqlite\", databaseURL())\n";
@@ -1546,7 +1623,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":34,"column":11},"end":{"line":34,"column":35}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":34,"column":1},"end":{"line":38,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":11},"end":{"line":35,"column":35}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":35,"column":1},"end":{"line":39,"column":1}}})) != null ? stack1 : "");
 },"12":function(container,depth0,helpers,partials,data) {
     return "	db, err := sqlx.Open(\"pgx\", databaseURL())\n";
 },"13":function(container,depth0,helpers,partials,data) {
@@ -1557,7 +1634,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":36,"column":11},"end":{"line":36,"column":32}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":36,"column":1},"end":{"line":38,"column":1}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":11},"end":{"line":37,"column":32}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":1},"end":{"line":39,"column":1}}})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
     return "	db, err := sqlx.Open(\"mysql\", databaseURL())\n	";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -1568,13 +1645,13 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "package db\n\nimport (\n	\"fmt\"\n	\"os\"\n	\"time\"\n\n	\"github.com/jmoiron/sqlx\"\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":7},"end":{"line":9,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":1},"end":{"line":15,"column":8}}})) != null ? stack1 : "")
+  return "package db\n\nimport (\n	\"context\"\n	\"fmt\"\n	\"os\"\n	\"time\"\n\n	\"github.com/jmoiron/sqlx\"\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":7},"end":{"line":10,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":10,"column":1},"end":{"line":16,"column":8}}})) != null ? stack1 : "")
     + ")\n\nfunc databaseURL() string {\n	if dsn := os.Getenv(\"DATABASE_URL\"); dsn != \"\" {\n		return dsn\n	}\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":7},"end":{"line":22,"column":29}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":22,"column":1},"end":{"line":28,"column":8}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":7},"end":{"line":23,"column":29}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":23,"column":1},"end":{"line":29,"column":8}}})) != null ? stack1 : "")
     + "}\n\nfunc Connect() (*sqlx.DB, error) {\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":7},"end":{"line":32,"column":29}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":32,"column":1},"end":{"line":38,"column":8}}})) != null ? stack1 : "")
-    + "	if err != nil {\n		return nil, fmt.Errorf(\"open database: %w\", err)\n	}\n\n	db.SetMaxOpenConns(25)\n	db.SetMaxIdleConns(25)\n	db.SetConnMaxLifetime(5 * time.Minute)\n\n	if err := db.Ping(); err != nil {\n		return nil, fmt.Errorf(\"ping database: %w\", err)\n	}\n\n	return db, nil\n}";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":7},"end":{"line":33,"column":29}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":33,"column":1},"end":{"line":39,"column":8}}})) != null ? stack1 : "")
+    + "	if err != nil {\n		return nil, fmt.Errorf(\"open database: %w\", err)\n	}\n\n	db.SetMaxOpenConns(25)\n	db.SetMaxIdleConns(25)\n	db.SetConnMaxLifetime(5 * time.Minute)\n\n	if err := db.Ping(); err != nil {\n		return nil, fmt.Errorf(\"ping database: %w\", err)\n	}\n\n	return db, nil\n}\n\nfunc EnsureSchema(ctx context.Context) error {\n	_, err := db.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS items (\n    id TEXT PRIMARY KEY,\n    name TEXT NOT NULL,\n    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n);`)\n	if err != nil {\n		return fmt.Errorf(\"create items table: %w\", err)\n	}\n	return nil\n}";
 },"useData":true} }],
   ["go/orm/sqlx/internal/model/item.go.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "package model\n\nimport \"time\"\n\ntype Item struct {\n	ID        string    `db:\"id\" json:\"id\"`\n	Name      string    `db:\"name\" json:\"name\"`\n	CreatedAt time.Time `db:\"created_at\" json:\"created_at\"`\n}";
@@ -1592,53 +1669,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + "/internal/model\"\n)\n\ntype ItemRepository interface {\n	Create(ctx context.Context, item *model.Item) error\n	List(ctx context.Context) ([]model.Item, error)\n}\n\ntype sqlxItemRepository struct {\n	db *sqlx.DB\n}\n\nfunc NewItemRepository(db *sqlx.DB) ItemRepository {\n	return &sqlxItemRepository{db: db}\n}\n\nfunc (r *sqlxItemRepository) Create(ctx context.Context, item *model.Item) error {\n	if _, err := r.db.ExecContext(ctx, r.db.Rebind(\"INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)\"),\n		item.ID, item.Name, item.CreatedAt); err != nil {\n		return fmt.Errorf(\"insert item: %w\", err)\n	}\n	return nil\n}\n\nfunc (r *sqlxItemRepository) List(ctx context.Context) ([]model.Item, error) {\n	var items []model.Item\n	if err := r.db.SelectContext(ctx, &items, r.db.Rebind(\"SELECT id, name, created_at FROM items ORDER BY created_at DESC\")); err != nil {\n		return nil, fmt.Errorf(\"select items: %w\", err)\n	}\n	return items, nil\n}";
 },"useData":true} }],
   ["python/addons/docker/_dockerignore", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return ".git\r\n.gitignore\r\n.venv\r\nvenv\r\n__pycache__\r\n*.pyc\r\n.pytest_cache\r\n.mypy_cache\r\n.ruff_cache\r\n.env\r\n.env*.local\r\nDockerfile\r\n.dockerignore\r\n";
+    return ".git\r\n.gitignore\r\n.venv\r\nvenv\r\n__pycache__\r\n*.pyc\r\n.pytest_cache\r\n.mypy_cache\r\n.ruff_cache\r\n.env\r\n.env*.local\r\nDockerfile\r\n.dockerignore\r\n*.db\n*.sqlite3\n";
 },"useData":true} }],
   ["python/addons/docker/docker-compose.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "  db:\n    image: postgres:16\n    environment:\n      POSTGRES_USER: postgres\n      POSTGRES_PASSWORD: postgres\n      POSTGRES_DB: "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":8,"column":19},"end":{"line":8,"column":35}}}) : helper)))
-    + "\n    ports:\n      - \"5432:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n";
+    return "    ports:\n      - \"8000:8000\"\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":10},"end":{"line":13,"column":31}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "  db:\n    image: mysql:8\n    environment:\n      MYSQL_ROOT_PASSWORD: password\n      MYSQL_DATABASE: "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":18,"column":22},"end":{"line":18,"column":38}}}) : helper)))
-    + "\n    ports:\n      - \"3306:3306\"\n    volumes:\n      - mysqldata:/var/lib/mysql\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "  pgdata:\n";
-},"4":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":31}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":0}}})) != null ? stack1 : "");
-},"5":function(container,depth0,helpers,partials,data) {
-    return "  mysqldata:\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -1646,90 +1681,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "services:\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
-    + "\nvolumes:\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":6},"end":{"line":26,"column":30}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "");
-},"useData":true} }],
-  ["python/addons/docker/Dockerfile.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "CMD [\"uv\", \"run\", \"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":10},"end":{"line":17,"column":35}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+  return "    environment:\n      DJANGO_SECRET_KEY: change-me\n      ALLOWED_HOSTS: localhost,127.0.0.1\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":35},"end":{"line":12,"column":56}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":57}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":32}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
-},"3":function(container,depth0,helpers,partials,data) {
-    return "CMD [\"uv\", \"run\", \"flask\", \"--app\", \"src.main\", \"run\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n";
-},"4":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":33}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
-},"5":function(container,depth0,helpers,partials,data) {
-    return "CMD [\"uv\", \"run\", \"gunicorn\", \"config.wsgi\", \"--bind\", \"0.0.0.0:8000\"]\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "FROM python:3.12-slim\n\nWORKDIR /app\n\nCOPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/\n\nCOPY pyproject.toml ./\nRUN uv sync --no-install-project --no-dev\n\nCOPY . .\n\nENV PYTHONPATH=/app\nEXPOSE 8000\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "");
-},"useData":true} }],
-  ["python/addons/github-actions/.github/workflows/ci.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "      - name: Lint\n        run: uv run ruff check .\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    return "      - name: Type check\n        run: uv run mypy .\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "      - name: Test\n        run: uv run pytest\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.12\"\n      - uses: astral-sh/setup-uv@v5\n      - name: Install dependencies\n        run: uv sync\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":19,"column":12},"end":{"line":19,"column":36}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":6},"end":{"line":22,"column":13}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":23,"column":12},"end":{"line":23,"column":36}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":23,"column":6},"end":{"line":26,"column":13}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":27,"column":12},"end":{"line":27,"column":38}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":30,"column":13}}})) != null ? stack1 : "");
-},"useData":true} }],
-  ["python/addons/mypy/mypy.ini.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "[mypy]\npython_version = \"3.12\"\nstrict = true\nwarn_unused_configs = true\nplugins = [\"pydantic.mypy\"]\n\n[[tool.mypy.overrides]]\nmodule = \"src.*\"\nfollow_imports = \"normal\"\n";
-},"useData":true} }],
-  ["python/addons/pytest/tests/test_health.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from fastapi.testclient import TestClient\n\nfrom src.main import app\n\nclient = TestClient(app)\n\ndef test_health():\n    response = client.get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":35}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    return "from litestar.testing import TestClient\n\nfrom src.main import app\n\nclient = TestClient(app)\n\ndef test_health():\n    with client:\n        response = client.get(\"/health\")\n        assert response.status_code == 200\n        assert response.json() == {\"status\": \"ok\"}\n";
+    return "      DB_HOST: db\n";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1738,36 +1693,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":10},"end":{"line":24,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":10},"end":{"line":15,"column":34}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":21,"column":0}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
-    return "from src.main import app\n\nclient = app.test_client()\n\ndef test_health():\n    response = client.get(\"/health\")\n    assert response.status_code == 200\n    assert response.get_json() == {\"status\": \"ok\"}\n";
-},"5":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":10},"end":{"line":33,"column":33}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
-},"6":function(container,depth0,helpers,partials,data) {
-    return "import os\n\nimport django\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\ndjango.setup()\n\nfrom django.test import Client\n\nclient = Client()\n\ndef test_health():\n    response = client.get(\"/api/health/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "");
-},"useData":true} }],
-  ["python/addons/ruff/ruff.toml.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "line-length = 100\ntarget-version = \"py312\"\n\n[lint]\nselect = [\"E\", \"F\", \"I\", \"UP\", \"B\"]\nignore = []\n\n[lint.isort]\nknown-first-party = [\"src\"]\n";
-},"useData":true} }],
-  ["python/base/env.example.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "DJANGO_SECRET_KEY=django-insecure-change-me\nDJANGO_DEBUG=true\nALLOWED_HOSTS=localhost,127.0.0.1\nCORS_ALLOWED_ORIGINS=http://localhost:3000\n";
-},"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -1775,66 +1702,15 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "APP_NAME="
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":24}}}) : helper)))
-    + "\nDEBUG=false\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":22,"column":7}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "");
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "# SQLite:  sqlite://./"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":12,"column":22},"end":{"line":12,"column":38}}}) : helper)))
-    + ".db\n# Postgres: postgres://postgres:postgres@localhost:5432/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":13,"column":56},"end":{"line":13,"column":72}}}) : helper)))
-    + "\n# MySQL:   mysql://root:password@localhost:3306/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":14,"column":48},"end":{"line":14,"column":64}}}) : helper)))
-    + "\nDATABASE_URL="
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":19},"end":{"line":15,"column":41}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":15,"column":13},"end":{"line":15,"column":262}}})) != null ? stack1 : "")
+  return "    environment:\n      DATABASE_URL: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":26},"end":{"line":17,"column":45}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":17,"column":20},"end":{"line":17,"column":88}}})) != null ? stack1 : "")
+    + "://postgres:postgres@db:5432/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":117},"end":{"line":17,"column":133}}}) : helper)))
     + "\n";
-},"4":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "sqlite://./"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":15,"column":54},"end":{"line":15,"column":70}}}) : helper)))
-    + ".db";
 },"5":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":83},"end":{"line":15,"column":107}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":15,"column":73},"end":{"line":15,"column":255}}})) != null ? stack1 : "");
+    return "postgres";
 },"6":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":15,"column":153},"end":{"line":15,"column":169}}}) : helper)));
+    return "postgresql+asyncpg";
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1843,65 +1719,36 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":179},"end":{"line":15,"column":200}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":169},"end":{"line":15,"column":255}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":31}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":21,"column":0}}})) != null ? stack1 : "");
 },"8":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "mysql://root:password@localhost:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":15,"column":239},"end":{"line":15,"column":255}}}) : helper)));
-},"9":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "# SQLite:  sqlite+aiosqlite:///./"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":33},"end":{"line":17,"column":49}}}) : helper)))
-    + ".db\n# Postgres: postgresql+asyncpg://postgres:postgres@localhost:5432/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":18,"column":66},"end":{"line":18,"column":82}}}) : helper)))
-    + "\n# MySQL:   mysql+asyncmy://root:password@localhost:3306/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":19,"column":56},"end":{"line":19,"column":72}}}) : helper)))
-    + "\nDATABASE_URL="
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":19},"end":{"line":20,"column":41}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":20,"column":13},"end":{"line":20,"column":291}}})) != null ? stack1 : "")
+  return "    environment:\n      DATABASE_URL: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":26},"end":{"line":20,"column":45}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":20,"column":20},"end":{"line":20,"column":80}}})) != null ? stack1 : "")
+    + "://root:password@db:3306/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":105},"end":{"line":20,"column":121}}}) : helper)))
     + "\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "mysql";
 },"10":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "sqlite+aiosqlite:///./"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":65},"end":{"line":20,"column":81}}}) : helper)))
-    + ".db";
+    return "mysql+asyncmy";
 },"11":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":94},"end":{"line":20,"column":118}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":20,"column":84},"end":{"line":20,"column":284}}})) != null ? stack1 : "");
+  return "    depends_on:\n      - db\n\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_USER: postgres\n      POSTGRES_PASSWORD: postgres\n      POSTGRES_DB: "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":31,"column":19},"end":{"line":31,"column":35}}}) : helper)))
+    + "\n    ports:\n      - \"5432:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n\nvolumes:\n  pgdata:\n";
 },"12":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "postgresql+asyncpg://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":174},"end":{"line":20,"column":190}}}) : helper)));
-},"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -1909,8 +1756,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":200},"end":{"line":20,"column":221}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":20,"column":190},"end":{"line":20,"column":284}}})) != null ? stack1 : "");
-},"14":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":39,"column":10},"end":{"line":39,"column":31}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":39,"column":0},"end":{"line":55,"column":0}}})) != null ? stack1 : "");
+},"13":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -1918,8 +1765,165 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "mysql+asyncmy://root:password@localhost:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":268},"end":{"line":20,"column":284}}}) : helper)));
+  return "    depends_on:\n      - db\n\n  db:\n    image: mysql:8\n    environment:\n      MYSQL_ROOT_PASSWORD: password\n      MYSQL_DATABASE: "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":47,"column":22},"end":{"line":47,"column":38}}}) : helper)))
+    + "\n    ports:\n      - \"3306:3306\"\n    volumes:\n      - mysqldata:/var/lib/mysql\n\nvolumes:\n  mysqldata:\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "services:\n  app:\n    build: .\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":27}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":29}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":30}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/addons/docker/Dockerfile.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "COPY --from=ghcr.io/astral-sh/uv:0.12 /uv /bin/uv\nCOPY pyproject.toml uv.lock* ./\nRUN uv sync --no-dev --no-install-project\nENV PATH=\"/app/.venv/bin:$PATH\"\n\nCOPY . .\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "COPY . .\nRUN pip install --no-cache-dir .\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "CMD [\"python\", \"-m\", \"src.main\"]\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "EXPOSE 8000\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":6},"end":{"line":29,"column":30}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":37,"column":7}}})) != null ? stack1 : "");
+},"4":function(container,depth0,helpers,partials,data) {
+    return "CMD [\"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":35}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":37,"column":0}}})) != null ? stack1 : "");
+},"6":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":10},"end":{"line":33,"column":32}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":37,"column":0}}})) != null ? stack1 : "");
+},"7":function(container,depth0,helpers,partials,data) {
+    return "CMD [\"flask\", \"--app\", \"src.main\", \"run\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":10},"end":{"line":35,"column":33}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":37,"column":0}}})) != null ? stack1 : "");
+},"9":function(container,depth0,helpers,partials,data) {
+    return "CMD [\"gunicorn\", \"config.wsgi\", \"--bind\", \"0.0.0.0:8000\"]\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "FROM python:3.12-slim\n\nENV PYTHONDONTWRITEBYTECODE=1 \\\n    PYTHONUNBUFFERED=1 \\\n    PYTHONPATH=/app\n\nWORKDIR /app\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":19,"column":7}}})) != null ? stack1 : "")
+    + "\nRUN useradd --create-home app && chown -R app:app /app\nUSER app\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":38,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/addons/github-actions/.github/workflows/ci.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "      - uses: astral-sh/setup-uv@v5\n      - name: Install dependencies\n        run: uv sync\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"poetry",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":10},"end":{"line":20,"column":38}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":20,"column":0},"end":{"line":28,"column":0}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    return "      - name: Install Poetry\n        run: pipx install poetry\n      - name: Install dependencies\n        run: poetry install\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "      - name: Install dependencies\n        run: pip install -e \".[dev]\"\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "      - name: Lint\n        run: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":19},"end":{"line":31,"column":43}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":31,"column":13},"end":{"line":31,"column":110}}})) != null ? stack1 : "")
+    + "ruff check .\n      - name: Format check\n        run: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":19},"end":{"line":33,"column":43}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":33,"column":13},"end":{"line":33,"column":110}}})) != null ? stack1 : "")
+    + "ruff format --check .\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    return "uv run ";
+},"6":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"poetry",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":62},"end":{"line":31,"column":90}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":52},"end":{"line":31,"column":103}}})) != null ? stack1 : "");
+},"7":function(container,depth0,helpers,partials,data) {
+    return "poetry run ";
+},"8":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "      - name: Type check\n        run: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":19},"end":{"line":37,"column":43}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":37,"column":13},"end":{"line":37,"column":110}}})) != null ? stack1 : "")
+    + "mypy .\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "      - name: Test\n        run: "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":19},"end":{"line":41,"column":43}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":41,"column":13},"end":{"line":41,"column":110}}})) != null ? stack1 : "")
+    + "pytest\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.12\"\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"packageManager") : depth0),"uv",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":28,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":29,"column":6},"end":{"line":29,"column":30}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":34,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":35,"column":6},"end":{"line":35,"column":30}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":38,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":39,"column":6},"end":{"line":39,"column":32}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":39,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/addons/mypy/mypy.ini.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "plugins = mypy_django_plugin.main, mypy_drf_plugin.main\n\n[mypy.plugins.django-stubs]\ndjango_settings_module = config.settings.development\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "plugins = pydantic.mypy\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1928,7 +1932,260 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "");
+  return "[mypy]\npython_version = 3.12\nstrict = True\nwarn_unused_configs = True\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":12,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/addons/pytest/tests/test_health.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "from fastapi.testclient import TestClient\n\nfrom src.main import app\n\n\ndef test_health() -> None:\n    response = TestClient(app).get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":10},"end":{"line":11,"column":35}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":52,"column":0}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    return "from litestar.testing import TestClient\n\nfrom src.main import app\n\n\ndef test_health() -> None:\n    response = TestClient(app).get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":52,"column":0}}})) != null ? stack1 : "");
+},"4":function(container,depth0,helpers,partials,data) {
+    return "from src.main import app\n\n\ndef test_health() -> None:\n    response = app.test_client().get(\"/health\")\n    assert response.status_code == 200\n    assert response.get_json() == {\"status\": \"ok\"}\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":33}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":52,"column":0}}})) != null ? stack1 : "");
+},"6":function(container,depth0,helpers,partials,data) {
+    return "import os\n\nimport django\nfrom django.test import Client\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\ndjango.setup()\n\n\ndef test_health() -> None:\n    response = Client().get(\"/api/health/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "import pytest\n\nfrom src.main import main\n\n\ndef test_main(capsys: pytest.CaptureFixture[str]) -> None:\n    main()\n    assert \"Hello from\" in capsys.readouterr().out\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":52,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/addons/ruff/ruff.toml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "\n[lint.per-file-ignores]\n\"config/settings/*.py\" = [\"F403\", \"F405\"]\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "line-length = 100\ntarget-version = \"py312\"\n\n[lint]\nselect = [\"E\", \"F\", \"I\", \"UP\", \"B\"]\nignore = []\n\n[lint.isort]\nknown-first-party = [\"src\"]\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["python/base/env.example.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DJANGO_SECRET_KEY=django-insecure-change-me\nALLOWED_HOSTS=localhost,127.0.0.1\nCORS_ALLOWED_ORIGINS=http://localhost:3000\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":30}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "");
+},"1":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DB_NAME="
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":6,"column":8},"end":{"line":6,"column":24}}}) : helper)))
+    + "\nDB_USER=postgres\nDB_PASSWORD=postgres\nDB_HOST=localhost\nDB_PORT=5432\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":10},"end":{"line":11,"column":31}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":17,"column":0}}})) != null ? stack1 : "");
+},"3":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DB_NAME="
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":12,"column":8},"end":{"line":12,"column":24}}}) : helper)))
+    + "\nDB_USER=root\nDB_PASSWORD=password\nDB_HOST=localhost\nDB_PORT=3306\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "APP_NAME="
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":19,"column":9},"end":{"line":19,"column":24}}}) : helper)))
+    + "\nDEBUG=false\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":26}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":28,"column":7}}})) != null ? stack1 : "");
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":6},"end":{"line":23,"column":25}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":23,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "");
+},"6":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DATABASE_URL="
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":19},"end":{"line":24,"column":41}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":24,"column":13},"end":{"line":24,"column":262}}})) != null ? stack1 : "")
+    + "\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "sqlite://./"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":24,"column":54},"end":{"line":24,"column":70}}}) : helper)))
+    + ".db";
+},"8":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":83},"end":{"line":24,"column":107}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":24,"column":73},"end":{"line":24,"column":255}}})) != null ? stack1 : "");
+},"9":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "postgres://postgres:postgres@localhost:5432/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":24,"column":153},"end":{"line":24,"column":169}}}) : helper)));
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":179},"end":{"line":24,"column":200}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":24,"column":169},"end":{"line":24,"column":255}}})) != null ? stack1 : "");
+},"11":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "mysql://root:password@localhost:3306/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":24,"column":239},"end":{"line":24,"column":255}}}) : helper)));
+},"12":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DATABASE_URL="
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":19},"end":{"line":26,"column":41}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(14, data, 0),"data":data,"loc":{"start":{"line":26,"column":13},"end":{"line":26,"column":291}}})) != null ? stack1 : "")
+    + "\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "sqlite+aiosqlite:///./"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":26,"column":65},"end":{"line":26,"column":81}}}) : helper)))
+    + ".db";
+},"14":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":94},"end":{"line":26,"column":118}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":26,"column":84},"end":{"line":26,"column":284}}})) != null ? stack1 : "");
+},"15":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "postgresql+asyncpg://postgres:postgres@localhost:5432/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":26,"column":174},"end":{"line":26,"column":190}}}) : helper)));
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":200},"end":{"line":26,"column":221}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":26,"column":190},"end":{"line":26,"column":284}}})) != null ? stack1 : "");
+},"17":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "mysql+asyncmy://root:password@localhost:3306/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":26,"column":268},"end":{"line":26,"column":284}}}) : helper)));
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":29,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/base/pyproject-pip.toml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -1955,9 +2212,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + alias4(((helper = (helper = lookupProperty(helpers,"framework") || (depth0 != null ? lookupProperty(depth0,"framework") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"framework","hash":{},"data":data,"loc":{"start":{"line":4,"column":89},"end":{"line":4,"column":102}}}) : helper)))
     + " project\"";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "    \"pydantic-settings\",\r\n";
+    return "    \"pydantic-settings\",\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "    \"fastapi\",\r\n    \"uvicorn[standard]\",\r\n";
+    return "    \"fastapi\",\n    \"uvicorn[standard]\",\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -1977,7 +2234,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "    "
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":30}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":14,"column":4},"end":{"line":14,"column":74}}})) != null ? stack1 : "")
-    + ",\r\n    \"uvicorn[standard]\",\r\n";
+    + ",\n    \"uvicorn[standard]\",\n";
 },"6":function(container,depth0,helpers,partials,data) {
     return "\"litestar[jinja]\"";
 },"7":function(container,depth0,helpers,partials,data) {
@@ -1992,7 +2249,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":33}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
 },"9":function(container,depth0,helpers,partials,data) {
-    return "    \"django\",\r\n    \"djangorestframework\",\r\n    \"django-cors-headers\",\r\n    \"gunicorn\",\r\n";
+    return "    \"django\",\n    \"djangorestframework\",\n    \"django-cors-headers\",\n    \"gunicorn\",\n";
 },"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2003,9 +2260,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":32}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data) {
-    return "    \"flask[async]\",\r\n";
+    return "    \"flask[async]\",\n";
 },"12":function(container,depth0,helpers,partials,data) {
-    return "    \"psycopg[binary]\",\r\n";
+    return "    \"psycopg[binary]\",\n";
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2014,9 +2271,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":29}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":33}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
-    return "    \"sqlmodel\",\r\n";
+    return "";
 },"15":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2025,9 +2282,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":31}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":10},"end":{"line":27,"column":29}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"16":function(container,depth0,helpers,partials,data) {
-    return "    \"sqlalchemy[asyncio]\",\r\n";
+    return "    \"sqlmodel\",\n";
 },"17":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2036,26 +2293,26 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":30,"column":10},"end":{"line":30,"column":29}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":30,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":31}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.program(19, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"18":function(container,depth0,helpers,partials,data) {
-    return "    \"tortoise-orm\",\r\n    \"tzdata\",\r\n";
+    return "    \"sqlalchemy[asyncio]\",\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    return "    \"jinja2\",\r\n";
-},"20":function(container,depth0,helpers,partials,data) {
-    return "    \"alembic\",\r\n";
-},"21":function(container,depth0,helpers,partials,data) {
-    return "    \"asyncpg\",\r\n";
-},"22":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":42,"column":15},"end":{"line":42,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":42,"column":39},"end":{"line":42,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":42,"column":10},"end":{"line":42,"column":61}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.program(24, data, 0),"data":data,"loc":{"start":{"line":42,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":29}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
+},"20":function(container,depth0,helpers,partials,data) {
+    return "    \"tortoise-orm\",\n    \"tzdata\",\n";
+},"21":function(container,depth0,helpers,partials,data) {
+    return "    \"jinja2\",\n";
+},"22":function(container,depth0,helpers,partials,data) {
+    return "    \"alembic\",\n";
 },"23":function(container,depth0,helpers,partials,data) {
-    return "    \"asyncmy\",\r\n";
+    return "    \"asyncpg\",\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2064,9 +2321,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":44,"column":15},"end":{"line":44,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":39},"end":{"line":44,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":44,"column":10},"end":{"line":44,"column":62}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":43,"column":15},"end":{"line":43,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":43,"column":39},"end":{"line":43,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":43,"column":10},"end":{"line":43,"column":61}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":43,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"25":function(container,depth0,helpers,partials,data) {
-    return "    \"aiosqlite\",\r\n";
+    return "    \"asyncmy\",\n";
 },"26":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2075,13 +2332,40 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":15},"end":{"line":46,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":39},"end":{"line":46,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":61}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":45,"column":15},"end":{"line":45,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":39},"end":{"line":45,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":62}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.program(28, data, 0),"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data) {
-    return "    \"mysqlclient\",\r\n";
+    return "    \"aiosqlite\",\n";
 },"28":function(container,depth0,helpers,partials,data) {
-    return "[tool.hatch.build.targets.wheel]\r\npackages = [\"config\", \"apps\"]\r\n\r\n[tool.hatch.build.targets.wheel.force-include]\r\ntemplates = \"templates\"\r\nstatic = \"static\"\r\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":15},"end":{"line":47,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":39},"end":{"line":47,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":47,"column":10},"end":{"line":47,"column":61}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"29":function(container,depth0,helpers,partials,data) {
-    return "[tool.hatch.build.targets.wheel]\r\npackages = [\"src\"]\r\n";
+    return "    \"mysqlclient\",\n";
+},"30":function(container,depth0,helpers,partials,data) {
+    return "    \"ruff\",\n";
+},"31":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    \"mypy\",\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":29}}}),{"name":"if","hash":{},"fn":container.program(32, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "");
+},"32":function(container,depth0,helpers,partials,data) {
+    return "    \"django-stubs[compatible-mypy]\",\n    \"djangorestframework-stubs[compatible-mypy]\",\n";
+},"33":function(container,depth0,helpers,partials,data) {
+    return "    \"pytest\",\n    \"httpx\",\n";
+},"34":function(container,depth0,helpers,partials,data) {
+    return "[tool.hatch.build.targets.wheel]\npackages = [\"config\", \"apps\"]\n\n[tool.hatch.build.targets.wheel.force-include]\ntemplates = \"templates\"\nstatic = \"static\"\n";
+},"35":function(container,depth0,helpers,partials,data) {
+    return "[tool.hatch.build.targets.wheel]\npackages = [\"src\"]\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2090,20 +2374,24 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "[project]\r\nname = \""
+  return "[project]\nname = \""
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":24}}}) : helper)))
-    + "\"\r\nversion = \"0.1.0\"\r\ndescription = "
+    + "\"\nversion = \"0.1.0\"\ndescription = "
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":41}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":118}}})) != null ? stack1 : "")
-    + "\r\nrequires-python = \">=3.12\"\r\ndependencies = [\r\n"
+    + "\nrequires-python = \">=3.12\"\ndependencies = [\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":9,"column":7}}})) != null ? stack1 : "")
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":30}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":29}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":34,"column":11},"end":{"line":34,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":34,"column":35},"end":{"line":34,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":34,"column":58},"end":{"line":34,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":34,"column":6},"end":{"line":34,"column":79}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":34,"column":0},"end":{"line":36,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":31}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":39,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":40,"column":11},"end":{"line":40,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":35},"end":{"line":40,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":60}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.program(22, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":48,"column":7}}})) != null ? stack1 : "")
-    + "]\r\n\r\n[project.optional-dependencies]\r\ndev = [\r\n    \"pytest\",\r\n    \"ruff\",\r\n    \"mypy\",\r\n]\r\n\r\n[build-system]\r\nrequires = [\"hatchling\"]\r\nbuild-backend = \"hatchling.build\"\r\n\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":6},"end":{"line":62,"column":29}}}),{"name":"if","hash":{},"fn":container.program(28, data, 0),"inverse":container.program(29, data, 0),"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":72,"column":7}}})) != null ? stack1 : "")
-    + "\r\n[tool.pytest.ini_options]\r\npythonpath = [\"src\"]";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":11},"end":{"line":24,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":35},"end":{"line":24,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":60}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":34,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":35,"column":11},"end":{"line":35,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":35,"column":35},"end":{"line":35,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":58},"end":{"line":35,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":35,"column":6},"end":{"line":35,"column":79}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":37,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":38,"column":6},"end":{"line":38,"column":31}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":38,"column":0},"end":{"line":40,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":41,"column":11},"end":{"line":41,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":35},"end":{"line":41,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":41,"column":6},"end":{"line":41,"column":60}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.program(24, data, 0),"data":data,"loc":{"start":{"line":41,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "")
+    + "]\n\n[project.optional-dependencies]\ndev = [\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":54,"column":6},"end":{"line":54,"column":30}}}),{"name":"if","hash":{},"fn":container.program(30, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":54,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":57,"column":6},"end":{"line":57,"column":30}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":57,"column":0},"end":{"line":63,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":64,"column":6},"end":{"line":64,"column":32}}}),{"name":"if","hash":{},"fn":container.program(33, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "")
+    + "]\n\n[build-system]\nrequires = [\"hatchling\"]\nbuild-backend = \"hatchling.build\"\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":74,"column":6},"end":{"line":74,"column":29}}}),{"name":"if","hash":{},"fn":container.program(34, data, 0),"inverse":container.program(35, data, 0),"data":data,"loc":{"start":{"line":74,"column":0},"end":{"line":84,"column":7}}})) != null ? stack1 : "")
+    + "\n[tool.pytest.ini_options]\npythonpath = [\".\"]";
 },"useData":true} }],
   ["python/base/pyproject-poetry.toml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -2157,9 +2445,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":6},"end":{"line":26,"column":26}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
     + "uvicorn = { extras = [\"standard\"], version = \"^0.34\" }\n";
 },"8":function(container,depth0,helpers,partials,data) {
-    return "litestar = { extras = [\"jinja\"], version = \"^2.14\" }\n";
+    return "litestar = { extras = [\"jinja\"], version = \"^2.23\" }\n";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "litestar = \"^2.14\"\n";
+    return "litestar = \"^2.23\"\n";
 },"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2192,9 +2480,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":42,"column":10},"end":{"line":42,"column":29}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":42,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":42,"column":10},"end":{"line":42,"column":33}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":42,"column":0},"end":{"line":50,"column":0}}})) != null ? stack1 : "");
 },"16":function(container,depth0,helpers,partials,data) {
-    return "sqlmodel = \"^0.0.22\"\n";
+    return "";
 },"17":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2203,9 +2491,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":10},"end":{"line":44,"column":31}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.program(19, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":43,"column":10},"end":{"line":43,"column":29}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.program(19, data, 0),"data":data,"loc":{"start":{"line":43,"column":0},"end":{"line":50,"column":0}}})) != null ? stack1 : "");
 },"18":function(container,depth0,helpers,partials,data) {
-    return "sqlalchemy = { extras = [\"asyncio\"], version = \"^2.0\" }\n";
+    return "sqlmodel = \">=0.0.27,<0.1\"\n";
 },"19":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2214,26 +2502,26 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":29}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":31}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.program(21, data, 0),"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":50,"column":0}}})) != null ? stack1 : "");
 },"20":function(container,depth0,helpers,partials,data) {
-    return "tortoise-orm = \"^0.24\"\ntzdata = \"^2025.2\"\n";
+    return "sqlalchemy = { extras = [\"asyncio\"], version = \"^2.0\" }\n";
 },"21":function(container,depth0,helpers,partials,data) {
-    return "jinja2 = \"^3.1\"\n";
-},"22":function(container,depth0,helpers,partials,data) {
-    return "alembic = \"^1.14\"\n";
-},"23":function(container,depth0,helpers,partials,data) {
-    return "asyncpg = \"^0.30\"\n";
-},"24":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":58,"column":15},"end":{"line":58,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":39},"end":{"line":58,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":58,"column":10},"end":{"line":58,"column":61}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":64,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":10},"end":{"line":47,"column":29}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":50,"column":0}}})) != null ? stack1 : "");
+},"22":function(container,depth0,helpers,partials,data) {
+    return "tortoise-orm = \"^1.1\"\ntzdata = \"^2025.2\"\n";
+},"23":function(container,depth0,helpers,partials,data) {
+    return "jinja2 = \"^3.1\"\n";
+},"24":function(container,depth0,helpers,partials,data) {
+    return "alembic = \"^1.14\"\n";
 },"25":function(container,depth0,helpers,partials,data) {
-    return "asyncmy = \"^0.2\"\n";
+    return "asyncpg = \"^0.30\"\n";
 },"26":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2242,9 +2530,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":60,"column":15},"end":{"line":60,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":39},"end":{"line":60,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":60,"column":10},"end":{"line":60,"column":62}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.program(28, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":64,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":59,"column":15},"end":{"line":59,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":59,"column":39},"end":{"line":59,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":59,"column":10},"end":{"line":59,"column":61}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.program(28, data, 0),"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":65,"column":0}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data) {
-    return "aiosqlite = \"^0.20\"\n";
+    return "asyncmy = \"^0.2\"\n";
 },"28":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2253,9 +2541,50 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":15},"end":{"line":62,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":39},"end":{"line":62,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":62,"column":10},"end":{"line":62,"column":61}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":64,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":61,"column":15},"end":{"line":61,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":61,"column":39},"end":{"line":61,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":61,"column":10},"end":{"line":61,"column":62}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.program(30, data, 0),"data":data,"loc":{"start":{"line":61,"column":0},"end":{"line":65,"column":0}}})) != null ? stack1 : "");
 },"29":function(container,depth0,helpers,partials,data) {
+    return "aiosqlite = \"^0.20\"\n";
+},"30":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":63,"column":15},"end":{"line":63,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":63,"column":39},"end":{"line":63,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":63,"column":10},"end":{"line":63,"column":61}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":63,"column":0},"end":{"line":65,"column":0}}})) != null ? stack1 : "");
+},"31":function(container,depth0,helpers,partials,data) {
     return "mysqlclient = \"^2.2\"\n";
+},"32":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "[tool.poetry.group.dev.dependencies]\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":69,"column":6},"end":{"line":69,"column":30}}}),{"name":"if","hash":{},"fn":container.program(33, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":69,"column":0},"end":{"line":71,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":72,"column":6},"end":{"line":72,"column":30}}}),{"name":"if","hash":{},"fn":container.program(34, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":72,"column":0},"end":{"line":79,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":80,"column":6},"end":{"line":80,"column":32}}}),{"name":"if","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":80,"column":0},"end":{"line":83,"column":7}}})) != null ? stack1 : "")
+    + "\n";
+},"33":function(container,depth0,helpers,partials,data) {
+    return "ruff = \"^0.16\"\n";
+},"34":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":73,"column":6},"end":{"line":73,"column":29}}}),{"name":"if","hash":{},"fn":container.program(35, data, 0),"inverse":container.program(36, data, 0),"data":data,"loc":{"start":{"line":73,"column":0},"end":{"line":78,"column":7}}})) != null ? stack1 : "");
+},"35":function(container,depth0,helpers,partials,data) {
+    return "django-stubs = { extras = [\"compatible-mypy\"], version = \"^6.1\" }\ndjangorestframework-stubs = { extras = [\"compatible-mypy\"], version = \"^3.18\" }\n";
+},"36":function(container,depth0,helpers,partials,data) {
+    return "mypy = \"^2.4\"\n";
+},"37":function(container,depth0,helpers,partials,data) {
+    return "pytest = \"^9.1\"\nhttpx = \"^0.28\"\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2270,14 +2599,16 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":41}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":118}}})) != null ? stack1 : "")
     + "\nauthors = []\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":6,"column":0},"end":{"line":15,"column":7}}})) != null ? stack1 : "")
-    + "\n[tool.poetry.dependencies]\npython = \">=3.12\"\n"
+    + "\n[tool.poetry.dependencies]\npython = \">=3.12,<4.0\"\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":19,"column":6},"end":{"line":19,"column":29}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":30}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":39,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":29}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":11},"end":{"line":50,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":35},"end":{"line":50,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":50,"column":58},"end":{"line":50,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":79}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":52,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":53,"column":6},"end":{"line":53,"column":31}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":53,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":56,"column":11},"end":{"line":56,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":56,"column":35},"end":{"line":56,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":56,"column":6},"end":{"line":56,"column":60}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.program(24, data, 0),"data":data,"loc":{"start":{"line":56,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
-    + "\n[build-system]\nrequires = [\"poetry-core\"]\nbuild-backend = \"poetry.core.masonry.api\"";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":11},"end":{"line":40,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":35},"end":{"line":40,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":60}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":50,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":51,"column":11},"end":{"line":51,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":51,"column":35},"end":{"line":51,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":51,"column":58},"end":{"line":51,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":51,"column":6},"end":{"line":51,"column":79}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":51,"column":0},"end":{"line":53,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":54,"column":6},"end":{"line":54,"column":31}}}),{"name":"if","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":54,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":57,"column":11},"end":{"line":57,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":57,"column":35},"end":{"line":57,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":57,"column":6},"end":{"line":57,"column":60}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":57,"column":0},"end":{"line":65,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":67,"column":10},"end":{"line":67,"column":34}}}),(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":67,"column":35},"end":{"line":67,"column":59}}}),(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":67,"column":60},"end":{"line":67,"column":86}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":67,"column":6},"end":{"line":67,"column":87}}}),{"name":"if","hash":{},"fn":container.program(32, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":67,"column":0},"end":{"line":85,"column":7}}})) != null ? stack1 : "")
+    + "[build-system]\nrequires = [\"poetry-core\"]\nbuild-backend = \"poetry.core.masonry.api\"\n\n[tool.pytest.ini_options]\npythonpath = [\".\"]\n";
 },"useData":true} }],
   ["python/base/pyproject-uv.toml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -2304,9 +2635,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + alias4(((helper = (helper = lookupProperty(helpers,"framework") || (depth0 != null ? lookupProperty(depth0,"framework") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"framework","hash":{},"data":data,"loc":{"start":{"line":4,"column":89},"end":{"line":4,"column":102}}}) : helper)))
     + " project\"";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "    \"pydantic-settings\",\r\n";
+    return "    \"pydantic-settings\",\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "    \"fastapi\",\r\n    \"uvicorn[standard]\",\r\n";
+    return "    \"fastapi\",\n    \"uvicorn[standard]\",\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2326,7 +2657,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "    "
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":30}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":14,"column":4},"end":{"line":14,"column":74}}})) != null ? stack1 : "")
-    + ",\r\n    \"uvicorn[standard]\",\r\n";
+    + ",\n    \"uvicorn[standard]\",\n";
 },"6":function(container,depth0,helpers,partials,data) {
     return "\"litestar[jinja]\"";
 },"7":function(container,depth0,helpers,partials,data) {
@@ -2341,7 +2672,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":33}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
 },"9":function(container,depth0,helpers,partials,data) {
-    return "    \"django\",\r\n    \"djangorestframework\",\r\n    \"django-cors-headers\",\r\n    \"gunicorn\",\r\n";
+    return "    \"django\",\n    \"djangorestframework\",\n    \"django-cors-headers\",\n    \"gunicorn\",\n";
 },"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2352,9 +2683,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":32}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data) {
-    return "    \"flask[async]\",\r\n";
+    return "    \"flask[async]\",\n";
 },"12":function(container,depth0,helpers,partials,data) {
-    return "    \"psycopg[binary]\",\r\n";
+    return "    \"psycopg[binary]\",\n";
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2363,9 +2694,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":29}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":33}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
-    return "    \"sqlmodel\",\r\n";
+    return "";
 },"15":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2374,9 +2705,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":31}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":10},"end":{"line":27,"column":29}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"16":function(container,depth0,helpers,partials,data) {
-    return "    \"sqlalchemy[asyncio]\",\r\n";
+    return "    \"sqlmodel\",\n";
 },"17":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2385,26 +2716,26 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":30,"column":10},"end":{"line":30,"column":29}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":30,"column":0},"end":{"line":33,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":31}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.program(19, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
 },"18":function(container,depth0,helpers,partials,data) {
-    return "    \"tortoise-orm\",\r\n    \"tzdata\",\r\n";
+    return "    \"sqlalchemy[asyncio]\",\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    return "    \"jinja2\",\r\n";
-},"20":function(container,depth0,helpers,partials,data) {
-    return "    \"alembic\",\r\n";
-},"21":function(container,depth0,helpers,partials,data) {
-    return "    \"asyncpg\",\r\n";
-},"22":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":42,"column":15},"end":{"line":42,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":42,"column":39},"end":{"line":42,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":42,"column":10},"end":{"line":42,"column":61}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.program(24, data, 0),"data":data,"loc":{"start":{"line":42,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":29}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":34,"column":0}}})) != null ? stack1 : "");
+},"20":function(container,depth0,helpers,partials,data) {
+    return "    \"tortoise-orm\",\n    \"tzdata\",\n";
+},"21":function(container,depth0,helpers,partials,data) {
+    return "    \"jinja2\",\n";
+},"22":function(container,depth0,helpers,partials,data) {
+    return "    \"alembic\",\n";
 },"23":function(container,depth0,helpers,partials,data) {
-    return "    \"asyncmy\",\r\n";
+    return "    \"asyncpg\",\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2413,9 +2744,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":44,"column":15},"end":{"line":44,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":39},"end":{"line":44,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":44,"column":10},"end":{"line":44,"column":62}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":43,"column":15},"end":{"line":43,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":43,"column":39},"end":{"line":43,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":43,"column":10},"end":{"line":43,"column":61}}}),{"name":"if","hash":{},"fn":container.program(25, data, 0),"inverse":container.program(26, data, 0),"data":data,"loc":{"start":{"line":43,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"25":function(container,depth0,helpers,partials,data) {
-    return "    \"aiosqlite\",\r\n";
+    return "    \"asyncmy\",\n";
 },"26":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2424,19 +2755,40 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":15},"end":{"line":46,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":39},"end":{"line":46,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":61}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":45,"column":15},"end":{"line":45,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":39},"end":{"line":45,"column":61}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":62}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.program(28, data, 0),"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data) {
-    return "    \"mysqlclient\",\r\n";
+    return "    \"aiosqlite\",\n";
 },"28":function(container,depth0,helpers,partials,data) {
-    return "    \"ruff\",\r\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":15},"end":{"line":47,"column":38}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":39},"end":{"line":47,"column":60}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":47,"column":10},"end":{"line":47,"column":61}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":49,"column":0}}})) != null ? stack1 : "");
 },"29":function(container,depth0,helpers,partials,data) {
-    return "    \"mypy\",\r\n";
+    return "    \"mysqlclient\",\n";
 },"30":function(container,depth0,helpers,partials,data) {
-    return "    \"pytest\",\r\n    \"httpx\",\r\n";
+    return "    \"ruff\",\n";
 },"31":function(container,depth0,helpers,partials,data) {
-    return "[tool.hatch.build.targets.wheel]\r\npackages = [\"config\", \"apps\"]\r\n\r\n[tool.hatch.build.targets.wheel.force-include]\r\ntemplates = \"templates\"\r\nstatic = \"static\"\r\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    \"mypy\",\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":29}}}),{"name":"if","hash":{},"fn":container.program(32, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "");
 },"32":function(container,depth0,helpers,partials,data) {
-    return "[tool.hatch.build.targets.wheel]\r\npackages = [\"src\"]\r\n";
+    return "    \"django-stubs[compatible-mypy]\",\n    \"djangorestframework-stubs[compatible-mypy]\",\n";
+},"33":function(container,depth0,helpers,partials,data) {
+    return "    \"pytest\",\n    \"httpx\",\n";
+},"34":function(container,depth0,helpers,partials,data) {
+    return "[tool.hatch.build.targets.wheel]\npackages = [\"config\", \"apps\"]\n\n[tool.hatch.build.targets.wheel.force-include]\ntemplates = \"templates\"\nstatic = \"static\"\n";
+},"35":function(container,depth0,helpers,partials,data) {
+    return "[tool.hatch.build.targets.wheel]\npackages = [\"src\"]\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2445,60 +2797,40 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "[project]\r\nname = \""
+  return "[project]\nname = \""
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":24}}}) : helper)))
-    + "\"\r\nversion = \"0.1.0\"\r\ndescription = "
+    + "\"\nversion = \"0.1.0\"\ndescription = "
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":41}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":118}}})) != null ? stack1 : "")
-    + "\r\nrequires-python = \">=3.12\"\r\ndependencies = [\r\n"
+    + "\nrequires-python = \">=3.12\"\ndependencies = [\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":9,"column":7}}})) != null ? stack1 : "")
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":30}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":29}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":34,"column":11},"end":{"line":34,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":34,"column":35},"end":{"line":34,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":34,"column":58},"end":{"line":34,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":34,"column":6},"end":{"line":34,"column":79}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":34,"column":0},"end":{"line":36,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":31}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":39,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":40,"column":11},"end":{"line":40,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":35},"end":{"line":40,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":60}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.program(22, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":48,"column":7}}})) != null ? stack1 : "")
-    + "]\r\n\r\n[dependency-groups]\r\ndev = [\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":53,"column":6},"end":{"line":53,"column":30}}}),{"name":"if","hash":{},"fn":container.program(28, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":53,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":56,"column":6},"end":{"line":56,"column":30}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":56,"column":0},"end":{"line":58,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":32}}}),{"name":"if","hash":{},"fn":container.program(30, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "")
-    + "]\r\n\r\n[build-system]\r\nrequires = [\"hatchling\"]\r\nbuild-backend = \"hatchling.build\"\r\n\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":69,"column":6},"end":{"line":69,"column":29}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.program(32, data, 0),"data":data,"loc":{"start":{"line":69,"column":0},"end":{"line":79,"column":7}}})) != null ? stack1 : "")
-    + "\r\n[tool.pytest.ini_options]\r\npythonpath = [\"src\"]";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":11},"end":{"line":24,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":35},"end":{"line":24,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":60}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":34,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":35,"column":11},"end":{"line":35,"column":34}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":35,"column":35},"end":{"line":35,"column":57}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":58},"end":{"line":35,"column":78}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":35,"column":6},"end":{"line":35,"column":79}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":37,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"alembic",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":38,"column":6},"end":{"line":38,"column":31}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":38,"column":0},"end":{"line":40,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":41,"column":11},"end":{"line":41,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":35},"end":{"line":41,"column":59}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":41,"column":6},"end":{"line":41,"column":60}}}),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.program(24, data, 0),"data":data,"loc":{"start":{"line":41,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "")
+    + "]\n\n[dependency-groups]\ndev = [\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"ruff",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":54,"column":6},"end":{"line":54,"column":30}}}),{"name":"if","hash":{},"fn":container.program(30, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":54,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"mypy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":57,"column":6},"end":{"line":57,"column":30}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":57,"column":0},"end":{"line":63,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"pytest",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":64,"column":6},"end":{"line":64,"column":32}}}),{"name":"if","hash":{},"fn":container.program(33, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "")
+    + "]\n\n[build-system]\nrequires = [\"hatchling\"]\nbuild-backend = \"hatchling.build\"\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"django",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":74,"column":6},"end":{"line":74,"column":29}}}),{"name":"if","hash":{},"fn":container.program(34, data, 0),"inverse":container.program(35, data, 0),"data":data,"loc":{"start":{"line":74,"column":0},"end":{"line":84,"column":7}}})) != null ? stack1 : "")
+    + "\n[tool.pytest.ini_options]\npythonpath = [\".\"]";
 },"useData":true} }],
   ["python/base/src/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/base/src/config.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":10},"end":{"line":13,"column":29}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":13,"column":4},"end":{"line":17,"column":11}}})) != null ? stack1 : "");
+  return "\nDATABASE_NAME = \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":6,"column":17},"end":{"line":6,"column":33}}}) : helper)))
+    + "\"\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"sqlite://./"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":14,"column":36},"end":{"line":14,"column":52}}}) : helper)))
-    + ".db\"\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"sqlite+aiosqlite:///./"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":16,"column":47},"end":{"line":16,"column":63}}}) : helper)))
-    + ".db\"\n";
-},"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -2506,7 +2838,20 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":14},"end":{"line":18,"column":38}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":18,"column":4},"end":{"line":30,"column":4}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    database_url: str = f\""
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":32},"end":{"line":18,"column":54}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":18,"column":26},"end":{"line":18,"column":247}}})) != null ? stack1 : "")
+    + "\"\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "sqlite://./{DATABASE_NAME}.db";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2515,29 +2860,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":29}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":19,"column":4},"end":{"line":23,"column":11}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":95},"end":{"line":18,"column":119}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":18,"column":85},"end":{"line":18,"column":240}}})) != null ? stack1 : "");
 },"5":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":69},"end":{"line":20,"column":85}}}) : helper)))
-    + "\"\n";
+    return "postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}";
 },"6":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"postgresql+asyncpg://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":22,"column":79},"end":{"line":22,"column":95}}}) : helper)))
-    + "\"\n";
+    return "mysql://root:password@localhost:3306/{DATABASE_NAME}";
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2546,8 +2873,12 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":14},"end":{"line":24,"column":35}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":24,"column":4},"end":{"line":30,"column":4}}})) != null ? stack1 : "");
+  return "    database_url: str = f\""
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":32},"end":{"line":20,"column":54}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":20,"column":26},"end":{"line":20,"column":276}}})) != null ? stack1 : "")
+    + "\"\n";
 },"8":function(container,depth0,helpers,partials,data) {
+    return "sqlite+aiosqlite:///./{DATABASE_NAME}.db";
+},"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -2555,30 +2886,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":29}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":25,"column":4},"end":{"line":29,"column":11}}})) != null ? stack1 : "")
-    + "    ";
-},"9":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"mysql://root:password@localhost:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":26,"column":62},"end":{"line":26,"column":78}}}) : helper)))
-    + "\"\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":106},"end":{"line":20,"column":130}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":20,"column":96},"end":{"line":20,"column":269}}})) != null ? stack1 : "");
 },"10":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "    database_url: str = \"mysql+asyncmy://root:password@localhost:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":28,"column":70},"end":{"line":28,"column":86}}}) : helper)))
-    + "\"\n";
+    return "postgresql+asyncpg://postgres:postgres@localhost:5432/{DATABASE_NAME}";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "mysql+asyncmy://root:password@localhost:3306/{DATABASE_NAME}";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2587,34 +2899,40 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from functools import lru_cache\n\nfrom pydantic_settings import BaseSettings, SettingsConfigDict\n\nclass Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", extra=\"ignore\")\n\n    app_name: str = \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":8,"column":21},"end":{"line":8,"column":36}}}) : helper)))
-    + "\"\n    debug: bool = False\n    cors_origins: list[str] = [\"http://localhost:3000\"]\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":32}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":4},"end":{"line":30,"column":11}}})) != null ? stack1 : "")
-    + "\n@lru_cache\ndef get_settings() -> Settings:\n    return Settings()\n";
+  return "from functools import lru_cache\n\nfrom pydantic_settings import BaseSettings, SettingsConfigDict\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":26}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "\n\nclass Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", extra=\"ignore\")\n\n    app_name: str = \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":13,"column":21},"end":{"line":13,"column":36}}}) : helper)))
+    + "\"\n    debug: bool = False\n    cors_origins: list[str] = [\"http://localhost:3000\"]\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":26}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":22,"column":7}}})) != null ? stack1 : "")
+    + "\n\n@lru_cache\ndef get_settings() -> Settings:\n    return Settings()\n";
 },"useData":true} }],
   ["python/core/src/schemas/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/core/src/schemas/items.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from datetime import datetime\n\nfrom pydantic import BaseModel, ConfigDict\n\nclass ItemCreate(BaseModel):\n\n    name: str\n\nclass ItemResponse(BaseModel):\n\n    model_config = ConfigDict(from_attributes=True)\n\n    id: str\n    name: str\n    created_at: datetime";
+    return "from datetime import datetime\nfrom typing import Annotated\n\nfrom pydantic import BaseModel, ConfigDict, StringConstraints\n\n\nclass ItemCreate(BaseModel):\n    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200)]\n\n\nclass ItemResponse(BaseModel):\n    model_config = ConfigDict(from_attributes=True)\n\n    id: str\n    name: str\n    created_at: datetime\n";
 },"useData":true} }],
   ["python/core/src/services/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/core/src/services/items.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from ..repositories.items import (\n    create_item as repo_create_item,\n    list_items as repo_list_items,\n)\nfrom ..schemas.items import ItemCreate, ItemResponse\n\nasync def create_item(payload: ItemCreate) -> ItemResponse:\n\n    return await repo_create_item(name=payload.name)\n\nasync def list_items() -> list[ItemResponse]:\n\n    return await repo_list_items()\n";
+    return "from ..db import AsyncSession\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "from sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ..repositories.items import (\n    create_item as repo_create_item,\n    list_items as repo_list_items,\n)\nfrom ..schemas.items import ItemCreate, ItemResponse\n\nasync def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:\n\n    return await repo_create_item(session, name=payload.name)\n\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\n\n    return await repo_list_items(session)\n";
+    return "\n\nasync def create_item(payload: ItemCreate) -> ItemResponse:\n    return await items_repository.create_item(name=payload.name)\n\n\nasync def list_items() -> list[ItemResponse]:\n    return await items_repository.list_items()\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "\n\nasync def create_item(session: AsyncSession, payload: ItemCreate) -> ItemResponse:\n    return await items_repository.create_item(session, name=payload.name)\n\n\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\n    return await items_repository.list_items(session)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":31,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":7}}})) != null ? stack1 : "")
+    + "from ..repositories import items as items_repository\nfrom ..schemas.items import ItemCreate, ItemResponse\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":25}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":6,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/framework/django/apps/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
@@ -2623,66 +2941,56 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "";
 },"useData":true} }],
   ["python/framework/django/apps/core/apps.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.apps import AppConfig\n\nclass CoreConfig(AppConfig):\n    default_auto_field = \"django.db.models.BigAutoField\"\n    name = \"apps.core\"";
+    return "from django.apps import AppConfig\n\n\nclass CoreConfig(AppConfig):\n    default_auto_field = \"django.db.models.BigAutoField\"\n    name = \"apps.core\"\n";
 },"useData":true} }],
   ["python/framework/django/apps/core/models.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.db import models";
-},"useData":true} }],
-  ["python/framework/django/apps/core/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.urls import path\n\nfrom . import views\n\nurlpatterns = [\n    path(\"health/\", views.health, name=\"health\"),\n]";
-},"useData":true} }],
-  ["python/framework/django/apps/core/utils.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
+  ["python/framework/django/apps/core/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "from django.urls import path\n\nfrom . import views\n\nurlpatterns = [\n    path(\"health/\", views.health, name=\"health\"),\n]\n";
+},"useData":true} }],
   ["python/framework/django/apps/core/views.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.http import HttpRequest\n\nfrom rest_framework.decorators import api_view\nfrom rest_framework.response import Response\n\n@api_view([\"GET\"])\ndef health(request: HttpRequest) -> Response:\n    return Response({\"status\": \"ok\"})";
+    return "from rest_framework.decorators import api_view\nfrom rest_framework.request import Request\nfrom rest_framework.response import Response\n\n\n@api_view([\"GET\"])\ndef health(request: Request) -> Response:\n    return Response({\"status\": \"ok\"})\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/django/apps/users/apps.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.apps import AppConfig\n\nclass UsersConfig(AppConfig):\n    default_auto_field = \"django.db.models.BigAutoField\"\n    name = \"apps.users\"";
+    return "from django.apps import AppConfig\n\n\nclass UsersConfig(AppConfig):\n    default_auto_field = \"django.db.models.BigAutoField\"\n    name = \"apps.users\"\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/models.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.contrib.auth.models import AbstractUser\nfrom django.db import models\n\nclass User(AbstractUser):\n\n    class Meta:\n        db_table = \"users\"";
+    return "from django.contrib.auth.models import AbstractUser\n\n\nclass User(AbstractUser):\n    class Meta:\n        db_table = \"users\"\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/selectors.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from .models import User\n\ndef get_user_by_id(user_id: int) -> User | None:\n\n    try:\n        return User.objects.get(pk=user_id)\n    except User.DoesNotExist:\n        return None";
+    return "from .models import User\n\n\ndef get_user_by_id(user_id: int) -> User | None:\n    try:\n        return User.objects.get(pk=user_id)\n    except User.DoesNotExist:\n        return None\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/serializers.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from rest_framework import serializers\n\nfrom .models import User\n\nclass UserSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = User\n        fields = [\"id\", \"username\", \"email\", \"first_name\", \"last_name\"]\n        read_only_fields = [\"id\"]";
+    return "from rest_framework import serializers\n\nfrom .models import User\n\n\nclass UserSerializer(serializers.ModelSerializer[User]):\n    class Meta:\n        model = User\n        fields = [\"id\", \"username\", \"email\", \"first_name\", \"last_name\"]\n        read_only_fields = [\"id\"]\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/services.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.db.models import QuerySet\n\nfrom .models import User\n\ndef get_users() -> QuerySet[User]:\n\n    return User.objects.filter(is_active=True)";
+    return "from django.db.models import QuerySet\n\nfrom .models import User\n\n\ndef get_users() -> QuerySet[User]:\n    return User.objects.filter(is_active=True)\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.urls import path\n\nfrom . import views\n\napp_name = \"users\"\n\nurlpatterns = [\n    path(\"\", views.UserListView.as_view(), name=\"user-list\"),\n]";
+    return "from django.urls import path\n\nfrom . import views\n\napp_name = \"users\"\n\nurlpatterns = [\n    path(\"\", views.UserListView.as_view(), name=\"user-list\"),\n]\n";
 },"useData":true} }],
   ["python/framework/django/apps/users/views.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from rest_framework import generics\nfrom rest_framework.permissions import IsAuthenticated\n\nfrom .models import User\nfrom .serializers import UserSerializer\n\nclass UserListView(generics.ListAPIView):\n    queryset = User.objects.all()\n    serializer_class = UserSerializer\n    permission_classes = [IsAuthenticated]";
+    return "from django.db.models import QuerySet\nfrom rest_framework import generics\nfrom rest_framework.permissions import IsAuthenticated\n\nfrom .models import User\nfrom .serializers import UserSerializer\nfrom .services import get_users\n\n\nclass UserListView(generics.ListAPIView[User]):\n    serializer_class = UserSerializer\n    permission_classes = [IsAuthenticated]\n\n    def get_queryset(self) -> QuerySet[User]:\n        return get_users()\n";
 },"useData":true} }],
   ["python/framework/django/config/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/django/config/asgi.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import os\n\nfrom django.core.asgi import get_asgi_application\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\n\napplication = get_asgi_application()\n";
+    return "import os\n\nfrom django.core.asgi import get_asgi_application\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.production\")\n\napplication = get_asgi_application()\n";
 },"useData":true} }],
   ["python/framework/django/config/settings/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/django/config/settings/base.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "DATABASES = {}\n";
+    return "import os\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":59,"column":10},"end":{"line":59,"column":32}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":88,"column":0}}})) != null ? stack1 : "");
+    return "    \"apps.web\",\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": BASE_DIR / \"db.sqlite3\",\n    }\n}\n";
+    return "DATABASES = {}\n";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2691,18 +2999,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":66,"column":10},"end":{"line":66,"column":34}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":66,"column":0},"end":{"line":88,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":65,"column":10},"end":{"line":65,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":65,"column":0},"end":{"line":94,"column":0}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.postgresql\",\n        \"NAME\": \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":70,"column":17},"end":{"line":70,"column":33}}}) : helper)))
-    + "\",\n        \"USER\": \"postgres\",\n        \"PASSWORD\": \"postgres\",\n        \"HOST\": \"localhost\",\n        \"PORT\": \"5432\",\n    }\n}\n";
+    return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": BASE_DIR / \"db.sqlite3\",\n    }\n}\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2711,7 +3010,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":77,"column":10},"end":{"line":77,"column":31}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":77,"column":0},"end":{"line":88,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":72,"column":10},"end":{"line":72,"column":34}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":72,"column":0},"end":{"line":94,"column":0}}})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2720,9 +3019,52 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.mysql\",\n        \"NAME\": \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":81,"column":17},"end":{"line":81,"column":33}}}) : helper)))
-    + "\",\n        \"USER\": \"root\",\n        \"PASSWORD\": \"password\",\n        \"HOST\": \"localhost\",\n        \"PORT\": \"3306\",\n    }\n}\n";
+  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.postgresql\",\n        \"NAME\": os.environ.get(\"DB_NAME\", \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":76,"column":43},"end":{"line":76,"column":59}}}) : helper)))
+    + "\"),\n        \"USER\": os.environ.get(\"DB_USER\", \"postgres\"),\n        \"PASSWORD\": os.environ.get(\"DB_PASSWORD\", \"postgres\"),\n        \"HOST\": os.environ.get(\"DB_HOST\", \"localhost\"),\n        \"PORT\": os.environ.get(\"DB_PORT\", \"5432\"),\n    }\n}\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":83,"column":10},"end":{"line":83,"column":31}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":83,"column":0},"end":{"line":94,"column":0}}})) != null ? stack1 : "");
+},"8":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.mysql\",\n        \"NAME\": os.environ.get(\"DB_NAME\", \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":87,"column":43},"end":{"line":87,"column":59}}}) : helper)))
+    + "\"),\n        \"USER\": os.environ.get(\"DB_USER\", \"root\"),\n        \"PASSWORD\": os.environ.get(\"DB_PASSWORD\", \"password\"),\n        \"HOST\": os.environ.get(\"DB_HOST\", \"localhost\"),\n        \"PORT\": os.environ.get(\"DB_PORT\", \"3306\"),\n    }\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":56}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":57}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":7}}})) != null ? stack1 : "")
+    + "from pathlib import Path\n\nBASE_DIR = Path(__file__).resolve().parent.parent.parent\n\nSECRET_KEY = \"django-insecure-change-me\"\n\nDEBUG = False\n\nALLOWED_HOSTS: list[str] = []\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"corsheaders\",\n    \"rest_framework\",\n    \"apps.core\",\n    \"apps.users\",\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":26}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + "]\n\nAUTH_USER_MODEL = \"users.User\"\n\nMIDDLEWARE = [\n    \"corsheaders.middleware.CorsMiddleware\",\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n]\n\nROOT_URLCONF = \"config.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [BASE_DIR / \"templates\"],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"config.wsgi.application\"\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":63,"column":6},"end":{"line":63,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":63,"column":0},"end":{"line":94,"column":7}}})) != null ? stack1 : "")
+    + "\nAUTH_PASSWORD_VALIDATORS = [\n    {\"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\"},\n]\n\nLANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"UTC\"\nUSE_I18N = True\nUSE_TZ = True\n\nSTATIC_URL = \"static/\"\nSTATIC_ROOT = BASE_DIR / \"staticfiles\"\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n\nMEDIA_URL = \"media/\"\nMEDIA_ROOT = BASE_DIR / \"media\"\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n";
+},"useData":true} }],
+  ["python/framework/django/config/settings/development.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "from .base import *\n\nDEBUG = True\n\nALLOWED_HOSTS = [\"*\"]\n\nCORS_ALLOW_ALL_ORIGINS = True\n";
+},"useData":true} }],
+  ["python/framework/django/config/settings/production.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "import os\n\nfrom .base import *\n\nDEBUG = False\n\nSECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n\nALLOWED_HOSTS = [host for host in os.environ.get(\"ALLOWED_HOSTS\", \"\").split(\",\") if host]\n\nCORS_ALLOW_ALL_ORIGINS = False\nCORS_ALLOWED_ORIGINS = [\n    origin for origin in os.environ.get(\"CORS_ALLOWED_ORIGINS\", \"\").split(\",\") if origin\n]\n";
+},"useData":true} }],
+  ["python/framework/django/config/urls.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "    path(\"\", include(\"apps.web.urls\")),\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2731,24 +3073,15 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from pathlib import Path\n\nBASE_DIR = Path(__file__).resolve().parent.parent.parent\n\nSECRET_KEY = \"django-insecure-change-me\"\n\nDEBUG = False\n\nALLOWED_HOSTS: list[str] = []\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"corsheaders\",\n    \"rest_framework\",\n    \"apps.core\",\n    \"apps.users\",\n]\n\nAUTH_USER_MODEL = \"users.User\"\n\nMIDDLEWARE = [\n    \"corsheaders.middleware.CorsMiddleware\",\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n]\n\nROOT_URLCONF = \"config.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [BASE_DIR / \"templates\"],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"config.wsgi.application\"\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":57,"column":6},"end":{"line":57,"column":26}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":57,"column":0},"end":{"line":88,"column":7}}})) != null ? stack1 : "")
-    + "\nAUTH_PASSWORD_VALIDATORS = [\n    {\"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\"},\n]\n\nLANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"UTC\"\nUSE_I18N = True\nUSE_TZ = True\n\nSTATIC_URL = \"static/\"\nSTATIC_ROOT = BASE_DIR / \"staticfiles\"\n\nMEDIA_URL = \"media/\"\nMEDIA_ROOT = BASE_DIR / \"media\"\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nREST_FRAMEWORK = {}\n";
-},"useData":true} }],
-  ["python/framework/django/config/settings/development.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from .base import *  # noqa: F401,F403\n\nDEBUG = True\n\nALLOWED_HOSTS = [\"*\"]\n\nCORS_ALLOW_ALL_ORIGINS = True\n";
-},"useData":true} }],
-  ["python/framework/django/config/settings/production.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import os\n\nfrom .base import *  # noqa: F401,F403\n\nSECRET_KEY = os.environ.get(\"DJANGO_SECRET_KEY\", SECRET_KEY)  # noqa: F405\n\nALLOWED_HOSTS = os.environ.get(\"ALLOWED_HOSTS\", \"\").split(\",\")  # type: ignore[assignment]\n\nCORS_ALLOW_ALL_ORIGINS = False\nCORS_ALLOWED_ORIGINS = os.environ.get(\"CORS_ALLOWED_ORIGINS\", \"\").split(\",\")  # type: ignore[assignment]\n";
-},"useData":true} }],
-  ["python/framework/django/config/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.conf import settings\nfrom django.conf.urls.static import static\nfrom django.contrib import admin\nfrom django.urls import include, path\n\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"api/\", include(\"apps.core.urls\")),\n    path(\"api/users/\", include(\"apps.users.urls\")),\n]\n\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n";
+  return "from django.conf import settings\nfrom django.conf.urls.static import static\nfrom django.contrib import admin\nfrom django.urls import URLPattern, URLResolver, include, path\n\nurlpatterns: list[URLPattern | URLResolver] = [\n    path(\"admin/\", admin.site.urls),\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":26}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":10,"column":7}}})) != null ? stack1 : "")
+    + "    path(\"api/\", include(\"apps.core.urls\")),\n    path(\"api/users/\", include(\"apps.users.urls\")),\n]\n\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n";
 },"useData":true} }],
   ["python/framework/django/config/wsgi.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import os\n\nfrom django.core.wsgi import get_wsgi_application\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\n\napplication = get_wsgi_application()\n";
+    return "import os\n\nfrom django.core.wsgi import get_wsgi_application\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.production\")\n\napplication = get_wsgi_application()\n";
 },"useData":true} }],
   ["python/framework/django/manage.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "#!/usr/bin/env python\n\nimport os\nimport sys\n\ndef main():\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed?\",\n        ) from exc\n    execute_from_command_line(sys.argv)\n\nif __name__ == \"__main__\":\n    main()\n";
+    return "#!/usr/bin/env python\nimport os\nimport sys\n\n\ndef main() -> None:\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"config.settings.development\")\n    from django.core.management import execute_from_command_line\n\n    execute_from_command_line(sys.argv)\n\n\nif __name__ == \"__main__\":\n    main()\n";
 },"useData":true} }],
   ["python/framework/django/media/README.md", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "User-uploaded media files directory.\n";
@@ -2772,13 +3105,13 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "";
 },"useData":true} }],
   ["python/framework/fastapi/src/api/router.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from fastapi import APIRouter\n\nfrom .v1.router import router as v1_router\n\napi_router = APIRouter()\n\n@api_router.get(\"/health\")\nasync def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n\napi_router.include_router(v1_router, prefix=\"/api/v1\")";
+    return "from fastapi import APIRouter\n\nfrom .v1.router import router as v1_router\n\napi_router = APIRouter()\n\n\n@api_router.get(\"/health\")\nasync def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n\n\napi_router.include_router(v1_router, prefix=\"/api/v1\")\n";
 },"useData":true} }],
   ["python/framework/fastapi/src/api/v1/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/fastapi/src/api/v1/router.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from .routes.items import router as items_router\n";
+    return "\nfrom .routes.items import router as items_router\n";
 },"1":function(container,depth0,helpers,partials,data) {
     return "router.include_router(items_router, prefix=\"/items\", tags=[\"items\"])\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -2789,20 +3122,24 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from fastapi import APIRouter\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
-    + "\nrouter = APIRouter()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "");
+  return "from fastapi import APIRouter\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "\nrouter = APIRouter()\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":10,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/framework/fastapi/src/api/v1/routes/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/fastapi/src/api/v1/routes/items.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from fastapi import Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ....db import get_session\n";
+    return "from fastapi import APIRouter\n\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "@router.get(\"/\", response_model=list[ItemResponse])\nasync def list_items_endpoint() -> list[ItemResponse]:\n    return await list_items()\n\n@router.post(\"/\", response_model=ItemResponse, status_code=201)\nasync def create_item_endpoint(payload: ItemCreate) -> ItemResponse:\n    return await create_item(payload)\n";
+    return "from typing import Annotated\n\nfrom fastapi import APIRouter, Depends\n\nfrom ....db import AsyncSession, get_session\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "@router.get(\"/\", response_model=list[ItemResponse])\nasync def list_items_endpoint(\n    session: AsyncSession = Depends(get_session),\n) -> list[ItemResponse]:\n    return await list_items(session)\n\n@router.post(\"/\", response_model=ItemResponse, status_code=201)\nasync def create_item_endpoint(\n    payload: ItemCreate,\n    session: AsyncSession = Depends(get_session),\n) -> ItemResponse:\n    return await create_item(session, payload)\n";
+    return "\nSessionDep = Annotated[AsyncSession, Depends(get_session)]\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "\n\n@router.get(\"/\", response_model=list[ItemResponse])\nasync def list_items_endpoint() -> list[ItemResponse]:\n    return await list_items()\n\n\n@router.post(\"/\", response_model=ItemResponse, status_code=201)\nasync def create_item_endpoint(payload: ItemCreate) -> ItemResponse:\n    return await create_item(payload)\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "\n\n@router.get(\"/\", response_model=list[ItemResponse])\nasync def list_items_endpoint(session: SessionDep) -> list[ItemResponse]:\n    return await list_items(session)\n\n\n@router.post(\"/\", response_model=ItemResponse, status_code=201)\nasync def create_item_endpoint(payload: ItemCreate, session: SessionDep) -> ItemResponse:\n    return await create_item(session, payload)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2811,18 +3148,31 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from fastapi import APIRouter\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "from ....schemas.items import ItemCreate, ItemResponse\nfrom ....services.items import create_item, list_items\n\nrouter = APIRouter()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":25}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":34,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":10,"column":7}}})) != null ? stack1 : "")
+    + "from ....schemas.items import ItemCreate, ItemResponse\nfrom ....services.items import create_item, list_items\n\nrouter = APIRouter()\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":18,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":6},"end":{"line":19,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":41,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/framework/fastapi/src/exceptions.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import logging\n\nfrom fastapi import FastAPI, Request, status\nfrom fastapi.responses import JSONResponse\n\nlogger = logging.getLogger(__name__)\n\nclass AppError(Exception):\n\n    status_code = status.HTTP_400_BAD_REQUEST\n\nclass NotFoundError(AppError):\n    status_code = status.HTTP_404_NOT_FOUND\n\ndef register_exception_handlers(app: FastAPI) -> None:\n\n    @app.exception_handler(AppError)\n    async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:\n        return JSONResponse(status_code=exc.status_code, content={\"detail\": str(exc)})\n\n    @app.exception_handler(Exception)\n    async def handle_unhandled(request: Request, exc: Exception) -> JSONResponse:\n        logger.exception(\"Unhandled error: %s\", exc)\n        return JSONResponse(\n            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,\n            content={\"detail\": \"Internal server error\"},\n        )";
+    return "import logging\n\nfrom fastapi import FastAPI, Request, status\nfrom fastapi.responses import JSONResponse\n\nlogger = logging.getLogger(__name__)\n\n\nclass AppError(Exception):\n    status_code = status.HTTP_400_BAD_REQUEST\n\n\nclass NotFoundError(AppError):\n    status_code = status.HTTP_404_NOT_FOUND\n\n\ndef register_exception_handlers(app: FastAPI) -> None:\n    @app.exception_handler(AppError)\n    async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:\n        return JSONResponse(status_code=exc.status_code, content={\"detail\": str(exc)})\n\n    @app.exception_handler(Exception)\n    async def handle_unhandled(request: Request, exc: Exception) -> JSONResponse:\n        logger.exception(\"Unhandled error: %s\", exc)\n        return JSONResponse(\n            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,\n            content={\"detail\": \"Internal server error\"},\n        )\n";
 },"useData":true} }],
   ["python/framework/fastapi/src/main.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n    from .db import init_db\n\n    await init_db()\n    yield\n";
+    return "from .db import close_db, init_db\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n    yield\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":10,"column":10},"end":{"line":10,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":12,"column":0}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    return "from .db import close_db\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "    await init_db()\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "    await close_db()\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2831,12 +3181,16 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from collections.abc import AsyncIterator\nfrom contextlib import asynccontextmanager\n\nfrom fastapi import FastAPI\n\nfrom .config import get_settings\nfrom .exceptions import register_exception_handlers\nfrom .middleware import add_middleware\n\nsettings = get_settings()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":12,"column":11},"end":{"line":12,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":27},"end":{"line":12,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":50}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
-    + "\ndef create_app() -> FastAPI:\n\n    app = FastAPI(title=settings.app_name, lifespan=lifespan)\n\n    add_middleware(app)\n    register_exception_handlers(app)\n\n    from .api.router import api_router\n\n    app.include_router(api_router)\n\n    return app\n\napp = create_app()";
+  return "from collections.abc import AsyncIterator\nfrom contextlib import asynccontextmanager\n\nfrom fastapi import FastAPI\n\nfrom .api.router import api_router\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":11},"end":{"line":8,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":8,"column":27},"end":{"line":8,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":50}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":12,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import register_exception_handlers\nfrom .middleware import add_middleware\n\nsettings = get_settings()\n\n\n@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":11},"end":{"line":21,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":27},"end":{"line":21,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":50}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
+    + "    yield\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":21}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + "\n\ndef create_app() -> FastAPI:\n    app = FastAPI(title=settings.app_name, lifespan=lifespan)\n    add_middleware(app)\n    register_exception_handlers(app)\n    app.include_router(api_router)\n    return app\n\n\napp = create_app()\n";
 },"useData":true} }],
   ["python/framework/fastapi/src/middleware.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import logging\nfrom collections.abc import Awaitable, Callable\n\nfrom fastapi import FastAPI, Request\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom starlette.middleware.base import BaseHTTPMiddleware\nfrom starlette.responses import Response\n\nfrom .config import get_settings\n\nlogger = logging.getLogger(__name__)\n\ndef add_middleware(app: FastAPI) -> None:\n\n    settings = get_settings()\n\n    app.add_middleware(\n        CORSMiddleware,\n        allow_origins=settings.cors_origins,\n        allow_credentials=True,\n        allow_methods=[\"*\"],\n        allow_headers=[\"*\"],\n    )\n    app.add_middleware(BaseHTTPMiddleware, dispatch=request_logging)\n\nasync def request_logging(\n    request: Request, call_next: Callable[[Request], Awaitable[Response]]\n) -> Response:\n\n    response = await call_next(request)\n    logger.info(\"%s %s -> %s\", request.method, request.url.path, response.status_code)\n    return response";
+    return "from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\n\nfrom .config import get_settings\n\n\ndef add_middleware(app: FastAPI) -> None:\n    app.add_middleware(\n        CORSMiddleware,\n        allow_origins=get_settings().cors_origins,\n        allow_credentials=True,\n        allow_methods=[\"*\"],\n        allow_headers=[\"*\"],\n    )\n";
 },"useData":true} }],
   ["python/framework/flask/src/api/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
@@ -2845,7 +3199,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "";
 },"useData":true} }],
   ["python/framework/flask/src/api/v1/router.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from .routes.items import items_bp\n";
+    return "from .routes.items import items_bp\n\n";
 },"1":function(container,depth0,helpers,partials,data) {
     return "    v1_bp.register_blueprint(items_bp)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -2857,22 +3211,24 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "from flask import Blueprint, Flask, Response, jsonify\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
-    + "\nhealth_bp = Blueprint(\"health\", __name__)\n\n@health_bp.get(\"/health\")\ndef health() -> Response:\n    return jsonify({\"status\": \"ok\"})\n\nv1_bp = Blueprint(\"api_v1\", __name__, url_prefix=\"/api/v1\")\n\ndef register_v1_blueprints(app: Flask) -> None:\n\n    app.register_blueprint(health_bp)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":25}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":4},"end":{"line":21,"column":11}}})) != null ? stack1 : "")
-    + "    app.register_blueprint(v1_bp)";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
+    + "health_bp = Blueprint(\"health\", __name__)\nv1_bp = Blueprint(\"api_v1\", __name__, url_prefix=\"/api/v1\")\n\n\n@health_bp.get(\"/health\")\ndef health() -> Response:\n    return jsonify({\"status\": \"ok\"})\n\n\ndef register_v1_blueprints(app: Flask) -> None:\n    app.register_blueprint(health_bp)\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + "    app.register_blueprint(v1_bp)\n";
 },"useData":true} }],
   ["python/framework/flask/src/api/v1/routes/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/flask/src/api/v1/routes/items.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "    items = await list_items()\n";
+    return "from ....db import SessionLocal\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "    from ....db import SessionLocal\n\n    async with SessionLocal() as session:\n        items = await list_items(session)\n";
+    return "    items = await list_items()\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "    item = await create_item(data)\n";
+    return "    async with SessionLocal() as session:\n        items = await list_items(session)\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "    from ....db import SessionLocal\n\n    async with SessionLocal() as session:\n        item = await create_item(session, data)\n";
+    return "    item = await create_item(payload)\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "    async with SessionLocal() as session:\n        item = await create_item(session, payload)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2881,17 +3237,23 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from flask import Blueprint, Response, jsonify, request\n\nitems_bp = Blueprint(\"items\", __name__, url_prefix=\"/items\")\n\n@items_bp.get(\"/\")\nasync def list_items_endpoint() -> Response:\n    from ....services.items import list_items\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":10},"end":{"line":9,"column":29}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":4},"end":{"line":16,"column":11}}})) != null ? stack1 : "")
-    + "    return jsonify([item.model_dump(mode=\"json\") for item in items])\n\n@items_bp.post(\"/\")\nasync def create_item_endpoint() -> Response:\n    from ....schemas.items import ItemCreate\n    from ....services.items import create_item\n\n    data = ItemCreate(**request.get_json() or {})\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":29}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":25,"column":4},"end":{"line":32,"column":11}}})) != null ? stack1 : "")
-    + "    return jsonify(item.model_dump(mode=\"json\")), 201";
+  return "from flask import Blueprint, Response, jsonify, request\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "from ....schemas.items import ItemCreate\nfrom ....services.items import create_item, list_items\n\nitems_bp = Blueprint(\"items\", __name__, url_prefix=\"/items\")\n\n\n@items_bp.get(\"/\")\nasync def list_items_endpoint() -> Response:\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":25}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":14,"column":0},"end":{"line":19,"column":7}}})) != null ? stack1 : "")
+    + "    return jsonify([item.model_dump(mode=\"json\") for item in items])\n\n\n@items_bp.post(\"/\")\nasync def create_item_endpoint() -> tuple[Response, int]:\n    payload = ItemCreate.model_validate(request.get_json())\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":6},"end":{"line":26,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":31,"column":7}}})) != null ? stack1 : "")
+    + "    return jsonify(item.model_dump(mode=\"json\")), 201\n";
 },"useData":true} }],
   ["python/framework/flask/src/exceptions.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import logging\n\nfrom flask import Flask, Response, jsonify\n\nlogger = logging.getLogger(__name__)\n\nclass AppError(Exception):\n\n    status_code: int = 400\n\nclass NotFoundError(AppError):\n    status_code: int = 404\n\ndef register_error_handlers(app: Flask) -> None:\n\n    @app.errorhandler(AppError)\n    def handle_app_error(exc: AppError) -> tuple[Response, int]:\n        return jsonify({\"detail\": str(exc)}), exc.status_code\n\n    @app.errorhandler(NotFoundError)\n    def handle_not_found(exc: NotFoundError) -> tuple[Response, int]:\n        return jsonify({\"detail\": str(exc)}), exc.status_code\n\n    @app.errorhandler(Exception)\n    def handle_unhandled(exc: Exception) -> tuple[Response, int]:\n        logger.exception(\"Unhandled error: %s\", exc)\n        return jsonify({\"detail\": \"Internal server error\"}), 500";
+    return "from flask import Flask, Response, jsonify\nfrom pydantic import ValidationError\nfrom werkzeug.exceptions import HTTPException\n\n\nclass AppError(Exception):\n    status_code: int = 400\n\n\nclass NotFoundError(AppError):\n    status_code: int = 404\n\n\ndef register_error_handlers(app: Flask) -> None:\n    @app.errorhandler(AppError)\n    def handle_app_error(exc: AppError) -> tuple[Response, int]:\n        return jsonify({\"detail\": str(exc)}), exc.status_code\n\n    @app.errorhandler(ValidationError)\n    def handle_validation_error(exc: ValidationError) -> tuple[Response, int]:\n        return jsonify({\"detail\": exc.errors(include_url=False, include_context=False)}), 422\n\n    @app.errorhandler(HTTPException)\n    def handle_http_error(exc: HTTPException) -> tuple[Response, int]:\n        return jsonify({\"detail\": exc.description}), exc.code or 500\n";
 },"useData":true} }],
   ["python/framework/flask/src/main.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "    from .db import init_db\n\n    asyncio.run(init_db())\n";
+    return "import asyncio\n\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "from .db import init_db\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "    asyncio.run(init_db())\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2900,25 +3262,23 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "import asyncio\n\nfrom flask import Flask\n\nfrom .config import get_settings\nfrom .exceptions import register_error_handlers\nfrom .middleware import register_middleware\n\nsettings = get_settings()\n\ndef create_app() -> Flask:\n\n    app = Flask(__name__)\n    app.config[\"DEBUG\"] = settings.debug\n\n    register_middleware(app)\n    register_error_handlers(app)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":19,"column":15},"end":{"line":19,"column":30}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":31},"end":{"line":19,"column":53}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":54}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":4},"end":{"line":23,"column":11}}})) != null ? stack1 : "")
-    + "\n    from .api.v1.router import register_v1_blueprints\n\n    register_v1_blueprints(app)\n\n    return app\n\napp = create_app()";
-},"useData":true} }],
-  ["python/framework/flask/src/middleware.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from flask import Flask, request\n\ndef register_middleware(app: Flask) -> None:\n\n    @app.before_request\n    def log_request() -> None:\n        app.logger.info(\"%s %s\", request.method, request.path)";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":50}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":7}}})) != null ? stack1 : "")
+    + "from flask import Flask\n\nfrom .api.v1.router import register_v1_blueprints\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":11},"end":{"line":9,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":27},"end":{"line":9,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":50}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import register_error_handlers\n\nsettings = get_settings()\n\n\ndef create_app() -> Flask:\n    app = Flask(__name__)\n    app.config[\"DEBUG\"] = settings.debug\n    register_error_handlers(app)\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":11},"end":{"line":21,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":27},"end":{"line":21,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":50}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
+    + "    register_v1_blueprints(app)\n    return app\n\n\napp = create_app()\n";
 },"useData":true} }],
   ["python/framework/litestar/app.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from src.main import app, create_app\n\n__all__ = [\"app\", \"create_app\"]\n";
+    return "from src.main import app, create_app\r\n\r\n__all__ = [\"app\", \"create_app\"]\r\n";
 },"useData":true} }],
   ["python/framework/litestar/src/api/v1/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/litestar/src/api/v1/router.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from .routes.items import create_item_endpoint, list_items_endpoint\n";
+    return "\nfrom .routes.items import create_item_endpoint, list_items_endpoint\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "router = Router(\n    path=\"/api/v1\",\n    route_handlers=[list_items_endpoint, create_item_endpoint],\n)\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "router = Router(\n    path=\"/api/v1\",\n    route_handlers=[],\n)\n";
+    return "list_items_endpoint, create_item_endpoint";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2927,20 +3287,23 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from litestar import Router, get\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
-    + "\n@get(\"/health\", tags=[\"health\"])\nasync def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "");
+  return "from litestar import Router, get\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "\n\n@get(\"/health\", tags=[\"health\"])\nasync def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n\n\nrouter = Router(\n    path=\"/api/v1\",\n    route_handlers=["
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":26},"end":{"line":15,"column":41}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":20},"end":{"line":15,"column":91}}})) != null ? stack1 : "")
+    + "],\n)\n";
 },"useData":true} }],
   ["python/framework/litestar/src/api/v1/routes/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/framework/litestar/src/api/v1/routes/items.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from litestar.di import Provide\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ....db import get_session\n";
+    return "from litestar.di import NamedDependency, Provide\n\nfrom ....db import AsyncSession, get_session\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "@get(\"/items\", response_model=list[ItemResponse])\nasync def list_items_endpoint() -> list[ItemResponse]:\n    return await list_items()\n\n@post(\n    \"/items\",\n    response_model=ItemResponse,\n    status_code=201,\n)\nasync def create_item_endpoint(data: ItemCreate) -> ItemResponse:\n    return await create_item(data)\n";
+    return "\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "@get(\n    \"/items\",\n    response_model=list[ItemResponse],\n    dependencies={\"session\": Provide(get_session, sync_to_thread=False)},\n)\nasync def list_items_endpoint(session: AsyncSession) -> list[ItemResponse]:\n    return await list_items(session)\n\n@post(\n    \"/items\",\n    response_model=ItemResponse,\n    status_code=201,\n    dependencies={\"session\": Provide(get_session, sync_to_thread=False)},\n)\nasync def create_item_endpoint(data: ItemCreate, session: AsyncSession) -> ItemResponse:\n    return await create_item(session, data)\n";
+    return "\n\n@get(\"/items\")\nasync def list_items_endpoint() -> list[ItemResponse]:\n    return await list_items()\n\n\n@post(\"/items\", status_code=201)\nasync def create_item_endpoint(data: ItemCreate) -> ItemResponse:\n    return await create_item(data)\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "\nsession_dependency = {\"session\": Provide(get_session)}\n\n\n@get(\"/items\", dependencies=session_dependency)\nasync def list_items_endpoint(session: NamedDependency[AsyncSession]) -> list[ItemResponse]:\n    return await list_items(session)\n\n\n@post(\"/items\", status_code=201, dependencies=session_dependency)\nasync def create_item_endpoint(\n    data: ItemCreate, session: NamedDependency[AsyncSession]\n) -> ItemResponse:\n    return await create_item(session, data)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2950,17 +3313,30 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "from litestar import get, post\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "from ....schemas.items import ItemCreate, ItemResponse\nfrom ....services.items import create_item, list_items\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":25}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":40,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":8,"column":7}}})) != null ? stack1 : "")
+    + "from ....schemas.items import ItemCreate, ItemResponse\nfrom ....services.items import create_item, list_items\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":37,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/framework/litestar/src/exceptions.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import logging\n\nfrom litestar import Request\nfrom litestar.response import Response\nfrom litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR\n\nlogger = logging.getLogger(__name__)\n\nclass AppError(Exception):\n\n    status_code = HTTP_400_BAD_REQUEST\n\nclass NotFoundError(AppError):\n    status_code = HTTP_404_NOT_FOUND\n\ndef _handle_app_error(request: Request, exc: AppError) -> Response:\n    return Response(content={\"detail\": str(exc)}, status_code=exc.status_code)\n\ndef _handle_unhandled(request: Request, exc: Exception) -> Response:\n    logger.exception(\"Unhandled error: %s\", exc)\n    return Response(\n        content={\"detail\": \"Internal server error\"},\n        status_code=HTTP_500_INTERNAL_SERVER_ERROR,\n    )\n\nexception_handlers = {\n    AppError: _handle_app_error,\n    Exception: _handle_unhandled,\n}";
+    return "from typing import Any\n\nfrom litestar import Request, Response\nfrom litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND\nfrom litestar.types import ExceptionHandlersMap\n\n\nclass AppError(Exception):\n    status_code = HTTP_400_BAD_REQUEST\n\n\nclass NotFoundError(AppError):\n    status_code = HTTP_404_NOT_FOUND\n\n\ndef _handle_app_error(request: Request[Any, Any, Any], exc: AppError) -> Response[Any]:\n    return Response(content={\"detail\": str(exc)}, status_code=exc.status_code)\n\n\nexception_handlers: ExceptionHandlersMap = {AppError: _handle_app_error}\n";
 },"useData":true} }],
   ["python/framework/litestar/src/main.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "async def on_startup() -> None:\n    from .db import init_db\n\n    await init_db()\n";
+    return "from .db import close_db, init_db\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "        on_startup=[on_startup],\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":10},"end":{"line":9,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":11,"column":0}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    return "from .db import close_db\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "        on_startup=[init_db],\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "        on_shutdown=[close_db],\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -2969,14 +3345,12 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from litestar import Litestar\nfrom litestar.config.cors import CORSConfig\n\nfrom .config import get_settings\nfrom .exceptions import exception_handlers\nfrom .middleware import RequestLoggingMiddleware\n\nsettings = get_settings()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":10,"column":11},"end":{"line":10,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":27},"end":{"line":10,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":50}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":15,"column":7}}})) != null ? stack1 : "")
-    + "\ndef create_app() -> Litestar:\n\n    from .api.v1.router import health, router as v1_router\n\n    return Litestar(\n        route_handlers=[health, v1_router],\n        debug=settings.debug,\n        cors_config=CORSConfig(allow_origins=settings.cors_origins),\n        exception_handlers=exception_handlers,\n        middleware=[RequestLoggingMiddleware()],\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":27,"column":19},"end":{"line":27,"column":34}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":35},"end":{"line":27,"column":57}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":27,"column":14},"end":{"line":27,"column":58}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":8},"end":{"line":29,"column":15}}})) != null ? stack1 : "")
-    + "    )\n\napp = create_app()";
-},"useData":true} }],
-  ["python/framework/litestar/src/middleware.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "import logging\nfrom typing import Any\n\nfrom litestar.enums import ScopeType\nfrom litestar.middleware import ASGIMiddleware\nfrom litestar.types import ASGIApp, Receive, Scope, Send\n\nlogger = logging.getLogger(__name__)\n\nclass RequestLoggingMiddleware(ASGIMiddleware):\n\n    scopes = (ScopeType.HTTP,)\n\n    async def handle(\n        self,\n        scope: Scope,\n        receive: Receive,\n        send: Send,\n        next_app: ASGIApp,\n    ) -> None:\n        method = scope[\"method\"]\n        path = scope[\"path\"]\n\n        async def send_wrapper(message: dict[str, Any]) -> None:\n            if message[\"type\"] == \"http.response.start\":\n                logger.info(\"%s %s -> %s\", method, path, message.get(\"status\", \"??\"))\n            await send(message)\n\n        await next_app(scope, receive, send_wrapper)\n";
+  return "from litestar import Litestar\nfrom litestar.config.cors import CORSConfig\n\nfrom .api.v1.router import health\nfrom .api.v1.router import router as v1_router\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":50}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import exception_handlers\n\nsettings = get_settings()\n\n\ndef create_app() -> Litestar:\n    return Litestar(\n        route_handlers=[health, v1_router],\n        debug=settings.debug,\n        cors_config=CORSConfig(allow_origins=settings.cors_origins),\n        exception_handlers=exception_handlers,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":23,"column":11},"end":{"line":23,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":27},"end":{"line":23,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":23,"column":6},"end":{"line":23,"column":50}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":23,"column":0},"end":{"line":25,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":26,"column":6},"end":{"line":26,"column":21}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":28,"column":7}}})) != null ? stack1 : "")
+    + "    )\n\n\napp = create_app()\n";
 },"useData":true} }],
   ["python/framework/none/src/main.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -2988,7 +3362,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "def main() -> None:\n    print(\"Hello from "
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":37}}}) : helper)))
-    + "!\")\n\n\nif __name__ == \"__main__\":\n    main()";
+    + "!\")\n\n\nif __name__ == \"__main__\":\n    main()\n";
 },"useData":true} }],
   ["python/frontend/htmx/app/src/main.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -2998,38 +3372,31 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from fastapi import FastAPI\nfrom fastapi.staticfiles import StaticFiles\n\nfrom .config import get_settings\nfrom .exceptions import register_exception_handlers\nfrom .middleware import add_middleware\n\nsettings = get_settings()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":11},"end":{"line":15,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":27},"end":{"line":15,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":50}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":26,"column":7}}})) != null ? stack1 : "")
-    + "\ndef create_app() -> FastAPI:\n\n    app = FastAPI(title=settings.app_name, lifespan=lifespan)\n    add_middleware(app)\n    register_exception_handlers(app)\n\n    from .api.router import api_router\n\n    app.include_router(api_router)\n\n    from .web import web_router\n\n    app.include_router(web_router)\n\n    static_dir = Path(__file__).resolve().parent.parent / \"static\"\n    app.mount(\"/static\", StaticFiles(directory=str(static_dir)), name=\"static\")\n\n    return app\n\napp = create_app()\n";
+  return "from collections.abc import AsyncIterator\nfrom contextlib import asynccontextmanager\nfrom pathlib import Path\n\nfrom fastapi import FastAPI\nfrom fastapi.staticfiles import StaticFiles\n\nfrom .api.router import api_router\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":11},"end":{"line":11,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":27},"end":{"line":11,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":50}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":15,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import register_exception_handlers\nfrom .middleware import add_middleware\nfrom .web import web_router\n\nsettings = get_settings()\n\n\n@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":25,"column":11},"end":{"line":25,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":27},"end":{"line":25,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":50}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + "    yield\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":29,"column":6},"end":{"line":29,"column":21}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":31,"column":7}}})) != null ? stack1 : "")
+    + "\n\ndef create_app() -> FastAPI:\n    app = FastAPI(title=settings.app_name, lifespan=lifespan)\n    add_middleware(app)\n    register_exception_handlers(app)\n    app.include_router(api_router)\n    app.include_router(web_router)\n    static_dir = Path(__file__).resolve().parent.parent / \"static\"\n    app.mount(\"/static\", StaticFiles(directory=static_dir), name=\"static\")\n    return app\n\n\napp = create_app()\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n    from .db import init_db\n\n    await init_db()\n    yield\n";
+    return "from .db import close_db, init_db\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncIterator[None]:\n    yield\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":13,"column":10},"end":{"line":13,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":15,"column":0}}})) != null ? stack1 : "");
 },"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":48,"column":10},"end":{"line":48,"column":35}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":48,"column":0},"end":{"line":146,"column":0}}})) != null ? stack1 : "");
+    return "from .db import close_db\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "from litestar import Litestar\nfrom litestar.config.cors import CORSConfig\nfrom litestar.plugins.jinja import JinjaTemplateEngine\nfrom litestar.static_files import create_static_files_router\nfrom litestar.template import TemplateConfig\n\nfrom .config import get_settings\nfrom .exceptions import exception_handlers\nfrom .middleware import RequestLoggingMiddleware\n\nsettings = get_settings()\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":61,"column":11},"end":{"line":61,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":61,"column":27},"end":{"line":61,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":61,"column":6},"end":{"line":61,"column":50}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":61,"column":0},"end":{"line":72,"column":7}}})) != null ? stack1 : "")
-    + "\ndef create_app() -> Litestar:\n\n    from .api.v1.router import health, router as v1_router\n    from .web import web_routes\n\n    pkg_dir = Path(__file__).resolve().parent\n    static_dir = pkg_dir.parent / \"static\"\n\n    return Litestar(\n        route_handlers=[\n            health,\n            v1_router,\n            *web_routes,\n            create_static_files_router(path=\"/static\", directories=[str(static_dir)]),\n        ],\n        debug=settings.debug,\n        cors_config=CORSConfig(allow_origins=settings.cors_origins),\n        template_config=TemplateConfig(\n            directory=pkg_dir / \"templates\",\n            engine=JinjaTemplateEngine,\n        ),\n        exception_handlers=exception_handlers,\n        middleware=[RequestLoggingMiddleware],\n        lifespan=lifespan,\n    )\n\napp = create_app()\n";
+    return "    await init_db()\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: Litestar) -> AsyncIterator[None]:\n    from .db import init_db\n\n    await init_db()\n    yield\n";
+    return "    await close_db()\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    return "@asynccontextmanager\nasync def lifespan(app: Litestar) -> AsyncIterator[None]:\n    yield\n";
-},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -3037,8 +3404,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":101,"column":10},"end":{"line":101,"column":32}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":101,"column":0},"end":{"line":146,"column":0}}})) != null ? stack1 : "");
-},"8":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":35}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":130,"column":0}}})) != null ? stack1 : "");
+},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -3046,11 +3413,45 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "import asyncio\nfrom pathlib import Path\n\nfrom flask import Flask\n\nfrom .config import get_settings\nfrom .exceptions import register_error_handlers\nfrom .middleware import register_middleware\n\nsettings = get_settings()\n\ndef create_app() -> Flask:\n\n    pkg_dir = Path(__file__).resolve().parent\n    root_dir = pkg_dir.parent\n\n    app = Flask(\n        __name__,\n        template_folder=str(pkg_dir / \"templates\"),\n        static_folder=str(root_dir / \"static\"),\n        static_url_path=\"/static\",\n    )\n    app.config[\"DEBUG\"] = settings.debug\n\n    register_middleware(app)\n    register_error_handlers(app)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":129,"column":15},"end":{"line":129,"column":30}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":129,"column":31},"end":{"line":129,"column":53}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":129,"column":10},"end":{"line":129,"column":54}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":129,"column":4},"end":{"line":133,"column":11}}})) != null ? stack1 : "")
-    + "\n    from .api.v1.router import register_v1_blueprints\n\n    register_v1_blueprints(app)\n\n    from .web import register_web_blueprints\n\n    register_web_blueprints(app)\n\n    return app\n\napp = create_app()\n";
+  return "from pathlib import Path\n\nfrom litestar import Litestar\nfrom litestar.config.cors import CORSConfig\nfrom litestar.plugins.jinja import JinjaTemplateEngine\nfrom litestar.static_files import create_static_files_router\nfrom litestar.template import TemplateConfig\n\nfrom .api.v1.router import health\nfrom .api.v1.router import router as v1_router\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":58,"column":11},"end":{"line":58,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":27},"end":{"line":58,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":50}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import exception_handlers\nfrom .web import web_routes\n\nsettings = get_settings()\n\n\ndef create_app() -> Litestar:\n    pkg_dir = Path(__file__).resolve().parent\n    return Litestar(\n        route_handlers=[\n            health,\n            v1_router,\n            *web_routes,\n            create_static_files_router(path=\"/static\", directories=[pkg_dir.parent / \"static\"]),\n        ],\n        debug=settings.debug,\n        cors_config=CORSConfig(allow_origins=settings.cors_origins),\n        template_config=TemplateConfig(directory=pkg_dir / \"templates\", engine=JinjaTemplateEngine),\n        exception_handlers=exception_handlers,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":82,"column":11},"end":{"line":82,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":82,"column":27},"end":{"line":82,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":82,"column":6},"end":{"line":82,"column":50}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":82,"column":0},"end":{"line":84,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":85,"column":6},"end":{"line":85,"column":21}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":85,"column":0},"end":{"line":87,"column":7}}})) != null ? stack1 : "")
+    + "    )\n\n\napp = create_app()\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "        on_startup=[init_db],\n";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "    from .db import init_db\n\n    asyncio.run(init_db())\n";
+    return "        on_shutdown=[close_db],\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":92,"column":10},"end":{"line":92,"column":32}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":92,"column":0},"end":{"line":130,"column":0}}})) != null ? stack1 : "");
+},"11":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":93,"column":11},"end":{"line":93,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":93,"column":27},"end":{"line":93,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":93,"column":6},"end":{"line":93,"column":50}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":93,"column":0},"end":{"line":95,"column":7}}})) != null ? stack1 : "")
+    + "from pathlib import Path\n\nfrom flask import Flask\n\nfrom .api.v1.router import register_v1_blueprints\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":102,"column":11},"end":{"line":102,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":102,"column":27},"end":{"line":102,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":102,"column":6},"end":{"line":102,"column":50}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":102,"column":0},"end":{"line":104,"column":7}}})) != null ? stack1 : "")
+    + "from .exceptions import register_error_handlers\nfrom .web import register_web_blueprints\n\nsettings = get_settings()\n\n\ndef create_app() -> Flask:\n    pkg_dir = Path(__file__).resolve().parent\n    app = Flask(\n        __name__,\n        template_folder=pkg_dir / \"templates\",\n        static_folder=pkg_dir.parent / \"static\",\n        static_url_path=\"/static\",\n    )\n    app.config[\"DEBUG\"] = settings.debug\n    register_error_handlers(app)\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":121,"column":11},"end":{"line":121,"column":26}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":121,"column":27},"end":{"line":121,"column":49}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":121,"column":6},"end":{"line":121,"column":50}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":121,"column":0},"end":{"line":123,"column":7}}})) != null ? stack1 : "")
+    + "    register_v1_blueprints(app)\n    register_web_blueprints(app)\n    return app\n\n\napp = create_app()\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "import asyncio\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    return "from .db import init_db\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "    asyncio.run(init_db())\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3059,8 +3460,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from collections.abc import AsyncIterator\nfrom contextlib import asynccontextmanager\nfrom pathlib import Path\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":146,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":130,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/frontend/htmx/app/src/templates/base.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ app_name }}</title>\n    <link rel=\"stylesheet\" href=\"/static/css/style.css\">\n    <script src=\"https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js\" defer></script>\n</head>\n<body>\n    <header>\n        <a href=\"/\">{{ app_name }}</a>\n        <a href=\"/api/v1/items\">API</a>\n    </header>\n    <main>\n        {% block content %}{% endblock %}\n    </main>\n</body>\n</html>";
@@ -3083,48 +3483,35 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "{% if items %}\n<table>\n    <thead>\n        <tr>\n            <th>Name</th>\n            <th>Created</th>\n        </tr>\n    </thead>\n    <tbody>\n        {% for item in items %}\n        <tr>\n            <td>{{ item.name }}</td>\n            <td>{{ item.created_at.strftime(\"%Y-%m-%d %H:%M\") }}</td>\n        </tr>\n        {% endfor %}\n    </tbody>\n</table>\n<button hx-get=\"/web/items\" hx-target=\"#items\" hx-swap=\"innerHTML\">Refresh</button>\n{% else %}\n<p>No items yet. Create one with <code>POST /api/v1/items</code>.</p>\n{% endif %}";
 },"useData":true} }],
   ["python/frontend/htmx/app/src/web.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "from fastapi import APIRouter, Request\nfrom fastapi.responses import HTMLResponse\nfrom fastapi.templating import Jinja2Templates\n\nweb_router = APIRouter()\n\ntemplates = Jinja2Templates(directory=str(templates_dir))\n\n@web_router.get(\"/\", response_class=HTMLResponse, include_in_schema=False)\nasync def home(request: Request) -> HTMLResponse:\n    return templates.TemplateResponse(\n        request,\n        \"home.html\",\n        {\"app_name\": settings.app_name},\n    )\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":27,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":50,"column":7}}})) != null ? stack1 : "");
+  return "from pathlib import Path\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":47}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":47}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + "from fastapi.responses import HTMLResponse\nfrom fastapi.templating import Jinja2Templates\n\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":11},"end":{"line":16,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":27},"end":{"line":16,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":47}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":18,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":19,"column":6},"end":{"line":19,"column":21}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
+    + "\nsettings = get_settings()\n\nweb_router = APIRouter()\n\ntemplates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / \"templates\"))\n\n\n@web_router.get(\"/\", response_class=HTMLResponse, include_in_schema=False)\nasync def home(request: Request) -> HTMLResponse:\n    return templates.TemplateResponse(request, \"home.html\", {\"app_name\": settings.app_name})\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":6},"end":{"line":33,"column":25}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":50,"column":7}}})) != null ? stack1 : "");
 },"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":25}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "");
+    return "from typing import Annotated\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "@web_router.get(\"/web/items\", response_class=HTMLResponse, include_in_schema=False)\nasync def items_fragment(request: Request) -> HTMLResponse:\n    from .services.items import list_items\n\n    items = await list_items()\n    return templates.TemplateResponse(request, \"items.html\", {\"items\": items})\n";
+    return "from fastapi import APIRouter, Depends, Request\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "from fastapi import Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom .db import get_session\nfrom .services.items import list_items\n\n@web_router.get(\"/web/items\", response_class=HTMLResponse, include_in_schema=False)\nasync def items_fragment(\n    request: Request,\n    session: AsyncSession = Depends(get_session),\n) -> HTMLResponse:\n    items = await list_items(session)\n    return templates.TemplateResponse(request, \"items.html\", {\"items\": items})\n";
+    return "from fastapi import APIRouter, Request\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":51,"column":10},"end":{"line":51,"column":35}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":51,"column":0},"end":{"line":114,"column":0}}})) != null ? stack1 : "");
+    return "from .db import AsyncSession, get_session\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "from litestar import get\nfrom litestar.response import Template\n\nweb_routes: list = []\n\n@get(\"/\", sync_to_thread=False, include_in_schema=False)\ndef home() -> Template:\n    return Template(template_name=\"home.html\", context={\"app_name\": settings.app_name})\n\nweb_routes.append(home)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":63,"column":6},"end":{"line":63,"column":21}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":63,"column":0},"end":{"line":85,"column":7}}})) != null ? stack1 : "");
+    return "from .services.items import list_items\n";
 },"6":function(container,depth0,helpers,partials,data) {
+    return "\n\n@web_router.get(\"/web/items\", response_class=HTMLResponse, include_in_schema=False)\nasync def items_fragment(request: Request) -> HTMLResponse:\n    items = await list_items()\n    return templates.TemplateResponse(request, \"items.html\", {\"items\": items})\n";
+},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -3132,12 +3519,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":64,"column":6},"end":{"line":64,"column":25}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":82,"column":7}}})) != null ? stack1 : "")
-    + "\nweb_routes.append(items_fragment)\n";
-},"7":function(container,depth0,helpers,partials,data) {
-    return "@get(\"/web/items\", sync_to_thread=False, include_in_schema=False)\nasync def items_fragment() -> Template:\n    from .services.items import list_items\n\n    items = await list_items()\n    return Template(template_name=\"items.html\", context={\"items\": items})\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":40,"column":10},"end":{"line":40,"column":25}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":50,"column":0}}})) != null ? stack1 : "");
 },"8":function(container,depth0,helpers,partials,data) {
-    return "from litestar import Provide\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom .db import get_session\nfrom .services.items import list_items\n\n@get(\"/web/items\", sync_to_thread=False, include_in_schema=False)\nasync def items_fragment(session: AsyncSession = Provide(get_session)) -> Template:\n    items = await list_items(session)\n    return Template(template_name=\"items.html\", context={\"items\": items})\n";
+    return "\n\n@web_router.get(\"/web/items\", response_class=HTMLResponse, include_in_schema=False)\nasync def items_fragment(\n    request: Request,\n    session: Annotated[AsyncSession, Depends(get_session)],\n) -> HTMLResponse:\n    items = await list_items(session)\n    return templates.TemplateResponse(request, \"items.html\", {\"items\": items})\n";
 },"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3146,19 +3530,30 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":86,"column":10},"end":{"line":86,"column":32}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":86,"column":0},"end":{"line":114,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"litestar",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":51,"column":10},"end":{"line":51,"column":35}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":51,"column":0},"end":{"line":134,"column":0}}})) != null ? stack1 : "");
 },"10":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "from flask import Blueprint, Flask, render_template\n\nweb_bp = Blueprint(\"web\", __name__)\n\n@web_bp.get(\"/\")\ndef home() -> str:\n    return render_template(\"home.html\", app_name=settings.app_name)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":95,"column":6},"end":{"line":95,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":95,"column":0},"end":{"line":110,"column":7}}})) != null ? stack1 : "")
-    + "\ndef register_web_blueprints(app: Flask) -> None:\n    app.register_blueprint(web_bp)\n";
+  return "from litestar import get\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":53,"column":11},"end":{"line":53,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":53,"column":27},"end":{"line":53,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":53,"column":6},"end":{"line":53,"column":47}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":53,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "")
+    + "from litestar.response import Template\nfrom litestar.types import ControllerRouterHandler\n\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":60,"column":11},"end":{"line":60,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":60,"column":27},"end":{"line":60,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":47}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":63,"column":6},"end":{"line":63,"column":21}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":63,"column":0},"end":{"line":65,"column":7}}})) != null ? stack1 : "")
+    + "\nsettings = get_settings()\n\n\n@get(\"/\", sync_to_thread=False, include_in_schema=False)\ndef home() -> Template:\n    return Template(template_name=\"home.html\", context={\"app_name\": settings.app_name})\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":73,"column":6},"end":{"line":73,"column":25}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":73,"column":0},"end":{"line":91,"column":7}}})) != null ? stack1 : "")
+    + "\n\nweb_routes: list[ControllerRouterHandler] = [home"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":94,"column":55},"end":{"line":94,"column":70}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":94,"column":49},"end":{"line":94,"column":95}}})) != null ? stack1 : "")
+    + "]\n";
 },"11":function(container,depth0,helpers,partials,data) {
+    return "from litestar.di import NamedDependency, Provide\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "\n\n@get(\"/web/items\", include_in_schema=False)\nasync def items_fragment() -> Template:\n    items = await list_items()\n    return Template(template_name=\"items.html\", context={\"items\": items})\n";
+},"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -3166,13 +3561,49 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "@web_bp.get(\"/web/items\")\nasync def items_fragment() -> str:\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":98,"column":10},"end":{"line":98,"column":29}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":98,"column":4},"end":{"line":108,"column":11}}})) != null ? stack1 : "")
-    + "    return render_template(\"items.html\", items=items)\n";
-},"12":function(container,depth0,helpers,partials,data) {
-    return "    from .services.items import list_items\n\n    items = await list_items()\n";
-},"13":function(container,depth0,helpers,partials,data) {
-    return "    from .db import SessionLocal\n    from .services.items import list_items\n\n    async with SessionLocal() as session:\n        items = await list_items(session)\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":80,"column":10},"end":{"line":80,"column":25}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":80,"column":0},"end":{"line":91,"column":0}}})) != null ? stack1 : "");
+},"14":function(container,depth0,helpers,partials,data) {
+    return "\n\n@get(\n    \"/web/items\",\n    include_in_schema=False,\n    dependencies={\"session\": Provide(get_session)},\n)\nasync def items_fragment(session: NamedDependency[AsyncSession]) -> Template:\n    items = await list_items(session)\n    return Template(template_name=\"items.html\", context={\"items\": items})\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return ", items_fragment";
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":95,"column":10},"end":{"line":95,"column":32}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":95,"column":0},"end":{"line":134,"column":0}}})) != null ? stack1 : "");
+},"17":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "from flask import Blueprint, Flask, render_template\n\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":99,"column":11},"end":{"line":99,"column":26}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":99,"column":27},"end":{"line":99,"column":46}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":99,"column":6},"end":{"line":99,"column":47}}}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":99,"column":0},"end":{"line":101,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":102,"column":6},"end":{"line":102,"column":21}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":102,"column":0},"end":{"line":104,"column":7}}})) != null ? stack1 : "")
+    + "\nsettings = get_settings()\n\nweb_bp = Blueprint(\"web\", __name__)\n\n\n@web_bp.get(\"/\")\ndef home() -> str:\n    return render_template(\"home.html\", app_name=settings.app_name)\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"tortoise",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":114,"column":6},"end":{"line":114,"column":25}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.program(20, data, 0),"data":data,"loc":{"start":{"line":114,"column":0},"end":{"line":129,"column":7}}})) != null ? stack1 : "")
+    + "\n\ndef register_web_blueprints(app: Flask) -> None:\n    app.register_blueprint(web_bp)\n";
+},"18":function(container,depth0,helpers,partials,data) {
+    return "from .db import SessionLocal\n";
+},"19":function(container,depth0,helpers,partials,data) {
+    return "\n\n@web_bp.get(\"/web/items\")\nasync def items_fragment() -> str:\n    items = await list_items()\n    return render_template(\"items.html\", items=items)\n";
+},"20":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":121,"column":10},"end":{"line":121,"column":25}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":121,"column":0},"end":{"line":129,"column":0}}})) != null ? stack1 : "");
+},"21":function(container,depth0,helpers,partials,data) {
+    return "\n\n@web_bp.get(\"/web/items\")\nasync def items_fragment() -> str:\n    async with SessionLocal() as session:\n        items = await list_items(session)\n    return render_template(\"items.html\", items=items)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3181,8 +3612,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "from pathlib import Path\n\nfrom .config import get_settings\n\nsettings = get_settings()\n\npkg_dir = Path(__file__).resolve().parent\ntemplates_dir = pkg_dir / \"templates\"\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":114,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"fastapi",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":134,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["python/frontend/htmx/common/static/css/style.css.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return ":root {\n    color-scheme: light dark;\n    --text: #1a1a1a;\n    --muted: #666;\n    --border: #d9d9d9;\n    --accent: #f6a510;\n}\n\n* {\n    box-sizing: border-box;\n}\n\nbody {\n    font-family: system-ui, -apple-system, \"Segoe UI\", sans-serif;\n    margin: 0;\n    line-height: 1.5;\n    color: var(--text);\n}\n\nheader {\n    display: flex;\n    align-items: baseline;\n    gap: 1.5rem;\n    padding: 0.75rem 1.5rem;\n    border-bottom: 1px solid var(--border);\n}\n\nheader a {\n    color: inherit;\n    text-decoration: none;\n    font-weight: 600;\n}\n\nheader a:hover {\n    color: var(--accent);\n}\n\nmain {\n    max-width: 56rem;\n    margin: 2rem auto;\n    padding: 0 1.5rem;\n}\n\ntable {\n    width: 100%;\n    border-collapse: collapse;\n}\n\nth,\ntd {\n    padding: 0.5rem 0.75rem;\n    text-align: left;\n    border-bottom: 1px solid var(--border);\n}\n\nbutton {\n    font: inherit;\n    padding: 0.3rem 0.9rem;\n    border: 1px solid var(--border);\n    border-radius: 6px;\n    background: transparent;\n    cursor: pointer;\n}\n\nbutton:hover {\n    border-color: var(--accent);\n    color: var(--accent);\n}\n\ncode {\n    padding: 0.1rem 0.35rem;\n    border-radius: 4px;\n    background: #f2f2f2;\n}\n\n@media (prefers-color-scheme: dark) {\n    :root {\n        --text: #e8e8e8;\n        --border: #333;\n    }\n\n    code {\n        background: #222;\n    }\n}";
@@ -3191,78 +3621,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "";
 },"useData":true} }],
   ["python/frontend/htmx/django/apps/web/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.urls import path\n\nfrom . import views\n\nurlpatterns = [\n    path(\"\", views.home, name=\"home\"),\n    path(\"web/users/\", views.users_fragment, name=\"users-fragment\"),\n]";
+    return "from django.urls import path\n\nfrom . import views\n\nurlpatterns = [\n    path(\"\", views.home, name=\"home\"),\n    path(\"web/users/\", views.users_fragment, name=\"users-fragment\"),\n]\n";
 },"useData":true} }],
   ["python/frontend/htmx/django/apps/web/views.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.contrib.auth import get_user_model\nfrom django.shortcuts import render\n\n\ndef home(request):\n    return render(request, \"home.html\")\n\n\ndef users_fragment(request):\n    users = get_user_model().objects.all().order_by(\"date_joined\")\n    return render(request, \"users_fragment.html\", {\"users\": users})";
-},"useData":true} }],
-  ["python/frontend/htmx/django/config/settings/base.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "DATABASES = {}\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":10},"end":{"line":60,"column":32}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":89,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": BASE_DIR / \"db.sqlite3\",\n    }\n}\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":67,"column":10},"end":{"line":67,"column":34}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":67,"column":0},"end":{"line":89,"column":0}}})) != null ? stack1 : "");
-},"4":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.postgresql\",\n        \"NAME\": \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":71,"column":17},"end":{"line":71,"column":33}}}) : helper)))
-    + "\",\n        \"USER\": \"postgres\",\n        \"PASSWORD\": \"postgres\",\n        \"HOST\": \"localhost\",\n        \"PORT\": \"5432\",\n    }\n}\n";
-},"5":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":78,"column":10},"end":{"line":78,"column":31}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":78,"column":0},"end":{"line":89,"column":0}}})) != null ? stack1 : "");
-},"6":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.mysql\",\n        \"NAME\": \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":82,"column":17},"end":{"line":82,"column":33}}}) : helper)))
-    + "\",\n        \"USER\": \"root\",\n        \"PASSWORD\": \"password\",\n        \"HOST\": \"localhost\",\n        \"PORT\": \"3306\",\n    }\n}\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "from pathlib import Path\n\nBASE_DIR = Path(__file__).resolve().parent.parent.parent\n\nSECRET_KEY = \"django-insecure-change-me\"\n\nDEBUG = False\n\nALLOWED_HOSTS: list[str] = []\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"corsheaders\",\n    \"rest_framework\",\n    \"apps.core\",\n    \"apps.users\",\n    \"apps.web\",\n]\n\nAUTH_USER_MODEL = \"users.User\"\n\nMIDDLEWARE = [\n    \"corsheaders.middleware.CorsMiddleware\",\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n]\n\nROOT_URLCONF = \"config.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [BASE_DIR / \"templates\"],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"config.wsgi.application\"\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":26}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":89,"column":7}}})) != null ? stack1 : "")
-    + "\nAUTH_PASSWORD_VALIDATORS = [\n    {\"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\"},\n    {\"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\"},\n]\n\nLANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"UTC\"\nUSE_I18N = True\nUSE_TZ = True\n\nSTATIC_URL = \"static/\"\nSTATIC_ROOT = BASE_DIR / \"staticfiles\"\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n\nMEDIA_URL = \"media/\"\nMEDIA_ROOT = BASE_DIR / \"media\"\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nREST_FRAMEWORK = {}";
-},"useData":true} }],
-  ["python/frontend/htmx/django/config/urls.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from django.conf import settings\nfrom django.conf.urls.static import static\nfrom django.contrib import admin\nfrom django.urls import include, path\n\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"\", include(\"apps.web.urls\")),\n    path(\"api/\", include(\"apps.core.urls\")),\n    path(\"api/users/\", include(\"apps.users.urls\")),\n]\n\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)";
+    return "from django.contrib.auth import get_user_model\nfrom django.http import HttpRequest, HttpResponse\nfrom django.shortcuts import render\n\n\ndef home(request: HttpRequest) -> HttpResponse:\n    return render(request, \"home.html\")\n\n\ndef users_fragment(request: HttpRequest) -> HttpResponse:\n    users = get_user_model().objects.all().order_by(\"date_joined\")\n    return render(request, \"users_fragment.html\", {\"users\": users})\n";
 },"useData":true} }],
   ["python/frontend/htmx/django/templates/base.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -3280,13 +3642,13 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "{% extends \"base.html\" %}\n{% block content %}\n<h1>Welcome</h1>\n<p>A TriStack project with an HTMX-powered web frontend.</p>\n<section id=\"users\"\n         hx-get=\"/web/users/\"\n         hx-trigger=\"load\"\n         hx-swap=\"innerHTML\">\n    <p>Loading users…</p>\n</section>\n{% endblock %}";
 },"useData":true} }],
   ["python/frontend/htmx/django/templates/users_fragment.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "{% if users %}\n<table>\n    <thead>\n        <tr>\n            <th>Username</th>\n            <th>Email</th>\n        </tr>\n    </thead>\n    <tbody>\n        {% for user in users %}\n        <tr>\n            <td>{{ user.username }}</td>\n            <td>{{ user.email }}</td>\n        </tr>\n        {% endfor %}\n    </tbody>\n</table>\n<button hx-get=\"/web/users/\" hx-target=\"#users\" hx-swap=\"innerHTML\">Refresh</button>\n{% else %}\n<p>No users yet. Create one via the Django admin.</p>\n{% endif %}";
+    return "{% if users %}\n<table>\n    <thead>\n        <tr>\n            <th>Username</th>\n            <th>Joined</th>\n        </tr>\n    </thead>\n    <tbody>\n        {% for user in users %}\n        <tr>\n            <td>{{ user.username }}</td>\n            <td>{{ user.date_joined|date:\"Y-m-d\" }}</td>\n        </tr>\n        {% endfor %}\n    </tbody>\n</table>\n<button hx-get=\"/web/users/\" hx-target=\"#users\" hx-swap=\"innerHTML\">Refresh</button>\n{% else %}\n<p>No users yet. Create one via the Django admin.</p>\n{% endif %}";
 },"useData":true} }],
   ["python/migrations/alembic/alembic.ini", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "[alembic]\r\nscript_location = migrations\r\nprepend_sys_path = .\r\nsqlalchemy.url =\r\n\r\n[loggers]\r\nkeys = root,sqlalchemy,alembic\r\n\r\n[handlers]\r\nkeys = console\r\n\r\n[formatters]\r\nkeys = generic\r\n\r\n[logger_root]\r\nlevel = WARN\r\nhandlers = console\r\nqualname =\r\n\r\n[logger_sqlalchemy]\r\nlevel = WARN\r\nhandlers =\r\nqualname = sqlalchemy.engine\r\n\r\n[logger_alembic]\r\nlevel = INFO\r\nhandlers =\r\nqualname = alembic\r\n\r\n[handler_console]\r\nclass = StreamHandler\r\nargs = (sys.stderr,)\r\nlevel = NOTSET\r\nformatter = generic\r\n\r\n[formatter_generic]\r\nformat = %(levelname)-5.5s [%(name)s] %(message)s\r\ndatefmt = %H:%M:%S\r\n";
 },"useData":true} }],
   ["python/migrations/alembic/migrations/env.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "from sqlmodel import SQLModel\n\nfrom src.config import get_settings\nfrom src.models import Item  # noqa: F401\n";
+    return "\nfrom src.config import get_settings\nfrom src.models import Item\n";
 },"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3295,11 +3657,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":31}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":14,"column":0},"end":{"line":17,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":31}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":16,"column":0}}})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    return "from src.config import get_settings\nfrom src.models import Base\n";
+    return "\nfrom src.config import get_settings\nfrom src.models import Base\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "target_metadata = SQLModel.metadata\n";
+    return "target_metadata = Item.metadata\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3308,7 +3670,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":31}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":26,"column":0},"end":{"line":28,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlalchemy",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":31}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":0}}})) != null ? stack1 : "");
 },"5":function(container,depth0,helpers,partials,data) {
     return "target_metadata = Base.metadata\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -3319,14 +3681,14 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "import asyncio\nfrom logging.config import fileConfig\n\nfrom alembic import context\nfrom sqlalchemy import pool\nfrom sqlalchemy.engine import Connection\nfrom sqlalchemy.ext.asyncio import async_engine_from_config\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+  return "import asyncio\nfrom logging.config import fileConfig\n\nfrom alembic import context\nfrom sqlalchemy import pool\nfrom sqlalchemy.engine import Connection\nfrom sqlalchemy.ext.asyncio import async_engine_from_config\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":16,"column":7}}})) != null ? stack1 : "")
     + "\nconfig = context.config\n\nif config.config_file_name is not None:\n    fileConfig(config.config_file_name)\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":28,"column":7}}})) != null ? stack1 : "")
-    + "\nsettings = get_settings()\n\ndef run_migrations_offline() -> None:\n    context.configure(\n        url=settings.database_url,\n        target_metadata=target_metadata,\n        literal_binds=True,\n        dialect_opts={\"paramstyle\": \"named\"},\n        compare_type=True,\n    )\n\n    with context.begin_transaction():\n        context.run_migrations()\n\ndef do_run_migrations(connection: Connection) -> None:\n    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)\n\n    with context.begin_transaction():\n        context.run_migrations()\n\nasync def run_async_migrations() -> None:\n    configuration = config.get_section(config.config_ini_section, {})\n    configuration[\"sqlalchemy.url\"] = settings.database_url\n\n    connectable = async_engine_from_config(\n        configuration,\n        prefix=\"sqlalchemy.\",\n        poolclass=pool.NullPool,\n    )\n\n    async with connectable.connect() as connection:\n        await connection.run_sync(do_run_migrations)\n\n    await connectable.dispose()\n\ndef run_migrations_online() -> None:\n    asyncio.run(run_async_migrations())\n\nif context.is_offline_mode():\n    run_migrations_offline()\nelse:\n    run_migrations_online()\n";
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":6},"end":{"line":23,"column":25}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":23,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + "\nsettings = get_settings()\n\n\ndef run_migrations_offline() -> None:\n    context.configure(\n        url=settings.database_url,\n        target_metadata=target_metadata,\n        literal_binds=True,\n        dialect_opts={\"paramstyle\": \"named\"},\n        compare_type=True,\n    )\n\n    with context.begin_transaction():\n        context.run_migrations()\n\n\ndef do_run_migrations(connection: Connection) -> None:\n    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)\n\n    with context.begin_transaction():\n        context.run_migrations()\n\n\nasync def run_async_migrations() -> None:\n    configuration = config.get_section(config.config_ini_section, {})\n    configuration[\"sqlalchemy.url\"] = settings.database_url\n\n    connectable = async_engine_from_config(\n        configuration,\n        prefix=\"sqlalchemy.\",\n        poolclass=pool.NullPool,\n    )\n\n    async with connectable.connect() as connection:\n        await connection.run_sync(do_run_migrations)\n\n    await connectable.dispose()\n\n\ndef run_migrations_online() -> None:\n    asyncio.run(run_async_migrations())\n\n\nif context.is_offline_mode():\n    run_migrations_offline()\nelse:\n    run_migrations_online()\n";
 },"useData":true} }],
   ["python/migrations/alembic/migrations/script.py.mako", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "import sqlmodel\r\n";
+    return "import sqlmodel\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -3335,78 +3697,94 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "\r\nfrom typing import Sequence, Union\r\n\r\nfrom alembic import op\r\nimport sqlalchemy as sa\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":6,"column":0},"end":{"line":8,"column":7}}})) != null ? stack1 : "")
-    + "${imports if imports else \"\"}\r\n\r\nrevision: str = ${repr(up_revision)}\r\ndown_revision: Union[str, None] = ${repr(down_revision)}\r\nbranch_labels: Union[str, Sequence[str], None] = ${repr(branch_labels)}\r\ndepends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}\r\n\r\n\r\ndef upgrade() -> None:\r\n    ${upgrades if upgrades else \"pass\"}\r\n\r\n\r\ndef downgrade() -> None:\r\n    ${downgrades if downgrades else \"pass\"}\r\n";
+  return "from typing import Sequence, Union\n\nfrom alembic import op\nimport sqlalchemy as sa\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlmodel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":25}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "${imports if imports else \"\"}\n\nrevision: str = ${repr(up_revision)}\ndown_revision: Union[str, None] = ${repr(down_revision)}\nbranch_labels: Union[str, Sequence[str], None] = ${repr(branch_labels)}\ndepends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}\n\n\ndef upgrade() -> None:\n    ${upgrades if upgrades else \"pass\"}\n\n\ndef downgrade() -> None:\n    ${downgrades if downgrades else \"pass\"}\n";
 },"useData":true} }],
-  ["python/migrations/alembic/migrations/versions/README.md", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "# Alembic migration versions are generated with:\n\n# uv run alembic revision --autogenerate -m \"initial\"\n\n# Generated revisions are placed in this directory.\n";
+  ["python/migrations/alembic/migrations/versions/.gitkeep", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "";
 },"useData":true} }],
   ["python/orm/sqlalchemy/src/db.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "async def init_db() -> None:\n\n    from .models import Base\n\n    async with engine.begin() as conn:\n        await conn.run_sync(Base.metadata.create_all)\n";
+    return "from sqlalchemy.pool import NullPool\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "engine = create_async_engine(settings.database_url, echo=settings.debug, poolclass=NullPool)\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "engine = create_async_engine(settings.database_url, echo=settings.debug)\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "\n\nasync def init_db() -> None:\n    from .models import Base\n\n    async with engine.begin() as conn:\n        await conn.run_sync(Base.metadata.create_all)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "from collections.abc import AsyncIterator\n\nfrom sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine\n\nfrom .config import get_settings\n\nsettings = get_settings()\n\nengine = create_async_engine(settings.database_url, echo=settings.debug)\nSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)\n\nasync def get_session() -> AsyncIterator[AsyncSession]:\n\n    async with SessionLocal() as session:\n        yield session\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "");
+  return "from collections.abc import AsyncIterator\n\nfrom sqlalchemy.ext.asyncio import AsyncSession as AsyncSession\nfrom sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "\nfrom .config import get_settings\n\nsettings = get_settings()\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":28}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + "SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)\n\n\nasync def get_session() -> AsyncIterator[AsyncSession]:\n    async with SessionLocal() as session:\n        yield session\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":28}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":32,"column":7}}})) != null ? stack1 : "")
+    + "\n\nasync def close_db() -> None:\n    await engine.dispose()\n";
 },"useData":true} }],
   ["python/orm/sqlalchemy/src/models.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from datetime import datetime, timezone\nfrom uuid import uuid4\n\nfrom sqlalchemy import Column, DateTime, String\nfrom sqlalchemy.orm import DeclarativeBase\n\nclass Base(DeclarativeBase):\n    pass\n\nclass Item(Base):\n    __tablename__ = \"items\"\n\n    id = Column(String, primary_key=True, default=lambda: str(uuid4()))\n    name = Column(String, nullable=False)\n    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))";
+    return "from datetime import UTC, datetime\nfrom uuid import uuid4\n\nfrom sqlalchemy import DateTime, String\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column\n\n\nclass Base(DeclarativeBase):\n    pass\n\n\nclass Item(Base):\n    __tablename__ = \"items\"\n\n    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))\n    name: Mapped[str] = mapped_column(String(255))\n    created_at: Mapped[datetime] = mapped_column(\n        DateTime(timezone=True), default=lambda: datetime.now(UTC)\n    )\n";
 },"useData":true} }],
   ["python/orm/sqlalchemy/src/repositories/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/orm/sqlalchemy/src/repositories/items.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ..models import Item\nfrom ..schemas.items import ItemResponse\n\nasync def create_item(session: AsyncSession, *, name: str) -> ItemResponse:\n    item = Item(name=name)\n    session.add(item)\n    await session.commit()\n    await session.refresh(item)\n    return ItemResponse.model_validate(item)\n\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\n    result = await session.execute(select(Item))\n    items = result.scalars().all()\n    return [ItemResponse.model_validate(i) for i in items]";
+    return "from sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ..models import Item\nfrom ..schemas.items import ItemResponse\n\n\nasync def create_item(session: AsyncSession, *, name: str) -> ItemResponse:\n    item = Item(name=name)\n    session.add(item)\n    await session.commit()\n    await session.refresh(item)\n    return ItemResponse.model_validate(item)\n\n\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\n    result = await session.execute(select(Item).order_by(Item.created_at.desc()))\n    items = result.scalars().all()\n    return [ItemResponse.model_validate(i) for i in items]\n";
 },"useData":true} }],
   ["python/orm/sqlmodel/src/db.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "async def init_db() -> None:\n\n    from . import models  # noqa: F401\n\n    async with engine.begin() as conn:\n        await conn.run_sync(SQLModel.metadata.create_all)\n";
+    return "from sqlalchemy.pool import NullPool\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "from .models import Item\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "engine = create_async_engine(settings.database_url, echo=settings.debug, poolclass=NullPool)\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "engine = create_async_engine(settings.database_url, echo=settings.debug)\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "\n\nasync def init_db() -> None:\n    async with engine.begin() as conn:\n        await conn.run_sync(Item.metadata.create_all)\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "from collections.abc import AsyncIterator\n\nfrom sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine\nfrom sqlmodel import SQLModel\nfrom sqlmodel.ext.asyncio.session import AsyncSession\n\nfrom .config import get_settings\n\nsettings = get_settings()\n\nengine = create_async_engine(settings.database_url, echo=settings.debug)\nSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)\n\nasync def get_session() -> AsyncIterator[AsyncSession]:\n\n    async with SessionLocal() as session:\n        yield session\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":6},"end":{"line":19,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":26,"column":7}}})) != null ? stack1 : "");
+  return "from collections.abc import AsyncIterator\n\nfrom sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
+    + "from sqlmodel.ext.asyncio.session import AsyncSession as AsyncSession\n\nfrom .config import get_settings\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":28}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":12,"column":7}}})) != null ? stack1 : "")
+    + "\nsettings = get_settings()\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"flask",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":28}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + "SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)\n\n\nasync def get_session() -> AsyncIterator[AsyncSession]:\n    async with SessionLocal() as session:\n        yield session\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":27,"column":6},"end":{"line":27,"column":28}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":27,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "")
+    + "\n\nasync def close_db() -> None:\n    await engine.dispose()\n";
 },"useData":true} }],
   ["python/orm/sqlmodel/src/models.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from datetime import datetime, timezone\nfrom uuid import uuid4\n\nfrom sqlmodel import Field, SQLModel\n\ndef utcnow() -> datetime:\n    return datetime.now(timezone.utc)\n\nclass Item(SQLModel, table=True):\n\n    id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)\n    name: str\n    created_at: datetime = Field(default_factory=utcnow)\n";
+    return "from datetime import UTC, datetime\nfrom uuid import uuid4\n\nfrom sqlalchemy import Column, DateTime\nfrom sqlmodel import Field, SQLModel\n\n\nclass Item(SQLModel, table=True):\n    id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True, max_length=36)\n    name: str = Field(max_length=255)\n    created_at: datetime = Field(\n        default_factory=lambda: datetime.now(UTC),\n        sa_column=Column(DateTime(timezone=True), nullable=False),\n    )\n";
 },"useData":true} }],
   ["python/orm/sqlmodel/src/repositories/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/orm/sqlmodel/src/repositories/items.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from sqlmodel import select\r\nfrom sqlmodel.ext.asyncio.session import AsyncSession\r\n\r\nfrom ..models import Item\r\nfrom ..schemas.items import ItemResponse\r\n\r\nasync def create_item(session: AsyncSession, *, name: str) -> ItemResponse:\r\n    item = Item(name=name)\r\n    session.add(item)\r\n    await session.commit()\r\n    await session.refresh(item)\r\n    return ItemResponse.model_validate(item)\r\n\r\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\r\n    result = await session.exec(select(Item))\r\n    items = result.all()\r\n    return [ItemResponse.model_validate(i) for i in items]";
+    return "from sqlmodel import col, select\nfrom sqlmodel.ext.asyncio.session import AsyncSession\n\nfrom ..models import Item\nfrom ..schemas.items import ItemResponse\n\n\nasync def create_item(session: AsyncSession, *, name: str) -> ItemResponse:\n    item = Item(name=name)\n    session.add(item)\n    await session.commit()\n    await session.refresh(item)\n    return ItemResponse.model_validate(item)\n\n\nasync def list_items(session: AsyncSession) -> list[ItemResponse]:\n    result = await session.exec(select(Item).order_by(col(Item.created_at).desc()))\n    items = result.all()\n    return [ItemResponse.model_validate(i) for i in items]\n";
 },"useData":true} }],
-  ["python/orm/tortoise/src/db.py.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "    await Tortoise.generate_schemas()\r\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "from tortoise import Tortoise\r\n\r\nfrom .config import get_settings\r\n\r\nsettings = get_settings()\r\n\r\nasync def init_db() -> None:\r\n\r\n    await Tortoise.init(\r\n        db_url=settings.database_url,\r\n        modules={\"models\": [\"src.models\"]},\r\n        _enable_global_fallback=True,\r\n    )\r\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"migrations") : depth0),"none",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":32}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":14,"column":4},"end":{"line":16,"column":11}}})) != null ? stack1 : "");
+  ["python/orm/tortoise/src/db.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "from tortoise import Tortoise\n\nfrom .config import get_settings\n\nsettings = get_settings()\n\n\nasync def init_db() -> None:\n    await Tortoise.init(\n        db_url=settings.database_url,\n        modules={\"models\": [\"src.models\"]},\n        _enable_global_fallback=True,\n    )\n    await Tortoise.generate_schemas()\n\n\nasync def close_db() -> None:\n    await Tortoise.close_connections()\n";
 },"useData":true} }],
   ["python/orm/tortoise/src/models.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from tortoise import fields\r\nfrom tortoise.models import Model\r\n\r\nclass Item(Model):\r\n\r\n    id = fields.UUIDField(primary_key=True)\r\n    name = fields.CharField(max_length=255)\r\n    created_at = fields.DatetimeField(auto_now_add=True)\r\n\r\n    class Meta:\r\n        table = \"items\"";
+    return "from tortoise import fields\nfrom tortoise.models import Model\n\n\nclass Item(Model):\n    id = fields.UUIDField(primary_key=True)\n    name = fields.CharField(max_length=255)\n    created_at = fields.DatetimeField(auto_now_add=True)\n\n    class Meta:\n        table = \"items\"\n";
 },"useData":true} }],
   ["python/orm/tortoise/src/repositories/__init__.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "";
 },"useData":true} }],
   ["python/orm/tortoise/src/repositories/items.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "from ..models import Item\r\nfrom ..schemas.items import ItemResponse\r\n\r\nasync def create_item(*, name: str) -> ItemResponse:\r\n    item = await Item.create(name=name)\r\n    return ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at)\r\n\r\nasync def list_items() -> list[ItemResponse]:\r\n    items = await Item.all()\r\n    return [ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at) for item in items]";
+    return "from ..models import Item\nfrom ..schemas.items import ItemResponse\n\n\ndef _to_response(item: Item) -> ItemResponse:\n    return ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at)\n\n\nasync def create_item(*, name: str) -> ItemResponse:\n    return _to_response(await Item.create(name=name))\n\n\nasync def list_items() -> list[ItemResponse]:\n    return [_to_response(item) for item in await Item.all().order_by(\"-created_at\")]\n";
 },"useData":true} }],
   ["rust/addons/docker/_dockerignore", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "target/\r\n.env\r\n.env.local\r\n.git\r\n.gitignore\r\n*.md\r\nDockerfile*";
@@ -4353,4 +4731,4 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 },"useData":true} }]
 ]);
 
-export const TEMPLATE_COUNT = 177;
+export const TEMPLATE_COUNT = 172;

@@ -21,8 +21,9 @@ dependencies = [
 {{else if (eq framework "flask")}}
     "flask[async]",
 {{/if}}
-{{#if (eq framework "django")}}
+{{#if (and (eq framework "django") (eq database "postgres"))}}
     "psycopg[binary]",
+{{else if (eq framework "django")}}
 {{else if (eq orm "sqlmodel")}}
     "sqlmodel",
 {{else if (eq orm "sqlalchemy")}}
@@ -50,9 +51,20 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
+{{#if (includes addons "ruff")}}
     "ruff",
+{{/if}}
+{{#if (includes addons "mypy")}}
     "mypy",
+{{#if (eq framework "django")}}
+    "django-stubs[compatible-mypy]",
+    "djangorestframework-stubs[compatible-mypy]",
+{{/if}}
+{{/if}}
+{{#if (includes addons "pytest")}}
+    "pytest",
+    "httpx",
+{{/if}}
 ]
 
 [build-system]
@@ -72,4 +84,4 @@ packages = ["src"]
 {{/if}}
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["."]

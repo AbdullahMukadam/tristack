@@ -1,3 +1,4 @@
+import { toProjectSlug } from "./project-slug";
 import type { ProjectConfig } from "./types";
 
 export type Command = {
@@ -144,8 +145,11 @@ function pythonProbes(config: ProjectConfig): Probe[] {
       { method: "POST", path: items, expectStatus: 201, body: { name: "boot-check" } },
     );
   }
-  if (config.frontend === "htmx")
-    probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+  if (config.frontend === "htmx") {
+    probes.push({ method: "GET", path: "/", expectStatus: 200 });
+    if (config.orm !== "none")
+      probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+  }
   return probes;
 }
 
@@ -161,31 +165,57 @@ function goRunCommand(config: ProjectConfig): (opts?: RunOptions) => Command {
   };
 }
 
+function goDatabaseURL(config: ProjectConfig): string {
+  const slug = toProjectSlug(config.projectName);
+  switch (config.database) {
+    case "postgres":
+      return `postgres://postgres:postgres@localhost:5432/${slug}`;
+    case "mysql":
+      return `mysql://root:password@localhost:3306/${slug}`;
+    default:
+      return `${slug}.db`;
+  }
+}
+
 function goPrepare(config: ProjectConfig): Command[] {
   const prepare: Command[] = [];
+  const databaseURL = goDatabaseURL(config);
   if (config.orm === "sqlc")
-    prepare.push({ bin: "sqlc", args: ["generate"], label: "sqlc generate" });
+    prepare.push({
+      bin: "go",
+      args: ["run", "github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0", "generate"],
+      label: "go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate",
+      env: { CGO_ENABLED: "0" },
+    });
   if (config.migrations === "goose") {
     prepare.push({
       bin: "go",
-      args: ["run", "github.com/pressly/goose/v3/cmd/goose@latest", "-dir", "migrations", "up"],
-      label: "go run github.com/pressly/goose/v3/cmd/goose@latest -dir migrations up",
+      args: ["run", "github.com/pressly/goose/v3/cmd/goose@v3.22.1", "up"],
+      label: "go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up",
+      env: {
+        GOOSE_DRIVER: config.database === "sqlite" ? "sqlite3" : config.database,
+        GOOSE_DBSTRING: databaseURL,
+        GOOSE_MIGRATION_DIR: "migrations",
+      },
     });
   } else if (config.migrations === "golang-migrate") {
+    const scheme =
+      config.database === "sqlite" ? "sqlite3" : config.database === "postgres" ? "pgx" : "mysql";
+    const target = `${scheme}://${databaseURL.replace(/^[a-z0-9+.-]*:\/\//i, "")}`;
     prepare.push({
       bin: "go",
       args: [
         "run",
         "-tags",
-        `'${goMigrateTags(config.database)}'`,
-        "github.com/golang-migrate/migrate/v4/cmd/migrate@latest",
+        goMigrateTags(config.database),
+        "github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1",
         "-path",
         "db/migrations",
         "-database",
-        "$DATABASE_URL",
+        target,
         "up",
       ],
-      label: `go run -tags '${goMigrateTags(config.database)}' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$DATABASE_URL" up`,
+      label: `go run -tags ${goMigrateTags(config.database)} github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database ${target} up`,
     });
   }
   return prepare;
@@ -199,8 +229,11 @@ function goProbes(config: ProjectConfig): Probe[] {
       { method: "POST", path: "/items", expectStatus: 201, body: { name: "boot-check" } },
     );
   }
-  if (config.frontend === "htmx")
-    probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+  if (config.frontend === "htmx") {
+    probes.push({ method: "GET", path: "/", expectStatus: 200 });
+    if (config.orm !== "none")
+      probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+  }
   return probes;
 }
 

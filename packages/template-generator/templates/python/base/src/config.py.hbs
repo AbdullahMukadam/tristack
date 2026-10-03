@@ -1,6 +1,11 @@
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+{{#if (ne database "none")}}
+
+DATABASE_NAME = "{{project_slug}}"
+{{/if}}
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
@@ -8,26 +13,14 @@ class Settings(BaseSettings):
     app_name: str = "{{projectName}}"
     debug: bool = False
     cors_origins: list[str] = ["http://localhost:3000"]
+{{#if (ne database "none")}}
+{{#if (eq orm "tortoise")}}
+    database_url: str = f"{{#if (eq database "sqlite")}}sqlite://./{DATABASE_NAME}.db{{else if (eq database "postgres")}}postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}{{else}}mysql://root:password@localhost:3306/{DATABASE_NAME}{{/if}}"
+{{else}}
+    database_url: str = f"{{#if (eq database "sqlite")}}sqlite+aiosqlite:///./{DATABASE_NAME}.db{{else if (eq database "postgres")}}postgresql+asyncpg://postgres:postgres@localhost:5432/{DATABASE_NAME}{{else}}mysql+asyncmy://root:password@localhost:3306/{DATABASE_NAME}{{/if}}"
+{{/if}}
+{{/if}}
 
-    {{#if (eq database "sqlite")}}
-    {{#if (eq orm "tortoise")}}
-    database_url: str = "sqlite://./{{project_slug}}.db"
-    {{else}}
-    database_url: str = "sqlite+aiosqlite:///./{{project_slug}}.db"
-    {{/if}}
-    {{else if (eq database "postgres")}}
-    {{#if (eq orm "tortoise")}}
-    database_url: str = "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
-    {{else}}
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/{{project_slug}}"
-    {{/if}}
-    {{else if (eq database "mysql")}}
-    {{#if (eq orm "tortoise")}}
-    database_url: str = "mysql://root:password@localhost:3306/{{project_slug}}"
-    {{else}}
-    database_url: str = "mysql+asyncmy://root:password@localhost:3306/{{project_slug}}"
-    {{/if}}
-    {{/if}}
 
 @lru_cache
 def get_settings() -> Settings:

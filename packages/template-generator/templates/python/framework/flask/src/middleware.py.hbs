@@ -1,7 +1,0 @@
-from flask import Flask, request
-
-def register_middleware(app: Flask) -> None:
-
-    @app.before_request
-    def log_request() -> None:
-        app.logger.info("%s %s", request.method, request.path)

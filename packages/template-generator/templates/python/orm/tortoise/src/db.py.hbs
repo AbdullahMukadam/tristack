@@ -4,13 +4,15 @@ from .config import get_settings
 
 settings = get_settings()
 
-async def init_db() -> None:
 
+async def init_db() -> None:
     await Tortoise.init(
         db_url=settings.database_url,
         modules={"models": ["src.models"]},
         _enable_global_fallback=True,
     )
-    {{#if (eq migrations "none")}}
     await Tortoise.generate_schemas()
-    {{/if}}
+
+
+async def close_db() -> None:
+    await Tortoise.close_connections()

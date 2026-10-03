@@ -1,24 +1,36 @@
 from collections.abc import AsyncIterator
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession as AsyncSession
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+{{#if (eq framework "flask")}}
+from sqlalchemy.pool import NullPool
+{{/if}}
 
 from .config import get_settings
 
 settings = get_settings()
 
+{{#if (eq framework "flask")}}
+engine = create_async_engine(settings.database_url, echo=settings.debug, poolclass=NullPool)
+{{else}}
 engine = create_async_engine(settings.database_url, echo=settings.debug)
+{{/if}}
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-async def get_session() -> AsyncIterator[AsyncSession]:
 
+async def get_session() -> AsyncIterator[AsyncSession]:
     async with SessionLocal() as session:
         yield session
-
 {{#if (eq migrations "none")}}
-async def init_db() -> None:
 
+
+async def init_db() -> None:
     from .models import Base
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 {{/if}}
+
+
+async def close_db() -> None:
+    await engine.dispose()

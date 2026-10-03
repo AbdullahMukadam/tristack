@@ -8,11 +8,20 @@ function goRunCommand(config: ProjectConfig): string {
   return getRuntimeProfile(config).run().label;
 }
 
+function goSqlcGenerateCommand(): string {
+  return "go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate";
+}
+
 function goMigrationsCommand(config: ProjectConfig): string {
   const migrate = getRuntimeProfile(config).prepare.find(
     (cmd) => cmd.label.includes("goose") || cmd.label.includes("golang-migrate"),
   );
-  return migrate?.label ?? "# no migrations configured";
+  if (!migrate) return "# no migrations configured";
+  const relevant = Object.entries(migrate.env ?? {}).filter(
+    ([key]) => !key.startsWith("CGO_") && !key.startsWith("GOFLAGS"),
+  );
+  const envPrefix = relevant.map(([key, value]) => `${key}=${value}`).join(" ");
+  return envPrefix ? `${envPrefix} ${migrate.label}` : migrate.label;
 }
 
 function bashBlock(lines: string[]): string {
@@ -31,7 +40,7 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
   setup.push("# 1. Install dependencies", "go mod tidy");
   let step = 2;
   if (config.orm === "sqlc") {
-    setup.push(`# ${step}. Generate query code (sqlc)`, "sqlc generate");
+    setup.push(`# ${step}. Generate query code (sqlc)`, goSqlcGenerateCommand());
     step++;
   }
   if (config.migrations !== "none") {
@@ -57,7 +66,7 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
     );
   }
   if (config.orm === "sqlc") {
-    common.push("sqlc generate                        # regenerate query code");
+    common.push(`${goSqlcGenerateCommand()}  # regenerate query code`);
   }
   if (config.addons.includes("air")) {
     common.push("air                                   # live reload dev server");
@@ -120,7 +129,21 @@ ${layout}
 
 ## Environment
 
-Copy \`.env.example\` to \`.env\` and fill in the values (database URLs, etc.).
+Defaults are baked in, so the app runs with no setup. Override them with environment variables:
+
+- \`PORT\` — HTTP port (default \`3000\`)
+- \`APP_NAME\` — application name
+- \`DATABASE_URL\` — database DSN; see \`env.example\` for per-database values
+
+For a local \`.env\`, load it into your shell before running (Go does not read \`.env\` on its own):
+
+\`\`\`bash
+# macOS / Linux
+set -a && . ./env.example && set +a
+
+# Windows PowerShell
+Get-Content ./env.example | Where-Object { $_ -match '=' -and $_ -notmatch '^\\s*#' } | ForEach-Object { $n, $v = $_ -split '=', 2; Set-Item -Path "env:$n" -Value $v }
+\`\`\`
 `;
   vfs.writeFile("README.md", content);
 }
@@ -187,7 +210,11 @@ ${steps.join("\n\n")}
 ${apiDocs}
 ${config.frontend !== "none" ? (webDocs[config.language] ?? "") : ""}## Environment
 
-Copy \`.env.example\` to \`.env\` and fill in the values (database URLs, etc.).
+${
+  config.framework === "django"
+    ? "Settings read environment variables directly; `.env` is not loaded. `manage.py` uses `config.settings.development`, which needs none. `wsgi.py` and `asgi.py` (gunicorn, Docker) use `config.settings.production`, which requires `DJANGO_SECRET_KEY` and reads `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, and the `DB_*` variables listed in `env.example`."
+    : "Copy `env.example` to `.env`; it is read automatically on startup."
+}
 `;
   void existing;
   vfs.writeFile("README.md", content);

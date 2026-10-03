@@ -1,5 +1,28 @@
 services:
+  app:
+    build: .
+{{#if (ne framework "none")}}
+    ports:
+      - "8000:8000"
+{{/if}}
+{{#if (eq framework "django")}}
+    environment:
+      DJANGO_SECRET_KEY: change-me
+      ALLOWED_HOSTS: localhost,127.0.0.1
+{{#if (or (eq database "postgres") (eq database "mysql"))}}
+      DB_HOST: db
+{{/if}}
+{{else if (eq database "postgres")}}
+    environment:
+      DATABASE_URL: {{#if (eq orm "tortoise")}}postgres{{else}}postgresql+asyncpg{{/if}}://postgres:postgres@db:5432/{{project_slug}}
+{{else if (eq database "mysql")}}
+    environment:
+      DATABASE_URL: {{#if (eq orm "tortoise")}}mysql{{else}}mysql+asyncmy{{/if}}://root:password@db:3306/{{project_slug}}
+{{/if}}
 {{#if (eq database "postgres")}}
+    depends_on:
+      - db
+
   db:
     image: postgres:16
     environment:
@@ -10,7 +33,13 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 {{else if (eq database "mysql")}}
+    depends_on:
+      - db
+
   db:
     image: mysql:8
     environment:
@@ -20,11 +49,7 @@ services:
       - "3306:3306"
     volumes:
       - mysqldata:/var/lib/mysql
-{{/if}}
 
 volumes:
-{{#if (eq database "postgres")}}
-  pgdata:
-{{else if (eq database "mysql")}}
   mysqldata:
 {{/if}}

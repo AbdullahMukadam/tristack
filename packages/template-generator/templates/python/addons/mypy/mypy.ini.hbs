@@ -1,9 +1,12 @@
 [mypy]
-python_version = "3.12"
-strict = true
-warn_unused_configs = true
-plugins = ["pydantic.mypy"]
+python_version = 3.12
+strict = True
+warn_unused_configs = True
+{{#if (eq framework "django")}}
+plugins = mypy_django_plugin.main, mypy_drf_plugin.main
 
-[[tool.mypy.overrides]]
-module = "src.*"
-follow_imports = "normal"
+[mypy.plugins.django-stubs]
+django_settings_module = config.settings.development
+{{else}}
+plugins = pydantic.mypy
+{{/if}}
