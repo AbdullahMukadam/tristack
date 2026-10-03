@@ -1,7 +1,7 @@
 from .models import User
 
-def get_user_by_id(user_id: int) -> User | None:
 
+def get_user_by_id(user_id: int) -> User | None:
     try:
         return User.objects.get(pk=user_id)
     except User.DoesNotExist:

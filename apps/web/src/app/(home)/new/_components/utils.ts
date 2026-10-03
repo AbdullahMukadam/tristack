@@ -184,6 +184,31 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     });
   }
 
+  if (adjustedStack.orm !== "none" && adjustedStack.database === "none") {
+    adjustedStack.database = "sqlite";
+    changes.push({
+      category: "database",
+      message: "An ORM needs a database — switched to SQLite.",
+    });
+  }
+
+  if (adjustedStack.migrations === "alembic" && adjustedStack.orm === "none") {
+    adjustedStack.migrations = "none";
+    changes.push({
+      category: "migrations",
+      message: "Alembic needs a SQLAlchemy-based ORM — switched to none.",
+    });
+  }
+
+  if (adjustedStack.framework === "flask" && adjustedStack.orm === "tortoise") {
+    adjustedStack.orm = "sqlmodel";
+    changes.push({
+      category: "orm",
+      message:
+        "Tortoise ORM doesn't work with Flask's per-request event loops — switched to SQLModel.",
+    });
+  }
+
   if (adjustedStack.orm === "tortoise" && adjustedStack.migrations !== "none") {
     adjustedStack.migrations = "none";
     changes.push({
@@ -222,6 +247,20 @@ export const getDisabledReason = (
   }
   if (currentStack.framework === "loco" && category === "frontend" && optionId !== "none") {
     return "HTMX isn't available for Loco yet.";
+  }
+  if (
+    currentStack.framework !== "none" &&
+    currentStack.orm !== "none" &&
+    category === "database" &&
+    optionId === "none"
+  ) {
+    return "An ORM needs a database.";
+  }
+  if (currentStack.orm === "none" && category === "migrations" && optionId === "alembic") {
+    return "Alembic needs a SQLAlchemy-based ORM.";
+  }
+  if (currentStack.framework === "flask" && category === "orm" && optionId === "tortoise") {
+    return "Tortoise ORM doesn't work with Flask's per-request event loops.";
   }
   const validIds = getValidIdsForLanguage(currentStack.language, category);
   if (!validIds.includes(optionId)) {

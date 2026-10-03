@@ -1,23 +1,38 @@
 FROM python:3.12-slim
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-COPY pyproject.toml ./
-RUN uv sync --no-install-project --no-dev
+{{#if (eq packageManager "uv")}}
+COPY --from=ghcr.io/astral-sh/uv:0.12 /uv /bin/uv
+COPY pyproject.toml uv.lock* ./
+RUN uv sync --no-dev --no-install-project
+ENV PATH="/app/.venv/bin:$PATH"
 
 COPY . .
+{{else}}
+COPY . .
+RUN pip install --no-cache-dir .
+{{/if}}
 
-ENV PYTHONPATH=/app
+RUN useradd --create-home app && chown -R app:app /app
+USER app
+
+{{#if (eq framework "none")}}
+CMD ["python", "-m", "src.main"]
+{{else}}
 EXPOSE 8000
 
 {{#if (eq framework "fastapi")}}
-CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "litestar")}}
-CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "flask")}}
-CMD ["uv", "run", "flask", "--app", "src.main", "run", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["flask", "--app", "src.main", "run", "--host", "0.0.0.0", "--port", "8000"]
 {{else if (eq framework "django")}}
-CMD ["uv", "run", "gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000"]
+{{/if}}
 {{/if}}

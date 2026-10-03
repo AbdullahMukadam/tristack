@@ -2,4 +2,7 @@ CREATE TABLE items (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    {{#if (eq orm "gorm")}},
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    {{/if}}
 );

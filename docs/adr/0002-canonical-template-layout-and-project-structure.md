@@ -15,3 +15,7 @@ We will grow the template catalog (new frameworks, libraries, dimension layers) 
 - Rust scaffolds converge on the canonical `src/` module skeleton (`config.rs`, `error.rs`, `state.rs`, `routes/`, `models/`, `services/`) built once in `core` instead of growing `main.rs`.
 - New categories land in `templates/<language>/{auth,frontend,jobs,observability,docs}/<library>` with declared library↔Core Stack rules in `packages/types`, enforced by validation, prompts, and web compatibility (parity-tested in `apps/web/test/stack-builder-compatibility.test.ts`).
 - Known drift gets a home before it is fixed: the dead `copyDb` call in the Python handler and the `base`-copy path filters are listed as tech debt in the doc and fixed when touched.
+
+## Amendment (2026-10-02)
+
+Python's canonical layout is the `src` directory as the importable package itself (`from src.main import app`), not `src/<pkg>/`. Every Python template, the runtime profile, the generated README, the Docker `CMD`s, and the boot/quality tests already depend on this shape, and the layout was verified end to end, so the documented convention changed instead of the templates (audit item PY-16). Django keeps Django's own `config/` + `apps/` layout.

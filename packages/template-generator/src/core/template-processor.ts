@@ -1,4 +1,4 @@
-import { type ProjectConfig } from "@tristack/types";
+import { type ProjectConfig, toProjectSlug } from "@tristack/types";
 import Handlebars from "handlebars";
 
 Handlebars.registerHelper("eq", (a, b) => a === b);
@@ -8,14 +8,7 @@ Handlebars.registerHelper("or", (...args) => args.slice(0, -1).some(Boolean));
 Handlebars.registerHelper("not", (a) => !a);
 Handlebars.registerHelper("includes", (arr, val) => Array.isArray(arr) && arr.includes(val));
 
-export function toProjectSlug(name: string): string {
-  return (
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "_")
-      .replace(/^_+|_+$/g, "") || "app"
-  );
-}
+export { toProjectSlug };
 
 export interface PrecompiledTemplate {
   kind: "precompiled";

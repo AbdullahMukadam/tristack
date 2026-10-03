@@ -33,14 +33,20 @@ describe("getRuntimeProfile", () => {
     ]);
   });
 
-  test("fastapi + htmx: adds the /web/items probe", () => {
+  test("fastapi + htmx: adds the home page and /web/items probes", () => {
     const runtime = profile({ frontend: "htmx" });
     expect(runtime.probes.map((p) => p.path)).toEqual([
       "/health",
       "/api/v1/items/",
       "/api/v1/items/",
+      "/",
       "/web/items",
     ]);
+  });
+
+  test("htmx without an orm: probes the home page but not /web/items", () => {
+    const runtime = profile({ framework: "litestar", frontend: "htmx", orm: "none" });
+    expect(runtime.probes.map((p) => p.path)).toEqual(["/health", "/"]);
   });
 
   test("litestar: items path has no trailing slash", () => {
@@ -96,7 +102,7 @@ describe("getRuntimeProfile", () => {
     expect(runtime.probes.map((p) => p.path)).toEqual(["/health", "/items", "/items"]);
   });
 
-  test("go + sqlc + golang-migrate: prepare has sqlc generate then migrate with tags", () => {
+  test("go + sqlc + golang-migrate: prepare generates then migrates with tags and a real DSN", () => {
     const runtime = profile({
       language: "go",
       framework: "chi",
@@ -106,9 +112,29 @@ describe("getRuntimeProfile", () => {
       packageManager: "go",
     });
     expect(runtime.prepare.map((c) => c.label)).toEqual([
-      "sqlc generate",
-      `go run -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest -path db/migrations -database "$DATABASE_URL" up`,
+      "go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate",
+      "go run -tags postgres github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database pgx://postgres:postgres@localhost:5432/profile_api up",
     ]);
+    expect(runtime.prepare[0]?.env).toEqual({ CGO_ENABLED: "0" });
+  });
+
+  test("go + goose: prepare passes driver, dbstring and dir through env", () => {
+    const runtime = profile({
+      language: "go",
+      framework: "gin",
+      orm: "gorm",
+      migrations: "goose",
+      packageManager: "go",
+    });
+    expect(runtime.prepare).toHaveLength(1);
+    expect(runtime.prepare[0]?.label).toBe(
+      "go run github.com/pressly/goose/v3/cmd/goose@v3.22.1 up",
+    );
+    expect(runtime.prepare[0]?.env).toEqual({
+      GOOSE_DRIVER: "sqlite3",
+      GOOSE_DBSTRING: "profile_api.db",
+      GOOSE_MIGRATION_DIR: "migrations",
+    });
   });
 
   test("go bare is a oneshot like python", () => {

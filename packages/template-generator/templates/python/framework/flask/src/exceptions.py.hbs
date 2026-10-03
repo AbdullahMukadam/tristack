@@ -1,27 +1,25 @@
-import logging
-
 from flask import Flask, Response, jsonify
+from pydantic import ValidationError
+from werkzeug.exceptions import HTTPException
 
-logger = logging.getLogger(__name__)
 
 class AppError(Exception):
-
     status_code: int = 400
+
 
 class NotFoundError(AppError):
     status_code: int = 404
 
-def register_error_handlers(app: Flask) -> None:
 
+def register_error_handlers(app: Flask) -> None:
     @app.errorhandler(AppError)
     def handle_app_error(exc: AppError) -> tuple[Response, int]:
         return jsonify({"detail": str(exc)}), exc.status_code
 
-    @app.errorhandler(NotFoundError)
-    def handle_not_found(exc: NotFoundError) -> tuple[Response, int]:
-        return jsonify({"detail": str(exc)}), exc.status_code
+    @app.errorhandler(ValidationError)
+    def handle_validation_error(exc: ValidationError) -> tuple[Response, int]:
+        return jsonify({"detail": exc.errors(include_url=False, include_context=False)}), 422
 
-    @app.errorhandler(Exception)
-    def handle_unhandled(exc: Exception) -> tuple[Response, int]:
-        logger.exception("Unhandled error: %s", exc)
-        return jsonify({"detail": "Internal server error"}), 500
+    @app.errorhandler(HTTPException)
+    def handle_http_error(exc: HTTPException) -> tuple[Response, int]:
+        return jsonify({"detail": exc.description}), exc.code or 500

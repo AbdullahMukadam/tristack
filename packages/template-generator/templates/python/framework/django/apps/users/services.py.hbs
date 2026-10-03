@@ -2,6 +2,6 @@ from django.db.models import QuerySet
 
 from .models import User
 
-def get_users() -> QuerySet[User]:
 
+def get_users() -> QuerySet[User]:
     return User.objects.filter(is_active=True)

@@ -1,33 +1,32 @@
 from flask import Blueprint, Response, jsonify, request
 
+{{#if (ne orm "tortoise")}}
+from ....db import SessionLocal
+{{/if}}
+from ....schemas.items import ItemCreate
+from ....services.items import create_item, list_items
+
 items_bp = Blueprint("items", __name__, url_prefix="/items")
+
 
 @items_bp.get("/")
 async def list_items_endpoint() -> Response:
-    from ....services.items import list_items
-
-    {{#if (eq orm "tortoise")}}
+{{#if (eq orm "tortoise")}}
     items = await list_items()
-    {{else}}
-    from ....db import SessionLocal
-
+{{else}}
     async with SessionLocal() as session:
         items = await list_items(session)
-    {{/if}}
+{{/if}}
     return jsonify([item.model_dump(mode="json") for item in items])
 
+
 @items_bp.post("/")
-async def create_item_endpoint() -> Response:
-    from ....schemas.items import ItemCreate
-    from ....services.items import create_item
-
-    data = ItemCreate(**request.get_json() or {})
-    {{#if (eq orm "tortoise")}}
-    item = await create_item(data)
-    {{else}}
-    from ....db import SessionLocal
-
+async def create_item_endpoint() -> tuple[Response, int]:
+    payload = ItemCreate.model_validate(request.get_json())
+{{#if (eq orm "tortoise")}}
+    item = await create_item(payload)
+{{else}}
     async with SessionLocal() as session:
-        item = await create_item(session, data)
-    {{/if}}
+        item = await create_item(session, payload)
+{{/if}}
     return jsonify(item.model_dump(mode="json")), 201

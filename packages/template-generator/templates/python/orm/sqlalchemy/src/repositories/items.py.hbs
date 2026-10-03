@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..models import Item
 from ..schemas.items import ItemResponse
 
+
 async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
     item = Item(name=name)
     session.add(item)
@@ -11,7 +12,8 @@ async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
     await session.refresh(item)
     return ItemResponse.model_validate(item)
 
+
 async def list_items(session: AsyncSession) -> list[ItemResponse]:
-    result = await session.execute(select(Item))
+    result = await session.execute(select(Item).order_by(Item.created_at.desc()))
     items = result.scalars().all()
     return [ItemResponse.model_validate(i) for i in items]

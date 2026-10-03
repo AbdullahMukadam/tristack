@@ -13,18 +13,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+{{#if (eq packageManager "uv")}}
       - uses: astral-sh/setup-uv@v5
       - name: Install dependencies
         run: uv sync
-      {{#if (includes addons "ruff")}}
+{{else if (eq packageManager "poetry")}}
+      - name: Install Poetry
+        run: pipx install poetry
+      - name: Install dependencies
+        run: poetry install
+{{else}}
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+{{/if}}
+{{#if (includes addons "ruff")}}
       - name: Lint
-        run: uv run ruff check .
-      {{/if}}
-      {{#if (includes addons "mypy")}}
+        run: {{#if (eq packageManager "uv")}}uv run {{else if (eq packageManager "poetry")}}poetry run {{/if}}ruff check .
+      - name: Format check
+        run: {{#if (eq packageManager "uv")}}uv run {{else if (eq packageManager "poetry")}}poetry run {{/if}}ruff format --check .
+{{/if}}
+{{#if (includes addons "mypy")}}
       - name: Type check
-        run: uv run mypy .
-      {{/if}}
-      {{#if (includes addons "pytest")}}
+        run: {{#if (eq packageManager "uv")}}uv run {{else if (eq packageManager "poetry")}}poetry run {{/if}}mypy .
+{{/if}}
+{{#if (includes addons "pytest")}}
       - name: Test
-        run: uv run pytest
-      {{/if}}
+        run: {{#if (eq packageManager "uv")}}uv run {{else if (eq packageManager "poetry")}}poetry run {{/if}}pytest
+{{/if}}

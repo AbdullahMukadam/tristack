@@ -1,8 +1,9 @@
-from sqlmodel import select
+from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..models import Item
 from ..schemas.items import ItemResponse
+
 
 async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
     item = Item(name=name)
@@ -11,7 +12,8 @@ async def create_item(session: AsyncSession, *, name: str) -> ItemResponse:
     await session.refresh(item)
     return ItemResponse.model_validate(item)
 
+
 async def list_items(session: AsyncSession) -> list[ItemResponse]:
-    result = await session.exec(select(Item))
+    result = await session.exec(select(Item).order_by(col(Item.created_at).desc()))
     items = result.all()
     return [ItemResponse.model_validate(i) for i in items]

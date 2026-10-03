@@ -8,19 +8,19 @@ Applies to: `packages/template-generator/templates`, the template handlers in `p
 
 Every generated project converges on one canonical skeleton per language. Frameworks, ORMs, migrations, addons, and other dimensions only fill predefined slots; they never invent new top-level shapes.
 
-### Python — src-layout
+### Python — `src` package
 
 ```
 pyproject.toml                 README.md  .gitignore  .dockerignore  env.example
 ruff.toml                      Dockerfile docker-compose.yml         (alembic.ini if migrations)
 migrations/                    env.py  script.py.mako  versions/           (per-migrations)
-src/<pkg>/
+src/                           # the importable package itself (`from src.main import app`)
   __init__.py
   config.py                    # settings — always present
   db.py                        # session/engine — slot: orm
   exceptions.py                # slot: framework
   main.py                      # entrypoint — slot: framework
-  middleware.py                # slot: framework
+  middleware.py                # slot: framework (FastAPI only: CORS)
   models.py                    # slot: orm
   api/                         # slot: framework (router + v1/routes/<feature>)
   repositories/                # slot: orm
@@ -28,8 +28,11 @@ src/<pkg>/
   services/                    # slot: core (framework-agnostic)
   core/                        # new: shared helpers, auth, logging
   jobs/                        # new: task queues
-tests/                         # pytest at repo root
+tests/                         # pytest at repo root (pythonpath = ["."])
+static/  src/templates/         # htmx frontend only
 ```
+
+Django projects use Django's own layout instead of `src/`: `manage.py`, `config/` (settings, urls, wsgi/asgi), `apps/<app>/`, `templates/`, `static/`.
 
 ### Go — Golang Standard Layout
 
@@ -116,9 +119,9 @@ Copy order within a language handler: `base` → `core` → `framework` → `orm
 
 - Each library lives in `templates/<language>/<dimension>/<library>/`.
 - Every file it contributes must target a documented slot from section 1:
-  - Python auth → `src/<pkg>/core/auth.py`; Go auth → `internal/auth/`; Rust auth → `src/auth/`.
-  - Task queues → `src/<pkg>/jobs/`, `internal/jobs/`, `src/workers/`.
-  - Server-rendered frontends (htmx/templ) → Go `internal/web/` + `static/`; Python `static/` + `src/<pkg>/templates/` (Jinja2); Rust under the engine's expected dir (`templates/` for Tera/Maud) — always confirm the engine's actual layout.
+  - Python auth → `src/core/auth.py`; Go auth → `internal/auth/`; Rust auth → `src/auth/`.
+  - Task queues → `src/jobs/`, `internal/jobs/`, `src/workers/`.
+  - Server-rendered frontends (htmx/templ) → Go `internal/web/` + `static/`; Python `static/` + `src/templates/` (Jinja2); Rust under the engine's expected dir (`templates/` for Tera/Maud) — always confirm the engine's actual layout.
   - Observability → a `logging`/`tracing` file in the language's config area.
 - Compatibility rules between a library and the Core Stack (language, framework, orm, database) are declared in the shared type layer, enforced by:
   - `apps/cli/src/validation.ts` (`validateResolvedConfigCompatibility`),

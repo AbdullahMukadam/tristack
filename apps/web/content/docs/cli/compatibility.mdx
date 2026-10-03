@@ -36,6 +36,10 @@ Each language has its own option sets (`packages/types`), so a Go/Rust value can
 - `frontend htmx` with `framework loco` (Rust) → error (Loco doesn't support HTMX yet)
 - `orm` not in the language's set → error, e.g. `--language python --orm seaorm`
 - `migrations` not in the language's set → error, e.g. `--language python --migrations goose`
+- `orm tortoise` with `migrations alembic` → error (Alembic only supports SQLAlchemy-based ORMs)
+- `migrations alembic` with `orm none` → error (Alembic migrates SQLAlchemy models)
+- any `orm` other than `none` with `database none` → error (an ORM needs a database)
+- `orm tortoise` with `framework flask` → error (Tortoise needs one long-lived event loop; Flask runs each async view in its own loop — use SQLModel or SQLAlchemy with Flask)
 - `addons` passed as a list must be valid enum values; `none` is normalized away
 - `database` must be one of `sqlite`, `postgres`, `mysql`, `none`
 

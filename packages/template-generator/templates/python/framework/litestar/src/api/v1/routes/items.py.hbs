@@ -1,40 +1,37 @@
 from litestar import get, post
 {{#if (ne orm "tortoise")}}
-from litestar.di import Provide
-from sqlalchemy.ext.asyncio import AsyncSession
+from litestar.di import NamedDependency, Provide
 
-from ....db import get_session
+from ....db import AsyncSession, get_session
+{{else}}
+
 {{/if}}
 from ....schemas.items import ItemCreate, ItemResponse
 from ....services.items import create_item, list_items
-
 {{#if (eq orm "tortoise")}}
-@get("/items", response_model=list[ItemResponse])
+
+
+@get("/items")
 async def list_items_endpoint() -> list[ItemResponse]:
     return await list_items()
 
-@post(
-    "/items",
-    response_model=ItemResponse,
-    status_code=201,
-)
+
+@post("/items", status_code=201)
 async def create_item_endpoint(data: ItemCreate) -> ItemResponse:
     return await create_item(data)
 {{else}}
-@get(
-    "/items",
-    response_model=list[ItemResponse],
-    dependencies={"session": Provide(get_session, sync_to_thread=False)},
-)
-async def list_items_endpoint(session: AsyncSession) -> list[ItemResponse]:
+
+session_dependency = {"session": Provide(get_session)}
+
+
+@get("/items", dependencies=session_dependency)
+async def list_items_endpoint(session: NamedDependency[AsyncSession]) -> list[ItemResponse]:
     return await list_items(session)
 
-@post(
-    "/items",
-    response_model=ItemResponse,
-    status_code=201,
-    dependencies={"session": Provide(get_session, sync_to_thread=False)},
-)
-async def create_item_endpoint(data: ItemCreate, session: AsyncSession) -> ItemResponse:
+
+@post("/items", status_code=201, dependencies=session_dependency)
+async def create_item_endpoint(
+    data: ItemCreate, session: NamedDependency[AsyncSession]
+) -> ItemResponse:
     return await create_item(session, data)
 {{/if}}

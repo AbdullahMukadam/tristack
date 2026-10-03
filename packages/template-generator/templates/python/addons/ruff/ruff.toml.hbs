@@ -7,3 +7,8 @@ ignore = []
 
 [lint.isort]
 known-first-party = ["src"]
+{{#if (eq framework "django")}}
+
+[lint.per-file-ignores]
+"config/settings/*.py" = ["F403", "F405"]
+{{/if}}

@@ -1,11 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 
-def home(request):
+def home(request: HttpRequest) -> HttpResponse:
     return render(request, "home.html")
 
 
-def users_fragment(request):
+def users_fragment(request: HttpRequest) -> HttpResponse:
     users = get_user_model().objects.all().order_by("date_joined")
     return render(request, "users_fragment.html", {"users": users})

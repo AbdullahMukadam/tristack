@@ -239,6 +239,46 @@ describe("python template structure verification", () => {
     expect(findByPath(tree.root, ["src", "api", "v1", "routes", "items.py"])).toBeNull();
   });
 
+  it("validation rejects alembic without an orm", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "fastapi",
+      orm: "none",
+      migrations: "alembic",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+    } as never);
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("validation rejects an orm without a database", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "fastapi",
+      orm: "sqlmodel",
+      migrations: "none",
+      database: "none",
+      packageManager: "uv",
+      addons: [],
+    } as never);
+    expect(result.isErr()).toBe(true);
+  });
+
+  it("validation rejects flask + tortoise", async () => {
+    const result = await createVirtual({
+      language: "python",
+      framework: "flask",
+      orm: "tortoise",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "uv",
+      addons: [],
+    } as never);
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) expect(result.error.message).toContain("Flask");
+  });
+
   it("validation rejects tortoise + alembic migrations", async () => {
     const result = await createVirtual({
       language: "python",
@@ -330,7 +370,7 @@ describe("go template structure verification", () => {
 
     const makefile = findByPath(tree.root, ["Makefile"]);
     expect(makefile).not.toBeNull();
-    expect(makefile).toContain("sqlc generate");
+    expect(makefile).toContain("go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate");
 
     const ci = findByPath(tree.root, [".github", "workflows", "ci.yml"]);
     expect(ci).not.toBeNull();
@@ -427,11 +467,14 @@ describe("go template structure verification", () => {
     expect(makefile).toContain("build: generate");
     expect(makefile).toContain("run: generate");
     expect(makefile).toContain("MIGRATE_TAGS := postgres");
+    expect(makefile).toContain("MIGRATE_URL ?= pgx://postgres:postgres@localhost:5432/my_project");
     expect(makefile).toContain("-tags '$(MIGRATE_TAGS)'");
+    expect(makefile).toContain("-database '$(MIGRATE_URL)'");
 
     const readme = findByPath(tree.root, ["README.md"]);
-    expect(readme).toContain("sqlc generate");
-    expect(readme).toContain("-tags 'postgres'");
+    expect(readme).toContain("go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate");
+    expect(readme).toContain("-tags postgres");
+    expect(readme).toContain("pgx://postgres:postgres@localhost:5432/my_project");
     expect(readme).toContain("go run ./cmd/api");
     expect(readme).toContain("GET /items");
     expect(readme).toContain("internal/service/    business logic");

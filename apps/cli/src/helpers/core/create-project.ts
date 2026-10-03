@@ -19,12 +19,14 @@ import { runOptionalStep } from "../../utils/optional-step";
 import { cliLog } from "../../utils/terminal-output";
 import { accent } from "../../utils/theme";
 import { initializeGit } from "./git";
-import { installDependencies } from "./install-dependencies";
+import { installDependencies, prepareDependencies } from "./install-dependencies";
 
 export interface CreateProjectOutcome {
   projectDir: string;
   install: "installed" | "skipped" | "cancelled" | "failed";
   installError: ProjectCreationError | null;
+  prepare: "prepared" | "skipped" | "cancelled" | "failed";
+  prepareError: ProjectCreationError | null;
   interrupted: boolean;
 }
 
@@ -104,6 +106,9 @@ async function runPostScaffoldSteps(
 
   let install: CreateProjectOutcome["install"] = "skipped";
   let installError: ProjectCreationError | null = null;
+  let prepare: CreateProjectOutcome["prepare"] = "skipped";
+  let prepareError: ProjectCreationError | null = null;
+
   if (options.install) {
     const installResult = await installDependencies({
       projectDir,
@@ -114,6 +119,19 @@ async function runPostScaffoldSteps(
       installError = installResult.error;
     } else {
       install = installResult.value;
+    }
+
+    if (install === "installed") {
+      const prepareResult = await prepareDependencies({
+        projectDir,
+        config: options,
+      });
+      if (prepareResult.isErr()) {
+        prepare = "failed";
+        prepareError = prepareResult.error;
+      } else {
+        prepare = prepareResult.value;
+      }
     }
   }
 
@@ -129,7 +147,14 @@ async function runPostScaffoldSteps(
     if (runCmd) cliLog.message(accent(runCmd));
   }
 
-  return { projectDir, install, installError, interrupted: wasAnyStepInterrupted() };
+  return {
+    projectDir,
+    install,
+    installError,
+    prepare,
+    prepareError,
+    interrupted: wasAnyStepInterrupted(),
+  };
 }
 
 function runCommandHint(options: ProjectConfig): string {

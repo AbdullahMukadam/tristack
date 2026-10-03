@@ -1,32 +1,32 @@
 from litestar import Litestar
 from litestar.config.cors import CORSConfig
 
+from .api.v1.router import health
+from .api.v1.router import router as v1_router
 from .config import get_settings
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+from .db import close_db, init_db
+{{else if (ne orm "none")}}
+from .db import close_db
+{{/if}}
 from .exceptions import exception_handlers
-from .middleware import RequestLoggingMiddleware
 
 settings = get_settings()
 
-{{#if (and (ne orm "none") (eq migrations "none"))}}
-async def on_startup() -> None:
-    from .db import init_db
-
-    await init_db()
-{{/if}}
 
 def create_app() -> Litestar:
-
-    from .api.v1.router import health, router as v1_router
-
     return Litestar(
         route_handlers=[health, v1_router],
         debug=settings.debug,
         cors_config=CORSConfig(allow_origins=settings.cors_origins),
         exception_handlers=exception_handlers,
-        middleware=[RequestLoggingMiddleware()],
-        {{#if (and (ne orm "none") (eq migrations "none"))}}
-        on_startup=[on_startup],
-        {{/if}}
+{{#if (and (ne orm "none") (eq migrations "none"))}}
+        on_startup=[init_db],
+{{/if}}
+{{#if (ne orm "none")}}
+        on_shutdown=[close_db],
+{{/if}}
     )
+
 
 app = create_app()

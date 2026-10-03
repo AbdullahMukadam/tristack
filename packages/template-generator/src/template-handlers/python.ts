@@ -13,7 +13,7 @@ function copyPythonBase(vfs: VirtualFileSystem, data: TemplateData): void {
     "python/base",
     (templatePath) =>
       templatePath.includes("pyproject-") ||
-      (config.framework === "django" && templatePath.includes("/{{project_slug}}/")),
+      (config.framework === "django" && templatePath.includes("/src/")),
   );
 
   const fileName =
