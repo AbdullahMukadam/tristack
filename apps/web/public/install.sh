@@ -67,13 +67,14 @@ main() {
   local platform version url tmp_dir
   platform="$(detect_platform)"
   version="${TRISTACK_VERSION:-$(get_latest_version)}"
+  version="${version#v}"
 
   info "Platform: ${platform}"
   info "Version:  v${version}"
 
   # Create temp directory
   tmp_dir="$(mktemp -d)"
-  trap 'rm -rf "$tmp_dir"' EXIT
+  trap "rm -rf '$tmp_dir'" EXIT
 
   # Download
   url="https://github.com/${REPO}/releases/download/v${version}/${platform}.tar.gz"
@@ -87,15 +88,29 @@ main() {
   # Install
   chmod +x "${tmp_dir}/${platform}"
 
-  if [ -w "$INSTALL_DIR" ]; then
+  if ! "${tmp_dir}/${platform}" --version >/dev/null 2>&1; then
+    error "The downloaded ${platform} binary does not run on this machine ($(uname -s) $(uname -m))."
+    error "Please report this at https://github.com/${REPO}/issues"
+    exit 1
+  fi
+
+  if mkdir -p "$INSTALL_DIR" 2>/dev/null && [ -w "$INSTALL_DIR" ]; then
     mv "${tmp_dir}/${platform}" "${INSTALL_DIR}/tristack"
   else
     info "Installing to ${INSTALL_DIR} (may need sudo)..."
+    sudo mkdir -p "$INSTALL_DIR"
     sudo mv "${tmp_dir}/${platform}" "${INSTALL_DIR}/tristack"
   fi
 
   info "Installed tristack ${version} to ${INSTALL_DIR}/tristack"
-  info "Run 'tristack --help' to get started"
+
+  case ":${PATH}:" in
+    *":${INSTALL_DIR}:"*) info "Run 'tristack --help' to get started" ;;
+    *)
+      warn "${INSTALL_DIR} is not on your PATH. Add it, for example:"
+      warn "  export PATH=\"${INSTALL_DIR}:\$PATH\""
+      ;;
+  esac
 }
 
 main "$@"

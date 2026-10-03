@@ -21,6 +21,16 @@ describe("release artifact packaging", () => {
   test("keeps gzip tarballs for the unix assets", () => {
     expect(releaseWorkflow).toContain("tar -czf");
   });
+
+  test("cross-compiles every platform for its own target instead of the runner's", () => {
+    expect(releaseWorkflow).toContain("--target=${{ matrix.target }}");
+    expect(releaseWorkflow).toMatch(/platform: macos-x64[\s\S]*?target: bun-darwin-x64/);
+  });
+
+  test("verifies artifacts before publishing", () => {
+    expect(releaseWorkflow).toContain('grep -q "${{ matrix.arch }}"');
+    expect(releaseWorkflow).toContain("Verify Release Zip");
+  });
 });
 
 describe("windows installer", () => {
@@ -54,11 +64,39 @@ describe("windows installer", () => {
     expect(installPs1).toContain("Get-Command tristack -All");
     expect(installPs1).toContain("Show-ShadowWarning");
   });
+
+  test("never assigns the read-only $IsWindows automatic variable of PowerShell 7", () => {
+    expect(installPs1).not.toMatch(/\$isWindows\s*=/i);
+  });
+
+  test("does not close the caller's session when run through irm | iex", () => {
+    expect(installPs1).toContain("if ($MyInvocation.MyCommand.Path)");
+  });
+
+  test("extracts tar-in-zip releases with the tar.exe that ships with Windows", () => {
+    expect(installPs1).toContain("System32\\tar.exe");
+  });
+
+  test("forces TLS 1.2 for Windows PowerShell 5.1", () => {
+    expect(installPs1).toContain("[Net.SecurityProtocolType]::Tls12");
+  });
 });
 
 describe("unix installer", () => {
   test("extracts the gzip tarballs the release actually publishes", () => {
     expect(installSh).toContain("tar -xzf");
     expect(installSh).not.toContain("tar -a ");
+  });
+
+  test("expands the temp dir when the cleanup trap is set, so set -u can't fail it", () => {
+    expect(installSh).toContain(`trap "rm -rf '$tmp_dir'" EXIT`);
+  });
+
+  test("accepts a v-prefixed TRISTACK_VERSION", () => {
+    expect(installSh).toContain('version="${version#v}"');
+  });
+
+  test("checks the binary runs before installing it", () => {
+    expect(installSh).toContain("--version >/dev/null 2>&1");
   });
 });

@@ -5,13 +5,15 @@
 # and adds it to your PATH.
 
 $ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 $Repo = "AbdullahMukadam/tristack"
-$InstallDir = Join-Path $env:LOCALAPPDATA "tristack\bin"
+$InstallDir = if ($env:TRISTACK_INSTALL_DIR) { $env:TRISTACK_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA "tristack\bin" }
 $ApiBase = "https://api.github.com/repos/$Repo"
 
-function Write-Info { Write-Host "▸ $args" -ForegroundColor Green }
-function Write-Warn { Write-Host "▸ $args" -ForegroundColor Yellow }
+function Write-Info { Write-Host "> $args" -ForegroundColor Green }
+function Write-Warn { Write-Host "! $args" -ForegroundColor Yellow }
 
 # Thrown rather than calling exit directly so every failure surfaces through the
 # single catch below, which keeps one readable message when run via `irm | iex`.
@@ -21,22 +23,20 @@ function Write-Fail {
 }
 
 function Get-Platform {
-    $os = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
-    $arch = $os.ToString().ToLower()
-    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription -match "Windows"
-
-    if ($isWindows) {
-        if ($arch -eq "x64") { return "tristack-windows-x64" }
+    if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
         return $null
     }
 
-    # This script is Windows-only; the bash installer covers macOS/Linux.
+    $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
+    if ($arch -eq "x64") { return "tristack-windows-x64" }
+
+    # This script is Windows x64 only; the bash installer covers macOS/Linux.
     return $null
 }
 
 # Expand-Archive fails cryptically on archives that are not zips. Releases built
 # before the packaging fix shipped an uncompressed tar named .zip, so check the
-# PK magic number first and report the mismatch ourselves.
+# PK magic number first and fall back to the tar.exe that ships with Windows.
 function Test-ZipMagic {
     param([Parameter(Mandatory = $true)][string]$Path)
 
@@ -48,6 +48,27 @@ function Test-ZipMagic {
     }
     finally {
         $stream.Dispose()
+    }
+}
+
+function Expand-ReleaseAsset {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$Destination
+    )
+
+    if (Test-ZipMagic -Path $Path) {
+        Expand-Archive -Path $Path -DestinationPath $Destination -Force
+        return
+    }
+
+    $tar = Join-Path $env:SystemRoot "System32\tar.exe"
+    if (-not (Test-Path -LiteralPath $tar)) {
+        Write-Fail "The downloaded asset is not a zip archive and tar.exe is unavailable. Install with: uv tool install tristack"
+    }
+    & $tar -xf $Path -C $Destination
+    if ($LASTEXITCODE -ne 0) {
+        Write-Fail "Could not extract $Path (tar exited with $LASTEXITCODE)."
     }
 }
 
@@ -75,8 +96,6 @@ function Add-InstallDirToPath {
 function Show-ShadowWarning {
     param([Parameter(Mandatory = $true)][string]$InstalledPath)
 
-    # The persisted PATH was just changed but this session still has the old one,
-    # so anything found here is a binary that wins until the shell is restarted.
     $others = @(Get-Command tristack -All -ErrorAction SilentlyContinue |
         Where-Object { $_.Source -and $_.Source -ine $InstalledPath })
 
@@ -97,16 +116,17 @@ try {
         Write-Fail "This installer is for 64-bit Windows only. On macOS/Linux use: curl -fsSL https://tristack.space/install.sh | bash"
     }
 
-    Write-Info "Checking for the latest version..."
-    $release = Invoke-RestMethod -Uri "$ApiBase/releases/latest" -Headers @{ "User-Agent" = "tristack-installer" }
-    $tag = $release.tag_name
-    if (-not $tag) {
-        Write-Fail "Could not read the latest release tag from GitHub. Check network access to api.github.com, or set `$TRISTACK_VERSION to pin a version."
-    }
-
-    $version = $tag.TrimStart("v")
     if ($env:TRISTACK_VERSION) {
         $version = $env:TRISTACK_VERSION.TrimStart("v")
+    }
+    else {
+        Write-Info "Checking for the latest version..."
+        $release = Invoke-RestMethod -Uri "$ApiBase/releases/latest" -Headers @{ "User-Agent" = "tristack-installer" }
+        $tag = $release.tag_name
+        if (-not $tag) {
+            Write-Fail "Could not read the latest release tag from GitHub. Check network access to api.github.com, or set `$env:TRISTACK_VERSION to pin a version."
+        }
+        $version = $tag.TrimStart("v")
     }
 
     Write-Info "Platform: $platform"
@@ -118,17 +138,18 @@ try {
     $url = "https://github.com/$Repo/releases/download/v$version/$platform.exe.zip"
     $zipPath = Join-Path $env:TEMP "tristack-$version.zip"
     Write-Info "Downloading from $url..."
-    Invoke-WebRequest -Uri $url -OutFile $zipPath -UseBasicParsing
-
-    if (-not (Test-ZipMagic -Path $zipPath)) {
-        Remove-Item -LiteralPath $zipPath -Force -ErrorAction SilentlyContinue
-        Write-Fail "The downloaded asset is not a zip archive. Releases before the packaging fix shipped a tar file named .zip; install this version with: uv tool install tristack"
+    try {
+        Invoke-WebRequest -Uri $url -OutFile $zipPath -UseBasicParsing
+    }
+    catch {
+        Write-Fail "Could not download $url. Check that v$version exists at https://github.com/$Repo/releases ($($_.Exception.Message))"
     }
 
     Write-Info "Extracting..."
     $tmpDir = Join-Path $env:TEMP "tristack-$version"
     if (Test-Path -LiteralPath $tmpDir) { Remove-Item -LiteralPath $tmpDir -Recurse -Force }
-    Expand-Archive -Path $zipPath -DestinationPath $tmpDir -Force
+    New-Item -ItemType Directory -Force -Path $tmpDir | Out-Null
+    Expand-ReleaseAsset -Path $zipPath -Destination $tmpDir
 
     $exe = Get-ChildItem -LiteralPath $tmpDir -Filter "*.exe" -Recurse | Select-Object -First 1
     if (-not $exe) {
@@ -139,13 +160,24 @@ try {
     Move-Item -LiteralPath $exe.FullName -Destination $binaryPath -Force
     Remove-Item -LiteralPath $zipPath, $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
 
-    Add-InstallDirToPath -Dir $InstallDir
-    Show-ShadowWarning -InstalledPath $binaryPath
+    $versionOutput = @(& $binaryPath --version 2>$null)
+    if ($LASTEXITCODE -ne 0) {
+        Write-Fail "Installed $binaryPath but it failed to run. Please report this at https://github.com/$Repo/issues"
+    }
+    $installed = $versionOutput[0]
 
-    Write-Info "Installed tristack v$version to $binaryPath"
-    Write-Info "Please restart your terminal, then run 'tristack --help'"
+    if ($env:TRISTACK_NO_MODIFY_PATH -ne "1") {
+        Add-InstallDirToPath -Dir $InstallDir
+        $env:Path = "$InstallDir;$env:Path"
+        Show-ShadowWarning -InstalledPath $binaryPath
+    }
+
+    Write-Info "Installed tristack $installed to $binaryPath"
+    Write-Info "Run 'tristack --help' to get started (open a new terminal if the command is not found)."
 }
 catch {
-    Write-Host "▸ $($_.Exception.Message)" -ForegroundColor Red
-    exit 1
+    Write-Host "x $($_.Exception.Message)" -ForegroundColor Red
+    if ($MyInvocation.MyCommand.Path) {
+        exit 1
+    }
 }

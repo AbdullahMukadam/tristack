@@ -47,22 +47,31 @@ jobs:
             os: ubuntu-latest
             tag: manylinux_2_17_x86_64
             bin: tristack-linux-x64
+            target: bun-linux-x64
+            arch: x86-64
           - platform: linux-arm64
             os: ubuntu-24.04-arm
             tag: manylinux_2_17_aarch64
             bin: tristack-linux-arm64
+            target: bun-linux-arm64
+            arch: aarch64
           - platform: macos-x64
             os: macos-14
             tag: macosx_10_13_x86_64
             bin: tristack-macos-x64
+            target: bun-darwin-x64
+            arch: x86_64
           - platform: macos-arm64
             os: macos-14
             tag: macosx_11_0_arm64
             bin: tristack-macos-arm64
+            target: bun-darwin-arm64
+            arch: arm64
           - platform: windows-x64
             os: windows-latest
             tag: win_amd64
             bin: tristack-windows-x64.exe
+            target: bun-windows-x64
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -85,7 +94,7 @@ jobs:
         run: bun run build:cli
 
       - name: Build Binary
-        run: bun build --compile --minify-whitespace --minify-syntax apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
+        run: bun build --compile --minify-whitespace --minify-syntax --target=${{ matrix.target }} apps/cli/dist/cli.mjs --outfile "${{ matrix.bin }}"
         shell: bash
 
       - name: Create Release Tarball
@@ -98,6 +107,21 @@ jobs:
       - name: Create Release Zip
         if: matrix.platform == 'windows-x64'
         run: Compress-Archive -Path "${{ matrix.bin }}" -DestinationPath "${{ matrix.bin }}.zip" -Force
+        shell: pwsh
+
+      - name: Verify Binary Architecture
+        if: matrix.platform != 'windows-x64'
+        run: |
+          file "${{ matrix.bin }}"
+          file "${{ matrix.bin }}" | grep -q "${{ matrix.arch }}"
+        shell: bash
+
+      - name: Verify Release Zip
+        if: matrix.platform == 'windows-x64'
+        run: |
+          Expand-Archive -Path "${{ matrix.bin }}.zip" -DestinationPath zip-check -Force
+          & "zip-check/${{ matrix.bin }}" --version
+          if ($LASTEXITCODE -ne 0) { exit 1 }
         shell: pwsh
 
       - name: Build Wheel
