@@ -4,7 +4,7 @@ Status: living document. Add a new section per planned feature; keep acceptance 
 
 ## 1. Problem statement
 
-Building a backend project today means either copy-pasting boilerplate (error-prone, inconsistent) or pulling in a full-stack template that forces an entire architecture you did not choose. Developers want a way to pick exactly the stack they need and get a reproducible, minimal, dependency-pinned starter project.
+Building a backend project today means either copy-pasting boilerplate (error-prone, inconsistent) or pulling in a full-stack template that forces an entire architecture you did not choose. Developers want a way to pick exactly the stack they need and get a reproducible, minimal starter project whose dependencies are locked at install.
 
 TriStack: a project scaffolding CLI that turns a stack selection into a reproducible starter project across **Python** (Phase 1), **Go** (Phase 2), and **Rust** (Phase 3). Built as a fork of [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack) (MIT).
 
@@ -55,7 +55,7 @@ Per-language dimensions defined in `packages/types/src/constants.ts`:
 - **Go** (Phase 2): frameworks `gin, fiber, echo, chi, stdlib, none`; ORMs `sqlc, gorm, sqlx, none`; migrations `goose, golang-migrate, none`; addons `docker, air, golangci-lint, github-actions, none`; frontends `htmx, none`.
 - **Rust** (Phase 3): frameworks `axum, actix-web, rocket, warp, salvo, loco, none`; ORMs `seaorm, diesel, sqlx-rust, none`; migrations `none`; addons `docker, cargo-watch, clippy, github-actions, none`; frontends `htmx, none`.
 
-Compatibility rules between a dimension and the Core Stack are declared in the shared type layer and enforced by CLI validation, silent prompts, and the web Stack Builder compatibility engine. Example rules: Django brings its own ORM/migrations; Tortoise has no Alembic support; no-framework projects are bare.
+Compatibility rules between a dimension and the Core Stack are declared in the shared type layer and enforced by CLI validation, silent prompts, and the web Stack Builder compatibility engine. Example rules: Django brings its own ORM/migrations; Tortoise has no Alembic support; Tortoise does not run under Flask; no-framework projects are bare.
 
 ### 5.3 Template generation
 
@@ -77,7 +77,7 @@ Compatibility rules between a dimension and the Core Stack are declared in the s
 
 ## 6. Quality requirements
 
-- Type-safe, dependency-pinned scaffolding (strict TypeScript across the repo).
+- Type-safe scaffolding (strict TypeScript across the repo). Generated projects are lockfile-reproducible: `pyproject.toml` declares compatible ranges, and the lockfile written at install (`uv.lock`, `poetry.lock`, `go.sum`, `Cargo.lock`) is the pin.
 - Deterministic, reproducible tests (see testing tiers in `docs/CONTEXT.md` and `docs/adr/0001-use-tiered-matrix-testing-for-cli-stack-coverage.md`).
 - No generated project may reference `packages/`, `templates/`, or repo-internal paths.
 - Pre-existing unrelated typecheck error in `packages/template-generator/src/utils/add-deps.ts:13` acknowledged; do not expand scope to fix it unless scoped.
