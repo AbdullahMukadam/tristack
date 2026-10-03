@@ -161,6 +161,33 @@ function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResul
       }),
     );
   }
+  if (config.migrations === "alembic" && config.orm === "none") {
+    return Result.err(
+      new ValidationError({
+        message: `Alembic migrates SQLAlchemy models — pick orm sqlmodel or sqlalchemy (or set migrations to "none").`,
+        field: "migrations",
+        value: config.migrations,
+      }),
+    );
+  }
+  if (config.orm && config.orm !== "none" && config.database === "none") {
+    return Result.err(
+      new ValidationError({
+        message: `An ORM needs a database — pick sqlite, postgres, or mysql (or set orm to "none").`,
+        field: "database",
+        value: config.database,
+      }),
+    );
+  }
+  if (config.framework === "flask" && config.orm === "tortoise") {
+    return Result.err(
+      new ValidationError({
+        message: `Tortoise ORM needs a single long-lived event loop, which Flask's per-request async views don't provide — use SQLModel or SQLAlchemy with Flask (or pick FastAPI/Litestar for Tortoise).`,
+        field: "orm",
+        value: config.orm,
+      }),
+    );
+  }
   if (config.frontend === "htmx" && config.framework === "none") {
     return Result.err(
       new ValidationError({

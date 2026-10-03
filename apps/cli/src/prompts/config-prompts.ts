@@ -90,14 +90,15 @@ export async function gatherConfig(
         const fw = results.framework ?? flags.framework;
         if (lang === "python" && fw === "django") return "none" as ORM;
         if (fw === "none") return "none" as ORM;
-        return getORMChoice(flags.orm, lang, previousAnswer);
+        return getORMChoice(flags.orm, lang, previousAnswer, fw);
       },
       migrations: async ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
         const orm = results.orm ?? flags.orm;
         if (lang === "python" && fw === "django") return "none" as Migrations;
-        if (lang === "python" && orm === "tortoise") return "none" as Migrations;
+        if (lang === "python" && (orm === "tortoise" || orm === "none"))
+          return "none" as Migrations;
         if (fw === "none") return "none" as Migrations;
         return getMigrationsChoice(flags.migrations, lang, previousAnswer);
       },

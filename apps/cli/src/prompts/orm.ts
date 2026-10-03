@@ -27,8 +27,11 @@ export async function getORMChoice(
   flag: ORM | undefined,
   language: Language,
   previousAnswer?: ORM,
+  framework?: string,
 ): Promise<ORM | symbol> {
-  const options = optionsFor(language).filter((option) => option.value !== "none");
+  const options = optionsFor(language).filter(
+    (option) => option.value !== "none" && !(framework === "flask" && option.value === "tortoise"),
+  );
   const initialValue = preferValidInitial(
     options,
     flag ?? previousAnswer,

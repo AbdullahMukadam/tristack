@@ -336,6 +336,33 @@ describe("no-framework stacks", () => {
   });
 });
 
+describe("flask + tortoise", () => {
+  test("switches the orm to sqlmodel and disables tortoise for flask", () => {
+    const stack = createStack({ framework: "flask", orm: "tortoise", migrations: "none" });
+    const analysis = analyzeStackCompatibility(stack);
+    expect(analysis.adjustedStack).toMatchObject({ framework: "flask", orm: "sqlmodel" });
+    expect(analysis.changes.map((change) => change.category)).toEqual(["orm"]);
+    expect(getDisabledReason(stack, "orm", "tortoise")).toContain("Flask");
+    expect(getDisabledReason(createStack({ framework: "fastapi" }), "orm", "tortoise")).toBe(null);
+  });
+});
+
+describe("orm, database, and alembic dependencies", () => {
+  test("switches the database to sqlite when an orm has no database", () => {
+    const stack = createStack({ framework: "fastapi", orm: "sqlmodel", database: "none" });
+    const analysis = analyzeStackCompatibility(stack);
+    expect(analysis.adjustedStack).toMatchObject({ orm: "sqlmodel", database: "sqlite" });
+    expect(getDisabledReason(stack, "database", "none")).toContain("ORM");
+  });
+
+  test("switches alembic to none when there is no orm", () => {
+    const stack = createStack({ framework: "fastapi", orm: "none", migrations: "alembic" });
+    const analysis = analyzeStackCompatibility(stack);
+    expect(analysis.adjustedStack).toMatchObject({ orm: "none", migrations: "none" });
+    expect(getDisabledReason(stack, "migrations", "alembic")).toContain("Alembic");
+  });
+});
+
 describe("stack builder command generation", () => {
   test("emits the short default command with --yes", () => {
     expect(generateStackCommand(DEFAULT_STACK)).toBe("uvx tristack my-tristack-app --yes");
