@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 
-import type { ORM } from "@tristack/types";
+import type { Database, ORM } from "@tristack/types";
 
 import { createVirtual } from "../src/index";
 import { collectFiles } from "./setup";
@@ -52,6 +52,263 @@ describe("Actix Web generated project", () => {
       expect(files.get("src/db.rs")).toContain(`"${expected}"`);
     });
   }
+});
+
+describe("Actix Web Cargo.toml dependencies", () => {
+  for (const frontend of ["none", "htmx"] as const) {
+    it(`declares actix-web = "4" with frontend ${frontend}`, async () => {
+      const result = await createVirtual({
+        projectName: "actix-example",
+        language: "rust",
+        framework: "actix-web",
+        frontend,
+        orm: "none",
+        database: "none",
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      if (result.isErr()) throw result.error;
+      const files = collectFiles(result.value.root, result.value.root.path);
+      const cargo = files.get("Cargo.toml")!;
+      expect(cargo).toContain('actix-web = "4"');
+    });
+  }
+
+  it('declares askama = "0.14" only when frontend is htmx', async () => {
+    const htmxResult = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      frontend: "htmx",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    if (htmxResult.isErr()) throw htmxResult.error;
+    const htmxFiles = collectFiles(htmxResult.value.root, htmxResult.value.root.path);
+    expect(htmxFiles.get("Cargo.toml")).toContain('askama = "0.14"');
+
+    const apiResult = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      frontend: "none",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    if (apiResult.isErr()) throw apiResult.error;
+    const apiFiles = collectFiles(apiResult.value.root, apiResult.value.root.path);
+    expect(apiFiles.get("Cargo.toml")).not.toContain("askama");
+  });
+
+  const ormDriverCases: Array<{
+    orm: ORM;
+    database: Database;
+    expectedSnippet: string;
+  }> = [
+    {
+      orm: "seaorm",
+      database: "sqlite",
+      expectedSnippet:
+        'sea-orm = { version = "1", features = ["sqlx-sqlite", "runtime-tokio-rustls"] }',
+    },
+    {
+      orm: "seaorm",
+      database: "postgres",
+      expectedSnippet:
+        'sea-orm = { version = "1", features = ["sqlx-postgres", "runtime-tokio-rustls"] }',
+    },
+    {
+      orm: "seaorm",
+      database: "mysql",
+      expectedSnippet:
+        'sea-orm = { version = "1", features = ["sqlx-mysql", "runtime-tokio-rustls"] }',
+    },
+    {
+      orm: "diesel",
+      database: "sqlite",
+      expectedSnippet: 'diesel = { version = "2", features = ["sqlite"] }',
+    },
+    {
+      orm: "diesel",
+      database: "postgres",
+      expectedSnippet: 'diesel = { version = "2", features = ["postgres"] }',
+    },
+    {
+      orm: "diesel",
+      database: "mysql",
+      expectedSnippet: 'diesel = { version = "2", features = ["mysql"] }',
+    },
+    {
+      orm: "sqlx-rust",
+      database: "sqlite",
+      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }',
+    },
+    {
+      orm: "sqlx-rust",
+      database: "postgres",
+      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }',
+    },
+    {
+      orm: "sqlx-rust",
+      database: "mysql",
+      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "mysql"] }',
+    },
+  ];
+
+  for (const { orm, database, expectedSnippet } of ormDriverCases) {
+    it(`declares driver dependency for ${orm} with ${database}`, async () => {
+      const result = await createVirtual({
+        projectName: "actix-example",
+        language: "rust",
+        framework: "actix-web",
+        orm,
+        database,
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      if (result.isErr()) throw result.error;
+      const files = collectFiles(result.value.root, result.value.root.path);
+      const cargo = files.get("Cargo.toml")!;
+      expect(cargo).toContain(expectedSnippet);
+      if (orm === "diesel" && database === "sqlite") {
+        expect(cargo).toContain('libsqlite3-sys = { version = "0.32", features = ["bundled"] }');
+      }
+    });
+  }
+});
+
+describe("Actix Web HTMX vs API frontend emission", () => {
+  it("htmx frontend emits Askama template files and routes", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      frontend: "htmx",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    if (result.isErr()) throw result.error;
+    const files = collectFiles(result.value.root, result.value.root.path);
+    expect(files.has("templates/index.html")).toBe(true);
+    expect(files.has("templates/now.html")).toBe(true);
+    expect(files.get("templates/index.html")).toContain('hx-get="/web/now"');
+    expect(files.get("templates/now.html")).toContain("{{ now }}");
+
+    const main = files.get("src/main.rs")!;
+    expect(main).toContain("struct IndexTemplate");
+    expect(main).toContain("struct NowTemplate");
+    expect(main).toContain('.route("/health", web::get().to(health))');
+    expect(main).toContain('.route("/", web::get().to(index))');
+    expect(main).toContain('.route("/web/now", web::get().to(now))');
+  });
+
+  it("api frontend (none) omits HTML templates and includes JSON health endpoint", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      frontend: "none",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    if (result.isErr()) throw result.error;
+    const files = collectFiles(result.value.root, result.value.root.path);
+    expect(files.has("templates/index.html")).toBe(false);
+    expect(files.has("templates/now.html")).toBe(false);
+
+    const main = files.get("src/main.rs")!;
+    expect(main).not.toContain("IndexTemplate");
+    expect(main).not.toContain("NowTemplate");
+    expect(main).not.toContain("/web/now");
+    expect(main).toContain('.route("/health", web::get().to(health))');
+    expect(main).toContain('{\\"status\\":\\"ok\\"}');
+  });
+});
+
+describe("Actix Web server databases (PostgreSQL and MySQL)", () => {
+  for (const orm of ["seaorm", "diesel", "sqlx-rust"] satisfies ORM[]) {
+    it(`${orm} configures Postgres URL in env and db.rs with newline termination`, async () => {
+      const result = await createVirtual({
+        projectName: "actix-example",
+        language: "rust",
+        framework: "actix-web",
+        orm,
+        database: "postgres",
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      if (result.isErr()) throw result.error;
+      const files = collectFiles(result.value.root, result.value.root.path);
+      const expectedUrl = "postgres://postgres:postgres@localhost:5432/actix_example";
+      expect(files.get(".env.example")).toContain(`DATABASE_URL=${expectedUrl}`);
+      expect(files.get("src/db.rs")).toContain(`"${expectedUrl}"`);
+
+      const sources = [...files].filter(([path]) => path.endsWith(".rs"));
+      expect(sources.length).toBeGreaterThan(0);
+      for (const [path, content] of sources) {
+        expect(content.endsWith("\n"), path).toBe(true);
+      }
+    });
+
+    it(`${orm} configures MySQL URL in env and db.rs with newline termination`, async () => {
+      const result = await createVirtual({
+        projectName: "actix-example",
+        language: "rust",
+        framework: "actix-web",
+        orm,
+        database: "mysql",
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      if (result.isErr()) throw result.error;
+      const files = collectFiles(result.value.root, result.value.root.path);
+      const expectedUrl = "mysql://root:password@127.0.0.1:3306/actix_example";
+      expect(files.get(".env.example")).toContain(`DATABASE_URL=${expectedUrl}`);
+      expect(files.get("src/db.rs")).toContain(`"${expectedUrl}"`);
+
+      const sources = [...files].filter(([path]) => path.endsWith(".rs"));
+      expect(sources.length).toBeGreaterThan(0);
+      for (const [path, content] of sources) {
+        expect(content.endsWith("\n"), path).toBe(true);
+      }
+    });
+  }
+
+  it("no orm omits DATABASE_URL from .env.example and omits src/db.rs", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    if (result.isErr()) throw result.error;
+    const files = collectFiles(result.value.root, result.value.root.path);
+    const envContent = files.get(".env.example")!;
+    expect(envContent).toContain("APP_NAME=actix-example");
+    expect(envContent).toContain("PORT=8000");
+    expect(envContent).not.toContain("DATABASE_URL");
+    expect(files.has("src/db.rs")).toBe(false);
+  });
 });
 
 describe("Rust Docker addon with Actix Web", () => {
@@ -118,5 +375,106 @@ describe("Rust Docker addon with Actix Web", () => {
         "DATABASE_URL: sqlite://docker_example.db?mode=rwc",
       );
     });
+
+    it(`${orm} Dockerfile omits C client libraries for postgres and mysql`, async () => {
+      for (const database of ["postgres", "mysql"] as const) {
+        const result = await createVirtual({
+          projectName: "docker-example",
+          language: "rust",
+          framework: "actix-web",
+          orm,
+          database,
+          migrations: "none",
+          packageManager: "cargo",
+          addons: ["docker"],
+        });
+        if (result.isErr()) throw result.error;
+        const files = collectFiles(result.value.root, result.value.root.path);
+        const dockerfile = files.get("Dockerfile")!;
+        expect(dockerfile).not.toContain("libpq-dev");
+        expect(dockerfile).not.toContain("libpq5");
+        expect(dockerfile).not.toContain("default-libmysqlclient-dev");
+        expect(dockerfile).not.toContain("libmariadb3");
+      }
+    });
   }
+});
+
+describe("Actix Web configuration and validation error handling", () => {
+  for (const orm of ["seaorm", "diesel", "sqlx-rust"] as const) {
+    it(`rejects ${orm} when database is set to none`, async () => {
+      const result = await createVirtual({
+        projectName: "actix-example",
+        language: "rust",
+        framework: "actix-web",
+        orm,
+        database: "none",
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      expect(result.isErr()).toBe(true);
+      if (result.isErr()) {
+        expect(result.error.message).toContain("An ORM needs a database");
+      }
+    });
+  }
+
+  it("rejects incompatible ORM for the Rust language", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      orm: "sqlalchemy" as any,
+      database: "sqlite",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) {
+      expect(result.error.message).toContain(
+        'ORM "sqlalchemy" is not available for the "rust" language.',
+      );
+    }
+  });
+
+  it("rejects incompatible migrations tool for the Rust language", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      orm: "seaorm",
+      database: "sqlite",
+      migrations: "alembic" as any,
+      packageManager: "cargo",
+      addons: [],
+    });
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) {
+      expect(result.error.message).toContain(
+        'Migrations tool "alembic" is not available for the "rust" language.',
+      );
+    }
+  });
+
+  it("rejects incompatible frontend for the Rust language", async () => {
+    const result = await createVirtual({
+      projectName: "actix-example",
+      language: "rust",
+      framework: "actix-web",
+      frontend: "react" as any,
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: [],
+    });
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) {
+      expect(result.error.message).toContain(
+        'Frontend "react" is not available for the "rust" language.',
+      );
+    }
+  });
 });
