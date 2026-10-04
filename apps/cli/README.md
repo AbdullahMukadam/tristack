@@ -34,7 +34,7 @@ Non-interactive default project:
 uvx tristack my-api --yes
 ```
 
-Go and Rust developers run the same `tristack` binary. The native installers are on the roadmap:
+Go and Rust developers run the same `tristack` binary, installed with:
 
 ```bash
 # Windows (PowerShell)
