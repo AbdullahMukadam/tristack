@@ -55,8 +55,8 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 {{#if (ne orm "none")}}
-	r.GET("/items", h.ListItems)
-	r.POST("/items", h.CreateItem)
+	r.GET("/api/v1/items", h.ListItems)
+	r.POST("/api/v1/items", h.CreateItem)
 {{/if}}
 	webHandler := gin.WrapH(webSrv.Mux())
 	r.GET("/", webHandler)

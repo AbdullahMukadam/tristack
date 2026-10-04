@@ -77,7 +77,7 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
       ? "- `cmd/api` — bare entrypoint; add your own logic."
       : config.orm === "none"
         ? "- `GET /health` — liveness probe."
-        : "- `GET /health` — liveness probe.\n- `GET /items` / `POST /items` — example resource; replace with your own models, repositories, and handlers.";
+        : "- `GET /health` — liveness probe.\n- `GET /api/v1/items` / `POST /api/v1/items` — example resource; replace with your own models, repositories, and handlers.";
 
   const layout =
     config.framework === "none"

@@ -14,11 +14,23 @@ RUN CGO_ENABLED=0 go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate
 RUN mkdir -p /out/data
 {{/if}}
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/{{project_slug}} ./cmd/api
+{{#if (eq migrations "goose")}}
+RUN CGO_ENABLED=0 GOBIN=/out go install github.com/pressly/goose/v3/cmd/goose@v3.22.1
+{{else if (eq migrations "golang-migrate")}}
+RUN CGO_ENABLED=0 GOBIN=/out go install -tags '{{#if (eq database "postgres")}}postgres{{else if (eq database "mysql")}}mysql{{else}}sqlite{{/if}}' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1
+{{/if}}
 
 FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app
 
 COPY --from=builder /out/{{project_slug}} /usr/local/bin/{{project_slug}}
+{{#if (eq migrations "goose")}}
+COPY --from=builder /out/goose /usr/local/bin/goose
+COPY migrations /migrations
+{{else if (eq migrations "golang-migrate")}}
+COPY --from=builder /out/migrate /usr/local/bin/migrate
+COPY db/migrations /migrations
+{{/if}}
 {{#if (eq database "sqlite")}}
 COPY --from=builder --chown=nonroot:nonroot /out/data /data
 ENV DATABASE_URL=/data/{{project_slug}}.db

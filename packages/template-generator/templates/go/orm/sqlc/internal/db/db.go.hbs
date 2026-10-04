@@ -41,8 +41,12 @@ func Connect() (*sql.DB, error) {
 		return nil, fmt.Errorf("open database: %w", err)
 	}
 
+{{#if (eq database "sqlite")}}
+	db.SetMaxOpenConns(1)
+{{else}}
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(25)
+{{/if}}
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := db.Ping(); err != nil {

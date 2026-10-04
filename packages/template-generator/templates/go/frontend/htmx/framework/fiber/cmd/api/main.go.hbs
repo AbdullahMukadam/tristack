@@ -58,8 +58,8 @@ func main() {
 		return c.JSON(fiber.Map{"status": "ok"})
 	})
 {{#if (ne orm "none")}}
-	app.Get("/items", h.ListItems)
-	app.Post("/items", h.CreateItem)
+	app.Get("/api/v1/items", h.ListItems)
+	app.Post("/api/v1/items", h.CreateItem)
 {{/if}}
 	app.Use(adaptor.HTTPHandler(webSrv.Mux()))
 

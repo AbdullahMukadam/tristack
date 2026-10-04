@@ -52,7 +52,8 @@ internal/
   jobs/                        # new: task queues
   web/                         # new: server-rendered frontends (templ/htmx)
 pkg/                           # optional shared libraries
-migrations/                    # goose / golang-migrate
+migrations/                    # goose
+db/migrations/                 # golang-migrate
 queries/  schema/              # sqlc sources
 ```
 

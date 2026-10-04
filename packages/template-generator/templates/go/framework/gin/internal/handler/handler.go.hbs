@@ -9,6 +9,8 @@ import (
 	"{{project_slug}}/internal/service"
 )
 
+const maxBodyBytes = 1 << 20
+
 type Handler struct {
 	items *service.ItemService
 }
@@ -30,6 +32,7 @@ func (h Handler) CreateItem(c *gin.Context) {
 	var body struct {
 		Name string `json:"name"`
 	}
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxBodyBytes)
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
 		return

@@ -99,7 +99,11 @@ describe("getRuntimeProfile", () => {
     expect(runtime.install.label).toBe("go mod tidy");
     expect(runtime.prepare).toEqual([]);
     expect(runtime.run({ port: 8765 }).env).toEqual({ PORT: "8765" });
-    expect(runtime.probes.map((p) => p.path)).toEqual(["/health", "/items", "/items"]);
+    expect(runtime.probes.map((p) => p.path)).toEqual([
+      "/health",
+      "/api/v1/items",
+      "/api/v1/items",
+    ]);
   });
 
   test("go + sqlc + golang-migrate: prepare generates then migrates with tags and a real DSN", () => {

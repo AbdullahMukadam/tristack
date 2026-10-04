@@ -1,5 +1,71 @@
 services:
+  app:
+    build: .
+{{#if (ne framework "none")}}
+    ports:
+      - "8000:8000"
+{{/if}}
 {{#if (eq database "postgres")}}
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/{{project_slug}}?sslmode=disable
+    restart: on-failure
+{{else if (eq database "mysql")}}
+    environment:
+      DATABASE_URL: root:password@tcp(db:3306)/{{project_slug}}?parseTime=true
+    restart: on-failure
+{{else if (eq database "sqlite")}}
+    volumes:
+      - appdata:/data
+{{/if}}
+{{#if (or (ne migrations "none") (eq database "postgres") (eq database "mysql"))}}
+    depends_on:
+{{#if (or (eq database "postgres") (eq database "mysql"))}}
+      db:
+        condition: service_started
+{{/if}}
+{{#if (ne migrations "none")}}
+      migrate:
+        condition: service_completed_successfully
+{{/if}}
+{{/if}}
+{{#if (ne migrations "none")}}
+
+  migrate:
+    build: .
+{{#if (eq migrations "goose")}}
+    entrypoint: ["/usr/local/bin/goose", "up"]
+    environment:
+      GOOSE_MIGRATION_DIR: /migrations
+{{#if (eq database "postgres")}}
+      GOOSE_DRIVER: postgres
+      GOOSE_DBSTRING: postgres://postgres:postgres@db:5432/{{project_slug}}?sslmode=disable
+{{else if (eq database "mysql")}}
+      GOOSE_DRIVER: mysql
+      GOOSE_DBSTRING: root:password@tcp(db:3306)/{{project_slug}}?parseTime=true
+{{else}}
+      GOOSE_DRIVER: sqlite3
+      GOOSE_DBSTRING: /data/{{project_slug}}.db
+{{/if}}
+{{else}}
+{{#if (eq database "postgres")}}
+    entrypoint: ["/usr/local/bin/migrate", "-path", "/migrations", "-database", "postgres://postgres:postgres@db:5432/{{project_slug}}?sslmode=disable", "up"]
+{{else if (eq database "mysql")}}
+    entrypoint: ["/usr/local/bin/migrate", "-path", "/migrations", "-database", "mysql://root:password@tcp(db:3306)/{{project_slug}}", "up"]
+{{else}}
+    entrypoint: ["/usr/local/bin/migrate", "-path", "/migrations", "-database", "sqlite:///data/{{project_slug}}.db", "up"]
+{{/if}}
+{{/if}}
+{{#if (eq database "sqlite")}}
+    volumes:
+      - appdata:/data
+{{else}}
+    restart: on-failure
+    depends_on:
+      - db
+{{/if}}
+{{/if}}
+{{#if (eq database "postgres")}}
+
   db:
     image: postgres:16
     environment:
@@ -10,7 +76,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 {{else if (eq database "mysql")}}
+
   db:
     image: mysql:8
     environment:
@@ -20,11 +90,11 @@ services:
       - "3306:3306"
     volumes:
       - mysqldata:/var/lib/mysql
-{{/if}}
 
 volumes:
-{{#if (eq database "postgres")}}
-  pgdata:
-{{else if (eq database "mysql")}}
   mysqldata:
+{{else if (eq database "sqlite")}}
+
+volumes:
+  appdata:
 {{/if}}

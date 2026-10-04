@@ -145,17 +145,26 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
   - **Fixed 2026-10-03.** Comments removed.
 - [x] **GO-11 Catch-all route.** `mux.HandleFunc("GET /", ...)` in `web.go` serves the home page for every unknown path; use `"GET /{$}"`.
   - **Fixed 2026-10-03.** `GET /{$}`.
-- [ ] **GO-12 CI:**
+- [x] **GO-12 CI:**
   - The gofmt check only runs when the `air` addon is selected.
   - `go mod tidy` mutates files in CI; use `go mod download` with `go mod verify`, or fail on a diff.
   - Go is `stable` in CI but `1.22` in the Dockerfile and `go.mod`.
-- [ ] **GO-13 Makefile and gitignore.** `make fmt` only lists files. `.gitignore` has both `bin/` and `!bin/`.
-- [ ] **GO-14 Small correctness items:**
+  - **Fixed 2026-10-03.** CI always checks gofmt, uses `go mod download && go mod verify`, and reads the Go version from `go.mod` (`go-version-file`). actionlint reports no issues, and the CI steps pass locally on a generated sqlc project. That work found a time bomb: `kr/pretty` (via gin, yaml.v3 and check.v1) imports `rogpeppe/go-internal` without requiring a version, so `go mod tidy` resolved the latest one (v1.16.0, which needs Go 1.25) and raised gin + Postgres projects to `go 1.25`. The `golang:1.22` Docker build (`GOTOOLCHAIN=local`) would then fail. `go.mod` now pins v1.13.1 under gin. A `go mod tidy` sweep of every framework × ORM × database combination stays on `go 1.22`, and the boot matrix now asserts the go directive after install.
+  - Accepted 2026-10-04: CI fails if `go.sum` was never committed (the review noted that `go mod tidy` in CI used to hide that). The CLI runs `go mod tidy` during install, so `go.sum` exists unless install was skipped.
+- [x] **GO-13 Makefile and gitignore.** `make fmt` only lists files. `.gitignore` has both `bin/` and `!bin/`.
+  - **Fixed 2026-10-03.** `make fmt` runs `gofmt -w .`. Removed `!bin/` and added `*.db` to `.gitignore`.
+- [x] **GO-14 Small correctness items:**
   - `time.Now()` should be `time.Now().UTC()`.
   - No `http.MaxBytesReader` on request bodies.
   - `SetMaxOpenConns(25)` on SQLite invites `database is locked`.
   - Repositories return interfaces ("accept interfaces, return structs").
-- [ ] **GO-15 Routes.** Go serves `/items`; PRD §7 and Python use `/api/v1/items`. Decide on one and record it.
+  - **Fixed 2026-10-03, except the last item.**
+    - `CreatedAt` uses `time.Now().UTC()`, and GORM gets `NowFunc` returning UTC.
+    - gin, echo, chi and stdlib wrap the request body in `http.MaxBytesReader` (1 MiB); fiber already limits bodies to 4 MB by default.
+    - SQLite uses `SetMaxOpenConns(1)`. Measured with 200 concurrent `POST /items`: the old pool returned 45 × 500 and the new one returned 200 × 201.
+    - **Won't fix: repositories returning interfaces.** The `ItemRepository` interface is what the service and its test fake depend on. Returning concrete structs would change 3 ORMs, the service and the test with no change in behavior.
+- [x] **GO-15 Routes.** Go serves `/items`; PRD §7 and Python use `/api/v1/items`. Decide on one and record it.
+  - **Decided and fixed 2026-10-03: `/api/v1/items` everywhere** (user's choice, matching Python and the PRD). The change covers every Go `main.go`, the HTMX nav link and empty-state text, the README, the runtime probes and tests, the web docs and the ROADMAP. The HTMX nav hides its API link when there is no ORM, because that route doesn't exist then. All 13 Go boot cases pass. On a running HTMX app, `/nope` and the old `/items` both return 404.
 
 ---
 
@@ -199,9 +208,10 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 
 ## Cross-cutting
 
-- [ ] **X-1 docker-compose.** There was no app service (only the database), and with SQLite or no database `services:` rendered empty, which is invalid. **Python fixed 2026-10-02:** there is always an `app` service built from the Dockerfile, wired to `db` with the right `DATABASE_URL`/`DB_HOST` when there is one; all rendered variants parse. Go and Rust are still open.
-- [ ] **X-2 HTMX from unpkg without SRI** (all three HTMX base templates). Add `integrity` and `crossorigin`, or vendor it into `static/`.
-- [ ] **X-4 Comments in Go and Rust `env.example`.** `# SQLite:`/`# Postgres:`/`# MySQL:` lines break the AGENTS.md no-comments rule (already removed from Python, PY-28).
+- [ ] **X-1 docker-compose.** There was no app service (only the database), and with SQLite or no database `services:` rendered empty, which is invalid. **Python fixed 2026-10-02:** there is always an `app` service built from the Dockerfile, wired to `db` with the right `DATABASE_URL`/`DB_HOST` when there is one; all rendered variants parse. **Go fixed 2026-10-04:** same shape. The app is wired to `db` with a Go-format `DATABASE_URL` and `restart: on-failure` (the app exits if the database isn't ready yet). SQLite persists `/data` in a named volume. Every rendered variant passes the compose-spec JSON schema (`check-jsonschema`); the old SQLite output failed it (`services: None is not of type 'object'`). Projects with goose or golang-migrate get a one-shot `migrate` service, which the code review asked for: without it, `docker compose up` served 500s from an empty database. The service uses the same image (the Dockerfile builds a CGO-free `goose`/`migrate` binary and copies the migrations to `/migrations`), so it runs as nonroot and shares the SQLite `/data` volume. `app` waits for it with `service_completed_successfully`. Checked without Docker: the builder's `go install` lines produce binaries with the right drivers (`sqlite`, `postgres`, `mysql`); replaying the SQLite flow with them (migrate, then start the app) gives POST 201 and GET 200; and golang-migrate's source turns `sqlite:///data/x.db` into `/data/x.db`. The compose run itself is still unverified. Rust is still open.
+- [x] **X-2 HTMX from unpkg without SRI** (all three HTMX base templates). Add `integrity` and `crossorigin`, or vendor it into `static/`.
+  - **Fixed 2026-10-04** in all four script tags (Go, Python app, Python Django, Rust). The `sha384` value was computed from the file, unpkg and jsDelivr serve the same bytes, and unpkg sends `Access-Control-Allow-Origin: *`, which `crossorigin="anonymous"` needs.
+- [ ] **X-4 Comments in Go and Rust `env.example`.** `# SQLite:`/`# Postgres:`/`# MySQL:` lines break the AGENTS.md no-comments rule (already removed from Python, PY-28). _Go fixed 2026-10-04; Rust is still open._
 - [ ] **X-3 Boot matrix coverage.** Add at least one Postgres and one MySQL case per language (service container in CI), plus the Go and Rust slices (ROADMAP B3/B4).
 
 ## Docs drift found during the audit
@@ -209,7 +219,7 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 - [ ] **D-1** ROADMAP Phase 1 says "shipped", and its exit criterion is phrased as universal, but only SQLite was ever booted (see X-3, PY-6, PY-7).
 - [x] **D-2** (fixed 2026-10-03 with GO-2) ROADMAP "Go boot coverage" row 3 (`EnsureSchema` bootstrap) is listed as covered, but the working-tree code doesn't compile (GO-2).
 - [x] **D-3** (fixed 2026-10-02: the PRD says lockfile-reproducible, per the PY-15 decision) PRD §1 and §6 promise "dependency-pinned" scaffolds; uv and pip output is unpinned (PY-15).
-- [ ] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11).
-- [ ] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go `migrations/` vs `db/migrations/` and Rust Askama parts are still open._
+- [ ] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11). _Go part fixed 2026-10-03 (GO-15); Rust is still open._
+- [ ] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go part was fixed 2026-10-04 (goose `migrations/`, golang-migrate `db/migrations/`); the Rust Askama part is still open._
 - [ ] **D-6** `docs/agents/issue-tracker.md` points to `AbdullahMukadam/tristack`; AGENTS.md says `AmanVarshney01/create-better-t-stack`. Pick one.
 - [ ] **D-7** ARCHITECTURE §1 still mentions a `create-tristack` command; AGENTS.md says the CLI is only `tristack` / `uvx tristack`.

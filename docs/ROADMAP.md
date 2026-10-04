@@ -53,7 +53,7 @@ Current Python Matrix Smoke slice (11 cases): FastAPI SQLModel/SQLAlchemy/Tortoi
 
 ### Go boot coverage
 
-Go's axes decompose into framework (gin, fiber, echo, chi, stdlib — each with its own routing/wiring), ORM (gorm, sqlx, sqlc — each with its own repository and `internal/db` package), migrations (goose, golang-migrate, `none`), database (sqlite, postgres, mysql), the htmx frontend overlay, and addons (docker, air, golangci-lint, github-actions). ORM is the highest-value axis because each ORM ships distinct data-access code; framework differences are confined to routing and all expose the same `/health`, `GET /items`, `POST /items`, and `PORT` contract. Addons and htmx are independent overlays and are exercised separately rather than crossed through every combination.
+Go's axes decompose into framework (gin, fiber, echo, chi, stdlib — each with its own routing/wiring), ORM (gorm, sqlx, sqlc — each with its own repository and `internal/db` package), migrations (goose, golang-migrate, `none`), database (sqlite, postgres, mysql), the htmx frontend overlay, and addons (docker, air, golangci-lint, github-actions). ORM is the highest-value axis because each ORM ships distinct data-access code; framework differences are confined to routing and all expose the same `/health`, `GET /api/v1/items`, `POST /api/v1/items`, and `PORT` contract. Addons and htmx are independent overlays and are exercised separately rather than crossed through every combination.
 
 A minimal high-coverage manual set is 8 combinations:
 

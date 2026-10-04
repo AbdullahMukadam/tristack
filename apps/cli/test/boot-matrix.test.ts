@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -501,6 +501,10 @@ describe.skipIf(process.env.BTS_BOOT !== "1")("boot matrix", () => {
           const installResult = await runCommand(profile.install, scaffoldDir);
           log += installResult.log;
           expect(installResult.ok, `install failed:\n${installResult.log}`).toBe(true);
+          if (config.language === "go") {
+            const goMod = await readFile(join(scaffoldDir, "go.mod"), "utf8");
+            expect(goMod, "go mod tidy raised the go directive").toMatch(/^go 1\.22(\.0)?$/m);
+          }
 
           for (const prepareCmd of profile.prepare) {
             const prepareResult = await runCommand(prepareCmd, scaffoldDir);

@@ -4,6 +4,7 @@ go 1.22
 
 {{#if (eq framework "gin")}}
 require github.com/gin-gonic/gin v1.10.0
+require github.com/rogpeppe/go-internal v1.13.1
 {{else if (eq framework "fiber")}}
 require github.com/gofiber/fiber/v2 v2.52.5
 {{else if (eq framework "echo")}}

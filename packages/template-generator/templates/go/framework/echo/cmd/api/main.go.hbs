@@ -48,8 +48,8 @@ func main() {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	})
 {{#if (ne orm "none")}}
-	e.GET("/items", h.ListItems)
-	e.POST("/items", h.CreateItem)
+	e.GET("/api/v1/items", h.ListItems)
+	e.POST("/api/v1/items", h.CreateItem)
 {{/if}}
 
 	addr := ":" + cfg.Port

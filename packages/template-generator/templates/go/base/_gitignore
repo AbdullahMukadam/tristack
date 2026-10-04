@@ -4,7 +4,6 @@
 *.so
 *.dylib
 bin/
-!bin/
 *.test
 *.out
 *.prof
@@ -12,6 +11,7 @@ vendor/
 go.work
 go.work.sum
 tmp/
+*.db
 .env
 .env.local
 .idea
