@@ -1,4 +1,4 @@
-use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 mod config;
 {{#if (ne orm "none")}}
@@ -39,7 +39,8 @@ mod tests {
 
     #[actix_web::test]
     async fn health_returns_status_ok() {
-        let app = App::new().route("/health", web::get().to(health));
+        let app =
+            actix_web::test::init_service(App::new().route("/health", web::get().to(health))).await;
         let request = actix_web::test::TestRequest::get()
             .uri("/health")
             .to_request();
