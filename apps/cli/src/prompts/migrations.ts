@@ -23,6 +23,7 @@ export async function getMigrationsChoice(
   previousAnswer?: Migrations,
 ): Promise<Migrations | symbol> {
   const options = optionsFor(language).filter((option) => option.value !== "none");
+  if (options.length === 0) return "none";
   const initialValue = preferValidInitial(
     options,
     flag ?? previousAnswer,
