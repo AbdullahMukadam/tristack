@@ -51,6 +51,24 @@ describe("Axum generated project", () => {
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expected}`);
       expect(files.get("src/db.rs")).toContain(`"${expected}"`);
     });
+
+    it(`${orm} uses a matching MySQL URL in env and connection fallback with 127.0.0.1`, async () => {
+      const result = await createVirtual({
+        projectName: "axum-example",
+        language: "rust",
+        framework: "axum",
+        orm,
+        database: "mysql",
+        migrations: "none",
+        packageManager: "cargo",
+        addons: [],
+      });
+      if (result.isErr()) throw result.error;
+      const files = collectFiles(result.value.root, result.value.root.path);
+      const expected = "mysql://root:password@127.0.0.1:3306/axum_example";
+      expect(files.get(".env.example")).toContain(`DATABASE_URL=${expected}`);
+      expect(files.get("src/db.rs")).toContain(`"${expected}"`);
+    });
   }
 });
 

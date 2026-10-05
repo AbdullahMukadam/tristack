@@ -18,6 +18,6 @@ fn database_default() -> String {
 }
 {{else if (eq database "mysql")}}
 fn database_default() -> String {
-    "mysql://root:password@localhost:3306/{{project_slug}}".to_string()
+    "mysql://root:password@127.0.0.1:3306/{{project_slug}}".to_string()
 }
 {{/if}}

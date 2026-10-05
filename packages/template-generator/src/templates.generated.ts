@@ -4277,7 +4277,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "mysql://root:password@localhost:3306/"
+  return "mysql://root:password@127.0.0.1:3306/"
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":5,"column":305},"end":{"line":5,"column":321}}}) : helper)));
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -4702,7 +4702,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "fn database_default() -> &'static str {\n    \"mysql://root:password@localhost:3306/"
+  return "fn database_default() -> &'static str {\n    \"mysql://root:password@127.0.0.1:3306/"
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":35,"column":42},"end":{"line":35,"column":58}}}) : helper)))
     + "\"\n}\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -4766,7 +4766,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "fn database_default() -> String {\n    \"mysql://root:password@localhost:3306/"
+  return "fn database_default() -> String {\n    \"mysql://root:password@127.0.0.1:3306/"
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":21,"column":42},"end":{"line":21,"column":58}}}) : helper)))
     + "\".to_string()\n}\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -4852,7 +4852,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "fn database_default() -> &'static str {\n    \"mysql://root:password@localhost:3306/"
+  return "fn database_default() -> &'static str {\n    \"mysql://root:password@127.0.0.1:3306/"
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":43,"column":42},"end":{"line":43,"column":58}}}) : helper)))
     + "\"\n}\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
