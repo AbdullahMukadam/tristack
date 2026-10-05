@@ -7,12 +7,16 @@ import { copyTemplate, copyTemplates, type TemplateData } from "./utils";
 function copyRustBase(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   copyTemplate(vfs, data.templates, config, "rust/base/Cargo.toml.hbs", "Cargo.toml");
+  copyTemplate(vfs, data.templates, config, "rust/base/env.example.hbs", ".env.example");
   copyTemplates(
     vfs,
     data.templates,
     config,
     "rust/base",
-    (templatePath) => templatePath.includes("Cargo.toml") || templatePath.includes(".gitkeep"),
+    (templatePath) =>
+      templatePath.includes("Cargo.toml") ||
+      templatePath.includes("env.example") ||
+      templatePath.includes(".gitkeep"),
   );
 }
 

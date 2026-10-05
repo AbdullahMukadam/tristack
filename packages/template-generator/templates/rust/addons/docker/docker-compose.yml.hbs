@@ -1,4 +1,24 @@
 services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: {{project_slug}}
+      PORT: "8000"
+{{#if (eq database "postgres")}}
+      DATABASE_URL: postgres://postgres:postgres@db:5432/{{project_slug}}
+    depends_on:
+      db:
+        condition: service_healthy
+{{else if (eq database "mysql")}}
+      DATABASE_URL: mysql://root:password@db:3306/{{project_slug}}
+    depends_on:
+      db:
+        condition: service_healthy
+{{else if (eq database "sqlite")}}
+      DATABASE_URL: {{#if (eq orm "diesel")}}{{project_slug}}.db{{else}}sqlite://{{project_slug}}.db?mode=rwc{{/if}}
+{{/if}}
 {{#if (eq database "postgres")}}
   db:
     image: postgres:16
@@ -8,6 +28,11 @@ services:
       POSTGRES_DB: {{project_slug}}
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d {{project_slug}}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     volumes:
       - pgdata:/var/lib/postgresql/data
 {{else if (eq database "mysql")}}
@@ -18,13 +43,19 @@ services:
       MYSQL_DATABASE: {{project_slug}}
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysql -h 127.0.0.1 -u root -e 'SELECT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     volumes:
       - mysqldata:/var/lib/mysql
 {{/if}}
 
-volumes:
 {{#if (eq database "postgres")}}
+volumes:
   pgdata:
 {{else if (eq database "mysql")}}
+volumes:
   mysqldata:
 {{/if}}

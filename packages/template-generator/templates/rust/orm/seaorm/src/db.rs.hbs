@@ -10,7 +10,7 @@ fn database_url() -> String {
 
 {{#if (eq database "sqlite")}}
 fn database_default() -> String {
-    "{{project_slug}}.db".to_string()
+    "sqlite://{{project_slug}}.db?mode=rwc".to_string()
 }
 {{else if (eq database "postgres")}}
 fn database_default() -> String {
@@ -18,6 +18,6 @@ fn database_default() -> String {
 }
 {{else if (eq database "mysql")}}
 fn database_default() -> String {
-    "mysql://root:password@localhost:3306/{{project_slug}}".to_string()
+    "mysql://root:password@127.0.0.1:3306/{{project_slug}}".to_string()
 }
 {{/if}}
