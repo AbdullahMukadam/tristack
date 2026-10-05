@@ -7,7 +7,7 @@ This document gives a high-level architectural overview. For template-authoring 
 Bun + Turborepo monorepo, ESM-first, strict TypeScript.
 
 ```
-apps/cli                    # the TriStack CLI (tristack / create-tristack)
+apps/cli                    # the TriStack CLI (tristack)
 apps/web                    # Next.js docs/site (tristack.space), Fumadocs docs
 packages/template-generator # template engine (.hbs) used by the CLI
 packages/types              # shared zod schemas + per-language constants

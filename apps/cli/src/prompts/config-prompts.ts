@@ -15,7 +15,7 @@ import { UserCancelledError } from "../utils/errors";
 import { getAddonsChoice } from "./addons";
 import { getDatabaseChoice } from "./database";
 import { getFrameworkChoice } from "./framework";
-import { getFrontendChoice } from "./frontend";
+import { getFrontendChoice, shouldPromptFrontend } from "./frontend";
 import { getGitChoice } from "./git";
 import { getInstallChoice } from "./install";
 import { getLanguageChoice } from "./language";
@@ -82,7 +82,7 @@ export async function gatherConfig(
       frontend: async ({ results, previousAnswer }) => {
         const lang = (results.language ?? flags.language ?? DEFAULT_CONFIG.language) as Language;
         const fw = results.framework ?? flags.framework;
-        if (lang !== "python" || fw === "none") return "none" as Frontend;
+        if (!shouldPromptFrontend(lang, fw)) return "none" as Frontend;
         return getFrontendChoice(flags.frontend, lang, previousAnswer);
       },
       orm: async ({ results, previousAnswer }) => {
