@@ -20,7 +20,6 @@
     "directory": "apps/cli"
   },
   "bin": {
-    "create-tristack": "dist/cli.mjs",
     "tristack": "dist/cli.mjs"
   },
   "files": [

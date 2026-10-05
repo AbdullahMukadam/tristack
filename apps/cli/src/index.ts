@@ -109,7 +109,7 @@ export const router = t.router({
 export function createTristackCli(): TrpcCli {
   return createCli({
     router,
-    name: "create-tristack",
+    name: "tristack",
     version: CLI_VERSION,
   });
 }
