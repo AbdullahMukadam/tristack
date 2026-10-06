@@ -316,7 +316,7 @@ describe("go template structure verification", () => {
     expect(findByPath(tree.root, ["Makefile"])).not.toBeNull();
 
     const main = findByPath(tree.root, ["cmd", "api", "main.go"]);
-    expect(main).toContain(`r.GET("/items"`);
+    expect(main).toContain(`r.GET("/api/v1/items"`);
     expect(main).not.toContain("AutoMigrate");
     expect(main).toContain("config.Load()");
 
@@ -374,7 +374,7 @@ describe("go template structure verification", () => {
 
     const ci = findByPath(tree.root, [".github", "workflows", "ci.yml"]);
     expect(ci).not.toBeNull();
-    expect(ci).toContain("sqlc generate");
+    expect(ci).toContain("sqlc@v1.27.0 generate");
   });
 
   it("stdlib + gorm: method-pattern routes wired through handler", async () => {
@@ -390,7 +390,7 @@ describe("go template structure verification", () => {
 
     const main = findByPath(tree.root, ["cmd", "api", "main.go"]);
     expect(main).not.toBeNull();
-    expect(main).toContain(`HandleFunc("GET /items"`);
+    expect(main).toContain(`HandleFunc("GET /api/v1/items"`);
 
     const handler = findByPath(tree.root, ["internal", "handler", "handler.go"]);
     expect(handler).not.toBeNull();
@@ -452,6 +452,55 @@ describe("go template structure verification", () => {
     expect(makefile).toContain("go test -race ./...");
   });
 
+  it("docker addon: compose always has an app service; sqlite persists /data", async () => {
+    const tree = await generate({
+      language: "go",
+      framework: "chi",
+      orm: "sqlx",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+      addons: ["docker"],
+    });
+    const compose = findByPath(tree.root, ["docker-compose.yml"]);
+    expect(compose).toContain("  app:\n    build: .");
+    expect(compose).toContain("- appdata:/data");
+  });
+
+  it("docker addon + goose: compose runs migrations before the app", async () => {
+    const tree = await generate({
+      language: "go",
+      framework: "gin",
+      orm: "sqlx",
+      migrations: "goose",
+      database: "postgres",
+      packageManager: "go",
+      addons: ["docker"],
+    });
+    const compose = findByPath(tree.root, ["docker-compose.yml"]);
+    expect(compose).toContain('entrypoint: ["/usr/local/bin/goose", "up"]');
+    expect(compose).toContain("condition: service_completed_successfully");
+    const dockerfile = findByPath(tree.root, ["Dockerfile"]);
+    expect(dockerfile).toContain("COPY --from=builder /out/goose /usr/local/bin/goose");
+    expect(dockerfile).toContain("COPY migrations /migrations");
+  });
+
+  it("goose + mysql: the DSN is shell-quoted in the Makefile and README", async () => {
+    const tree = await generate({
+      language: "go",
+      framework: "gin",
+      orm: "sqlx",
+      migrations: "goose",
+      database: "mysql",
+      packageManager: "go",
+      addons: [],
+    });
+    const dsn = "root:password@tcp(localhost:3306)/my_project?parseTime=true";
+    expect(findByPath(tree.root, ["Makefile"])).toContain(`GOOSE_DBSTRING ?= ${dsn}`);
+    expect(findByPath(tree.root, ["Makefile"])).toContain("GOOSE_DBSTRING='$(GOOSE_DBSTRING)'");
+    expect(findByPath(tree.root, ["README.md"])).toContain(`GOOSE_DBSTRING='${dsn}'`);
+  });
+
   it("sqlc: make build/run depend on generate; golang-migrate uses database tags", async () => {
     const tree = await generate({
       language: "go",
@@ -467,16 +516,20 @@ describe("go template structure verification", () => {
     expect(makefile).toContain("build: generate");
     expect(makefile).toContain("run: generate");
     expect(makefile).toContain("MIGRATE_TAGS := postgres");
-    expect(makefile).toContain("MIGRATE_URL ?= pgx://postgres:postgres@localhost:5432/my_project");
+    expect(makefile).toContain(
+      "MIGRATE_URL ?= postgres://postgres:postgres@localhost:5432/my_project?sslmode=disable",
+    );
     expect(makefile).toContain("-tags '$(MIGRATE_TAGS)'");
     expect(makefile).toContain("-database '$(MIGRATE_URL)'");
 
     const readme = findByPath(tree.root, ["README.md"]);
     expect(readme).toContain("go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate");
     expect(readme).toContain("-tags postgres");
-    expect(readme).toContain("pgx://postgres:postgres@localhost:5432/my_project");
+    expect(readme).toContain(
+      "postgres://postgres:postgres@localhost:5432/my_project?sslmode=disable",
+    );
     expect(readme).toContain("go run ./cmd/api");
-    expect(readme).toContain("GET /items");
+    expect(readme).toContain("GET /api/v1/items");
     expect(readme).toContain("internal/service/    business logic");
   });
 });

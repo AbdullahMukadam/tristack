@@ -8,6 +8,8 @@ import (
 	"{{project_slug}}/internal/service"
 )
 
+const maxBodyBytes = 1 << 20
+
 type Handler struct {
 	items *service.ItemService
 }
@@ -29,6 +31,7 @@ func (h Handler) CreateItem(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Name string `json:"name"`
 	}
+	r.Body = http.MaxBytesReader(w, r.Body, maxBodyBytes)
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request body"})
 		return

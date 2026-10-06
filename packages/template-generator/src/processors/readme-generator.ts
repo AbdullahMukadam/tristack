@@ -20,7 +20,7 @@ function goMigrationsCommand(config: ProjectConfig): string {
   const relevant = Object.entries(migrate.env ?? {}).filter(
     ([key]) => !key.startsWith("CGO_") && !key.startsWith("GOFLAGS"),
   );
-  const envPrefix = relevant.map(([key, value]) => `${key}=${value}`).join(" ");
+  const envPrefix = relevant.map(([key, value]) => `${key}='${value}'`).join(" ");
   return envPrefix ? `${envPrefix} ${migrate.label}` : migrate.label;
 }
 
@@ -77,7 +77,7 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
       ? "- `cmd/api` — bare entrypoint; add your own logic."
       : config.orm === "none"
         ? "- `GET /health` — liveness probe."
-        : "- `GET /health` — liveness probe.\n- `GET /items` / `POST /items` — example resource; replace with your own models, repositories, and handlers.";
+        : "- `GET /health` — liveness probe.\n- `GET /api/v1/items` / `POST /api/v1/items` — example resource; replace with your own models, repositories, and handlers.";
 
   const layout =
     config.framework === "none"

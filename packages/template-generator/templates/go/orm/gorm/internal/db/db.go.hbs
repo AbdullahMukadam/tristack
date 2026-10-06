@@ -7,13 +7,14 @@ import (
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	{{#if (eq database "sqlite")}}
+
+{{#if (eq database "sqlite")}}
 	"github.com/glebarez/sqlite"
-	{{else if (eq database "postgres")}}
+{{else if (eq database "postgres")}}
 	"gorm.io/driver/postgres"
-	{{else if (eq database "mysql")}}
+{{else if (eq database "mysql")}}
 	"gorm.io/driver/mysql"
-	{{/if}}
+{{/if}}
 
 	"{{project_slug}}/internal/model"
 )
@@ -22,29 +23,27 @@ func databaseURL() string {
 	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
 		return dsn
 	}
-	{{#if (eq database "sqlite")}}
+{{#if (eq database "sqlite")}}
 	return "{{project_slug}}.db"
-	{{else if (eq database "postgres")}}
+{{else if (eq database "postgres")}}
 	return "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
-	{{else if (eq database "mysql")}}
-	return "mysql://root:password@localhost:3306/{{project_slug}}"
-	{{/if}}
+{{else if (eq database "mysql")}}
+	return "root:password@tcp(localhost:3306)/{{project_slug}}?parseTime=true"
+{{/if}}
 }
 
 func Connect() (*gorm.DB, error) {
-	{{#if (eq database "sqlite")}}
-	db, err := gorm.Open(sqlite.Open(databaseURL()), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-	})
-	{{else if (eq database "postgres")}}
-	db, err := gorm.Open(postgres.Open(databaseURL()), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-	})
-	{{else if (eq database "mysql")}}
-	db, err := gorm.Open(mysql.Open(databaseURL()), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-	})
-	{{/if}}
+	config := &gorm.Config{
+		Logger:  logger.Default.LogMode(logger.Warn),
+		NowFunc: func() time.Time { return time.Now().UTC() },
+	}
+{{#if (eq database "sqlite")}}
+	db, err := gorm.Open(sqlite.Open(databaseURL()), config)
+{{else if (eq database "postgres")}}
+	db, err := gorm.Open(postgres.Open(databaseURL()), config)
+{{else if (eq database "mysql")}}
+	db, err := gorm.Open(mysql.Open(databaseURL()), config)
+{{/if}}
 	if err != nil {
 		return nil, fmt.Errorf("open database: %w", err)
 	}
@@ -54,8 +53,12 @@ func Connect() (*gorm.DB, error) {
 		return nil, fmt.Errorf("access connection pool: %w", err)
 	}
 
+{{#if (eq database "sqlite")}}
+	sqlDB.SetMaxOpenConns(1)
+{{else}}
 	sqlDB.SetMaxOpenConns(25)
 	sqlDB.SetMaxIdleConns(25)
+{{/if}}
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := sqlDB.Ping(); err != nil {

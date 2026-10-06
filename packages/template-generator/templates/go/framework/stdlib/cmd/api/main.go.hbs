@@ -21,8 +21,8 @@ import (
 
 func main() {
 	cfg := config.Load()
-
 {{#if (ne orm "none")}}
+
 	conn, err := db.Connect()
 	if err != nil {
 		log.Fatalf("database not ready: %v", err)
@@ -30,6 +30,11 @@ func main() {
 {{#if (and (eq orm "gorm") (eq migrations "none"))}}
 	if err := db.AutoMigrate(conn); err != nil {
 		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+{{#if (and (or (eq orm "sqlx") (eq orm "sqlc")) (eq migrations "none"))}}
+	if err := db.EnsureSchema(context.Background(), conn); err != nil {
+		log.Fatalf("schema bootstrap failed: %v", err)
 	}
 {{/if}}
 	repo := repository.NewItemRepository(conn)
@@ -43,8 +48,8 @@ func main() {
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
 {{#if (ne orm "none")}}
-	mux.HandleFunc("GET /items", h.ListItems)
-	mux.HandleFunc("POST /items", h.CreateItem)
+	mux.HandleFunc("GET /api/v1/items", h.ListItems)
+	mux.HandleFunc("POST /api/v1/items", h.CreateItem)
 {{/if}}
 
 	srv := &http.Server{

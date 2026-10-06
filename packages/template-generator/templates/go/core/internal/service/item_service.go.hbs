@@ -30,7 +30,7 @@ func (s *ItemService) CreateItem(ctx context.Context, name string) (model.Item, 
 	item := model.Item{
 		ID:        uuid.NewString(),
 		Name:      name,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 	}
 	if err := s.repo.Create(ctx, &item); err != nil {
 		return model.Item{}, fmt.Errorf("create item: %w", err)

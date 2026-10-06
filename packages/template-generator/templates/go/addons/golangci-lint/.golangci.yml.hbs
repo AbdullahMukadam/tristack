@@ -1,12 +1,12 @@
+version: "2"
+
 run:
   timeout: 5m
   tests: true
 
 linters:
+  default: standard
+
+formatters:
   enable:
     - gofmt
-    - govet
-    - staticcheck
-    - errcheck
-    - ineffassign
-    - unused

@@ -34,7 +34,7 @@ async function generateTemplates() {
       binaryFiles.push(normalizedPath);
       entries.push(`  ["${normalizedPath}", "[Binary file]"]`);
     } else {
-      const content = fs.readFileSync(fullPath, "utf-8");
+      const content = fs.readFileSync(fullPath, "utf-8").replace(/\r\n/g, "\n");
       const specSource = Handlebars.precompile(content, { spec: true } as never);
       entries.push(`  ["${normalizedPath}", { kind: "precompiled", spec: ${specSource} }]`);
     }

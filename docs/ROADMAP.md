@@ -53,7 +53,7 @@ Current Python Matrix Smoke slice (11 cases): FastAPI SQLModel/SQLAlchemy/Tortoi
 
 ### Go boot coverage
 
-Go's axes decompose into framework (gin, fiber, echo, chi, stdlib — each with its own routing/wiring), ORM (gorm, sqlx, sqlc — each with its own repository and `internal/db` package), migrations (goose, golang-migrate, `none`), database (sqlite, postgres, mysql), the htmx frontend overlay, and addons (docker, air, golangci-lint, github-actions). ORM is the highest-value axis because each ORM ships distinct data-access code; framework differences are confined to routing and all expose the same `/health`, `GET /items`, `POST /items`, and `PORT` contract. Addons and htmx are independent overlays and are exercised separately rather than crossed through every combination.
+Go's axes decompose into framework (gin, fiber, echo, chi, stdlib — each with its own routing/wiring), ORM (gorm, sqlx, sqlc — each with its own repository and `internal/db` package), migrations (goose, golang-migrate, `none`), database (sqlite, postgres, mysql), the htmx frontend overlay, and addons (docker, air, golangci-lint, github-actions). ORM is the highest-value axis because each ORM ships distinct data-access code; framework differences are confined to routing and all expose the same `/health`, `GET /api/v1/items`, `POST /api/v1/items`, and `PORT` contract. Addons and htmx are independent overlays and are exercised separately rather than crossed through every combination.
 
 A minimal high-coverage manual set is 8 combinations:
 
@@ -68,7 +68,9 @@ A minimal high-coverage manual set is 8 combinations:
 | 7   | chi       | sqlc | none           | postgres | sqlc without migrations                               |
 | 8   | none      | none | none           | none     | bare oneshot entrypoint                               |
 
-If time is short, rows 1, 3, 5, and 8 cover gorm, sqlx, sqlc, and bare. Two known host limits: golang-migrate with SQLite needs CGO and fails on this Windows host (`cc1.exe: sorry, unimplemented: 64-bit mode not compiled in`), and the postgres rows need a live server to run — their `sqlc generate` step works regardless.
+The boot matrix also runs `chi-sqlx-none`, `chi-sqlc-none`, `gin-sqlx-migrate` (golang-migrate on the pure-Go `sqlite` tag, no CGO needed) and one HTMX case per framework (`stdlib-sqlx-htmx`, `gin-gorm-htmx`, `chi-sqlc-htmx`, `echo-gorm-htmx`, `fiber-sqlx-htmx`), all on SQLite.
+
+If time is short, rows 1, 3, 5, and 8 cover gorm, sqlx, sqlc, and bare. Known host limit: the postgres rows need a live server to run — their `sqlc generate` step works regardless.
 
 Exit: every Matrix Smoke case installs, boots, and returns the expected status for each probe; a missing toolchain is a skip, never a pass.
 

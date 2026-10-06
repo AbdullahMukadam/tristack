@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"net/http"
 {{#if (ne orm "none")}}
+
 	"{{project_slug}}/internal/model"
 	"{{project_slug}}/internal/service"
 {{/if}}
@@ -15,13 +16,11 @@ import (
 //go:embed templates static
 var content embed.FS
 
-// Web serves the server-rendered HTMX frontend. It is framework-agnostic:
-// each framework mounts Mux() alongside the JSON API.
 type Web struct {
 	appName string
 	tmpl    *template.Template
 {{#if (ne orm "none")}}
-	items *service.ItemService
+	items   *service.ItemService
 {{/if}}
 }
 
@@ -34,19 +33,14 @@ func New(appName string{{#if (ne orm "none")}}, items *service.ItemService{{/if}
 		appName: appName,
 		tmpl:    tmpl,
 {{#if (ne orm "none")}}
-		items: items,
+		items:   items,
 {{/if}}
 	}, nil
 }
 
-// Mux returns a net/http handler mounting the web routes: the home page,
-{{#if (ne orm "none")}}
-// the ORM-backed items fragment, and
-{{/if}}
-// the static assets under /static.
 func (w *Web) Mux() *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /", w.home)
+	mux.HandleFunc("GET /{$}", w.home)
 {{#if (ne orm "none")}}
 	mux.HandleFunc("GET /web/items", w.renderItems)
 {{/if}}
@@ -54,7 +48,6 @@ func (w *Web) Mux() *http.ServeMux {
 	return mux
 }
 
-// Static serves the embedded static assets (css, etc.).
 func Static() http.Handler {
 	sub, err := fs.Sub(content, "static")
 	if err != nil {
@@ -74,8 +67,8 @@ func (w *Web) home(wr http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 {{#if (ne orm "none")}}
+
 type itemsData struct {
 	Items []model.Item
 }

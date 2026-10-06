@@ -13,19 +13,19 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"{{project_slug}}/internal/config"
-	"{{project_slug}}/internal/web"
 {{#if (ne orm "none")}}
 	"{{project_slug}}/internal/db"
 	"{{project_slug}}/internal/handler"
 	"{{project_slug}}/internal/repository"
 	"{{project_slug}}/internal/service"
 {{/if}}
+	"{{project_slug}}/internal/web"
 )
 
 func main() {
 	cfg := config.Load()
-
 {{#if (ne orm "none")}}
+
 	conn, err := db.Connect()
 	if err != nil {
 		log.Fatalf("database not ready: %v", err)
@@ -33,6 +33,11 @@ func main() {
 {{#if (and (eq orm "gorm") (eq migrations "none"))}}
 	if err := db.AutoMigrate(conn); err != nil {
 		log.Fatalf("auto-migrate failed: %v", err)
+	}
+{{/if}}
+{{#if (and (or (eq orm "sqlx") (eq orm "sqlc")) (eq migrations "none"))}}
+	if err := db.EnsureSchema(context.Background(), conn); err != nil {
+		log.Fatalf("schema bootstrap failed: %v", err)
 	}
 {{/if}}
 	repo := repository.NewItemRepository(conn)
@@ -50,10 +55,15 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 {{#if (ne orm "none")}}
-	r.GET("/items", h.ListItems)
-	r.POST("/items", h.CreateItem)
+	r.GET("/api/v1/items", h.ListItems)
+	r.POST("/api/v1/items", h.CreateItem)
 {{/if}}
-	r.NoRoute(gin.WrapH(webSrv.Mux()))
+	webHandler := gin.WrapH(webSrv.Mux())
+	r.GET("/", webHandler)
+{{#if (ne orm "none")}}
+	r.GET("/web/items", webHandler)
+{{/if}}
+	r.GET("/static/*filepath", webHandler)
 
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,

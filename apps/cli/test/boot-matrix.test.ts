@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -239,6 +239,110 @@ const BOOT_CASES: BootCase[] = [
     },
   },
   {
+    id: "chi-sqlx-none",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "chi",
+      frontend: "none",
+      orm: "sqlx",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "stdlib-sqlx-htmx",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "stdlib",
+      frontend: "htmx",
+      orm: "sqlx",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "gin-gorm-htmx",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "gin",
+      frontend: "htmx",
+      orm: "gorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "chi-sqlc-htmx",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "chi",
+      frontend: "htmx",
+      orm: "sqlc",
+      migrations: "goose",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "echo-gorm-htmx",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "echo",
+      frontend: "htmx",
+      orm: "gorm",
+      migrations: "goose",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "fiber-sqlx-htmx",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "fiber",
+      frontend: "htmx",
+      orm: "sqlx",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "gin-sqlx-migrate",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "gin",
+      frontend: "none",
+      orm: "sqlx",
+      migrations: "golang-migrate",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
+    id: "chi-sqlc-none",
+    requiresTool: "go",
+    config: {
+      language: "go",
+      framework: "chi",
+      frontend: "none",
+      orm: "sqlc",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "go",
+    },
+  },
+  {
     id: "bare-go",
     requiresTool: "go",
     config: {
@@ -397,6 +501,10 @@ describe.skipIf(process.env.BTS_BOOT !== "1")("boot matrix", () => {
           const installResult = await runCommand(profile.install, scaffoldDir);
           log += installResult.log;
           expect(installResult.ok, `install failed:\n${installResult.log}`).toBe(true);
+          if (config.language === "go") {
+            const goMod = await readFile(join(scaffoldDir, "go.mod"), "utf8");
+            expect(goMod, "go mod tidy raised the go directive").toMatch(/^go 1\.22(\.0)?$/m);
+          }
 
           for (const prepareCmd of profile.prepare) {
             const prepareResult = await runCommand(prepareCmd, scaffoldDir);

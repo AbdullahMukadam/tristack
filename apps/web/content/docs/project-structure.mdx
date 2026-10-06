@@ -261,7 +261,7 @@ Notes:
 
 - The module path is the slugged project name (`my_api` for `my-api`) unless your project name is already a module path.
 - The server reads `PORT` (default `8000`) and `APP_NAME` from the environment via `internal/config`.
-- The entrypoint wires the layers: `config.Load()` → `db.Connect()` → repository → service → handler, then registers `GET /health`, `GET /items`, and `POST /items`.
+- The entrypoint wires the layers: `config.Load()` → `db.Connect()` → repository → service → handler, then registers `GET /health`, `GET /api/v1/items`, and `POST /api/v1/items`.
 - `orm` must not be `none` for the `handler`/`service`/`repository`/`model` layers to be generated.
 
 ### Framework variations

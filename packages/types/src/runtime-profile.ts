@@ -36,7 +36,7 @@ function goMigrateTags(database: ProjectConfig["database"]): string {
     case "mysql":
       return "mysql";
     default:
-      return "sqlite3";
+      return "sqlite";
   }
 }
 
@@ -171,7 +171,7 @@ function goDatabaseURL(config: ProjectConfig): string {
     case "postgres":
       return `postgres://postgres:postgres@localhost:5432/${slug}`;
     case "mysql":
-      return `mysql://root:password@localhost:3306/${slug}`;
+      return `root:password@tcp(localhost:3306)/${slug}?parseTime=true`;
     default:
       return `${slug}.db`;
   }
@@ -199,9 +199,12 @@ function goPrepare(config: ProjectConfig): Command[] {
       },
     });
   } else if (config.migrations === "golang-migrate") {
-    const scheme =
-      config.database === "sqlite" ? "sqlite3" : config.database === "postgres" ? "pgx" : "mysql";
-    const target = `${scheme}://${databaseURL.replace(/^[a-z0-9+.-]*:\/\//i, "")}`;
+    const target =
+      config.database === "postgres"
+        ? `${databaseURL}?sslmode=disable`
+        : config.database === "mysql"
+          ? `mysql://${databaseURL.replace("?parseTime=true", "")}`
+          : `sqlite://${databaseURL}`;
     prepare.push({
       bin: "go",
       args: [
@@ -215,7 +218,7 @@ function goPrepare(config: ProjectConfig): Command[] {
         target,
         "up",
       ],
-      label: `go run -tags ${goMigrateTags(config.database)} github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database ${target} up`,
+      label: `go run -tags ${goMigrateTags(config.database)} github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.1 -path db/migrations -database '${target}' up`,
     });
   }
   return prepare;
@@ -225,14 +228,15 @@ function goProbes(config: ProjectConfig): Probe[] {
   const probes: Probe[] = [{ method: "GET", path: "/health", expectStatus: 200 }];
   if (config.orm !== "none") {
     probes.push(
-      { method: "GET", path: "/items", expectStatus: 200 },
-      { method: "POST", path: "/items", expectStatus: 201, body: { name: "boot-check" } },
+      { method: "GET", path: "/api/v1/items", expectStatus: 200 },
+      { method: "POST", path: "/api/v1/items", expectStatus: 201, body: { name: "boot-check" } },
     );
   }
   if (config.frontend === "htmx") {
     probes.push({ method: "GET", path: "/", expectStatus: 200 });
     if (config.orm !== "none")
       probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+    probes.push({ method: "GET", path: "/static/css/style.css", expectStatus: 200 });
   }
   return probes;
 }

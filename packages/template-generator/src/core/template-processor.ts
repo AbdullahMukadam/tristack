@@ -27,7 +27,8 @@ export function processTemplateString(content: TemplateSource, context: ProjectC
     project_slug: toProjectSlug(context.projectName),
   };
   if (!isPrecompiledTemplate(content)) return content;
-  return Handlebars.template(content.spec)(renderContext);
+  const rendered = Handlebars.template(content.spec)(renderContext);
+  return rendered && !rendered.endsWith("\n") ? `${rendered}\n` : rendered;
 }
 
 export function isBinaryFile(filePath: string): boolean {
