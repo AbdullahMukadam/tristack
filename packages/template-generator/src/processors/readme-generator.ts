@@ -169,7 +169,11 @@ function writeDefaultReadme(
     if (migrationSteps.length > 0) {
       steps.push(`# 2. ${migrationSteps[0]}`, ...migrationSteps.slice(1));
     }
-    steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, runCommand(config));
+    const devServerCommand =
+      config.language === "rust" && config.addons.includes("cargo-watch")
+        ? `cargo install cargo-watch\n${runCommand(config)}`
+        : runCommand(config);
+    steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, devServerCommand);
   }
 
   const apiDocs = isBare
