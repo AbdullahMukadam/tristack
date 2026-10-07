@@ -10,18 +10,23 @@ fn health() -> &'static str {
     "{\"status\":\"ok\"}"
 }
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
+#[launch]
+async fn rocket() -> _ {
     let app_config = config::Config::from_env();
 
 {{#if (ne orm "none")}}
+{{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+{{else}}
     if let Err(err) = db::connect().await {
+{{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
     let config = rocket::Config {
+        address: std::net::Ipv4Addr::UNSPECIFIED.into(),
         port: app_config.port,
-        ..Default::default()
+        ..rocket::Config::default()
     };
 
     println!(
@@ -29,8 +34,7 @@ async fn main() -> Result<(), rocket::Error> {
         app_config.app_name, config.port,
     );
 
-    let _ = rocket::custom(config).mount("/", routes![health]).launch().await?;
-    Ok(())
+    rocket::custom(config).mount("/", routes![health])
 }
 
 #[cfg(test)]
