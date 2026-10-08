@@ -172,26 +172,33 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 
 ### P0
 
-- [ ] **RS-1 actix tests don't compile** (reviewed). `framework/actix-web` and the HTMX actix `main.rs` pass a bare `App` to `test::call_service`; it needs `test::init_service(App::new()...).await`.
-- [ ] **RS-2 Rocket + Diesel doesn't compile.** `framework/rocket/src/main.rs.hbs` and the HTMX Rocket file always do `db::connect().await`, but Diesel's `connect` is synchronous. The other frameworks already branch on this.
-- [ ] **RS-3 Rocket + HTMX doesn't compile.** `rocket::response::content::Html` is `RawHtml` in Rocket 0.5.
+- [x] **RS-1 actix tests don't compile** (reviewed). `framework/actix-web` and the HTMX actix `main.rs` pass a bare `App` to `test::call_service`; it needs `test::init_service(App::new()...).await`.
+  - **Fixed in PR #10** (Actix Web). Reviewed by building and testing the generated projects in WSL.
+- [x] **RS-2 Rocket + Diesel doesn't compile.** `framework/rocket/src/main.rs.hbs` and the HTMX Rocket file always do `db::connect().await`, but Diesel's `connect` is synchronous. The other frameworks already branch on this.
+  - **Fixed 2026-10-07** in both Rocket `main.rs` files (API and HTMX). Confirmed in WSL: the old output fails with `` `Result<_, _>` is not a future ``. The new output builds with Diesel on SQLite, Postgres and MySQL.
+- [x] **RS-3 Rocket + HTMX doesn't compile.** `rocket::response::content::Html` is `RawHtml` in Rocket 0.5.
+  - **Fixed 2026-10-07** in both Rocket `main.rs` files (API and HTMX). Confirmed in WSL: the old output fails with `unresolved import rocket::response::content::Html`. With `RawHtml`, `/` returns 200 and `/web/now` renders its partial.
 - [ ] **RS-4 Loco doesn't compile and isn't Loco.** `#[tokio::main]` is used with no `tokio` dependency. `loco-rs = "0.4"` is years old. `main` never uses Loco. Either build a real Loco app or drop the option.
 - [ ] **RS-5 CI workflow is invalid.** In `addons/github-actions`, `components: [rustfmt, clippy]` is a YAML list; action inputs must be strings (`components: rustfmt, clippy`).
 
 ### P1
 
-- [ ] **RS-6 Rocket binds 127.0.0.1.** `..Default::default()` keeps the default address while the log says `0.0.0.0`, so it's unreachable from Docker. Set `address`.
-- [ ] **RS-7 SQLite URLs:**
+- [x] **RS-6 Rocket binds 127.0.0.1.** `..Default::default()` keeps the default address while the log says `0.0.0.0`, so it's unreachable from Docker. Set `address`.
+  - **Fixed 2026-10-07** in both Rocket `main.rs` files (API and HTMX). Confirmed in WSL: the old output fails with no answer on the WSL network IP (only on `127.0.0.1`). With `address: Ipv4Addr::UNSPECIFIED.into()`, `/health` answers on the network IP.
+- [x] **RS-7 SQLite URLs:**
   - SeaORM gets `slug.db` with no scheme, so it can't pick a driver.
   - sqlx doesn't create a missing file.
   - Use `sqlite://slug.db?mode=rwc` (and match it in `env.example`).
+  - **Fixed in PR #7.** The defaults live in `orm/*/src/db.rs`, so every framework gets them. SeaORM and sqlx use `sqlite://slug.db?mode=rwc`; Diesel keeps a plain path. `env.example` and docker-compose match.
 - [ ] **RS-8 Database errors are swallowed.** Every `main.rs` connects, logs `database not ready`, drops the pool, and serves anyway. Fail fast and keep the pool in app state.
 - [ ] **RS-9 Dockerfile:**
   - `rust:1.80` is likely too old for current crate MSRVs (there's no `Cargo.lock`).
   - The "cache" step builds twice and caches nothing.
   - The `debian-slim` runtime lacks `libpq5` and `libmysqlclient` for Diesel.
   - It runs as root.
+  - _Partly fixed in PR #7:_ `rust:1-slim-bookworm`, a single build, and `libpq5`/`libmariadb3` in the runtime for Diesel. It still runs as root.
 - [ ] **RS-10 `cargo fmt --check` and clippy fail** on generated code: unsorted `use` lists in actix, and an unused `get` import that breaks `clippy -D warnings`.
+  - _Axum and Actix Web fixed in PRs #7 and #10_ (fmt and `clippy -D warnings` clean in WSL). _Rocket fixed 2026-10-07:_ the one-line `launch()` chain failed rustfmt, and `main() -> Result<(), rocket::Error>` failed clippy (`result_large_err`, the error is 224 bytes). Rocket now uses its own `#[launch]`. Ten generated projects (API and HTMX × none, SeaORM, Diesel, sqlx on SQLite; Diesel on Postgres and MySQL) pass build, test, `fmt --check` and `clippy -D warnings`. Warp, Salvo and Loco are unchecked.
 
 ### P2
 
@@ -208,10 +215,10 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 
 ## Cross-cutting
 
-- [ ] **X-1 docker-compose.** There was no app service (only the database), and with SQLite or no database `services:` rendered empty, which is invalid. **Python fixed 2026-10-02:** there is always an `app` service built from the Dockerfile, wired to `db` with the right `DATABASE_URL`/`DB_HOST` when there is one; all rendered variants parse. **Go fixed 2026-10-04:** same shape. The app is wired to `db` with a Go-format `DATABASE_URL` and `restart: on-failure` (the app exits if the database isn't ready yet). SQLite persists `/data` in a named volume. Every rendered variant passes the compose-spec JSON schema (`check-jsonschema`); the old SQLite output failed it (`services: None is not of type 'object'`). Projects with goose or golang-migrate get a one-shot `migrate` service, which the code review asked for: without it, `docker compose up` served 500s from an empty database. The service uses the same image (the Dockerfile builds a CGO-free `goose`/`migrate` binary and copies the migrations to `/migrations`), so it runs as nonroot and shares the SQLite `/data` volume. `app` waits for it with `service_completed_successfully`. Checked without Docker: the builder's `go install` lines produce binaries with the right drivers (`sqlite`, `postgres`, `mysql`); replaying the SQLite flow with them (migrate, then start the app) gives POST 201 and GET 200; and golang-migrate's source turns `sqlite:///data/x.db` into `/data/x.db`. The compose run itself is still unverified. Rust is still open.
+- [ ] **X-1 docker-compose.** There was no app service (only the database), and with SQLite or no database `services:` rendered empty, which is invalid. **Python fixed 2026-10-02:** there is always an `app` service built from the Dockerfile, wired to `db` with the right `DATABASE_URL`/`DB_HOST` when there is one; all rendered variants parse. **Go fixed 2026-10-04:** same shape. The app is wired to `db` with a Go-format `DATABASE_URL` and `restart: on-failure` (the app exits if the database isn't ready yet). SQLite persists `/data` in a named volume. Every rendered variant passes the compose-spec JSON schema (`check-jsonschema`); the old SQLite output failed it (`services: None is not of type 'object'`). Projects with goose or golang-migrate get a one-shot `migrate` service, which the code review asked for: without it, `docker compose up` served 500s from an empty database. The service uses the same image (the Dockerfile builds a CGO-free `goose`/`migrate` binary and copies the migrations to `/migrations`), so it runs as nonroot and shares the SQLite `/data` volume. `app` waits for it with `service_completed_successfully`. Checked without Docker: the builder's `go install` lines produce binaries with the right drivers (`sqlite`, `postgres`, `mysql`); replaying the SQLite flow with them (migrate, then start the app) gives POST 201 and GET 200; and golang-migrate's source turns `sqlite:///data/x.db` into `/data/x.db`. The compose run itself is still unverified. **Rust fixed in PR #7:** same `app` + `db` shape with healthchecks and `service_healthy`. The contributor reports a `docker compose up` probe; it wasn't rerun here (no Docker).
 - [x] **X-2 HTMX from unpkg without SRI** (all three HTMX base templates). Add `integrity` and `crossorigin`, or vendor it into `static/`.
   - **Fixed 2026-10-04** in all four script tags (Go, Python app, Python Django, Rust). The `sha384` value was computed from the file, unpkg and jsDelivr serve the same bytes, and unpkg sends `Access-Control-Allow-Origin: *`, which `crossorigin="anonymous"` needs.
-- [ ] **X-4 Comments in Go and Rust `env.example`.** `# SQLite:`/`# Postgres:`/`# MySQL:` lines break the AGENTS.md no-comments rule (already removed from Python, PY-28). _Go fixed 2026-10-04; Rust is still open._
+- [x] **X-4 Comments in Go and Rust `env.example`.** `# SQLite:`/`# Postgres:`/`# MySQL:` lines break the AGENTS.md no-comments rule (already removed from Python, PY-28). _Go fixed 2026-10-04; Rust fixed in PR #7._
 - [ ] **X-3 Boot matrix coverage.** Add at least one Postgres and one MySQL case per language (service container in CI), plus the Go and Rust slices (ROADMAP B3/B4).
 
 ## Docs drift found during the audit

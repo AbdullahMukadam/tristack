@@ -4723,7 +4723,19 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   ["rust/framework/rocket/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "mod db;\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n        eprintln!(\"database not ready: {err}\");\n    }\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":23}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":22,"column":7}}})) != null ? stack1 : "")
+    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "    if let Err(err) = db::connect() {\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "    if let Err(err) = db::connect().await {\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4734,9 +4746,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "#[macro_use]\nextern crate rocket;\n\nmod config;\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[rocket::main]\nasync fn main() -> Result<(), rocket::Error> {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
-    + "    let config = rocket::Config {\n        port: app_config.port,\n        ..Default::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    let _ = rocket::custom(config).mount(\"/\", routes![health]).launch().await?;\n    Ok(())\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
+    + "#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[launch]\nasync fn rocket() -> _ {\n    let app_config = config::Config::from_env();\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":25,"column":7}}})) != null ? stack1 : "")
+    + "    let config = rocket::Config {\n        address: std::net::Ipv4Addr::UNSPECIFIED.into(),\n        port: app_config.port,\n        ..rocket::Config::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    rocket::custom(config).mount(\"/\", routes![health])\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
 },"useData":true} }],
   ["rust/framework/salvo/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "mod db;\n";
@@ -4867,7 +4879,19 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   ["rust/frontend/htmx/framework/rocket/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "mod db;\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n        eprintln!(\"database not ready: {err}\");\n    }\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":23}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
+    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "    if let Err(err) = db::connect() {\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "    if let Err(err) = db::connect().await {\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4876,11 +4900,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use askama::Template;\nuse rocket::response::content::Html;\n\n#[macro_use]\nextern crate rocket;\n\nmod config;\n"
+  return "use askama::Template;\nuse rocket::response::content::RawHtml;\n\n#[macro_use]\nextern crate rocket;\n\nmod config;\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":10,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Clone)]\nstruct AppState {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[get(\"/\")]\nfn index(state: &rocket::State<AppState>) -> Html<String> {\n    let template = IndexTemplate {\n        app_name: state.app_name.clone(),\n    };\n    Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\n#[get(\"/web/now\")]\nfn now() -> Html<String> {\n    let template = NowTemplate { now: unix_now() };\n    Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[rocket::main]\nasync fn main() -> Result<(), rocket::Error> {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":63,"column":7}}})) != null ? stack1 : "")
-    + "    let config = rocket::Config {\n        port: app_config.port,\n        ..Default::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    let _ = rocket::custom(config)\n        .manage(AppState {\n            app_name: app_config.app_name,\n        })\n        .mount(\"/\", routes![health, index, now])\n        .launch()\n        .await?;\n    Ok(())\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
+    + "\n#[derive(Clone)]\nstruct AppState {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[get(\"/\")]\nfn index(state: &rocket::State<AppState>) -> RawHtml<String> {\n    let template = IndexTemplate {\n        app_name: state.app_name.clone(),\n    };\n    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\n#[get(\"/web/now\")]\nfn now() -> RawHtml<String> {\n    let template = NowTemplate { now: unix_now() };\n    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[launch]\nasync fn rocket() -> _ {\n    let app_config = config::Config::from_env();\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "")
+    + "    let config = rocket::Config {\n        address: std::net::Ipv4Addr::UNSPECIFIED.into(),\n        port: app_config.port,\n        ..rocket::Config::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    rocket::custom(config)\n        .manage(AppState {\n            app_name: app_config.app_name,\n        })\n        .mount(\"/\", routes![health, index, now])\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
 },"useData":true} }],
   ["rust/frontend/htmx/framework/salvo/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     return "mod db;\n";

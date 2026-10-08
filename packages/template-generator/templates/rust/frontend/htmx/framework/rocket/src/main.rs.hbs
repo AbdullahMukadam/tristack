@@ -1,5 +1,5 @@
 use askama::Template;
-use rocket::response::content::Html;
+use rocket::response::content::RawHtml;
 
 #[macro_use]
 extern crate rocket;
@@ -32,17 +32,17 @@ fn health() -> &'static str {
 }
 
 #[get("/")]
-fn index(state: &rocket::State<AppState>) -> Html<String> {
+fn index(state: &rocket::State<AppState>) -> RawHtml<String> {
     let template = IndexTemplate {
         app_name: state.app_name.clone(),
     };
-    Html(template.render().unwrap_or_else(|err| err.to_string()))
+    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))
 }
 
 #[get("/web/now")]
-fn now() -> Html<String> {
+fn now() -> RawHtml<String> {
     let template = NowTemplate { now: unix_now() };
-    Html(template.render().unwrap_or_else(|err| err.to_string()))
+    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))
 }
 
 fn unix_now() -> String {
@@ -52,18 +52,23 @@ fn unix_now() -> String {
         .unwrap_or_default()
 }
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
+#[launch]
+async fn rocket() -> _ {
     let app_config = config::Config::from_env();
 
 {{#if (ne orm "none")}}
+{{#if (eq orm "diesel")}}
+    if let Err(err) = db::connect() {
+{{else}}
     if let Err(err) = db::connect().await {
+{{/if}}
         eprintln!("database not ready: {err}");
     }
 {{/if}}
     let config = rocket::Config {
+        address: std::net::Ipv4Addr::UNSPECIFIED.into(),
         port: app_config.port,
-        ..Default::default()
+        ..rocket::Config::default()
     };
 
     println!(
@@ -71,14 +76,11 @@ async fn main() -> Result<(), rocket::Error> {
         app_config.app_name, config.port,
     );
 
-    let _ = rocket::custom(config)
+    rocket::custom(config)
         .manage(AppState {
             app_name: app_config.app_name,
         })
         .mount("/", routes![health, index, now])
-        .launch()
-        .await?;
-    Ok(())
 }
 
 #[cfg(test)]
