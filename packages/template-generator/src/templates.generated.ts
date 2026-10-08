@@ -4098,7 +4098,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "from ..models import Item\nfrom ..schemas.items import ItemResponse\n\n\ndef _to_response(item: Item) -> ItemResponse:\n    return ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at)\n\n\nasync def create_item(*, name: str) -> ItemResponse:\n    return _to_response(await Item.create(name=name))\n\n\nasync def list_items() -> list[ItemResponse]:\n    return [_to_response(item) for item in await Item.all().order_by(\"-created_at\")]\n";
 },"useData":true} }],
   ["rust/addons/docker/_dockerignore", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "target/\n.env\n.env.local\n.git\n.gitignore\n*.md\nDockerfile*";
+    return "target/\n.env\n.env.local\n.git\n.gitignore\n*.md\nDockerfile*\n";
 },"useData":true} }],
   ["rust/addons/docker/docker-compose.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -4308,9 +4308,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: dtolnay/rust-toolchain@stable\n        with:\n          components: [rustfmt, clippy]\n      - name: Build\n        run: cargo build --all-targets\n      - name: Test\n        run: cargo test\n"
+  return "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: dtolnay/rust-toolchain@stable\n        with:\n          components: rustfmt, clippy\n      - name: Build\n        run: cargo build --all-targets\n      - name: Test\n        run: cargo test\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"clippy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":20,"column":12},"end":{"line":20,"column":38}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":20,"column":6},"end":{"line":23,"column":13}}})) != null ? stack1 : "")
-    + "      - name: Format check\n        run: cargo fmt -- --check";
+    + "      - name: Format check\n        run: cargo fmt -- --check\n";
 },"useData":true} }],
   ["rust/base/_gitignore", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "/target/\n**/*.rs.bk\n*.pdb\n.env\n.env.local\n.idea\n.vscode\n*.swp\n.DS_Store\nThumbs.db";
@@ -4494,6 +4494,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":54,"column":10},"end":{"line":54,"column":31}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":54,"column":0},"end":{"line":56,"column":0}}})) != null ? stack1 : "");
 },"31":function(container,depth0,helpers,partials,data) {
     return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"mysql\"] }\n";
+},"32":function(container,depth0,helpers,partials,data) {
+    return "\n[lints.clippy]\nall = { level = \"warn\", priority = -1 }\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4509,7 +4511,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + "\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":26}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"seaorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":6},"end":{"line":32,"column":23}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":57,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"seaorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":6},"end":{"line":32,"column":23}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":57,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"clippy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":32}}}),{"name":"if","hash":{},"fn":container.program(32, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["rust/base/env.example.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
