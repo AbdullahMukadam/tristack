@@ -32,7 +32,7 @@ import {
 import { validateProjectName } from "../../utils/project-name-validation";
 import { checkBaselineRequirements, checkLocalRequirements } from "../../utils/requirements";
 import { clackIntro, clackOutro, cliLog } from "../../utils/terminal-output";
-import { accent, success, warning } from "../../utils/theme";
+import { accent, renderLogo, success, warning } from "../../utils/theme";
 import {
   applyFlagDefaults,
   getProvidedFlags,
@@ -168,6 +168,7 @@ async function createProjectHandlerInternal(
 ): Promise<Result<CreateProjectResult, CreateHandlerError>> {
   return Result.gen(async function* () {
     if (!isSilent()) {
+      console.log(`\n${renderLogo()}\n`);
       clackIntro(accent("Configure your new project"));
     }
 

@@ -1,3 +1,5 @@
+import pc from "picocolors";
+
 export const triPalette = {
   brand: "#f6a510",
   brandBright: "#ffd36b",
@@ -22,3 +24,39 @@ export const warning = (text: string | number) => rgb(triPalette.warning, text);
 export const error = (text: string | number) => rgb(triPalette.error, text);
 
 export const bannerGradient = ["#ffd36b", "#f6a510", "#e07a00"];
+
+const LOGO = [
+  "████████╗██████╗ ██╗███████╗████████╗ █████╗  ██████╗██╗  ██╗",
+  "╚══██╔══╝██╔══██╗██║██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝",
+  "   ██║   ██████╔╝██║███████╗   ██║   ███████║██║     █████╔╝ ",
+  "   ██║   ██╔══██╗██║╚════██║   ██║   ██╔══██║██║     ██╔═██╗ ",
+  "   ██║   ██║  ██║██║███████║   ██║   ██║  ██║╚██████╗██║  ██╗",
+  "   ╚═╝   ╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝",
+];
+const LOGO_WIDTH = 61;
+
+function gradientAt(t: number): string {
+  const scaled = t * (bannerGradient.length - 1);
+  const i = Math.min(Math.floor(scaled), bannerGradient.length - 2);
+  const f = scaled - i;
+  const channel = (offset: number) => {
+    const a = Number.parseInt(bannerGradient[i]!.slice(offset, offset + 2), 16);
+    const b = Number.parseInt(bannerGradient[i + 1]!.slice(offset, offset + 2), 16);
+    return Math.round(a + (b - a) * f)
+      .toString(16)
+      .padStart(2, "0");
+  };
+  return `#${channel(1)}${channel(3)}${channel(5)}`;
+}
+
+export function renderLogo(
+  columns = process.stdout.columns ?? 80,
+  color = pc.isColorSupported,
+): string {
+  if (columns < LOGO_WIDTH + 2) {
+    return color ? pc.bold(accent("TriStack")) : "TriStack";
+  }
+  return LOGO.map((line, row) =>
+    color ? rgb(gradientAt(row / (LOGO.length - 1)), line) : line,
+  ).join("\n");
+}
