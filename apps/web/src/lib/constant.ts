@@ -179,13 +179,6 @@ const FRAMEWORK_META = {
     icon: "/icon/salvo.svg",
     color: "from-sky-400 to-blue-600",
   },
-  loco: {
-    id: "loco",
-    name: "Loco",
-    description: "Rails-like full web framework",
-    icon: "/icon/loco.svg",
-    color: "from-red-400 to-rose-600",
-  },
   none: {
     id: "none",
     name: "No framework",

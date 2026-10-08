@@ -1,0 +1,41 @@
+use salvo::prelude::*;
+
+{{#if (ne orm "none")}}
+use crate::service;
+{{/if}}
+use crate::views;
+use crate::AppState;
+
+pub fn router() -> Router {
+    Router::new()
+        .get(index)
+        .push(Router::with_path("web/now").get(now))
+{{#if (ne orm "none")}}
+        .push(Router::with_path("web/items").get(items))
+{{/if}}
+}
+
+#[handler]
+async fn index(depot: &mut Depot, res: &mut Response) {
+    let state = AppState::from_depot(depot);
+    res.render(Text::Html(views::index(&state.app_name)));
+}
+
+#[handler]
+async fn now(res: &mut Response) {
+    res.render(Text::Html(views::now()));
+}
+{{#if (ne orm "none")}}
+
+#[handler]
+async fn items(depot: &mut Depot, res: &mut Response) {
+    let state = AppState::from_depot(depot);
+    match service::list_items(&state.db).await {
+        Ok(list) => res.render(Text::Html(views::items(&list))),
+        Err(err) => {
+            res.status_code(StatusCode::INTERNAL_SERVER_ERROR);
+            res.render(Text::Plain(err.to_string()));
+        }
+    }
+}
+{{/if}}

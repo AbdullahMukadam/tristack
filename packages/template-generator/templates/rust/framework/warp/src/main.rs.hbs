@@ -1,34 +1,83 @@
+use serde_json::json;
 use warp::{Filter, Rejection, Reply};
 
+{{#if (ne orm "none")}}
+mod api;
+{{/if}}
 mod config;
 {{#if (ne orm "none")}}
 mod db;
+mod models;
 {{/if}}
-fn routes() -> impl Filter<Extract = impl Reply, Error = Rejection> {
-    let health = warp::path("health").map(|| "{\"status\":\"ok\"}");
-    health.with(warp::cors().allow_any_origin())
+{{#if (eq frontend "htmx")}}
+mod pages;
+{{/if}}
+{{#if (ne orm "none")}}
+mod service;
+{{/if}}
+{{#if (eq frontend "htmx")}}
+mod views;
+{{/if}}
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+
+#[derive(Clone)]
+pub struct AppState {
+{{#if (eq frontend "htmx")}}
+    pub app_name: String,
+{{/if}}
+{{#if (ne orm "none")}}
+    pub db: db::Db,
+{{/if}}
 }
+{{/if}}
 
 #[tokio::main]
 async fn main() {
     let app_config = config::Config::from_env();
-
 {{#if (ne orm "none")}}
-    {{#if (eq orm "diesel")}}
-    if let Err(err) = db::connect() {
-    {{else}}
-    if let Err(err) = db::connect().await {
-    {{/if}}
+    let db = db::connect().await.unwrap_or_else(|err| {
         eprintln!("database not ready: {err}");
-    }
+        std::process::exit(1);
+    });
 {{/if}}
-
     println!(
         "{} listening on 0.0.0.0:{}",
         app_config.app_name, app_config.port,
     );
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+{{#if (eq frontend "htmx")}}
+    let state = AppState {
+        app_name: app_config.app_name,
+{{#if (ne orm "none")}}
+        db,
+{{/if}}
+    };
+{{else}}
+    let state = AppState { db };
+{{/if}}
+{{/if}}
 
-    warp::serve(routes()).run(([0, 0, 0, 0], app_config.port)).await;
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+    let routes = health()
+{{#if (ne orm "none")}}
+        .or(api::routes(state{{#if (eq frontend "htmx")}}.clone(){{/if}}))
+{{/if}}
+{{#if (eq frontend "htmx")}}
+        .or(pages::routes(state))
+{{/if}}
+        .with(warp::cors().allow_any_origin());
+{{else}}
+    let routes = health().with(warp::cors().allow_any_origin());
+{{/if}}
+    warp::serve(routes)
+        .run(([0, 0, 0, 0], app_config.port))
+        .await;
+}
+
+fn health() -> impl Filter<Extract = (impl Reply,), Error = Rejection> + Clone {
+    warp::path!("health")
+        .and(warp::get())
+        .map(|| warp::reply::json(&json!({ "status": "ok" })))
 }
 
 #[cfg(test)]
@@ -37,7 +86,8 @@ mod tests {
 
     #[tokio::test]
     async fn health_returns_status_ok() {
-        let response = warp::test::request().path("/health").reply(routes()).await;
+        let response = warp::test::request().path("/health").reply(&health()).await;
         assert_eq!(response.status(), warp::http::StatusCode::OK);
+        assert_eq!(response.body().as_ref(), br#"{"status":"ok"}"#);
     }
 }

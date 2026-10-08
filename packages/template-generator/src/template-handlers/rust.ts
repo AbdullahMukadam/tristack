@@ -28,7 +28,21 @@ function copyRustCore(vfs: VirtualFileSystem, data: TemplateData): void {
 
 function copyFramework(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
-  copyTemplates(vfs, data.templates, config, `rust/framework/${config.framework}`);
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    `rust/framework/${config.framework}`,
+    (templatePath) =>
+      (config.orm === "none" && templatePath.endsWith("/api.rs.hbs")) ||
+      (config.frontend === "none" && templatePath.endsWith("/pages.rs.hbs")),
+  );
+}
+
+function copyItems(vfs: VirtualFileSystem, data: TemplateData): void {
+  const { config } = data;
+  if (config.orm === "none") return;
+  copyTemplates(vfs, data.templates, config, "rust/items");
 }
 
 function copyOrm(vfs: VirtualFileSystem, data: TemplateData): void {
@@ -47,11 +61,13 @@ function copyFrontends(vfs: VirtualFileSystem, data: TemplateData): void {
   const { config } = data;
   if (config.frontend === "none") return;
 
-  const prefix = `rust/frontend/${config.frontend}`;
-  copyTemplates(vfs, data.templates, config, `${prefix}/common`);
-  if (config.framework !== "none") {
-    copyTemplates(vfs, data.templates, config, `${prefix}/framework/${config.framework}`);
-  }
+  copyTemplates(
+    vfs,
+    data.templates,
+    config,
+    `rust/frontend/${config.frontend}/common`,
+    (templatePath) => config.orm === "none" && templatePath.endsWith("/items.html.hbs"),
+  );
 }
 
 function copyAddons(vfs: VirtualFileSystem, data: TemplateData): void {
@@ -70,6 +86,7 @@ export function processRustTemplates(
   copyRustBase(vfs, data);
   copyRustCore(vfs, data);
   copyFramework(vfs, data);
+  copyItems(vfs, data);
   copyOrm(vfs, data);
   copyMigrations(vfs, data);
   copyFrontends(vfs, data);

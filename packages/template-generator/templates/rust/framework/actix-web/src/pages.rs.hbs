@@ -1,0 +1,30 @@
+use actix_web::{web, HttpResponse};
+
+{{#if (ne orm "none")}}
+use crate::service;
+{{/if}}
+use crate::views;
+use crate::AppState;
+
+pub async fn index(state: web::Data<AppState>) -> HttpResponse {
+    html(views::index(&state.app_name))
+}
+
+pub async fn now() -> HttpResponse {
+    html(views::now())
+}
+{{#if (ne orm "none")}}
+
+pub async fn items(state: web::Data<AppState>) -> HttpResponse {
+    match service::list_items(&state.db).await {
+        Ok(items) => html(views::items(&items)),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
+}
+{{/if}}
+
+fn html(body: String) -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(body)
+}

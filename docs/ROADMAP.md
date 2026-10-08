@@ -32,11 +32,11 @@ Exit: every option combination above scaffolds, builds (`go build ./cmd/api`), a
 
 ## Phase 3 — Rust (planned)
 
-- [ ] Template parity across frameworks: Axum, Actix-Web, Rocket, Warp, Salvo, Loco (plus `none`).
-- [ ] ORMs: SeaORM, Diesel, SQLx (plus `none`).
-- [ ] Migrations: `none` (Rust option set has no standard tool yet).
-- [ ] Addons: docker, cargo-watch, clippy, github-actions.
-- [ ] htmx frontend layer (`/web/now` server-time fragment).
+- [x] Template parity across frameworks: Axum, Actix-Web, Rocket, Warp, Salvo (plus `none`).
+- [x] ORMs: SeaORM, Diesel, SQLx (plus `none`).
+- [x] Migrations: `none` (Rust option set has no standard tool yet).
+- [x] Addons: docker, cargo-watch, clippy, github-actions.
+- [x] htmx frontend layer (`/web/now` server-time fragment, plus `/web/items` with an ORM).
 
 Exit: every combination above scaffolds, builds (`cargo build`), and serves the documented routes.
 

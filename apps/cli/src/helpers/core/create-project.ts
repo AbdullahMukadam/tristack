@@ -158,5 +158,6 @@ async function runPostScaffoldSteps(
 }
 
 function runCommandHint(options: ProjectConfig): string {
-  return getRuntimeProfile(options).run({ dev: true }).label;
+  const run = getRuntimeProfile(options).run({ dev: true }).label;
+  return run.startsWith("cargo watch") ? `cargo install cargo-watch\n${run}` : run;
 }

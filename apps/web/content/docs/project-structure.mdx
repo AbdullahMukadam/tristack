@@ -351,6 +351,10 @@ The default stack (`axum` + `seaorm` + `cargo` + `docker, cargo-watch, clippy`) 
     </Folder>
     <Folder name="src">
       <File name="main.rs" />
+      <File name="config.rs" />
+      <File name="api.rs" />
+      <File name="models.rs" />
+      <File name="service.rs" />
       <File name="db.rs" />
     </Folder>
   </Folder>
@@ -359,8 +363,10 @@ The default stack (`axum` + `seaorm` + `cargo` + `docker, cargo-watch, clippy`) 
 Notes:
 
 - The package name is the slugged project name (`my_api` for `my-api`).
-- The web framework entrypoints read `PORT` (default `8000`) and `APP_NAME` from the environment (`main.rs`) and expose `GET /health`.
-- Dependencies (`serde`, `tokio`, the framework, and the ORM) are pinned in `Cargo.toml`.
+- `main.rs` reads `PORT` (default `8000`) and `APP_NAME` through `config.rs`, builds the app state, and exposes `GET /health` returning `{"status":"ok"}` as JSON.
+- With an ORM, the project serves the canonical items Example: `GET /api/v1/items` (newest first) and `POST /api/v1/items` with `{"name": "..."}` (201, or 400 with `{"error": "..."}` for a bad body or a name that is empty or over 200 characters). `api.rs` holds the handlers, `service.rs` the validation, `models.rs` the `Item` type, and `db.rs` the data layer.
+- On startup, `db.rs` creates the `items` table if it is missing. If the database can't be reached, the app prints `database not ready: …` and exits with status 1 instead of serving.
+- The framework, the ORM, and their supporting crates are declared in `Cargo.toml`.
 
 ### Framework variations
 
@@ -371,16 +377,15 @@ Every framework writes its entrypoint to `src/main.rs`. Each web framework expos
 - **Rocket** — `rocket` routes with the `#[launch]` (or `#[rocket::main]`) runtime
 - **Warp** — a `warp` filter pipeline on `tokio`
 - **Salvo** — a `salvo` `Router` on `tokio`
-- **Loco** — a minimal, Rails-like `loco-rs` entrypoint scaffold; generate the full app (controllers, initializers) with `cargo loco new`
 
 ### ORM variations
 
-The data layer always lands at `src/db.rs` and is wired to `main.rs` via `mod db;`:
+The data layer always lands at `src/db.rs` and exposes the same async API for every ORM (`Db`, `connect`, `insert_item`, `list_items`), so the frameworks don't branch on the ORM:
 
-- **SeaORM** — an async connection helper (`DatabaseConnection` for `postgres`/`mysql`, the SQLite connection for `sqlite`)
-- **Diesel** — a synchronous connection helper (`PgConnection` / `MysqlConnection` / `SqliteConnection`)
-- **sqlx** — an async pool helper (`PgPool` / `MySqlPool` / `SqlitePool`)
-- **None** — no `src/db.rs` and no `mod db;`
+- **SeaORM** — a `DatabaseConnection` and an `items` entity; the table is created from the entity
+- **Diesel** — an r2d2 connection pool; queries run on `tokio::task::spawn_blocking`
+- **sqlx** — a `PgPool` / `MySqlPool` / `SqlitePool` with plain SQL queries
+- **None** — no `src/db.rs`, no items API
 
 The database driver is chosen from the `database` value and enabled via Cargo features in `Cargo.toml`.
 
@@ -390,33 +395,35 @@ Rust has no standard migration tool in the option set yet, so `--migrations` is 
 
 ### Frontend
 
-With `--frontend htmx`, Rust adds Askama templates under `src/templates/`. The page templates are ORM-agnostic — the `IndexTemplate` / `NowTemplate` render data computed in `main.rs`, so the htmx frontend works with any ORM (or none):
+With `--frontend htmx`, Rust adds Askama templates in a project-root `templates/` folder:
 
 <Files>
   <Folder name="rust-htmx-project/" defaultOpen>
     <Folder name="src">
       <File name="main.rs" />
-      <Folder name="templates">
-        <File name="index.html" />
-        <File name="now.html" />
-      </Folder>
+      <File name="pages.rs" />
+      <File name="views.rs" />
+    </Folder>
+    <Folder name="templates">
+      <File name="index.html" />
+      <File name="now.html" />
+      <File name="items.html" />
     </Folder>
   </Folder>
 </Files>
 
-- `main.rs` — registers `GET /` (rendering `IndexTemplate`) and `GET /web/now` (rendering the `NowTemplate` fragment with the current Unix time)
-- `src/templates/` — `index.html` (layout with the HTMX script and inline CSS) and `now.html` (the fragment)
+- `pages.rs` — `GET /` (the home page), `GET /web/now` (a server-time fragment) and, with an ORM, `GET /web/items` (a table of items, loaded by the home page over htmx)
+- `views.rs` — the Askama template structs and render helpers
+- `templates/` — `index.html` (layout with the HTMX script and inline CSS), `now.html`, and `items.html` (ORM projects only)
 - `Cargo.toml` — adds `askama = "0.14"`
-
-Loco doesn't support `htmx` yet — the CLI rejects `--framework loco --frontend htmx`.
 
 ### Addons
 
 | Addon            | Adds                                                      |
 | ---------------- | --------------------------------------------------------- |
-| `docker`         | `Dockerfile`, `docker-compose.yml`, `.dockerignore`       |
+| `docker`         | non-root image, `docker-compose.yml`, `.dockerignore`     |
 | `cargo-watch`    | auto-reload dev server (run with `cargo watch -x run`)    |
-| `clippy`         | strict clippy lints in CI (`cargo clippy -- -D warnings`) |
+| `clippy`         | `[lints.clippy]` in `Cargo.toml`, `clippy.toml`, CI lint  |
 | `github-actions` | `.github/workflows/ci.yml`                                |
 
 ## Config file

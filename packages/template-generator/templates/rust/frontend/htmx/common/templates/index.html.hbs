@@ -48,6 +48,18 @@
             padding: 0 1.5rem;
         }
 
+        table {
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        th,
+        td {
+            padding: 0.4rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
         code {
             padding: 0.1rem 0.35rem;
             border-radius: 4px;
@@ -74,6 +86,14 @@
     <main>
         <h1>\{{ app_name }}</h1>
         <p>A TriStack project with an HTMX-powered web frontend.</p>
+{{#if (ne orm "none")}}
+        <section id="items"
+                 hx-get="/web/items"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+            <p>Loading items…</p>
+        </section>
+{{/if}}
         <section id="clock"
                  hx-get="/web/now"
                  hx-trigger="load"

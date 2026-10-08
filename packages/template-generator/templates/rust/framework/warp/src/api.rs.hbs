@@ -1,0 +1,49 @@
+use std::convert::Infallible;
+
+use serde_json::json;
+use warp::http::StatusCode;
+use warp::hyper::body::Bytes;
+use warp::reply::{self, Response};
+use warp::{Filter, Rejection, Reply};
+
+use crate::service::{self, ServiceError};
+use crate::AppState;
+
+const MAX_BODY_BYTES: u64 = 1024 * 1024;
+
+pub fn routes(state: AppState) -> impl Filter<Extract = (Response,), Error = Rejection> + Clone {
+    let with_state = warp::any().map(move || state.clone());
+    let list = warp::path!("api" / "v1" / "items")
+        .and(warp::get())
+        .and(with_state.clone())
+        .and_then(list_items);
+    let create = warp::path!("api" / "v1" / "items")
+        .and(warp::post())
+        .and(warp::body::content_length_limit(MAX_BODY_BYTES))
+        .and(warp::body::bytes())
+        .and(with_state)
+        .and_then(create_item);
+    list.or(create).unify()
+}
+
+async fn list_items(state: AppState) -> Result<Response, Infallible> {
+    Ok(match service::list_items(&state.db).await {
+        Ok(items) => reply::json(&items).into_response(),
+        Err(err) => error_response(&err),
+    })
+}
+
+async fn create_item(body: Bytes, state: AppState) -> Result<Response, Infallible> {
+    Ok(match service::create_item(&state.db, &body).await {
+        Ok(item) => reply::with_status(reply::json(&item), StatusCode::CREATED).into_response(),
+        Err(err) => error_response(&err),
+    })
+}
+
+fn error_response(err: &ServiceError) -> Response {
+    let status = match err {
+        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,
+        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    };
+    reply::with_status(reply::json(&json!({ "error": err.to_string() })), status).into_response()
+}

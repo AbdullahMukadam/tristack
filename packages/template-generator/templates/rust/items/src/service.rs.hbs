@@ -1,0 +1,89 @@
+use std::fmt;
+
+use chrono::{SubsecRound, Utc};
+use serde::Deserialize;
+use uuid::Uuid;
+
+use crate::db::{self, Db};
+use crate::models::Item;
+
+const MAX_NAME_CHARS: usize = 200;
+
+#[derive(Debug)]
+pub enum ServiceError {
+    BadRequest(String),
+    Internal(&'static str),
+}
+
+impl fmt::Display for ServiceError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::BadRequest(message) => f.write_str(message),
+            Self::Internal(message) => f.write_str(message),
+        }
+    }
+}
+
+#[derive(Deserialize)]
+struct NewItem {
+    name: String,
+}
+
+pub async fn list_items(db: &Db) -> Result<Vec<Item>, ServiceError> {
+    db::list_items(db)
+        .await
+        .map_err(|err| internal("could not list items", &err))
+}
+
+pub async fn create_item(db: &Db, body: &[u8]) -> Result<Item, ServiceError> {
+    let input: NewItem = serde_json::from_slice(body)
+        .map_err(|_| ServiceError::BadRequest("invalid request body".to_string()))?;
+    validate_name(&input.name)?;
+    let item = Item {
+        id: Uuid::new_v4().to_string(),
+        name: input.name,
+        created_at: Utc::now().trunc_subsecs(6),
+    };
+    db::insert_item(db, &item)
+        .await
+        .map_err(|err| internal("could not create item", &err))?;
+    Ok(item)
+}
+
+fn validate_name(name: &str) -> Result<(), ServiceError> {
+    if name.trim().is_empty() {
+        return Err(ServiceError::BadRequest(
+            "invalid input: name must not be empty".to_string(),
+        ));
+    }
+    if name.chars().count() > MAX_NAME_CHARS {
+        return Err(ServiceError::BadRequest(format!(
+            "invalid input: name must be at most {MAX_NAME_CHARS} characters"
+        )));
+    }
+    Ok(())
+}
+
+fn internal(message: &'static str, err: &db::Error) -> ServiceError {
+    eprintln!("{message}: {err}");
+    ServiceError::Internal(message)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn validate_name_accepts_valid_names() {
+        assert!(validate_name("abc").is_ok());
+        assert!(validate_name("  spaced name  ").is_ok());
+        assert!(validate_name(&"a".repeat(MAX_NAME_CHARS)).is_ok());
+    }
+
+    #[test]
+    fn validate_name_rejects_invalid_names() {
+        assert!(validate_name("").is_err());
+        assert!(validate_name("   ").is_err());
+        assert!(validate_name(&"a".repeat(MAX_NAME_CHARS + 1)).is_err());
+    }
+}

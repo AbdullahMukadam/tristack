@@ -21,7 +21,6 @@ export const FrameworkSchema = z
     "rocket",
     "warp",
     "salvo",
-    "loco",
     "none",
   ])
   .describe('Web framework (or "none" for a bare project)');

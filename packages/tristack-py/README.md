@@ -27,7 +27,7 @@ tristack my-api --yes    # use default configuration
 ## Support
 
 - Operations: interactive prompts, `--yes`, `--yolo`, `--dry-run`, `--verbose`
-- Languages: Python (FastAPI, Litestar, Django, Flask), Go (Gin, Fiber, Echo, Chi, stdlib), Rust (Axum, Actix-Web, Rocket, Warp, Salvo, Loco)
+- Languages: Python (FastAPI, Litestar, Django, Flask), Go (Gin, Fiber, Echo, Chi, stdlib), Rust (Axum, Actix-Web, Rocket, Warp, Salvo)
 - ORMs/migrations: Python (SQLModel, SQLAlchemy, Tortoise, Alembic), Go (GORM, SQLC, SQLx, Goose), Rust (SeaORM, Diesel, SQLx)
 
 ## License

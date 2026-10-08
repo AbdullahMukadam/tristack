@@ -1,0 +1,45 @@
+use salvo::prelude::*;
+use serde_json::json;
+
+use crate::service::{self, ServiceError};
+use crate::AppState;
+
+pub fn router() -> Router {
+    Router::with_path("api/v1/items")
+        .get(list_items)
+        .post(create_item)
+}
+
+#[handler]
+async fn list_items(depot: &mut Depot, res: &mut Response) {
+    let state = AppState::from_depot(depot);
+    match service::list_items(&state.db).await {
+        Ok(items) => res.render(Json(items)),
+        Err(err) => error_response(res, &err),
+    }
+}
+
+#[handler]
+async fn create_item(req: &mut Request, depot: &mut Depot, res: &mut Response) {
+    let body = req
+        .payload()
+        .await
+        .map(|bytes| bytes.to_vec())
+        .unwrap_or_default();
+    let state = AppState::from_depot(depot);
+    match service::create_item(&state.db, &body).await {
+        Ok(item) => {
+            res.status_code(StatusCode::CREATED);
+            res.render(Json(item));
+        }
+        Err(err) => error_response(res, &err),
+    }
+}
+
+fn error_response(res: &mut Response, err: &ServiceError) {
+    res.status_code(match err {
+        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,
+        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    });
+    res.render(Json(json!({ "error": err.to_string() })));
+}

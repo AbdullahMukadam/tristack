@@ -1,40 +1,91 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket::serde::json::Json;
+use serde_json::{json, Value};
+
+{{#if (ne orm "none")}}
+mod api;
+{{/if}}
 mod config;
 {{#if (ne orm "none")}}
 mod db;
+mod models;
 {{/if}}
+{{#if (eq frontend "htmx")}}
+mod pages;
+{{/if}}
+{{#if (ne orm "none")}}
+mod service;
+{{/if}}
+{{#if (eq frontend "htmx")}}
+mod views;
+{{/if}}
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+
+#[derive(Clone)]
+pub struct AppState {
+{{#if (eq frontend "htmx")}}
+    pub app_name: String,
+{{/if}}
+{{#if (ne orm "none")}}
+    pub db: db::Db,
+{{/if}}
+}
+{{/if}}
+
 #[get("/health")]
-fn health() -> &'static str {
-    "{\"status\":\"ok\"}"
+fn health() -> Json<Value> {
+    Json(json!({ "status": "ok" }))
 }
 
 #[launch]
 async fn rocket() -> _ {
     let app_config = config::Config::from_env();
-
 {{#if (ne orm "none")}}
-{{#if (eq orm "diesel")}}
-    if let Err(err) = db::connect() {
-{{else}}
-    if let Err(err) = db::connect().await {
-{{/if}}
+    let db = db::connect().await.unwrap_or_else(|err| {
         eprintln!("database not ready: {err}");
-    }
+        std::process::exit(1);
+    });
 {{/if}}
     let config = rocket::Config {
         address: std::net::Ipv4Addr::UNSPECIFIED.into(),
         port: app_config.port,
         ..rocket::Config::default()
     };
-
     println!(
         "{} listening on 0.0.0.0:{}",
         app_config.app_name, config.port,
     );
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+{{#if (eq frontend "htmx")}}
+    let state = AppState {
+        app_name: app_config.app_name,
+{{#if (ne orm "none")}}
+        db,
+{{/if}}
+    };
+{{else}}
+    let state = AppState { db };
+{{/if}}
+{{/if}}
 
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+    rocket::custom(config)
+        .manage(state)
+{{#if (ne orm "none")}}
+        .mount("/", routes![api::list_items, api::create_item])
+{{/if}}
+{{#if (eq frontend "htmx")}}
+        .mount("/", routes![pages::index, pages::now])
+{{/if}}
+{{#if (and (eq frontend "htmx") (ne orm "none"))}}
+        .mount("/", routes![pages::items])
+{{/if}}
+        .mount("/", routes![health])
+{{else}}
     rocket::custom(config).mount("/", routes![health])
+{{/if}}
 }
 
 #[cfg(test)]
@@ -43,6 +94,6 @@ mod tests {
 
     #[test]
     fn health_returns_status_ok() {
-        assert_eq!(health(), "{\"status\":\"ok\"}");
+        assert_eq!(health().0, json!({ "status": "ok" }));
     }
 }

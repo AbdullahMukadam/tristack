@@ -1,0 +1,37 @@
+use rocket::http::Status;
+use rocket::serde::json::Json;
+use rocket::State;
+use serde_json::{json, Value};
+
+use crate::models::Item;
+use crate::service::{self, ServiceError};
+use crate::AppState;
+
+type ApiError = (Status, Json<Value>);
+
+#[get("/api/v1/items")]
+pub async fn list_items(state: &State<AppState>) -> Result<Json<Vec<Item>>, ApiError> {
+    service::list_items(&state.db)
+        .await
+        .map(Json)
+        .map_err(|err| error_response(&err))
+}
+
+#[post("/api/v1/items", data = "<body>")]
+pub async fn create_item(
+    state: &State<AppState>,
+    body: Vec<u8>,
+) -> Result<(Status, Json<Item>), ApiError> {
+    service::create_item(&state.db, &body)
+        .await
+        .map(|item| (Status::Created, Json(item)))
+        .map_err(|err| error_response(&err))
+}
+
+fn error_response(err: &ServiceError) -> ApiError {
+    let status = match err {
+        ServiceError::BadRequest(_) => Status::BadRequest,
+        ServiceError::Internal(_) => Status::InternalServerError,
+    };
+    (status, Json(json!({ "error": err.to_string() })))
+}

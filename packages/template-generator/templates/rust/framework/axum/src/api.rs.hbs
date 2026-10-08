@@ -1,0 +1,31 @@
+use axum::body::Bytes;
+use axum::extract::State;
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
+use axum::Json;
+use serde_json::json;
+
+use crate::service::{self, ServiceError};
+use crate::AppState;
+
+pub async fn list_items(State(state): State<AppState>) -> Response {
+    match service::list_items(&state.db).await {
+        Ok(items) => Json(items).into_response(),
+        Err(err) => error_response(&err),
+    }
+}
+
+pub async fn create_item(State(state): State<AppState>, body: Bytes) -> Response {
+    match service::create_item(&state.db, &body).await {
+        Ok(item) => (StatusCode::CREATED, Json(item)).into_response(),
+        Err(err) => error_response(&err),
+    }
+}
+
+fn error_response(err: &ServiceError) -> Response {
+    let status = match err {
+        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,
+        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    };
+    (status, Json(json!({ "error": err.to_string() }))).into_response()
+}

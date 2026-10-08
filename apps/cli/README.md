@@ -61,7 +61,7 @@ Options:
   --verbose                       Show detailed result information as JSON
   --yolo                          Bypass validations and compatibility checks
   --language <lang>               python (default), go, rust
-  --framework <framework>         python: fastapi (default), litestar, django, flask · go: gin, fiber, echo, chi, stdlib · rust: axum, actix-web, rocket, warp, salvo, loco
+  --framework <framework>         python: fastapi (default), litestar, django, flask · go: gin, fiber, echo, chi, stdlib · rust: axum, actix-web, rocket, warp, salvo
   --orm <orm>                     python: sqlmodel (default), sqlalchemy, tortoise, none · go: sqlc, gorm, sqlx, none · rust: seaorm, diesel, sqlx, none
   --migrations <tool>             python: alembic (default), none · go: goose, golang-migrate, none · rust: none
   --database <db>                 sqlite (default), postgres, mysql, none

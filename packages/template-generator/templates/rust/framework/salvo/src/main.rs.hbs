@@ -1,33 +1,106 @@
 use salvo::prelude::*;
+use serde_json::json;
 
+{{#if (ne orm "none")}}
+mod api;
+{{/if}}
 mod config;
 {{#if (ne orm "none")}}
 mod db;
+mod models;
 {{/if}}
+{{#if (eq frontend "htmx")}}
+mod pages;
+{{/if}}
+{{#if (ne orm "none")}}
+mod service;
+{{/if}}
+{{#if (eq frontend "htmx")}}
+mod views;
+{{/if}}
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+
+#[derive(Clone)]
+pub struct AppState {
+{{#if (eq frontend "htmx")}}
+    pub app_name: String,
+{{/if}}
+{{#if (ne orm "none")}}
+    pub db: db::Db,
+{{/if}}
+}
+
+impl AppState {
+    pub fn from_depot(depot: &Depot) -> &Self {
+        depot
+            .obtain::<Self>()
+            .expect("AppState is injected in main")
+    }
+}
+{{/if}}
+
 #[handler]
-async fn health() -> &'static str {
-    "{\"status\":\"ok\"}"
+async fn health(res: &mut Response) {
+    res.render(Json(json!({ "status": "ok" })));
 }
 
 #[tokio::main]
 async fn main() {
     let app_config = config::Config::from_env();
-
 {{#if (ne orm "none")}}
-    {{#if (eq orm "diesel")}}
-    if let Err(err) = db::connect() {
-    {{else}}
-    if let Err(err) = db::connect().await {
-    {{/if}}
+    let db = db::connect().await.unwrap_or_else(|err| {
         eprintln!("database not ready: {err}");
-    }
+        std::process::exit(1);
+    });
 {{/if}}
-    let router = Router::new().path("health").get(health);
-
     let addr = format!("0.0.0.0:{}", app_config.port);
-
     println!("{} listening on {}", app_config.app_name, addr);
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+{{#if (eq frontend "htmx")}}
+    let state = AppState {
+        app_name: app_config.app_name,
+{{#if (ne orm "none")}}
+        db,
+{{/if}}
+    };
+{{else}}
+    let state = AppState { db };
+{{/if}}
+{{/if}}
 
-    let listener = TcpListener::bind(&addr).await.expect("failed to bind");
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+    let router = Router::new()
+        .hoop(affix_state::inject(state))
+{{#if (ne orm "none")}}
+        .push(api::router())
+{{/if}}
+{{#if (eq frontend "htmx")}}
+        .push(pages::router())
+{{/if}}
+        .push(Router::with_path("health").get(health));
+{{else}}
+    let router = Router::with_path("health").get(health);
+{{/if}}
+
+    let listener = TcpListener::new(addr).bind().await;
     Server::new(listener).serve(router).await;
+}
+
+#[cfg(test)]
+mod tests {
+    use salvo::test::{ResponseExt, TestClient};
+
+    use super::*;
+
+    #[tokio::test]
+    async fn health_returns_status_ok() {
+        let service = Service::new(Router::with_path("health").get(health));
+        let body = TestClient::get("http://127.0.0.1/health")
+            .send(&service)
+            .await
+            .take_string()
+            .await
+            .expect("response body");
+        assert_eq!(body, r#"{"status":"ok"}"#);
+    }
 }

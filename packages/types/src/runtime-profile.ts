@@ -255,8 +255,18 @@ function rustRunCommand(config: ProjectConfig): (opts?: RunOptions) => Command {
 
 function rustProbes(config: ProjectConfig): Probe[] {
   const probes: Probe[] = [{ method: "GET", path: "/health", expectStatus: 200 }];
-  if (config.frontend === "htmx")
+  if (config.orm !== "none") {
+    probes.push(
+      { method: "GET", path: "/api/v1/items", expectStatus: 200 },
+      { method: "POST", path: "/api/v1/items", expectStatus: 201, body: { name: "boot-check" } },
+    );
+  }
+  if (config.frontend === "htmx") {
+    probes.push({ method: "GET", path: "/", expectStatus: 200 });
     probes.push({ method: "GET", path: "/web/now", expectStatus: 200 });
+    if (config.orm !== "none")
+      probes.push({ method: "GET", path: "/web/items", expectStatus: 200 });
+  }
   return probes;
 }
 

@@ -1,37 +1,126 @@
-use diesel::{Connection, ConnectionError};
-
+use chrono::{DateTime, NaiveDateTime, Utc};
+use diesel::prelude::*;
 {{#if (eq database "sqlite")}}
-use diesel::SqliteConnection;
-
-pub type DbConnection = SqliteConnection;
-{{else if (eq database "postgres")}}
-use diesel::PgConnection;
-
-pub type DbConnection = PgConnection;
-{{else if (eq database "mysql")}}
-use diesel::MysqlConnection;
-
-pub type DbConnection = MysqlConnection;
+use diesel::r2d2::{ConnectionManager, CustomizeConnection, Pool};
+{{else}}
+use diesel::r2d2::{ConnectionManager, Pool};
 {{/if}}
 
-pub fn connect() -> Result<DbConnection, ConnectionError> {
-    <DbConnection as Connection>::establish(&database_url())
+use crate::models::Item;
+
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+
+const DATABASE_NAME: &str = "{{project_slug}}";
+{{#if (eq database "sqlite")}}
+pub type Db = Pool<ConnectionManager<SqliteConnection>>;
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)";
+{{else if (eq database "postgres")}}
+pub type Db = Pool<ConnectionManager<PgConnection>>;
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)";
+{{else if (eq database "mysql")}}
+pub type Db = Pool<ConnectionManager<MysqlConnection>>;
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)";
+{{/if}}
+
+diesel::table! {
+    items (id) {
+        id -> Text,
+        name -> Text,
+        created_at -> {{#if (eq database "mysql")}}Datetime{{else}}Timestamp{{/if}},
+    }
+}
+
+{{#if (eq database "sqlite")}}
+#[derive(Debug)]
+struct SqliteBusyTimeout;
+
+impl CustomizeConnection<SqliteConnection, diesel::r2d2::Error> for SqliteBusyTimeout {
+    fn on_acquire(&self, conn: &mut SqliteConnection) -> Result<(), diesel::r2d2::Error> {
+        diesel::sql_query("PRAGMA busy_timeout = 5000")
+            .execute(conn)
+            .map(|_| ())
+            .map_err(diesel::r2d2::Error::QueryError)
+    }
+}
+
+{{/if}}
+#[derive(Queryable, Insertable)]
+#[diesel(table_name = items)]
+struct ItemRow {
+    id: String,
+    name: String,
+    created_at: NaiveDateTime,
+}
+
+pub async fn connect() -> Result<Db, Error> {
+    blocking(|| {
+{{#if (eq database "sqlite")}}
+        let db = Pool::builder()
+            .connection_customizer(Box::new(SqliteBusyTimeout))
+            .build(ConnectionManager::new(database_url()))?;
+{{else}}
+        let db = Pool::builder().build(ConnectionManager::new(database_url()))?;
+{{/if}}
+        diesel::sql_query(CREATE_ITEMS).execute(&mut db.get()?)?;
+        Ok(db)
+    })
+    .await
+}
+
+pub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {
+    let db = db.clone();
+    let row = ItemRow {
+        id: item.id.clone(),
+        name: item.name.clone(),
+        created_at: item.created_at.naive_utc(),
+    };
+    blocking(move || {
+        diesel::insert_into(items::table)
+            .values(&row)
+            .execute(&mut db.get()?)?;
+        Ok(())
+    })
+    .await
+}
+
+pub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {
+    let db = db.clone();
+    let rows: Vec<ItemRow> = blocking(move || {
+        Ok(items::table
+            .order(items::created_at.desc())
+            .load(&mut db.get()?)?)
+    })
+    .await?;
+    Ok(rows
+        .into_iter()
+        .map(|row| Item {
+            id: row.id,
+            name: row.name,
+            created_at: DateTime::<Utc>::from_naive_utc_and_offset(row.created_at, Utc),
+        })
+        .collect())
+}
+
+async fn blocking<T, F>(task: F) -> Result<T, Error>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, Error> + Send + 'static,
+{
+    tokio::task::spawn_blocking(task).await?
 }
 
 fn database_url() -> String {
-    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
-}
-
 {{#if (eq database "sqlite")}}
-fn database_default() -> &'static str {
-    "{{project_slug}}.db"
-}
-{{else if (eq database "postgres")}}
-fn database_default() -> &'static str {
-    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
-}
-{{else if (eq database "mysql")}}
-fn database_default() -> &'static str {
-    "mysql://root:password@127.0.0.1:3306/{{project_slug}}"
-}
+    std::env::var("DATABASE_URL").unwrap_or_else(|_| format!("{DATABASE_NAME}.db"))
+{{else}}
+    std::env::var("DATABASE_URL")
 {{/if}}
+{{#if (eq database "postgres")}}
+        .unwrap_or_else(|_| format!("postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}"))
+{{else if (eq database "mysql")}}
+        .unwrap_or_else(|_| format!("mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}"))
+{{/if}}
+}

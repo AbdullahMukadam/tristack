@@ -1,37 +1,85 @@
-use axum::{routing::get, Router};
+use axum::{routing::get, Json, Router};
+use serde_json::{json, Value};
 
+{{#if (ne orm "none")}}
+mod api;
+{{/if}}
 mod config;
 {{#if (ne orm "none")}}
 mod db;
+mod models;
 {{/if}}
+{{#if (eq frontend "htmx")}}
+mod pages;
+{{/if}}
+{{#if (ne orm "none")}}
+mod service;
+{{/if}}
+{{#if (eq frontend "htmx")}}
+mod views;
+{{/if}}
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+
+#[derive(Clone)]
+pub struct AppState {
+{{#if (eq frontend "htmx")}}
+    pub app_name: String,
+{{/if}}
+{{#if (ne orm "none")}}
+    pub db: db::Db,
+{{/if}}
+}
+{{/if}}
+
 #[tokio::main]
 async fn main() {
     let app_config = config::Config::from_env();
-
 {{#if (ne orm "none")}}
-    {{#if (eq orm "diesel")}}
-    if let Err(err) = db::connect() {
-    {{else}}
-    if let Err(err) = db::connect().await {
-    {{/if}}
+    let db = db::connect().await.unwrap_or_else(|err| {
         eprintln!("database not ready: {err}");
-    }
+        std::process::exit(1);
+    });
 {{/if}}
-    let router = Router::new().route("/health", get(health));
-
     let addr = format!("0.0.0.0:{}", app_config.port);
-
     println!("{} listening on {}", app_config.app_name, addr);
+
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+{{#if (eq frontend "htmx")}}
+    let state = AppState {
+        app_name: app_config.app_name,
+{{#if (ne orm "none")}}
+        db,
+{{/if}}
+    };
+{{else}}
+    let state = AppState { db };
+{{/if}}
+
+    let router = Router::new()
+{{#if (ne orm "none")}}
+        .route("/api/v1/items", get(api::list_items).post(api::create_item))
+{{/if}}
+{{#if (eq frontend "htmx")}}
+        .route("/", get(pages::index))
+        .route("/web/now", get(pages::now))
+{{/if}}
+{{#if (and (eq frontend "htmx") (ne orm "none"))}}
+        .route("/web/items", get(pages::items))
+{{/if}}
+        .with_state(state)
+        .route("/health", get(health));
+{{else}}
+    let router = Router::new().route("/health", get(health));
+{{/if}}
 
     let listener = tokio::net::TcpListener::bind(&addr)
         .await
         .expect("failed to bind");
-
     axum::serve(listener, router).await.expect("server error");
 }
 
-async fn health() -> &'static str {
-    "{\"status\":\"ok\"}"
+async fn health() -> Json<Value> {
+    Json(json!({ "status": "ok" }))
 }
 
 #[cfg(test)]
@@ -40,6 +88,6 @@ mod tests {
 
     #[tokio::test]
     async fn health_returns_status_ok() {
-        assert_eq!(health().await, "{\"status\":\"ok\"}");
+        assert_eq!(health().await.0, json!({ "status": "ok" }));
     }
 }

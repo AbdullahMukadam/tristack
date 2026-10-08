@@ -1,0 +1,47 @@
+use askama::Template;
+
+{{#if (ne orm "none")}}
+use crate::models::Item;
+
+{{/if}}
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate<'a> {
+    app_name: &'a str,
+}
+
+#[derive(Template)]
+#[template(path = "now.html")]
+struct NowTemplate {
+    now: u64,
+}
+{{#if (ne orm "none")}}
+
+#[derive(Template)]
+#[template(path = "items.html")]
+struct ItemsTemplate<'a> {
+    items: &'a [Item],
+}
+{{/if}}
+
+pub fn index(app_name: &str) -> String {
+    render(&IndexTemplate { app_name })
+}
+
+pub fn now() -> String {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|elapsed| elapsed.as_secs())
+        .unwrap_or_default();
+    render(&NowTemplate { now })
+}
+{{#if (ne orm "none")}}
+
+pub fn items(items: &[Item]) -> String {
+    render(&ItemsTemplate { items })
+}
+{{/if}}
+
+fn render(template: &impl Template) -> String {
+    template.render().unwrap_or_else(|err| err.to_string())
+}

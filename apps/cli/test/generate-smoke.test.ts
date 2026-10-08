@@ -266,18 +266,18 @@ describe("createVirtual - python htmx scaffold", () => {
     expect(htmxWithNoFramework.isErr()).toBe(true);
   });
 
-  it("rejects HTMX for Loco", async () => {
-    const locoWithHtmx = await createVirtual({
+  it("rejects the removed Loco framework", async () => {
+    const loco = await createVirtual({
       language: "rust",
-      framework: "loco",
-      frontend: "htmx",
-      orm: "seaorm",
+      framework: "loco" as never,
+      frontend: "none",
+      orm: "none",
       migrations: "none",
-      database: "sqlite",
+      database: "none",
       packageManager: "cargo",
       addons: [],
     });
-    expect(locoWithHtmx.isErr()).toBe(true);
+    expect(loco.isErr() && String(loco.error)).toContain('Framework "loco" is not available');
   });
 });
 
@@ -424,8 +424,8 @@ describe("createVirtual - rust scaffold", () => {
 
     const main = findByPath(tree.root, ["src", "main.rs"]);
     expect(main).not.toBeNull();
-    expect(main).toContain("IndexTemplate");
-    expect(main).toContain(`route("/web/now", get(now))`);
+    expect(main).toContain(`route("/web/now", get(pages::now))`);
+    expect(findByPath(tree.root, ["src", "views.rs"])).toContain("IndexTemplate");
 
     const home = findByPath(tree.root, ["templates", "index.html"]);
     expect(home).not.toBeNull();
@@ -734,24 +734,5 @@ describe("validateResolvedConfigCompatibility", () => {
       install: false,
     });
     expect(result.isOk()).toBe(true);
-  });
-
-  it("rejects HTMX for Loco", () => {
-    const result = validateResolvedConfigCompatibility({
-      projectName: "x",
-      projectDir: "/x",
-      relativePath: "x",
-      language: "rust",
-      framework: "loco",
-      frontend: "htmx",
-      orm: "seaorm",
-      migrations: "none",
-      database: "sqlite",
-      packageManager: "cargo",
-      addons: [],
-      git: false,
-      install: false,
-    });
-    expect(result.isErr()).toBe(true);
   });
 });

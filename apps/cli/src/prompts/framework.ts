@@ -18,7 +18,6 @@ const FRAMEWORK_LABELS = {
   rocket: { label: "Rocket", hint: "Ergonomic, macro-driven" },
   warp: { label: "Warp", hint: "Composable filter-based" },
   salvo: { label: "Salvo", hint: "Multi-purpose web framework" },
-  loco: { label: "Loco", hint: "Rails-for-Rust, batteries included" },
   none: { label: "None", hint: "No framework (bare setup)" },
 } satisfies Record<Framework, { label: string; hint: string }>;
 

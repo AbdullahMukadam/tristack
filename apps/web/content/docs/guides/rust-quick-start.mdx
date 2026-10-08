@@ -54,11 +54,11 @@ cargo build
 cargo watch -x run
 ```
 
-Open `http://localhost:8000/health` — you should see `{"status":"ok"}`.
+Open `http://localhost:8000/health` — you should see `{"status":"ok"}`. With an ORM, `http://localhost:8000/api/v1/items` lists items, and `POST /api/v1/items` with `{"name": "..."}` creates one.
 
 <Callout title="Note">
   The package name is a slugged version of your project name (`my-api` → `my_api`), sources live in
-  `src/` (`src/main.rs` entrypoint, `src/db.rs` data layer), and the port (`8000`) and app name come
+  `src/` (`src/main.rs` entrypoint, `src/api.rs` items routes, `src/db.rs` data layer), and the port (`8000`) and app name come
   from `PORT` and `APP_NAME` in `.env`.
 </Callout>
 
@@ -101,7 +101,6 @@ The stack varies by framework — same flow, different server:
 | Rocket         | `--framework rocket`    | `cargo run`                        |
 | Warp           | `--framework warp`      | `cargo watch -x run` / `cargo run` |
 | Salvo          | `--framework salvo`     | `cargo watch -x run` / `cargo run` |
-| Loco           | `--framework loco`      | `cargo run`                        |
 
 ## 5. Reproduce the same stack
 

@@ -31,7 +31,6 @@ export const RUST_FRAMEWORKS: readonly Framework[] = [
   "rocket",
   "warp",
   "salvo",
-  "loco",
   "none",
 ] as const;
 

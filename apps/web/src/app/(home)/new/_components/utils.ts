@@ -176,14 +176,6 @@ export const analyzeStackCompatibility = (stack: StackState): CompatibilityResul
     });
   }
 
-  if (adjustedStack.framework === "loco" && adjustedStack.frontend === "htmx") {
-    adjustedStack.frontend = "none";
-    changes.push({
-      category: "frontend",
-      message: "HTMX isn't available for Loco yet — switched to none.",
-    });
-  }
-
   if (adjustedStack.orm !== "none" && adjustedStack.database === "none") {
     adjustedStack.database = "sqlite";
     changes.push({
@@ -244,9 +236,6 @@ export const getDisabledReason = (
   }
   if (currentStack.framework === "none" && category === "frontend" && optionId !== "none") {
     return "Pick a framework first to serve the rendered pages.";
-  }
-  if (currentStack.framework === "loco" && category === "frontend" && optionId !== "none") {
-    return "HTMX isn't available for Loco yet.";
   }
   if (
     currentStack.framework !== "none" &&

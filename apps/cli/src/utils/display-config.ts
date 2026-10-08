@@ -33,7 +33,6 @@ const VALUE_LABELS = {
   rocket: "Rocket",
   warp: "Warp",
   salvo: "Salvo",
-  loco: "Loco",
   sqlmodel: "SQLModel",
   sqlalchemy: "SQLAlchemy",
   tortoise: "Tortoise ORM",

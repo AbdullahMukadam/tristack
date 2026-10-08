@@ -5,6 +5,11 @@ import type { Database, ORM } from "@tristack/types";
 import { createVirtual } from "../src/index";
 import { collectFiles } from "./setup";
 
+function withDatabaseName(db: string | undefined): string {
+  const name = /const DATABASE_NAME: &str = "(.*)";/.exec(db ?? "")?.[1] ?? "";
+  return (db ?? "").replaceAll("{DATABASE_NAME}", name);
+}
+
 describe("Actix Web generated project", () => {
   for (const frontend of ["none", "htmx"] as const) {
     for (const orm of ["none", "seaorm", "diesel", "sqlx-rust"] as const) {
@@ -49,7 +54,7 @@ describe("Actix Web generated project", () => {
       const files = collectFiles(result.value.root, result.value.root.path);
       const expected = orm === "diesel" ? "actix_example.db" : "sqlite://actix_example.db?mode=rwc";
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expected}`);
-      expect(files.get("src/db.rs")).toContain(`"${expected}"`);
+      expect(withDatabaseName(files.get("src/db.rs"))).toContain(`"${expected}"`);
     });
   }
 });
@@ -133,32 +138,35 @@ describe("Actix Web Cargo.toml dependencies", () => {
     {
       orm: "diesel",
       database: "sqlite",
-      expectedSnippet: 'diesel = { version = "2", features = ["sqlite"] }',
+      expectedSnippet: 'diesel = { version = "2", features = ["sqlite", "r2d2", "chrono"] }',
     },
     {
       orm: "diesel",
       database: "postgres",
-      expectedSnippet: 'diesel = { version = "2", features = ["postgres"] }',
+      expectedSnippet: 'diesel = { version = "2", features = ["postgres", "r2d2", "chrono"] }',
     },
     {
       orm: "diesel",
       database: "mysql",
-      expectedSnippet: 'diesel = { version = "2", features = ["mysql"] }',
+      expectedSnippet: 'diesel = { version = "2", features = ["mysql", "r2d2", "chrono"] }',
     },
     {
       orm: "sqlx-rust",
       database: "sqlite",
-      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }',
+      expectedSnippet:
+        'sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "chrono"] }',
     },
     {
       orm: "sqlx-rust",
       database: "postgres",
-      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }',
+      expectedSnippet:
+        'sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono"] }',
     },
     {
       orm: "sqlx-rust",
       database: "mysql",
-      expectedSnippet: 'sqlx = { version = "0.8", features = ["runtime-tokio", "mysql"] }',
+      expectedSnippet:
+        'sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "mysql", "chrono"] }',
     },
   ];
 
@@ -205,12 +213,16 @@ describe("Actix Web HTMX vs API frontend emission", () => {
     expect(files.get("templates/index.html")).toContain('hx-get="/web/now"');
     expect(files.get("templates/now.html")).toContain("{{ now }}");
 
+    expect(files.get("src/views.rs")).toContain("struct IndexTemplate");
+    expect(files.get("src/views.rs")).toContain("struct NowTemplate");
+    expect(files.has("src/pages.rs")).toBe(true);
+    expect(files.has("src/api.rs")).toBe(false);
+    expect(files.has("templates/items.html")).toBe(false);
+
     const main = files.get("src/main.rs")!;
-    expect(main).toContain("struct IndexTemplate");
-    expect(main).toContain("struct NowTemplate");
-    expect(main).toContain('.route("/health", web::get().to(health))');
-    expect(main).toContain('.route("/", web::get().to(index))');
-    expect(main).toContain('.route("/web/now", web::get().to(now))');
+    expect(main).toContain('cfg.route("/health", web::get().to(health));');
+    expect(main).toContain('cfg.route("/", web::get().to(pages::index));');
+    expect(main).toContain('cfg.route("/web/now", web::get().to(pages::now));');
   });
 
   it("api frontend (none) omits HTML templates and includes JSON health endpoint", async () => {
@@ -230,12 +242,13 @@ describe("Actix Web HTMX vs API frontend emission", () => {
     expect(files.has("templates/index.html")).toBe(false);
     expect(files.has("templates/now.html")).toBe(false);
 
+    expect(files.has("src/views.rs")).toBe(false);
+    expect(files.has("src/pages.rs")).toBe(false);
+
     const main = files.get("src/main.rs")!;
-    expect(main).not.toContain("IndexTemplate");
-    expect(main).not.toContain("NowTemplate");
     expect(main).not.toContain("/web/now");
-    expect(main).toContain('.route("/health", web::get().to(health))');
-    expect(main).toContain('{\\"status\\":\\"ok\\"}');
+    expect(main).toContain('cfg.route("/health", web::get().to(health));');
+    expect(main).toContain('json!({ "status": "ok" })');
   });
 });
 
@@ -256,7 +269,7 @@ describe("Actix Web server databases (PostgreSQL and MySQL)", () => {
       const files = collectFiles(result.value.root, result.value.root.path);
       const expectedUrl = "postgres://postgres:postgres@localhost:5432/actix_example";
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expectedUrl}`);
-      expect(files.get("src/db.rs")).toContain(`"${expectedUrl}"`);
+      expect(withDatabaseName(files.get("src/db.rs"))).toContain(`"${expectedUrl}"`);
 
       const sources = [...files].filter(([path]) => path.endsWith(".rs"));
       expect(sources.length).toBeGreaterThan(0);
@@ -280,7 +293,7 @@ describe("Actix Web server databases (PostgreSQL and MySQL)", () => {
       const files = collectFiles(result.value.root, result.value.root.path);
       const expectedUrl = "mysql://root:password@127.0.0.1:3306/actix_example";
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expectedUrl}`);
-      expect(files.get("src/db.rs")).toContain(`"${expectedUrl}"`);
+      expect(withDatabaseName(files.get("src/db.rs"))).toContain(`"${expectedUrl}"`);
 
       const sources = [...files].filter(([path]) => path.endsWith(".rs"));
       expect(sources.length).toBeGreaterThan(0);
@@ -349,9 +362,11 @@ describe("Rust Docker addon with Actix Web", () => {
         expect(dockerfile).toContain(database === "postgres" ? "libpq5" : "libmariadb3");
       } else {
         expect(compose).not.toContain("  db:");
-        expect(compose).not.toContain("volumes:");
         if (database === "sqlite") {
-          expect(compose).toContain("DATABASE_URL: docker_example.db");
+          expect(compose).toContain("      - appdata:/data");
+          expect(dockerfile).toContain("ENV DATABASE_URL=/data/docker_example.db");
+        } else {
+          expect(compose).not.toContain("volumes:");
         }
       }
     });
@@ -371,8 +386,8 @@ describe("Rust Docker addon with Actix Web", () => {
       });
       if (result.isErr()) throw result.error;
       const files = collectFiles(result.value.root, result.value.root.path);
-      expect(files.get("docker-compose.yml")).toContain(
-        "DATABASE_URL: sqlite://docker_example.db?mode=rwc",
+      expect(files.get("Dockerfile")).toContain(
+        "ENV DATABASE_URL=sqlite:///data/docker_example.db?mode=rwc",
       );
     });
 

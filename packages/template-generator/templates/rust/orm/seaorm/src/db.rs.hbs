@@ -1,23 +1,78 @@
-use sea_orm::{Database, DatabaseConnection, DbErr};
+use sea_orm::{ConnectionTrait, Database, DatabaseConnection, EntityTrait, QueryOrder, Set};
 
-pub async fn connect() -> Result<DatabaseConnection, DbErr> {
-    Database::connect(database_url()).await
+use crate::models::Item;
+
+pub type Db = DatabaseConnection;
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+
+const DATABASE_NAME: &str = "{{project_slug}}";
+{{#if (eq database "sqlite")}}
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)";
+{{else if (eq database "postgres")}}
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMPTZ NOT NULL)";
+{{else if (eq database "mysql")}}
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)";
+{{/if}}
+
+mod item {
+    use sea_orm::entity::prelude::*;
+
+    #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
+    #[sea_orm(table_name = "items")]
+    pub struct Model {
+        #[sea_orm(primary_key, auto_increment = false)]
+        pub id: String,
+        pub name: String,
+        pub created_at: DateTimeUtc,
+    }
+
+    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+    pub enum Relation {}
+
+    impl ActiveModelBehavior for ActiveModel {}
+}
+
+pub async fn connect() -> Result<Db, Error> {
+    let db = Database::connect(database_url()).await?;
+    db.execute_unprepared(CREATE_ITEMS).await?;
+    Ok(db)
+}
+
+pub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {
+    let row = item::ActiveModel {
+        id: Set(item.id.clone()),
+        name: Set(item.name.clone()),
+        created_at: Set(item.created_at),
+    };
+    item::Entity::insert(row).exec_without_returning(db).await?;
+    Ok(())
+}
+
+pub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {
+    let rows = item::Entity::find()
+        .order_by_desc(item::Column::CreatedAt)
+        .all(db)
+        .await?;
+    Ok(rows
+        .into_iter()
+        .map(|row| Item {
+            id: row.id,
+            name: row.name,
+            created_at: row.created_at,
+        })
+        .collect())
 }
 
 fn database_url() -> String {
-    std::env::var("DATABASE_URL").unwrap_or_else(|_| database_default())
-}
-
+    std::env::var("DATABASE_URL")
 {{#if (eq database "sqlite")}}
-fn database_default() -> String {
-    "sqlite://{{project_slug}}.db?mode=rwc".to_string()
-}
+        .unwrap_or_else(|_| format!("sqlite://{DATABASE_NAME}.db?mode=rwc"))
 {{else if (eq database "postgres")}}
-fn database_default() -> String {
-    "postgres://postgres:postgres@localhost:5432/{{project_slug}}".to_string()
-}
+        .unwrap_or_else(|_| format!("postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}"))
 {{else if (eq database "mysql")}}
-fn database_default() -> String {
-    "mysql://root:password@127.0.0.1:3306/{{project_slug}}".to_string()
-}
+        .unwrap_or_else(|_| format!("mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}"))
 {{/if}}
+}

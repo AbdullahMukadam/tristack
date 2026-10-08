@@ -4097,10 +4097,15 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   ["python/orm/tortoise/src/repositories/items.py.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "from ..models import Item\nfrom ..schemas.items import ItemResponse\n\n\ndef _to_response(item: Item) -> ItemResponse:\n    return ItemResponse(id=str(item.id), name=item.name, created_at=item.created_at)\n\n\nasync def create_item(*, name: str) -> ItemResponse:\n    return _to_response(await Item.create(name=name))\n\n\nasync def list_items() -> list[ItemResponse]:\n    return [_to_response(item) for item in await Item.all().order_by(\"-created_at\")]\n";
 },"useData":true} }],
+  ["rust/addons/clippy/clippy.toml", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "allow-unwrap-in-tests = true\n";
+},"useData":true} }],
   ["rust/addons/docker/_dockerignore", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "target/\n.env\n.env.local\n.git\n.gitignore\n*.md\nDockerfile*\n";
 },"useData":true} }],
   ["rust/addons/docker/docker-compose.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "    ports:\n      - \"8000:8000\"\n";
+},"1":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4109,9 +4114,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "      DATABASE_URL: postgres://postgres:postgres@db:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":10,"column":57},"end":{"line":10,"column":73}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":12,"column":57},"end":{"line":12,"column":73}}}) : helper)))
     + "\n    depends_on:\n      db:\n        condition: service_healthy\n";
-},"1":function(container,depth0,helpers,partials,data) {
+},"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4119,8 +4124,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":31}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":14,"column":0},"end":{"line":21,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":31}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(4, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":24,"column":0}}})) != null ? stack1 : "");
+},"3":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4129,17 +4134,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "      DATABASE_URL: mysql://root:password@db:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":15,"column":50},"end":{"line":15,"column":66}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":50},"end":{"line":17,"column":66}}}) : helper)))
     + "\n    depends_on:\n      db:\n        condition: service_healthy\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":32}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":21,"column":0}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4148,31 +4144,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "      DATABASE_URL: "
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":26},"end":{"line":20,"column":43}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":20,"column":20},"end":{"line":20,"column":116}}})) != null ? stack1 : "")
-    + "\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":32}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":24,"column":0}}})) != null ? stack1 : "");
 },"5":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":45},"end":{"line":20,"column":61}}}) : helper)))
-    + ".db";
+    return "    volumes:\n      - appdata:/data\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "sqlite://"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":20,"column":81},"end":{"line":20,"column":97}}}) : helper)))
-    + ".db?mode=rwc";
-},"7":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4181,11 +4156,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "  db:\n    image: postgres:16\n    environment:\n      POSTGRES_USER: postgres\n      POSTGRES_PASSWORD: postgres\n      POSTGRES_DB: "
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":28,"column":19},"end":{"line":28,"column":35}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":31,"column":19},"end":{"line":31,"column":35}}}) : helper)))
     + "\n    ports:\n      - \"5432:5432\"\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres -d "
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":32,"column":53},"end":{"line":32,"column":69}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":35,"column":53},"end":{"line":35,"column":69}}}) : helper)))
     + "\"]\n      interval: 5s\n      timeout: 5s\n      retries: 20\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n";
-},"8":function(container,depth0,helpers,partials,data) {
+},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4193,8 +4168,8 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":38,"column":10},"end":{"line":38,"column":31}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":38,"column":0},"end":{"line":53,"column":0}}})) != null ? stack1 : "");
-},"9":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":10},"end":{"line":41,"column":31}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":41,"column":0},"end":{"line":56,"column":0}}})) != null ? stack1 : "");
+},"8":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4203,11 +4178,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     };
 
   return "  db:\n    image: mysql:8\n    environment:\n      MYSQL_ROOT_PASSWORD: password\n      MYSQL_DATABASE: "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":43,"column":22},"end":{"line":43,"column":38}}}) : helper)))
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":46,"column":22},"end":{"line":46,"column":38}}}) : helper)))
     + "\n    ports:\n      - \"3306:3306\"\n    healthcheck:\n      test: [\"CMD-SHELL\", \"MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysql -h 127.0.0.1 -u root -e 'SELECT 1'\"]\n      interval: 5s\n      timeout: 5s\n      retries: 20\n    volumes:\n      - mysqldata:/var/lib/mysql\n";
-},"10":function(container,depth0,helpers,partials,data) {
+},"9":function(container,depth0,helpers,partials,data) {
     return "volumes:\n  pgdata:\n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4215,9 +4190,20 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":10},"end":{"line":58,"column":31}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":61,"column":0}}})) != null ? stack1 : "");
-},"12":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":61,"column":10},"end":{"line":61,"column":31}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":61,"column":0},"end":{"line":67,"column":0}}})) != null ? stack1 : "");
+},"11":function(container,depth0,helpers,partials,data) {
     return "volumes:\n  mysqldata:\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":64,"column":10},"end":{"line":64,"column":32}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":67,"column":0}}})) != null ? stack1 : "");
+},"13":function(container,depth0,helpers,partials,data) {
+    return "volumes:\n  appdata:\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4226,13 +4212,15 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "services:\n  app:\n    build: .\n    ports:\n      - \"8000:8000\"\n    environment:\n      APP_NAME: "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":32}}}) : helper)))
+  return "services:\n  app:\n    build: .\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":27}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "    environment:\n      APP_NAME: "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":32}}}) : helper)))
     + "\n      PORT: \"8000\"\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":30}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":30}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":53,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":30}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":30}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":55,"column":6},"end":{"line":55,"column":30}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":55,"column":0},"end":{"line":61,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":30}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["rust/addons/docker/Dockerfile.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -4278,6 +4266,41 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
   return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":154},"end":{"line":15,"column":175}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":144},"end":{"line":15,"column":189}}})) != null ? stack1 : "");
 },"7":function(container,depth0,helpers,partials,data) {
     return " libmariadb3";
+},"8":function(container,depth0,helpers,partials,data) {
+    return " && mkdir /data && chown app /data";
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "ENV DATABASE_URL="
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":23},"end":{"line":19,"column":40}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":19,"column":17},"end":{"line":19,"column":125}}})) != null ? stack1 : "")
+    + "\nVOLUME /data\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "/data/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":19,"column":48},"end":{"line":19,"column":64}}}) : helper)))
+    + ".db";
+},"11":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "sqlite:///data/"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":19,"column":90},"end":{"line":19,"column":106}}}) : helper)))
+    + ".db?mode=rwc";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4290,12 +4313,16 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":23}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":9,"column":7}}})) != null ? stack1 : "")
     + "COPY . .\nRUN cargo build --release\n\nFROM debian:bookworm-slim\nWORKDIR /app\nRUN apt-get update && apt-get install -y --no-install-recommends ca-certificates"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":86},"end":{"line":15,"column":103}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":80},"end":{"line":15,"column":203}}})) != null ? stack1 : "")
-    + " && rm -rf /var/lib/apt/lists/*\nCOPY --from=builder /app/target/release/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":16,"column":40},"end":{"line":16,"column":56}}}) : helper)))
+    + " && rm -rf /var/lib/apt/lists/*\nRUN useradd --system --uid 10001 --no-create-home app"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":59},"end":{"line":16,"column":81}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":53},"end":{"line":16,"column":124}}})) != null ? stack1 : "")
+    + "\nCOPY --from=builder /app/target/release/"
+    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":40},"end":{"line":17,"column":56}}}) : helper)))
     + " /usr/local/bin/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":16,"column":72},"end":{"line":16,"column":88}}}) : helper)))
-    + "\n\nEXPOSE 8000\nENTRYPOINT [\"/usr/local/bin/"
-    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":19,"column":28},"end":{"line":19,"column":44}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":72},"end":{"line":17,"column":88}}}) : helper)))
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":28}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":21,"column":7}}})) != null ? stack1 : "")
+    + "USER app\n\nEXPOSE 8000\nENTRYPOINT [\"/usr/local/bin/"
+    + alias4(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":25,"column":28},"end":{"line":25,"column":44}}}) : helper)))
     + "\"]\n";
 },"useData":true} }],
   ["rust/addons/github-actions/.github/workflows/ci.yml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
@@ -4319,8 +4346,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     return "";
 },"useData":true} }],
   ["rust/base/Cargo.toml.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "axum = \"0.8\"\ntokio = { version = \"1\", features = [\"full\"] }\n";
+    return "serde = { version = \"1\", features = [\"derive\"] }\nchrono = { version = \"0.4\", features = [\"serde\"] }\nuuid = { version = \"1\", features = [\"v4\"] }\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "axum = \"0.8\"\ntokio = { version = \"1\", features = [\"full\"] }\n";
+},"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4328,9 +4357,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"actix-web",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":36}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":14,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    return "actix-web = \"4\"\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"actix-web",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":36}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":38,"column":0}}})) != null ? stack1 : "");
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4339,9 +4366,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"rocket",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":33}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+  return "actix-web = \"4\"\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":20,"column":6},"end":{"line":20,"column":23}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":20,"column":0},"end":{"line":22,"column":7}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
-    return "rocket = \"0.5\"\n";
+    return "tokio = { version = \"1\", features = [\"rt\"] }\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4350,9 +4378,17 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"warp",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":31}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"rocket",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":23,"column":10},"end":{"line":23,"column":33}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":23,"column":0},"end":{"line":38,"column":0}}})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data) {
-    return "warp = \"0.3\"\ntokio = { version = \"1\", features = [\"full\"] }\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "rocket = { version = \"0.5\", features = [\"json\"] }\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":23}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "");
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4361,9 +4397,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"salvo",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":32}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"warp",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":31}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(9, data, 0),"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":38,"column":0}}})) != null ? stack1 : "");
 },"8":function(container,depth0,helpers,partials,data) {
-    return "salvo = \"0.75\"\ntokio = { version = \"1\", features = [\"full\"] }\n";
+    return "warp = \"0.3\"\ntokio = { version = \"1\", features = [\"full\"] }\n";
 },"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4372,22 +4408,23 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"loco",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":10},"end":{"line":24,"column":31}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"salvo",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":32}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":38,"column":0}}})) != null ? stack1 : "");
 },"10":function(container,depth0,helpers,partials,data) {
-    return "loco-rs = \"0.4\"\n";
-},"11":function(container,depth0,helpers,partials,data) {
-    return "askama = \"0.14\"\n";
-},"12":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":6},"end":{"line":33,"column":28}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(14, data, 0),"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":39,"column":7}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":32,"column":10},"end":{"line":32,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":26},"end":{"line":32,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":32,"column":6},"end":{"line":32,"column":47}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":36,"column":7}}})) != null ? stack1 : "")
+    + "tokio = { version = \"1\", features = [\"full\"] }\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "salvo = { version = \"0.75\", features = [\"affix-state\"] }\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "salvo = \"0.75\"\n";
 },"13":function(container,depth0,helpers,partials,data) {
-    return "sea-orm = { version = \"1\", features = [\"sqlx-sqlite\", \"runtime-tokio-rustls\"] }\n";
+    return "askama = \"0.14\"\n";
 },"14":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4396,9 +4433,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":35,"column":10},"end":{"line":35,"column":34}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":39,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":6},"end":{"line":45,"column":28}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":51,"column":7}}})) != null ? stack1 : "");
 },"15":function(container,depth0,helpers,partials,data) {
-    return "sea-orm = { version = \"1\", features = [\"sqlx-postgres\", \"runtime-tokio-rustls\"] }\n";
+    return "sea-orm = { version = \"1\", features = [\"sqlx-sqlite\", \"runtime-tokio-rustls\"] }\n";
 },"16":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4407,9 +4444,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":10},"end":{"line":37,"column":31}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":39,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":10},"end":{"line":47,"column":34}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":51,"column":0}}})) != null ? stack1 : "");
 },"17":function(container,depth0,helpers,partials,data) {
-    return "sea-orm = { version = \"1\", features = [\"sqlx-mysql\", \"runtime-tokio-rustls\"] }\n";
+    return "sea-orm = { version = \"1\", features = [\"sqlx-postgres\", \"runtime-tokio-rustls\"] }\n";
 },"18":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4418,8 +4455,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":10},"end":{"line":40,"column":27}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.program(25, data, 0),"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":57,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":49,"column":10},"end":{"line":49,"column":31}}}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":49,"column":0},"end":{"line":51,"column":0}}})) != null ? stack1 : "");
 },"19":function(container,depth0,helpers,partials,data) {
+    return "sea-orm = { version = \"1\", features = [\"sqlx-mysql\", \"runtime-tokio-rustls\"] }\n";
+},"20":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4427,9 +4466,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":6},"end":{"line":41,"column":28}}}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.program(21, data, 0),"data":data,"loc":{"start":{"line":41,"column":0},"end":{"line":48,"column":7}}})) != null ? stack1 : "");
-},"20":function(container,depth0,helpers,partials,data) {
-    return "diesel = { version = \"2\", features = [\"sqlite\"] }\nlibsqlite3-sys = { version = \"0.32\", features = [\"bundled\"] }\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":52,"column":10},"end":{"line":52,"column":27}}}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.program(27, data, 0),"data":data,"loc":{"start":{"line":52,"column":0},"end":{"line":69,"column":0}}})) != null ? stack1 : "");
 },"21":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4438,9 +4475,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":10},"end":{"line":44,"column":34}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.program(23, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":53,"column":6},"end":{"line":53,"column":28}}}),{"name":"if","hash":{},"fn":container.program(22, data, 0),"inverse":container.program(23, data, 0),"data":data,"loc":{"start":{"line":53,"column":0},"end":{"line":60,"column":7}}})) != null ? stack1 : "");
 },"22":function(container,depth0,helpers,partials,data) {
-    return "diesel = { version = \"2\", features = [\"postgres\"] }\n";
+    return "diesel = { version = \"2\", features = [\"sqlite\", \"r2d2\", \"chrono\"] }\nlibsqlite3-sys = { version = \"0.32\", features = [\"bundled\"] }\n";
 },"23":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4449,9 +4486,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":31}}}),{"name":"if","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":48,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":56,"column":10},"end":{"line":56,"column":34}}}),{"name":"if","hash":{},"fn":container.program(24, data, 0),"inverse":container.program(25, data, 0),"data":data,"loc":{"start":{"line":56,"column":0},"end":{"line":60,"column":0}}})) != null ? stack1 : "");
 },"24":function(container,depth0,helpers,partials,data) {
-    return "diesel = { version = \"2\", features = [\"mysql\"] }\n";
+    return "diesel = { version = \"2\", features = [\"postgres\", \"r2d2\", \"chrono\"] }\n";
 },"25":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4460,8 +4497,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlx-rust",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":49,"column":10},"end":{"line":49,"column":30}}}),{"name":"if","hash":{},"fn":container.program(26, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":49,"column":0},"end":{"line":57,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":10},"end":{"line":58,"column":31}}}),{"name":"if","hash":{},"fn":container.program(26, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":60,"column":0}}})) != null ? stack1 : "");
 },"26":function(container,depth0,helpers,partials,data) {
+    return "diesel = { version = \"2\", features = [\"mysql\", \"r2d2\", \"chrono\"] }\n";
+},"27":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4469,9 +4508,7 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":28}}}),{"name":"if","hash":{},"fn":container.program(27, data, 0),"inverse":container.program(28, data, 0),"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "");
-},"27":function(container,depth0,helpers,partials,data) {
-    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"sqlite\"] }\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"sqlx-rust",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":61,"column":10},"end":{"line":61,"column":30}}}),{"name":"if","hash":{},"fn":container.program(28, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":61,"column":0},"end":{"line":69,"column":0}}})) != null ? stack1 : "");
 },"28":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4480,9 +4517,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":52,"column":10},"end":{"line":52,"column":34}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.program(30, data, 0),"data":data,"loc":{"start":{"line":52,"column":0},"end":{"line":56,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":6},"end":{"line":62,"column":28}}}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.program(30, data, 0),"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":68,"column":7}}})) != null ? stack1 : "");
 },"29":function(container,depth0,helpers,partials,data) {
-    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"postgres\"] }\n";
+    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"sqlite\", \"chrono\"] }\n";
 },"30":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4491,11 +4528,24 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":54,"column":10},"end":{"line":54,"column":31}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":54,"column":0},"end":{"line":56,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":64,"column":10},"end":{"line":64,"column":34}}}),{"name":"if","hash":{},"fn":container.program(31, data, 0),"inverse":container.program(32, data, 0),"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":68,"column":0}}})) != null ? stack1 : "");
 },"31":function(container,depth0,helpers,partials,data) {
-    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"mysql\"] }\n";
+    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"tls-rustls\", \"postgres\", \"chrono\"] }\n";
 },"32":function(container,depth0,helpers,partials,data) {
-    return "\n[lints.clippy]\nall = { level = \"warn\", priority = -1 }\n";
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":66,"column":10},"end":{"line":66,"column":31}}}),{"name":"if","hash":{},"fn":container.program(33, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":66,"column":0},"end":{"line":68,"column":0}}})) != null ? stack1 : "");
+},"33":function(container,depth0,helpers,partials,data) {
+    return "sqlx = { version = \"0.8\", features = [\"runtime-tokio\", \"tls-rustls\", \"mysql\", \"chrono\"] }\n";
+},"34":function(container,depth0,helpers,partials,data) {
+    return "\n[dev-dependencies]\nsalvo = { version = \"0.75\", features = [\"test\"] }\n";
+},"35":function(container,depth0,helpers,partials,data) {
+    return "\n[lints.clippy]\nall = { level = \"warn\", priority = -1 }\ndbg_macro = \"warn\"\ntodo = \"warn\"\nunwrap_used = \"warn\"\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4506,13 +4556,16 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
 
   return "[package]\nname = \""
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":24}}}) : helper)))
-    + "\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\nserde = { version = \"1\", features = [\"derive\"] }\nserde_json = \"1\"\ndotenvy = \"0.15\"\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"axum",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":27}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":26,"column":7}}})) != null ? stack1 : "")
+    + "\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\ndotenvy = \"0.15\"\nserde_json = \"1\"\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":13,"column":7}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":26}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"axum",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":27}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(2, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":38,"column":7}}})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"seaorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":6},"end":{"line":32,"column":23}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(18, data, 0),"data":data,"loc":{"start":{"line":32,"column":0},"end":{"line":57,"column":7}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"clippy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":32}}}),{"name":"if","hash":{},"fn":container.program(32, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":62,"column":7}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":26}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"seaorm",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":44,"column":6},"end":{"line":44,"column":23}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(20, data, 0),"data":data,"loc":{"start":{"line":44,"column":0},"end":{"line":69,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"framework") : depth0),"salvo",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":70,"column":6},"end":{"line":70,"column":28}}}),{"name":"if","hash":{},"fn":container.program(34, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":70,"column":0},"end":{"line":74,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"includes")||(depth0 && lookupProperty(depth0,"includes"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"addons") : depth0),"clippy",{"name":"includes","hash":{},"data":data,"loc":{"start":{"line":75,"column":6},"end":{"line":75,"column":32}}}),{"name":"if","hash":{},"fn":container.program(35, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":75,"column":0},"end":{"line":82,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["rust/base/env.example.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -4618,9 +4671,38 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":9,"column":28},"end":{"line":9,"column":43}}}) : helper)))
     + "\";\n        let app_name = std::env::var(\"APP_NAME\").unwrap_or_else(|_| default_name.to_string());\n        let port: u16 = std::env::var(\"PORT\")\n            .unwrap_or_else(|_| \"8000\".to_string())\n            .parse()\n            .expect(\"PORT must be a valid u16\");\n        Self { app_name, port }\n    }\n}\n";
 },"useData":true} }],
+  ["rust/framework/actix-web/src/api.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use actix_web::{web, HttpResponse};\nuse serde_json::json;\n\nuse crate::service::{self, ServiceError};\nuse crate::AppState;\n\npub async fn list_items(state: web::Data<AppState>) -> HttpResponse {\n    match service::list_items(&state.db).await {\n        Ok(items) => HttpResponse::Ok().json(items),\n        Err(err) => error_response(&err),\n    }\n}\n\npub async fn create_item(state: web::Data<AppState>, body: web::Bytes) -> HttpResponse {\n    match service::create_item(&state.db, &body).await {\n        Ok(item) => HttpResponse::Created().json(item),\n        Err(err) => error_response(&err),\n    }\n}\n\nfn error_response(err: &ServiceError) -> HttpResponse {\n    let mut response = match err {\n        ServiceError::BadRequest(_) => HttpResponse::BadRequest(),\n        ServiceError::Internal(_) => HttpResponse::InternalServerError(),\n    };\n    response.json(json!({ \"error\": err.to_string() }))\n}\n";
+},"useData":true} }],
   ["rust/framework/actix-web/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+    return "mod api;\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "mod db;\nmod models;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "mod pages;\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "mod service;\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "mod views;\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n#[derive(Clone)]\npub struct AppState {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":26}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "    pub app_name: String,\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "    pub db: db::Db,\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "    let db = db::connect().await.unwrap_or_else(|err| {\n        eprintln!(\"database not ready: {err}\");\n        std::process::exit(1);\n    });\n";
+},"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4628,12 +4710,32 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":4},"end":{"line":16,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":6},"end":{"line":46,"column":26}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "");
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let state = AppState {\n        app_name: app_config.app_name,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":49,"column":6},"end":{"line":49,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":49,"column":0},"end":{"line":51,"column":7}}})) != null ? stack1 : "")
+    + "    };\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        db,\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    let state = AppState { db };\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    return "    HttpServer::new(move || {\n        App::new()\n            .app_data(web::Data::new(state.clone()))\n            .configure(routes)\n    })\n    .bind(addr)?\n    .run()\n    .await\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "    HttpServer::new(|| App::new().configure(routes))\n        .bind(addr)?\n        .run()\n        .await\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "    cfg.service(\n        web::resource(\"/api/v1/items\")\n            .route(web::get().to(api::list_items))\n            .route(web::post().to(api::create_item)),\n    );\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    return "    cfg.route(\"/\", web::get().to(pages::index));\n    cfg.route(\"/web/now\", web::get().to(pages::now));\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    return "    cfg.route(\"/web/items\", web::get().to(pages::items));\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4642,15 +4744,90 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use actix_web::{web, App, HttpResponse, HttpServer, Responder};\n\nmod config;\n"
+  return "use actix_web::{web, App, HttpResponse, HttpServer};\nuse serde_json::json;\n\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
-    + "#[actix_web::main]\nasync fn main() -> std::io::Result<()> {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":19,"column":7}}})) != null ? stack1 : "")
-    + "    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    HttpServer::new(|| App::new().route(\"/health\", web::get().to(health)))\n        .bind(addr)?\n        .run()\n        .await\n}\n\nasync fn health() -> impl Responder {\n    HttpResponse::Ok()\n        .content_type(\"application/json\")\n        .body(\"{\\\"status\\\":\\\"ok\\\"}\")\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[actix_web::test]\n    async fn health_returns_status_ok() {\n        let app =\n            actix_web::test::init_service(App::new().route(\"/health\", web::get().to(health))).await;\n        let request = actix_web::test::TestRequest::get()\n            .uri(\"/health\")\n            .to_request();\n        let response = actix_web::test::call_service(&app, request).await;\n        assert!(response.status().is_success());\n    }\n}\n";
+    + "mod config;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":26}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":26},"end":{"line":21,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":47}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":32,"column":7}}})) != null ? stack1 : "")
+    + "\n#[actix_web::main]\nasync fn main() -> std::io::Result<()> {\n    let app_config = config::Config::from_env();\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":21}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "")
+    + "    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":45,"column":10},"end":{"line":45,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":45,"column":26},"end":{"line":45,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":45,"column":6},"end":{"line":45,"column":47}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":58,"column":10},"end":{"line":58,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":26},"end":{"line":58,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":47}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(14, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":72,"column":7}}})) != null ? stack1 : "")
+    + "}\n\nfn routes(cfg: &mut web::ServiceConfig) {\n    cfg.route(\"/health\", web::get().to(health));\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":77,"column":6},"end":{"line":77,"column":21}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":77,"column":0},"end":{"line":83,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":84,"column":6},"end":{"line":84,"column":26}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":84,"column":0},"end":{"line":87,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":88,"column":11},"end":{"line":88,"column":31}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":88,"column":32},"end":{"line":88,"column":47}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":88,"column":6},"end":{"line":88,"column":48}}}),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":88,"column":0},"end":{"line":90,"column":7}}})) != null ? stack1 : "")
+    + "}\n\nasync fn health() -> HttpResponse {\n    HttpResponse::Ok().json(json!({ \"status\": \"ok\" }))\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[actix_web::test]\n    async fn health_returns_status_ok() {\n        let app =\n            actix_web::test::init_service(App::new().route(\"/health\", web::get().to(health))).await;\n        let request = actix_web::test::TestRequest::get()\n            .uri(\"/health\")\n            .to_request();\n        let response = actix_web::test::call_service(&app, request).await;\n        assert!(response.status().is_success());\n    }\n}\n";
+},"useData":true} }],
+  ["rust/framework/actix-web/src/pages.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use crate::service;\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "\npub async fn items(state: web::Data<AppState>) -> HttpResponse {\n    match service::list_items(&state.db).await {\n        Ok(items) => html(views::items(&items)),\n        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),\n    }\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "use actix_web::{web, HttpResponse};\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "use crate::views;\nuse crate::AppState;\n\npub async fn index(state: web::Data<AppState>) -> HttpResponse {\n    html(views::index(&state.app_name))\n}\n\npub async fn now() -> HttpResponse {\n    html(views::now())\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "")
+    + "\nfn html(body: String) -> HttpResponse {\n    HttpResponse::Ok()\n        .content_type(\"text/html; charset=utf-8\")\n        .body(body)\n}\n";
+},"useData":true} }],
+  ["rust/framework/axum/src/api.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use axum::body::Bytes;\nuse axum::extract::State;\nuse axum::http::StatusCode;\nuse axum::response::{IntoResponse, Response};\nuse axum::Json;\nuse serde_json::json;\n\nuse crate::service::{self, ServiceError};\nuse crate::AppState;\n\npub async fn list_items(State(state): State<AppState>) -> Response {\n    match service::list_items(&state.db).await {\n        Ok(items) => Json(items).into_response(),\n        Err(err) => error_response(&err),\n    }\n}\n\npub async fn create_item(State(state): State<AppState>, body: Bytes) -> Response {\n    match service::create_item(&state.db, &body).await {\n        Ok(item) => (StatusCode::CREATED, Json(item)).into_response(),\n        Err(err) => error_response(&err),\n    }\n}\n\nfn error_response(err: &ServiceError) -> Response {\n    let status = match err {\n        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,\n        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,\n    };\n    (status, Json(json!({ \"error\": err.to_string() }))).into_response()\n}\n";
 },"useData":true} }],
   ["rust/framework/axum/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+    return "mod api;\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "mod db;\nmod models;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "mod pages;\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "mod service;\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "mod views;\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n#[derive(Clone)]\npub struct AppState {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":26}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "    pub app_name: String,\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "    pub db: db::Db,\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "    let db = db::connect().await.unwrap_or_else(|err| {\n        eprintln!(\"database not ready: {err}\");\n        std::process::exit(1);\n    });\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":6},"end":{"line":47,"column":26}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":56,"column":7}}})) != null ? stack1 : "")
+    + "\n    let router = Router::new()\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":21}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":61,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":6},"end":{"line":62,"column":26}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":65,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":66,"column":11},"end":{"line":66,"column":31}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":66,"column":32},"end":{"line":66,"column":47}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":66,"column":6},"end":{"line":66,"column":48}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":66,"column":0},"end":{"line":68,"column":7}}})) != null ? stack1 : "")
+    + "        .with_state(state)\n        .route(\"/health\", get(health));\n";
+},"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4658,12 +4835,21 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":4},"end":{"line":16,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return "    let state = AppState {\n        app_name: app_config.app_name,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":52,"column":7}}})) != null ? stack1 : "")
+    + "    };\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        db,\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    let state = AppState { db };\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    return "        .route(\"/api/v1/items\", get(api::list_items).post(api::create_item))\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "        .route(\"/\", get(pages::index))\n        .route(\"/web/now\", get(pages::now))\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "        .route(\"/web/items\", get(pages::items))\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    return "    let router = Router::new().route(\"/health\", get(health));\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4672,28 +4858,28 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use axum::{routing::get, Router};\n\nmod config;\n"
+  return "use axum::{routing::get, Json, Router};\nuse serde_json::{json, Value};\n\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
-    + "#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":19,"column":7}}})) != null ? stack1 : "")
-    + "    let router = Router::new().route(\"/health\", get(health));\n\n    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    let listener = tokio::net::TcpListener::bind(&addr)\n        .await\n        .expect(\"failed to bind\");\n\n    axum::serve(listener, router).await.expect(\"server error\");\n}\n\nasync fn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        assert_eq!(health().await, \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}\n";
+    + "mod config;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":26}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":26},"end":{"line":21,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":47}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":32,"column":7}}})) != null ? stack1 : "")
+    + "\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":21}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "")
+    + "    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":46,"column":10},"end":{"line":46,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":46,"column":26},"end":{"line":46,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":46,"column":6},"end":{"line":46,"column":47}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":46,"column":0},"end":{"line":73,"column":7}}})) != null ? stack1 : "")
+    + "\n    let listener = tokio::net::TcpListener::bind(&addr)\n        .await\n        .expect(\"failed to bind\");\n    axum::serve(listener, router).await.expect(\"server error\");\n}\n\nasync fn health() -> Json<Value> {\n    Json(json!({ \"status\": \"ok\" }))\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        assert_eq!(health().await.0, json!({ \"status\": \"ok\" }));\n    }\n}\n";
 },"useData":true} }],
-  ["rust/framework/loco/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+  ["rust/framework/axum/src/pages.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use axum::http::StatusCode;\nuse axum::response::{Html, IntoResponse, Response};\n";
 },"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":4},"end":{"line":16,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
+    return "use axum::response::Html;\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
+    return "use crate::service;\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+    return "\npub async fn items(State(state): State<AppState>) -> Response {\n    match service::list_items(&state.db).await {\n        Ok(items) => Html(views::items(&items)).into_response(),\n        Err(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()).into_response(),\n    }\n}\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4702,11 +4888,12 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use loco_rs::prelude::*;\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
-    + "#[tokio::main]\nasync fn main() -> Result<()> {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":19,"column":7}}})) != null ? stack1 : "")
-    + "    println!(\"{} initialized\", app_config.app_name);\n\n    Ok(())\n}";
+  return "use axum::extract::State;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":2,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":21}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + "use crate::views;\nuse crate::AppState;\n\npub async fn index(State(state): State<AppState>) -> Html<String> {\n    Html(views::index(&state.app_name))\n}\n\npub async fn now() -> Html<String> {\n    Html(views::now())\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "");
 },"useData":true} }],
   ["rust/framework/none/src/main.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -4720,9 +4907,38 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":40}}}) : helper)))
     + "!\");\n}";
 },"useData":true} }],
+  ["rust/framework/rocket/src/api.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use rocket::http::Status;\nuse rocket::serde::json::Json;\nuse rocket::State;\nuse serde_json::{json, Value};\n\nuse crate::models::Item;\nuse crate::service::{self, ServiceError};\nuse crate::AppState;\n\ntype ApiError = (Status, Json<Value>);\n\n#[get(\"/api/v1/items\")]\npub async fn list_items(state: &State<AppState>) -> Result<Json<Vec<Item>>, ApiError> {\n    service::list_items(&state.db)\n        .await\n        .map(Json)\n        .map_err(|err| error_response(&err))\n}\n\n#[post(\"/api/v1/items\", data = \"<body>\")]\npub async fn create_item(\n    state: &State<AppState>,\n    body: Vec<u8>,\n) -> Result<(Status, Json<Item>), ApiError> {\n    service::create_item(&state.db, &body)\n        .await\n        .map(|item| (Status::Created, Json(item)))\n        .map_err(|err| error_response(&err))\n}\n\nfn error_response(err: &ServiceError) -> ApiError {\n    let status = match err {\n        ServiceError::BadRequest(_) => Status::BadRequest,\n        ServiceError::Internal(_) => Status::InternalServerError,\n    };\n    (status, Json(json!({ \"error\": err.to_string() })))\n}\n";
+},"useData":true} }],
   ["rust/framework/rocket/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+    return "mod api;\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "mod db;\nmod models;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "mod pages;\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "mod service;\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "mod views;\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n#[derive(Clone)]\npub struct AppState {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":26}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":31,"column":6},"end":{"line":31,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":31,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "    pub app_name: String,\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "    pub db: db::Db,\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "    let db = db::connect().await.unwrap_or_else(|err| {\n        eprintln!(\"database not ready: {err}\");\n        std::process::exit(1);\n    });\n";
+},"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4730,12 +4946,43 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":23}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":22,"column":7}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":61,"column":6},"end":{"line":61,"column":26}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":61,"column":0},"end":{"line":70,"column":7}}})) != null ? stack1 : "");
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let state = AppState {\n        app_name: app_config.app_name,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":64,"column":6},"end":{"line":64,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":64,"column":0},"end":{"line":66,"column":7}}})) != null ? stack1 : "")
+    + "    };\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        db,\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    let state = AppState { db };\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    rocket::custom(config)\n        .manage(state)\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":76,"column":6},"end":{"line":76,"column":21}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":76,"column":0},"end":{"line":78,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":79,"column":6},"end":{"line":79,"column":26}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":79,"column":0},"end":{"line":81,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"and")||(depth0 && lookupProperty(depth0,"and"))||alias2).call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":82,"column":11},"end":{"line":82,"column":31}}}),(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":82,"column":32},"end":{"line":82,"column":47}}}),{"name":"and","hash":{},"data":data,"loc":{"start":{"line":82,"column":6},"end":{"line":82,"column":48}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":82,"column":0},"end":{"line":84,"column":7}}})) != null ? stack1 : "")
+    + "        .mount(\"/\", routes![health])\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "        .mount(\"/\", routes![api::list_items, api::create_item])\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "        .mount(\"/\", routes![pages::index, pages::now])\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    return "        .mount(\"/\", routes![pages::items])\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    return "    rocket::custom(config).mount(\"/\", routes![health])\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4744,15 +4991,74 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "#[macro_use]\nextern crate rocket;\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[launch]\nasync fn rocket() -> _ {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":17,"column":0},"end":{"line":25,"column":7}}})) != null ? stack1 : "")
-    + "    let config = rocket::Config {\n        address: std::net::Ipv4Addr::UNSPECIFIED.into(),\n        port: app_config.port,\n        ..rocket::Config::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    rocket::custom(config).mount(\"/\", routes![health])\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
+  return "#[macro_use]\nextern crate rocket;\n\nuse rocket::serde::json::Json;\nuse serde_json::{json, Value};\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":9,"column":7}}})) != null ? stack1 : "")
+    + "mod config;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":26}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":24,"column":10},"end":{"line":24,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":24,"column":26},"end":{"line":24,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":24,"column":6},"end":{"line":24,"column":47}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":24,"column":0},"end":{"line":35,"column":7}}})) != null ? stack1 : "")
+    + "\n#[get(\"/health\")]\nfn health() -> Json<Value> {\n    Json(json!({ \"status\": \"ok\" }))\n}\n\n#[launch]\nasync fn rocket() -> _ {\n    let app_config = config::Config::from_env();\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":45,"column":6},"end":{"line":45,"column":21}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":45,"column":0},"end":{"line":50,"column":7}}})) != null ? stack1 : "")
+    + "    let config = rocket::Config {\n        address: std::net::Ipv4Addr::UNSPECIFIED.into(),\n        port: app_config.port,\n        ..rocket::Config::default()\n    };\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":60,"column":10},"end":{"line":60,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":26},"end":{"line":60,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":47}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":71,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":73,"column":10},"end":{"line":73,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":73,"column":26},"end":{"line":73,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":73,"column":6},"end":{"line":73,"column":47}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":73,"column":0},"end":{"line":88,"column":7}}})) != null ? stack1 : "")
+    + "}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health().0, json!({ \"status\": \"ok\" }));\n    }\n}\n";
+},"useData":true} }],
+  ["rust/framework/rocket/src/pages.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use rocket::http::Status;\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "use crate::service;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "\n#[get(\"/web/items\")]\npub async fn items(state: &State<AppState>) -> Result<RawHtml<String>, (Status, String)> {\n    service::list_items(&state.db)\n        .await\n        .map(|items| RawHtml(views::items(&items)))\n        .map_err(|err| (Status::InternalServerError, err.to_string()))\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":7}}})) != null ? stack1 : "")
+    + "use rocket::response::content::RawHtml;\nuse rocket::State;\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":9,"column":7}}})) != null ? stack1 : "")
+    + "use crate::views;\nuse crate::AppState;\n\n#[get(\"/\")]\npub fn index(state: &State<AppState>) -> RawHtml<String> {\n    RawHtml(views::index(&state.app_name))\n}\n\n#[get(\"/web/now\")]\npub fn now() -> RawHtml<String> {\n    RawHtml(views::now())\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":22,"column":6},"end":{"line":22,"column":21}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":31,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["rust/framework/salvo/src/api.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use salvo::prelude::*;\nuse serde_json::json;\n\nuse crate::service::{self, ServiceError};\nuse crate::AppState;\n\npub fn router() -> Router {\n    Router::with_path(\"api/v1/items\")\n        .get(list_items)\n        .post(create_item)\n}\n\n#[handler]\nasync fn list_items(depot: &mut Depot, res: &mut Response) {\n    let state = AppState::from_depot(depot);\n    match service::list_items(&state.db).await {\n        Ok(items) => res.render(Json(items)),\n        Err(err) => error_response(res, &err),\n    }\n}\n\n#[handler]\nasync fn create_item(req: &mut Request, depot: &mut Depot, res: &mut Response) {\n    let body = req\n        .payload()\n        .await\n        .map(|bytes| bytes.to_vec())\n        .unwrap_or_default();\n    let state = AppState::from_depot(depot);\n    match service::create_item(&state.db, &body).await {\n        Ok(item) => {\n            res.status_code(StatusCode::CREATED);\n            res.render(Json(item));\n        }\n        Err(err) => error_response(res, &err),\n    }\n}\n\nfn error_response(res: &mut Response, err: &ServiceError) {\n    res.status_code(match err {\n        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,\n        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,\n    });\n    res.render(Json(json!({ \"error\": err.to_string() })));\n}\n";
 },"useData":true} }],
   ["rust/framework/salvo/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+    return "mod api;\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "mod db;\nmod models;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "mod pages;\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "mod service;\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "mod views;\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n#[derive(Clone)]\npub struct AppState {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":26}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + "}\n\nimpl AppState {\n    pub fn from_depot(depot: &Depot) -> &Self {\n        depot\n            .obtain::<Self>()\n            .expect(\"AppState is injected in main\")\n    }\n}\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "    pub app_name: String,\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "    pub db: db::Db,\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "    let db = db::connect().await.unwrap_or_else(|err| {\n        eprintln!(\"database not ready: {err}\");\n        std::process::exit(1);\n    });\n";
+},"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4760,12 +5066,40 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":10},"end":{"line":17,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":17,"column":4},"end":{"line":21,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":26}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":68,"column":7}}})) != null ? stack1 : "");
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let state = AppState {\n        app_name: app_config.app_name,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":62,"column":6},"end":{"line":62,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
+    + "    };\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        db,\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    let state = AppState { db };\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let router = Router::new()\n        .hoop(affix_state::inject(state))\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":74,"column":6},"end":{"line":74,"column":21}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":74,"column":0},"end":{"line":76,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":77,"column":6},"end":{"line":77,"column":26}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":77,"column":0},"end":{"line":79,"column":7}}})) != null ? stack1 : "")
+    + "        .push(Router::with_path(\"health\").get(health));\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "        .push(api::router())\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return "        .push(pages::router())\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    return "    let router = Router::with_path(\"health\").get(health);\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4774,15 +5108,75 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use salvo::prelude::*;\n\nmod config;\n"
+  return "use salvo::prelude::*;\nuse serde_json::json;\n\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
-    + "#[handler]\nasync fn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "")
-    + "    let router = Router::new().path(\"health\").get(health);\n\n    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    let listener = TcpListener::bind(&addr).await.expect(\"failed to bind\");\n    Server::new(listener).serve(router).await;\n}";
+    + "mod config;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":26}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":26},"end":{"line":21,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":47}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":40,"column":7}}})) != null ? stack1 : "")
+    + "\n#[handler]\nasync fn health(res: &mut Response) {\n    res.render(Json(json!({ \"status\": \"ok\" })));\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":21}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":55,"column":7}}})) != null ? stack1 : "")
+    + "    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":58,"column":10},"end":{"line":58,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":26},"end":{"line":58,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":47}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":69,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":71,"column":10},"end":{"line":71,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":71,"column":26},"end":{"line":71,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":71,"column":6},"end":{"line":71,"column":47}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(16, data, 0),"data":data,"loc":{"start":{"line":71,"column":0},"end":{"line":83,"column":7}}})) != null ? stack1 : "")
+    + "\n    let listener = TcpListener::new(addr).bind().await;\n    Server::new(listener).serve(router).await;\n}\n\n#[cfg(test)]\nmod tests {\n    use salvo::test::{ResponseExt, TestClient};\n\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        let service = Service::new(Router::with_path(\"health\").get(health));\n        let body = TestClient::get(\"http://127.0.0.1/health\")\n            .send(&service)\n            .await\n            .take_string()\n            .await\n            .expect(\"response body\");\n        assert_eq!(body, r#\"{\"status\":\"ok\"}\"#);\n    }\n}\n";
+},"useData":true} }],
+  ["rust/framework/salvo/src/pages.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use crate::service;\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "        .push(Router::with_path(\"web/items\").get(items))\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "\n#[handler]\nasync fn items(depot: &mut Depot, res: &mut Response) {\n    let state = AppState::from_depot(depot);\n    match service::list_items(&state.db).await {\n        Ok(list) => res.render(Text::Html(views::items(&list))),\n        Err(err) => {\n            res.status_code(StatusCode::INTERNAL_SERVER_ERROR);\n            res.render(Text::Plain(err.to_string()));\n        }\n    }\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "use salvo::prelude::*;\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "use crate::views;\nuse crate::AppState;\n\npub fn router() -> Router {\n    Router::new()\n        .get(index)\n        .push(Router::with_path(\"web/now\").get(now))\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":15,"column":7}}})) != null ? stack1 : "")
+    + "}\n\n#[handler]\nasync fn index(depot: &mut Depot, res: &mut Response) {\n    let state = AppState::from_depot(depot);\n    res.render(Text::Html(views::index(&state.app_name)));\n}\n\n#[handler]\nasync fn now(res: &mut Response) {\n    res.render(Text::Html(views::now()));\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":21}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":41,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["rust/framework/warp/src/api.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use std::convert::Infallible;\n\nuse serde_json::json;\nuse warp::http::StatusCode;\nuse warp::hyper::body::Bytes;\nuse warp::reply::{self, Response};\nuse warp::{Filter, Rejection, Reply};\n\nuse crate::service::{self, ServiceError};\nuse crate::AppState;\n\nconst MAX_BODY_BYTES: u64 = 1024 * 1024;\n\npub fn routes(state: AppState) -> impl Filter<Extract = (Response,), Error = Rejection> + Clone {\n    let with_state = warp::any().map(move || state.clone());\n    let list = warp::path!(\"api\" / \"v1\" / \"items\")\n        .and(warp::get())\n        .and(with_state.clone())\n        .and_then(list_items);\n    let create = warp::path!(\"api\" / \"v1\" / \"items\")\n        .and(warp::post())\n        .and(warp::body::content_length_limit(MAX_BODY_BYTES))\n        .and(warp::body::bytes())\n        .and(with_state)\n        .and_then(create_item);\n    list.or(create).unify()\n}\n\nasync fn list_items(state: AppState) -> Result<Response, Infallible> {\n    Ok(match service::list_items(&state.db).await {\n        Ok(items) => reply::json(&items).into_response(),\n        Err(err) => error_response(&err),\n    })\n}\n\nasync fn create_item(body: Bytes, state: AppState) -> Result<Response, Infallible> {\n    Ok(match service::create_item(&state.db, &body).await {\n        Ok(item) => reply::with_status(reply::json(&item), StatusCode::CREATED).into_response(),\n        Err(err) => error_response(&err),\n    })\n}\n\nfn error_response(err: &ServiceError) -> Response {\n    let status = match err {\n        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,\n        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,\n    };\n    reply::with_status(reply::json(&json!({ \"error\": err.to_string() })), status).into_response()\n}\n";
 },"useData":true} }],
   ["rust/framework/warp/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+    return "mod api;\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "mod db;\nmod models;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "mod pages;\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "mod service;\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "mod views;\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "\n#[derive(Clone)]\npub struct AppState {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":26}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":28,"column":6},"end":{"line":28,"column":21}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":0},"end":{"line":30,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "    pub app_name: String,\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "    pub db: db::Db,\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "    let db = db::connect().await.unwrap_or_else(|err| {\n        eprintln!(\"database not ready: {err}\");\n        std::process::exit(1);\n    });\n";
+},"9":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4790,12 +5184,51 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":17,"column":10},"end":{"line":17,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":17,"column":4},"end":{"line":21,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":48,"column":6},"end":{"line":48,"column":26}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data,"loc":{"start":{"line":48,"column":0},"end":{"line":57,"column":7}}})) != null ? stack1 : "");
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let state = AppState {\n        app_name: app_config.app_name,\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":51,"column":6},"end":{"line":51,"column":21}}}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":51,"column":0},"end":{"line":53,"column":7}}})) != null ? stack1 : "")
+    + "    };\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        db,\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    let state = AppState { db };\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "    let routes = health()\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":62,"column":6},"end":{"line":62,"column":21}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":65,"column":6},"end":{"line":65,"column":26}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":65,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "")
+    + "        .with(warp::cors().allow_any_origin());\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "        .or(api::routes(state"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":63,"column":35},"end":{"line":63,"column":55}}}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":63,"column":29},"end":{"line":63,"column":72}}})) != null ? stack1 : "")
+    + "))\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    return ".clone()";
+},"16":function(container,depth0,helpers,partials,data) {
+    return "        .or(pages::routes(state))\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    return "    let routes = health().with(warp::cors().allow_any_origin());\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4804,81 +5237,109 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use warp::{Filter, Rejection, Reply};\n\nmod config;\n"
+  return "use serde_json::json;\nuse warp::{Filter, Rejection, Reply};\n\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
-    + "fn routes() -> impl Filter<Extract = impl Reply, Error = Rejection> {\n    let health = warp::path(\"health\").map(|| \"{\\\"status\\\":\\\"ok\\\"}\");\n    health.with(warp::cors().allow_any_origin())\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":24,"column":7}}})) != null ? stack1 : "")
-    + "\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, app_config.port,\n    );\n\n    warp::serve(routes()).run(([0, 0, 0, 0], app_config.port)).await;\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        let response = warp::test::request().path(\"/health\").reply(routes()).await;\n        assert_eq!(response.status(), warp::http::StatusCode::OK);\n    }\n}";
+    + "mod config;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":26}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":14,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":21}}}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":17,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":26}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":20,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":21,"column":10},"end":{"line":21,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":21,"column":26},"end":{"line":21,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":21,"column":6},"end":{"line":21,"column":47}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":0},"end":{"line":32,"column":7}}})) != null ? stack1 : "")
+    + "\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":37,"column":6},"end":{"line":37,"column":21}}}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":42,"column":7}}})) != null ? stack1 : "")
+    + "    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, app_config.port,\n    );\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":47,"column":10},"end":{"line":47,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":47,"column":26},"end":{"line":47,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":47,"column":6},"end":{"line":47,"column":47}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":47,"column":0},"end":{"line":58,"column":7}}})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"or")||(depth0 && lookupProperty(depth0,"or"))||alias2).call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":60,"column":10},"end":{"line":60,"column":25}}}),(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"frontend") : depth0),"htmx",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":26},"end":{"line":60,"column":46}}}),{"name":"or","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":47}}}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(17, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":71,"column":7}}})) != null ? stack1 : "")
+    + "    warp::serve(routes)\n        .run(([0, 0, 0, 0], app_config.port))\n        .await;\n}\n\nfn health() -> impl Filter<Extract = (impl Reply,), Error = Rejection> + Clone {\n    warp::path!(\"health\")\n        .and(warp::get())\n        .map(|| warp::reply::json(&json!({ \"status\": \"ok\" })))\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        let response = warp::test::request().path(\"/health\").reply(&health()).await;\n        assert_eq!(response.status(), warp::http::StatusCode::OK);\n        assert_eq!(response.body().as_ref(), br#\"{\"status\":\"ok\"}\"#);\n    }\n}\n";
 },"useData":true} }],
-  ["rust/frontend/htmx/common/templates/index.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ app_name }}</title>\n    <style>\n        :root {\n            color-scheme: light dark;\n            --text: #1a1a1a;\n            --muted: #666;\n            --border: #d9d9d9;\n            --accent: #f6a510;\n        }\n\n        * {\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: system-ui, -apple-system, \"Segoe UI\", sans-serif;\n            margin: 0;\n            line-height: 1.5;\n            color: var(--text);\n        }\n\n        header {\n            display: flex;\n            align-items: baseline;\n            gap: 1.5rem;\n            padding: 0.75rem 1.5rem;\n            border-bottom: 1px solid var(--border);\n        }\n\n        header a {\n            color: inherit;\n            text-decoration: none;\n            font-weight: 600;\n        }\n\n        header a:hover {\n            color: var(--accent);\n        }\n\n        main {\n            max-width: 56rem;\n            margin: 2rem auto;\n            padding: 0 1.5rem;\n        }\n\n        code {\n            padding: 0.1rem 0.35rem;\n            border-radius: 4px;\n            background: #f2f2f2;\n        }\n\n        @media (prefers-color-scheme: dark) {\n            :root {\n                --text: #e8e8e8;\n                --border: #333;\n            }\n\n            code {\n                background: #222;\n            }\n        }\n    </style>\n    <script src=\"https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js\" integrity=\"sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V\" crossorigin=\"anonymous\" defer></script>\n</head>\n<body>\n    <header>\n        <a href=\"/\">{{ app_name }}</a>\n    </header>\n    <main>\n        <h1>{{ app_name }}</h1>\n        <p>A TriStack project with an HTMX-powered web frontend.</p>\n        <section id=\"clock\"\n                 hx-get=\"/web/now\"\n                 hx-trigger=\"load\"\n                 hx-swap=\"innerHTML\">\n            <p>Loading…</p>\n        </section>\n    </main>\n</body>\n</html>";
+  ["rust/framework/warp/src/pages.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use std::convert::Infallible;\n\nuse warp::http::StatusCode;\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "use crate::service;\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "    let with_state = warp::any().map(move || state.clone());\n    let index = warp::path::end()\n        .and(warp::get())\n        .and(with_state.clone())\n        .map(|state: AppState| reply::html(views::index(&state.app_name)).into_response());\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "    let index = warp::path::end()\n        .and(warp::get())\n        .map(move || reply::html(views::index(&state.app_name)).into_response());\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    return "    let items = warp::path!(\"web\" / \"items\")\n        .and(warp::get())\n        .and(with_state)\n        .and_then(items);\n    index.or(now).unify().or(items).unify()\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    return "    index.or(now).unify()\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    return "\nasync fn items(state: AppState) -> Result<Response, Infallible> {\n    Ok(match service::list_items(&state.db).await {\n        Ok(items) => reply::html(views::items(&items)).into_response(),\n        Err(err) => {\n            reply::with_status(err.to_string(), StatusCode::INTERNAL_SERVER_ERROR).into_response()\n        }\n    })\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":7}}})) != null ? stack1 : "")
+    + "use warp::reply::{self, Response};\nuse warp::{Filter, Rejection, Reply};\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":11,"column":7}}})) != null ? stack1 : "")
+    + "use crate::views;\nuse crate::AppState;\n\npub fn routes(state: AppState) -> impl Filter<Extract = (Response,), Error = Rejection> + Clone {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":16,"column":6},"end":{"line":16,"column":21}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":16,"column":0},"end":{"line":26,"column":7}}})) != null ? stack1 : "")
+    + "    let now = warp::path!(\"web\" / \"now\")\n        .and(warp::get())\n        .map(|| reply::html(views::now()).into_response());\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":30,"column":6},"end":{"line":30,"column":21}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":30,"column":0},"end":{"line":38,"column":7}}})) != null ? stack1 : "")
+    + "}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":40,"column":6},"end":{"line":40,"column":21}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":40,"column":0},"end":{"line":50,"column":7}}})) != null ? stack1 : "");
+},"useData":true} }],
+  ["rust/frontend/htmx/common/src/views.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use crate::models::Item;\n\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    return "\n#[derive(Template)]\n#[template(path = \"items.html\")]\nstruct ItemsTemplate<'a> {\n    items: &'a [Item],\n}\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "\npub fn items(items: &[Item]) -> String {\n    render(&ItemsTemplate { items })\n}\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "use askama::Template;\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":6,"column":7}}})) != null ? stack1 : "")
+    + "#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate<'a> {\n    app_name: &'a str,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: u64,\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":25,"column":7}}})) != null ? stack1 : "")
+    + "\npub fn index(app_name: &str) -> String {\n    render(&IndexTemplate { app_name })\n}\n\npub fn now() -> String {\n    let now = std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|elapsed| elapsed.as_secs())\n        .unwrap_or_default();\n    render(&NowTemplate { now })\n}\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":38,"column":6},"end":{"line":38,"column":21}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":38,"column":0},"end":{"line":43,"column":7}}})) != null ? stack1 : "")
+    + "\nfn render(template: &impl Template) -> String {\n    template.render().unwrap_or_else(|err| err.to_string())\n}\n";
+},"useData":true} }],
+  ["rust/frontend/htmx/common/templates/index.html.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "        <section id=\"items\"\n                 hx-get=\"/web/items\"\n                 hx-trigger=\"load\"\n                 hx-swap=\"innerHTML\">\n            <p>Loading items…</p>\n        </section>\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ app_name }}</title>\n    <style>\n        :root {\n            color-scheme: light dark;\n            --text: #1a1a1a;\n            --muted: #666;\n            --border: #d9d9d9;\n            --accent: #f6a510;\n        }\n\n        * {\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: system-ui, -apple-system, \"Segoe UI\", sans-serif;\n            margin: 0;\n            line-height: 1.5;\n            color: var(--text);\n        }\n\n        header {\n            display: flex;\n            align-items: baseline;\n            gap: 1.5rem;\n            padding: 0.75rem 1.5rem;\n            border-bottom: 1px solid var(--border);\n        }\n\n        header a {\n            color: inherit;\n            text-decoration: none;\n            font-weight: 600;\n        }\n\n        header a:hover {\n            color: var(--accent);\n        }\n\n        main {\n            max-width: 56rem;\n            margin: 2rem auto;\n            padding: 0 1.5rem;\n        }\n\n        table {\n            border-collapse: collapse;\n            margin-bottom: 1rem;\n        }\n\n        th,\n        td {\n            padding: 0.4rem 0.75rem;\n            border-bottom: 1px solid var(--border);\n            text-align: left;\n        }\n\n        code {\n            padding: 0.1rem 0.35rem;\n            border-radius: 4px;\n            background: #f2f2f2;\n        }\n\n        @media (prefers-color-scheme: dark) {\n            :root {\n                --text: #e8e8e8;\n                --border: #333;\n            }\n\n            code {\n                background: #222;\n            }\n        }\n    </style>\n    <script src=\"https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js\" integrity=\"sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V\" crossorigin=\"anonymous\" defer></script>\n</head>\n<body>\n    <header>\n        <a href=\"/\">{{ app_name }}</a>\n    </header>\n    <main>\n        <h1>{{ app_name }}</h1>\n        <p>A TriStack project with an HTMX-powered web frontend.</p>\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":89,"column":6},"end":{"line":89,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":89,"column":0},"end":{"line":96,"column":7}}})) != null ? stack1 : "")
+    + "        <section id=\"clock\"\n                 hx-get=\"/web/now\"\n                 hx-trigger=\"load\"\n                 hx-swap=\"innerHTML\">\n            <p>Loading…</p>\n        </section>\n    </main>\n</body>\n</html>";
+},"useData":true} }],
+  ["rust/frontend/htmx/common/templates/items.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "{% if items.is_empty() %}\n<p>No items yet. Create one with <code>POST /api/v1/items</code>.</p>\n{% else %}\n<table>\n    <thead>\n        <tr>\n            <th>Name</th>\n            <th>Created</th>\n        </tr>\n    </thead>\n    <tbody>\n        {% for item in items %}\n        <tr>\n            <td>{{ item.name }}</td>\n            <td>{{ item.created_at.format(\"%Y-%m-%d %H:%M\") }}</td>\n        </tr>\n        {% endfor %}\n    </tbody>\n</table>\n{% endif %}\n<button hx-get=\"/web/items\" hx-target=\"#items\" hx-swap=\"innerHTML\">Refresh</button>\n";
 },"useData":true} }],
   ["rust/frontend/htmx/common/templates/now.html.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<p>Server time: {{ now }} (Unix seconds)</p>";
 },"useData":true} }],
-  ["rust/frontend/htmx/framework/actix-web/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":26,"column":10},"end":{"line":26,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":26,"column":4},"end":{"line":30,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use actix_web::{web, App, HttpResponse, HttpServer, Responder};\nuse askama::Template;\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[actix_web::main]\nasync fn main() -> std::io::Result<()> {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":33,"column":7}}})) != null ? stack1 : "")
-    + "    let app_name = app_config.app_name.clone();\n    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    HttpServer::new(move || {\n        App::new()\n            .app_data(web::Data::new(app_name.clone()))\n            .route(\"/health\", web::get().to(health))\n            .route(\"/\", web::get().to(index))\n            .route(\"/web/now\", web::get().to(now))\n    })\n    .bind(addr)?\n    .run()\n    .await\n}\n\nasync fn health() -> impl Responder {\n    HttpResponse::Ok()\n        .content_type(\"application/json\")\n        .body(\"{\\\"status\\\":\\\"ok\\\"}\")\n}\n\nasync fn index(app_name: web::Data<String>) -> impl Responder {\n    let template = IndexTemplate {\n        app_name: app_name.get_ref().clone(),\n    };\n    HttpResponse::Ok()\n        .content_type(\"text/html\")\n        .body(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nasync fn now() -> impl Responder {\n    let template = NowTemplate { now: unix_now() };\n    HttpResponse::Ok()\n        .content_type(\"text/html\")\n        .body(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[actix_web::test]\n    async fn health_returns_status_ok() {\n        let app =\n            actix_web::test::init_service(App::new().route(\"/health\", web::get().to(health))).await;\n        let request = actix_web::test::TestRequest::get()\n            .uri(\"/health\")\n            .to_request();\n        let response = actix_web::test::call_service(&app, request).await;\n        assert!(response.status().is_success());\n    }\n}\n";
+  ["rust/items/src/models.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use chrono::{DateTime, Utc};\nuse serde::Serialize;\n\n#[derive(Debug, Clone, Serialize)]\npub struct Item {\n    pub id: String,\n    pub name: String,\n    pub created_at: DateTime<Utc>,\n}\n";
 },"useData":true} }],
-  ["rust/frontend/htmx/framework/axum/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":36,"column":10},"end":{"line":36,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":36,"column":4},"end":{"line":40,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use askama::Template;\nuse axum::{\n    extract::State,\n    response::{Html, IntoResponse},\n    routing::get,\n    Router,\n};\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":10,"column":0},"end":{"line":12,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Clone)]\nstruct AppState {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":35,"column":6},"end":{"line":35,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":35,"column":0},"end":{"line":43,"column":7}}})) != null ? stack1 : "")
-    + "    let state = AppState {\n        app_name: app_config.app_name.clone(),\n    };\n\n    let router = Router::new()\n        .route(\"/health\", get(health))\n        .route(\"/\", get(index))\n        .route(\"/web/now\", get(now))\n        .with_state(state);\n\n    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    let listener = tokio::net::TcpListener::bind(&addr)\n        .await\n        .expect(\"failed to bind\");\n\n    axum::serve(listener, router).await.expect(\"server error\");\n}\n\nasync fn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\nasync fn index(State(state): State<AppState>) -> impl IntoResponse {\n    let template = IndexTemplate {\n        app_name: state.app_name,\n    };\n    Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nasync fn now() -> impl IntoResponse {\n    let template = NowTemplate { now: unix_now() };\n    Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        assert_eq!(health().await, \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}\n";
+  ["rust/items/src/service.rs.hbs", { kind: "precompiled", spec: {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "use std::fmt;\n\nuse chrono::{SubsecRound, Utc};\nuse serde::Deserialize;\nuse uuid::Uuid;\n\nuse crate::db::{self, Db};\nuse crate::models::Item;\n\nconst MAX_NAME_CHARS: usize = 200;\n\n#[derive(Debug)]\npub enum ServiceError {\n    BadRequest(String),\n    Internal(&'static str),\n}\n\nimpl fmt::Display for ServiceError {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {\n        match self {\n            Self::BadRequest(message) => f.write_str(message),\n            Self::Internal(message) => f.write_str(message),\n        }\n    }\n}\n\n#[derive(Deserialize)]\nstruct NewItem {\n    name: String,\n}\n\npub async fn list_items(db: &Db) -> Result<Vec<Item>, ServiceError> {\n    db::list_items(db)\n        .await\n        .map_err(|err| internal(\"could not list items\", &err))\n}\n\npub async fn create_item(db: &Db, body: &[u8]) -> Result<Item, ServiceError> {\n    let input: NewItem = serde_json::from_slice(body)\n        .map_err(|_| ServiceError::BadRequest(\"invalid request body\".to_string()))?;\n    validate_name(&input.name)?;\n    let item = Item {\n        id: Uuid::new_v4().to_string(),\n        name: input.name,\n        created_at: Utc::now().trunc_subsecs(6),\n    };\n    db::insert_item(db, &item)\n        .await\n        .map_err(|err| internal(\"could not create item\", &err))?;\n    Ok(item)\n}\n\nfn validate_name(name: &str) -> Result<(), ServiceError> {\n    if name.trim().is_empty() {\n        return Err(ServiceError::BadRequest(\n            \"invalid input: name must not be empty\".to_string(),\n        ));\n    }\n    if name.chars().count() > MAX_NAME_CHARS {\n        return Err(ServiceError::BadRequest(format!(\n            \"invalid input: name must be at most {MAX_NAME_CHARS} characters\"\n        )));\n    }\n    Ok(())\n}\n\nfn internal(message: &'static str, err: &db::Error) -> ServiceError {\n    eprintln!(\"{message}: {err}\");\n    ServiceError::Internal(message)\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn validate_name_accepts_valid_names() {\n        assert!(validate_name(\"abc\").is_ok());\n        assert!(validate_name(\"  spaced name  \").is_ok());\n        assert!(validate_name(&\"a\".repeat(MAX_NAME_CHARS)).is_ok());\n    }\n\n    #[test]\n    fn validate_name_rejects_invalid_names() {\n        assert!(validate_name(\"\").is_err());\n        assert!(validate_name(\"   \").is_err());\n        assert!(validate_name(&\"a\".repeat(MAX_NAME_CHARS + 1)).is_err());\n    }\n}\n";
 },"useData":true} }],
-  ["rust/frontend/htmx/framework/rocket/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
+  ["rust/orm/diesel/src/db.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "use diesel::r2d2::{ConnectionManager, CustomizeConnection, Pool};\n";
 },"1":function(container,depth0,helpers,partials,data) {
+    return "use diesel::r2d2::{ConnectionManager, Pool};\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = Pool<ConnectionManager<SqliteConnection>>;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)\";\n";
+},"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4886,29 +5347,10 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":23}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use askama::Template;\nuse rocket::response::content::RawHtml;\n\n#[macro_use]\nextern crate rocket;\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":10,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Clone)]\nstruct AppState {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[get(\"/health\")]\nfn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[get(\"/\")]\nfn index(state: &rocket::State<AppState>) -> RawHtml<String> {\n    let template = IndexTemplate {\n        app_name: state.app_name.clone(),\n    };\n    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\n#[get(\"/web/now\")]\nfn now() -> RawHtml<String> {\n    let template = NowTemplate { now: unix_now() };\n    RawHtml(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[launch]\nasync fn rocket() -> _ {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":59,"column":6},"end":{"line":59,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":59,"column":0},"end":{"line":67,"column":7}}})) != null ? stack1 : "")
-    + "    let config = rocket::Config {\n        address: std::net::Ipv4Addr::UNSPECIFIED.into(),\n        port: app_config.port,\n        ..rocket::Config::default()\n    };\n\n    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, config.port,\n    );\n\n    rocket::custom(config)\n        .manage(AppState {\n            app_name: app_config.app_name,\n        })\n        .mount(\"/\", routes![health, index, now])\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn health_returns_status_ok() {\n        assert_eq!(health(), \"{\\\"status\\\":\\\"ok\\\"}\");\n    }\n}";
-},"useData":true} }],
-  ["rust/frontend/htmx/framework/salvo/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
-},"1":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":34}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(5, data, 0),"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+},"4":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = Pool<ConnectionManager<PgConnection>>;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)\";\n";
+},"5":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -4916,12 +5358,36 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":51,"column":10},"end":{"line":51,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":51,"column":4},"end":{"line":55,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":22,"column":10},"end":{"line":22,"column":31}}}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":22,"column":0},"end":{"line":26,"column":0}}})) != null ? stack1 : "");
+},"6":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = Pool<ConnectionManager<MysqlConnection>>;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)\";\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    return "Datetime";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "Timestamp";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "#[derive(Debug)]\nstruct SqliteBusyTimeout;\n\nimpl CustomizeConnection<SqliteConnection, diesel::r2d2::Error> for SqliteBusyTimeout {\n    fn on_acquire(&self, conn: &mut SqliteConnection) -> Result<(), diesel::r2d2::Error> {\n        diesel::sql_query(\"PRAGMA busy_timeout = 5000\")\n            .execute(conn)\n            .map(|_| ())\n            .map_err(diesel::r2d2::Error::QueryError)\n    }\n}\n\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    return "        let db = Pool::builder()\n            .connection_customizer(Box::new(SqliteBusyTimeout))\n            .build(ConnectionManager::new(database_url()))?;\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "        let db = Pool::builder().build(ConnectionManager::new(database_url()))?;\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "    std::env::var(\"DATABASE_URL\").unwrap_or_else(|_| format!(\"{DATABASE_NAME}.db\"))\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    return "    std::env::var(\"DATABASE_URL\")\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "        .unwrap_or_else(|_| format!(\"postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}\"))\n";
+},"15":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":123,"column":10},"end":{"line":123,"column":31}}}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":123,"column":0},"end":{"line":125,"column":0}}})) != null ? stack1 : "");
+},"16":function(container,depth0,helpers,partials,data) {
+    return "        .unwrap_or_else(|_| format!(\"mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}\"))\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -4930,143 +5396,25 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return "use askama::Template;\nuse salvo::prelude::*;\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\n#[handler]\nasync fn health() -> &'static str {\n    \"{\\\"status\\\":\\\"ok\\\"}\"\n}\n\n#[handler]\nasync fn index() -> Text {\n    let app_name = std::env::var(\"APP_NAME\").unwrap_or_else(|_| \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"projectName") || (depth0 != null ? lookupProperty(depth0,"projectName") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"projectName","hash":{},"data":data,"loc":{"start":{"line":28,"column":65},"end":{"line":28,"column":80}}}) : helper)))
-    + "\".to_string());\n    let template = IndexTemplate { app_name };\n    Text::Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\n#[handler]\nasync fn now() -> Text {\n    let template = NowTemplate { now: unix_now() };\n    Text::Html(template.render().unwrap_or_else(|err| err.to_string()))\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":50,"column":6},"end":{"line":50,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":50,"column":0},"end":{"line":58,"column":7}}})) != null ? stack1 : "")
-    + "    let router = Router::new()\n        .get(index)\n        .push(Router::with_path(\"health\").get(health))\n        .push(Router::with_path(\"web/now\").get(now));\n\n    let addr = format!(\"0.0.0.0:{}\", app_config.port);\n\n    println!(\"{} listening on {}\", app_config.app_name, addr);\n\n    let listener = TcpListener::bind(&addr).await.expect(\"failed to bind\");\n    Server::new(listener).serve(router).await;\n}";
-},"useData":true} }],
-  ["rust/frontend/htmx/framework/warp/src/main.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "mod db;\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"diesel",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":52,"column":10},"end":{"line":52,"column":27}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":52,"column":4},"end":{"line":56,"column":11}}})) != null ? stack1 : "")
-    + "        eprintln!(\"database not ready: {err}\");\n    }\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect() {\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    return "    if let Err(err) = db::connect().await {\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use askama::Template;\nuse warp::{Filter, Rejection, Reply};\n\nmod config;\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":21}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
-    + "\n#[derive(Template)]\n#[template(path = \"index.html\")]\nstruct IndexTemplate {\n    app_name: String,\n}\n\n#[derive(Template)]\n#[template(path = \"now.html\")]\nstruct NowTemplate {\n    now: String,\n}\n\nfn routes(app_name: String) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {\n    let health = warp::path(\"health\").map(|| \"{\\\"status\\\":\\\"ok\\\"}\");\n\n    let index_name = app_name.clone();\n    let index = warp::path::end().and(warp::get()).map(move || {\n        let template = IndexTemplate {\n            app_name: index_name.clone(),\n        };\n        warp::reply::html(template.render().unwrap_or_else(|err| err.to_string()))\n    });\n\n    let now = warp::path(\"web\")\n        .and(warp::path(\"now\"))\n        .and(warp::get())\n        .map(|| {\n            let template = NowTemplate { now: unix_now() };\n            warp::reply::html(template.render().unwrap_or_else(|err| err.to_string()))\n        });\n\n    index\n        .or(now)\n        .or(health)\n        .boxed()\n        .with(warp::cors().allow_any_origin())\n}\n\n#[tokio::main]\nasync fn main() {\n    let app_config = config::Config::from_env();\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"ne")||(depth0 && lookupProperty(depth0,"ne"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"orm") : depth0),"none",{"name":"ne","hash":{},"data":data,"loc":{"start":{"line":51,"column":6},"end":{"line":51,"column":21}}}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":51,"column":0},"end":{"line":59,"column":7}}})) != null ? stack1 : "")
-    + "    println!(\n        \"{} listening on 0.0.0.0:{}\",\n        app_config.app_name, app_config.port,\n    );\n\n    warp::serve(routes(app_config.app_name))\n        .run(([0, 0, 0, 0], app_config.port))\n        .await;\n}\n\nfn unix_now() -> String {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .map(|d| d.as_secs().to_string())\n        .unwrap_or_default()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[tokio::test]\n    async fn health_returns_status_ok() {\n        let response = warp::test::request()\n            .path(\"/health\")\n            .reply(&routes(\"test\".to_string()))\n            .await;\n        assert_eq!(response.status(), warp::http::StatusCode::OK);\n    }\n}";
-},"useData":true} }],
-  ["rust/orm/diesel/src/db.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "use diesel::SqliteConnection;\n\npub type DbConnection = SqliteConnection;\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":7,"column":10},"end":{"line":7,"column":34}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":7,"column":0},"end":{"line":15,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    return "use diesel::PgConnection;\n\npub type DbConnection = PgConnection;\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":10},"end":{"line":11,"column":31}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":15,"column":0}}})) != null ? stack1 : "");
-},"4":function(container,depth0,helpers,partials,data) {
-    return "use diesel::MysqlConnection;\n\npub type DbConnection = MysqlConnection;\n";
-},"5":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":27,"column":5},"end":{"line":27,"column":21}}}) : helper)))
-    + ".db\"\n}\n";
-},"6":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":29,"column":10},"end":{"line":29,"column":34}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":29,"column":0},"end":{"line":37,"column":0}}})) != null ? stack1 : "");
-},"7":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \"postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":31,"column":49},"end":{"line":31,"column":65}}}) : helper)))
-    + "\"\n}\n";
-},"8":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":10},"end":{"line":33,"column":31}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":37,"column":0}}})) != null ? stack1 : "");
-},"9":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \"mysql://root:password@127.0.0.1:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":35,"column":42},"end":{"line":35,"column":58}}}) : helper)))
-    + "\"\n}\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use diesel::{Connection, ConnectionError};\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":15,"column":7}}})) != null ? stack1 : "")
-    + "\npub fn connect() -> Result<DbConnection, ConnectionError> {\n    <DbConnection as Connection>::establish(&database_url())\n}\n\nfn database_url() -> String {\n    std::env::var(\"DATABASE_URL\").unwrap_or_else(|_| String::from(database_default()))\n}\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":25,"column":6},"end":{"line":25,"column":28}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":25,"column":0},"end":{"line":37,"column":7}}})) != null ? stack1 : "");
+  return "use chrono::{DateTime, NaiveDateTime, Utc};\nuse diesel::prelude::*;\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":7,"column":7}}})) != null ? stack1 : "")
+    + "\nuse crate::models::Item;\n\npub type Error = Box<dyn std::error::Error + Send + Sync>;\n\nconst DATABASE_NAME: &str = \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":13,"column":29},"end":{"line":13,"column":45}}}) : helper)))
+    + "\";\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":28}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":14,"column":0},"end":{"line":26,"column":7}}})) != null ? stack1 : "")
+    + "\ndiesel::table! {\n    items (id) {\n        id -> Text,\n        name -> Text,\n        created_at -> "
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":32,"column":28},"end":{"line":32,"column":49}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":32,"column":22},"end":{"line":32,"column":83}}})) != null ? stack1 : "")
+    + ",\n    }\n}\n\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":36,"column":6},"end":{"line":36,"column":28}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":36,"column":0},"end":{"line":49,"column":7}}})) != null ? stack1 : "")
+    + "#[derive(Queryable, Insertable)]\n#[diesel(table_name = items)]\nstruct ItemRow {\n    id: String,\n    name: String,\n    created_at: NaiveDateTime,\n}\n\npub async fn connect() -> Result<Db, Error> {\n    blocking(|| {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":6},"end":{"line":60,"column":28}}}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(11, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":66,"column":7}}})) != null ? stack1 : "")
+    + "        diesel::sql_query(CREATE_ITEMS).execute(&mut db.get()?)?;\n        Ok(db)\n    })\n    .await\n}\n\npub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {\n    let db = db.clone();\n    let row = ItemRow {\n        id: item.id.clone(),\n        name: item.name.clone(),\n        created_at: item.created_at.naive_utc(),\n    };\n    blocking(move || {\n        diesel::insert_into(items::table)\n            .values(&row)\n            .execute(&mut db.get()?)?;\n        Ok(())\n    })\n    .await\n}\n\npub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {\n    let db = db.clone();\n    let rows: Vec<ItemRow> = blocking(move || {\n        Ok(items::table\n            .order(items::created_at.desc())\n            .load(&mut db.get()?)?)\n    })\n    .await?;\n    Ok(rows\n        .into_iter()\n        .map(|row| Item {\n            id: row.id,\n            name: row.name,\n            created_at: DateTime::<Utc>::from_naive_utc_and_offset(row.created_at, Utc),\n        })\n        .collect())\n}\n\nasync fn blocking<T, F>(task: F) -> Result<T, Error>\nwhere\n    T: Send + 'static,\n    F: FnOnce() -> Result<T, Error> + Send + 'static,\n{\n    tokio::task::spawn_blocking(task).await?\n}\n\nfn database_url() -> String {\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":116,"column":6},"end":{"line":116,"column":28}}}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(13, data, 0),"data":data,"loc":{"start":{"line":116,"column":0},"end":{"line":120,"column":7}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":121,"column":6},"end":{"line":121,"column":30}}}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(15, data, 0),"data":data,"loc":{"start":{"line":121,"column":0},"end":{"line":125,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
 },"useData":true} }],
   ["rust/orm/seaorm/src/db.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> String {\n    \"sqlite://"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":13,"column":14},"end":{"line":13,"column":30}}}) : helper)))
-    + ".db?mode=rwc\".to_string()\n}\n";
+    return "\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)\";\n";
 },"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -5075,18 +5423,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":10},"end":{"line":15,"column":34}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":12,"column":10},"end":{"line":12,"column":34}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":12,"column":0},"end":{"line":18,"column":0}}})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> String {\n    \"postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":17,"column":49},"end":{"line":17,"column":65}}}) : helper)))
-    + "\".to_string()\n}\n";
+    return "\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMPTZ NOT NULL)\";\n";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -5095,64 +5434,11 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":31}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":15,"column":10},"end":{"line":15,"column":31}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":0},"end":{"line":18,"column":0}}})) != null ? stack1 : "");
 },"4":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> String {\n    \"mysql://root:password@127.0.0.1:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":21,"column":42},"end":{"line":21,"column":58}}}) : helper)))
-    + "\".to_string()\n}\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "use sea_orm::{Database, DatabaseConnection, DbErr};\n\npub async fn connect() -> Result<DatabaseConnection, DbErr> {\n    Database::connect(database_url()).await\n}\n\nfn database_url() -> String {\n    std::env::var(\"DATABASE_URL\").unwrap_or_else(|_| database_default())\n}\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "");
-},"useData":true} }],
-  ["rust/orm/sqlx-rust/src/db.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
-    return "use sqlx::SqlitePool;\n\npub type OrmPool = SqlitePool;\n\npub async fn connect() -> Result<OrmPool, Error> {\n    SqlitePool::connect(&database_url()).await\n}\n";
-},"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":11,"column":10},"end":{"line":11,"column":34}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":11,"column":0},"end":{"line":27,"column":0}}})) != null ? stack1 : "");
-},"2":function(container,depth0,helpers,partials,data) {
-    return "use sqlx::PgPool;\n\npub type OrmPool = PgPool;\n\npub async fn connect() -> Result<OrmPool, Error> {\n    PgPool::connect(&database_url()).await\n}\n";
-},"3":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":31}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":0},"end":{"line":27,"column":0}}})) != null ? stack1 : "");
-},"4":function(container,depth0,helpers,partials,data) {
-    return "use sqlx::MySqlPool;\n\npub type OrmPool = MySqlPool;\n\npub async fn connect() -> Result<OrmPool, Error> {\n    MySqlPool::connect(&database_url()).await\n}\n";
+    return "\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)\";\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \"sqlite://"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":35,"column":14},"end":{"line":35,"column":30}}}) : helper)))
-    + ".db?mode=rwc\"\n}\n";
+    return "        .unwrap_or_else(|_| format!(\"sqlite://{DATABASE_NAME}.db?mode=rwc\"))\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -5161,18 +5447,9 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":37,"column":10},"end":{"line":37,"column":34}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":37,"column":0},"end":{"line":45,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":73,"column":10},"end":{"line":73,"column":34}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":73,"column":0},"end":{"line":77,"column":0}}})) != null ? stack1 : "");
 },"7":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \"postgres://postgres:postgres@localhost:5432/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":39,"column":49},"end":{"line":39,"column":65}}}) : helper)))
-    + "\"\n}\n";
+    return "        .unwrap_or_else(|_| format!(\"postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}\"))\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -5181,31 +5458,89 @@ export const EMBEDDED_TEMPLATES: Map<string, TemplateSource> = new Map([
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":41,"column":10},"end":{"line":41,"column":31}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":41,"column":0},"end":{"line":45,"column":0}}})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":75,"column":10},"end":{"line":75,"column":31}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":75,"column":0},"end":{"line":77,"column":0}}})) != null ? stack1 : "");
 },"9":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "fn database_default() -> &'static str {\n    \"mysql://root:password@127.0.0.1:3306/"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":43,"column":42},"end":{"line":43,"column":58}}}) : helper)))
-    + "\"\n}\n";
+    return "        .unwrap_or_else(|_| format!(\"mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}\"))\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "use sqlx::Error;\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":3,"column":0},"end":{"line":27,"column":7}}})) != null ? stack1 : "")
-    + "\nfn database_url() -> String {\n    std::env::var(\"DATABASE_URL\").unwrap_or_else(|_| String::from(database_default()))\n}\n\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":33,"column":6},"end":{"line":33,"column":28}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":33,"column":0},"end":{"line":45,"column":7}}})) != null ? stack1 : "");
+  return "use sea_orm::{ConnectionTrait, Database, DatabaseConnection, EntityTrait, QueryOrder, Set};\n\nuse crate::models::Item;\n\npub type Db = DatabaseConnection;\npub type Error = Box<dyn std::error::Error + Send + Sync>;\n\nconst DATABASE_NAME: &str = \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":8,"column":29},"end":{"line":8,"column":45}}}) : helper)))
+    + "\";\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":9,"column":0},"end":{"line":18,"column":7}}})) != null ? stack1 : "")
+    + "\nmod item {\n    use sea_orm::entity::prelude::*;\n\n    #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]\n    #[sea_orm(table_name = \"items\")]\n    pub struct Model {\n        #[sea_orm(primary_key, auto_increment = false)]\n        pub id: String,\n        pub name: String,\n        pub created_at: DateTimeUtc,\n    }\n\n    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]\n    pub enum Relation {}\n\n    impl ActiveModelBehavior for ActiveModel {}\n}\n\npub async fn connect() -> Result<Db, Error> {\n    let db = Database::connect(database_url()).await?;\n    db.execute_unprepared(CREATE_ITEMS).await?;\n    Ok(db)\n}\n\npub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {\n    let row = item::ActiveModel {\n        id: Set(item.id.clone()),\n        name: Set(item.name.clone()),\n        created_at: Set(item.created_at),\n    };\n    item::Entity::insert(row).exec_without_returning(db).await?;\n    Ok(())\n}\n\npub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {\n    let rows = item::Entity::find()\n        .order_by_desc(item::Column::CreatedAt)\n        .all(db)\n        .await?;\n    Ok(rows\n        .into_iter()\n        .map(|row| Item {\n            id: row.id,\n            name: row.name,\n            created_at: row.created_at,\n        })\n        .collect())\n}\n\nfn database_url() -> String {\n    std::env::var(\"DATABASE_URL\")\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":71,"column":6},"end":{"line":71,"column":28}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":71,"column":0},"end":{"line":77,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
+},"useData":true} }],
+  ["rust/orm/sqlx-rust/src/db.rs.hbs", { kind: "precompiled", spec: {"0":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = sqlx::SqlitePool;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)\";\nconst INSERT_ITEM: &str = \"INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)\";\n";
+},"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":13,"column":10},"end":{"line":13,"column":34}}}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":13,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = sqlx::PgPool;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMPTZ NOT NULL)\";\nconst INSERT_ITEM: &str = \"INSERT INTO items (id, name, created_at) VALUES ($1, $2, $3)\";\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":31}}}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":18,"column":0},"end":{"line":23,"column":0}}})) != null ? stack1 : "");
+},"4":function(container,depth0,helpers,partials,data) {
+    return "pub type Db = sqlx::MySqlPool;\n\nconst CREATE_ITEMS: &str = \"CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)\";\nconst INSERT_ITEM: &str = \"INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)\";\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    return "        .unwrap_or_else(|_| format!(\"sqlite://{DATABASE_NAME}.db?mode=rwc\"))\n";
+},"6":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"postgres",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":60,"column":10},"end":{"line":60,"column":34}}}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":60,"column":0},"end":{"line":64,"column":0}}})) != null ? stack1 : "");
+},"7":function(container,depth0,helpers,partials,data) {
+    return "        .unwrap_or_else(|_| format!(\"postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}\"))\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||container.hooks.helperMissing).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"mysql",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":62,"column":10},"end":{"line":62,"column":31}}}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":0},"end":{"line":64,"column":0}}})) != null ? stack1 : "");
+},"9":function(container,depth0,helpers,partials,data) {
+    return "        .unwrap_or_else(|_| format!(\"mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}\"))\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "use sqlx::Row;\n\nuse crate::models::Item;\n\npub type Error = Box<dyn std::error::Error + Send + Sync>;\n\nconst DATABASE_NAME: &str = \""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"project_slug") || (depth0 != null ? lookupProperty(depth0,"project_slug") : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"project_slug","hash":{},"data":data,"loc":{"start":{"line":7,"column":29},"end":{"line":7,"column":45}}}) : helper)))
+    + "\";\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":28}}}),{"name":"if","hash":{},"fn":container.program(0, data, 0),"inverse":container.program(1, data, 0),"data":data,"loc":{"start":{"line":8,"column":0},"end":{"line":23,"column":7}}})) != null ? stack1 : "")
+    + "\npub async fn connect() -> Result<Db, Error> {\n    let db = Db::connect(&database_url()).await?;\n    sqlx::query(CREATE_ITEMS).execute(&db).await?;\n    Ok(db)\n}\n\npub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {\n    sqlx::query(INSERT_ITEM)\n        .bind(&item.id)\n        .bind(&item.name)\n        .bind(item.created_at)\n        .execute(db)\n        .await?;\n    Ok(())\n}\n\npub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {\n    let rows = sqlx::query(\"SELECT id, name, created_at FROM items ORDER BY created_at DESC\")\n        .fetch_all(db)\n        .await?;\n    rows.iter()\n        .map(|row| {\n            Ok(Item {\n                id: row.try_get(\"id\")?,\n                name: row.try_get(\"name\")?,\n                created_at: row.try_get(\"created_at\")?,\n            })\n        })\n        .collect()\n}\n\nfn database_url() -> String {\n    std::env::var(\"DATABASE_URL\")\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(lookupProperty(helpers,"eq")||(depth0 && lookupProperty(depth0,"eq"))||alias2).call(alias1,(depth0 != null ? lookupProperty(depth0,"database") : depth0),"sqlite",{"name":"eq","hash":{},"data":data,"loc":{"start":{"line":58,"column":6},"end":{"line":58,"column":28}}}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(6, data, 0),"data":data,"loc":{"start":{"line":58,"column":0},"end":{"line":64,"column":7}}})) != null ? stack1 : "")
+    + "}\n";
 },"useData":true} }]
 ]);
 
-export const TEMPLATE_COUNT = 172;
+export const TEMPLATE_COUNT = 181;
