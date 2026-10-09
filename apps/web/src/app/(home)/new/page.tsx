@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { SITE_URL } from "@/lib/site";
-import { fetchSponsors } from "@/lib/sponsors";
 
 import { StackBuilder } from "./_components/stack-builder";
 
@@ -33,13 +32,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function FullScreenStackBuilder() {
-  const sponsorsData = await fetchSponsors();
-
+export default function FullScreenStackBuilder() {
   return (
     <Suspense>
-      <div className="grid h-[calc(100svh-64px)] w-full flex-1 grid-cols-1 overflow-hidden">
-        <StackBuilder specialSponsors={sponsorsData.specialSponsors} />
+      <div className="mx-auto w-full max-w-6xl border-x border-border">
+        <StackBuilder />
       </div>
     </Suspense>
   );

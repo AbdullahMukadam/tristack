@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { DEFAULT_STACK, PRESET_TEMPLATES, type StackState, TECH_OPTIONS } from "@/lib/constant";
@@ -18,15 +18,6 @@ import {
   isOptionCompatible,
   validateProjectName,
 } from "../utils";
-
-export type MobileTab = "build" | "preview";
-
-export type CategoryProgressItem = {
-  category: TechCategory;
-  selected: number;
-  total: number;
-  done: boolean;
-};
 
 const CATEGORY_LIST = CATEGORY_ORDER as TechCategory[];
 const MAX_COMPATIBILITY_PASSES = 10;
@@ -172,7 +163,6 @@ export function useStackBuilder() {
 
   const [copied, setCopied] = useState(false);
   const [lastSavedStack, setLastSavedStack] = useState<StackState | null>(null);
-  const [mobileTab, setMobileTab] = useState<MobileTab>("build");
 
   const setStack = useCallback(
     async (update: StackUpdate) => {
@@ -188,20 +178,6 @@ export function useStackBuilder() {
     },
     [setUrlStack],
   );
-
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>(
-        '[data-slot="scroll-area-viewport"]',
-      );
-      if (viewport) {
-        contentRef.current = viewport;
-      }
-    }
-  }, [viewMode]);
 
   const compatibilityAnalysis = useMemo(() => resolveStackCompatibility(stack), [stack]);
   const effectiveStack = compatibilityAnalysis.stack;
@@ -225,43 +201,6 @@ export function useStackBuilder() {
   const command = useMemo(() => {
     return generateStackCommand(withFormattedProjectName(effectiveStack));
   }, [effectiveStack]);
-
-  const categoryProgress = useMemo<Array<CategoryProgressItem>>(() => {
-    return CATEGORY_LIST.map((category) => {
-      const options = getOptionsForStack(effectiveStack, category);
-      const selectedValue = effectiveStack[category as keyof StackState];
-      const realOptionCount = options.filter((option) => option.id !== "none").length;
-
-      if (Array.isArray(selectedValue)) {
-        const selectedReal = selectedValue.filter(
-          (id) => id !== "none" && options.some((option) => option.id === id),
-        );
-        const selectedCount = selectedReal.length;
-        return {
-          category,
-          selected: selectedCount,
-          total: Math.max(realOptionCount, 1),
-          done: selectedCount > 0,
-        };
-      }
-
-      const isSelectedReal =
-        selectedValue !== "none" &&
-        selectedValue !== "false" &&
-        options.some((option) => option.id === selectedValue);
-
-      return {
-        category,
-        selected: isSelectedReal ? 1 : 0,
-        total: 1,
-        done: isSelectedReal,
-      };
-    });
-  }, [effectiveStack]);
-
-  const selectedCount = useMemo(() => {
-    return categoryProgress.reduce((total, entry) => total + entry.selected, 0);
-  }, [categoryProgress]);
 
   function getStackUrl() {
     return generateStackSharingUrl(withFormattedProjectName(effectiveStack));
@@ -305,8 +244,6 @@ export function useStackBuilder() {
         projectName: stack.projectName || "my-tristack-app",
       });
     });
-
-    contentRef.current?.scrollTo(0, 0);
   }
 
   function handleTechSelect(category: keyof typeof TECH_OPTIONS, techId: string) {
@@ -335,7 +272,6 @@ export function useStackBuilder() {
     startTransition(() => {
       setStack(DEFAULT_STACK);
     });
-    contentRef.current?.scrollTo(0, 0);
   }
 
   function saveCurrentStack() {
@@ -353,8 +289,6 @@ export function useStackBuilder() {
     startTransition(() => {
       setStack(lastSavedStack);
     });
-
-    contentRef.current?.scrollTo(0, 0);
     toast.success("Saved configuration loaded");
   }
 
@@ -367,14 +301,11 @@ export function useStackBuilder() {
     startTransition(() => {
       setStack(preset.stack);
     });
-
-    contentRef.current?.scrollTo(0, 0);
     toast.success(`Applied preset: ${preset.name}`);
   }
 
   return {
     applyPreset,
-    categoryProgress,
     command,
     compatibilityAnalysis,
     copied,
@@ -384,15 +315,11 @@ export function useStackBuilder() {
     handleTechSelect,
     lastSavedStack,
     loadSavedStack,
-    mobileTab,
     projectNameError,
     removeSelectedTech,
     resetStack,
     saveCurrentStack,
-    scrollAreaRef,
-    selectedCount,
     selectedFile,
-    setMobileTab,
     setSelectedFile,
     setStack,
     setViewMode,
