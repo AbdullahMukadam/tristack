@@ -14,12 +14,14 @@ const BOOT_ROOT = join(import.meta.dir, "..", ".smoke", "boot");
 const FAILURE_ROOT = join(tmpdir(), "tristack-boot-failures");
 
 const CASE_TIMEOUT_MS = 240_000;
+const RUST_CASE_TIMEOUT_MS = 900_000;
 const READY_TIMEOUT_MS = 60_000;
 const BASE_PORT = 42_000;
 
 type BootCase = {
   id: string;
   requiresTool?: string;
+  timeoutMs?: number;
   requiresPython?: string;
   config: Pick<
     ProjectConfig,
@@ -355,9 +357,94 @@ const BOOT_CASES: BootCase[] = [
       packageManager: "go",
     },
   },
+  {
+    id: "rust-axum-sqlx-htmx",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "axum",
+      frontend: "htmx",
+      orm: "sqlx-rust",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+    },
+  },
+  {
+    id: "rust-actix-diesel",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "actix-web",
+      frontend: "none",
+      orm: "diesel",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+    },
+  },
+  {
+    id: "rust-rocket-seaorm-htmx",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "rocket",
+      frontend: "htmx",
+      orm: "seaorm",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+    },
+  },
+  {
+    id: "rust-warp-sqlx",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "warp",
+      frontend: "none",
+      orm: "sqlx-rust",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+    },
+  },
+  {
+    id: "rust-salvo-diesel-htmx",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "salvo",
+      frontend: "htmx",
+      orm: "diesel",
+      migrations: "none",
+      database: "sqlite",
+      packageManager: "cargo",
+    },
+  },
+  {
+    id: "bare-rust",
+    requiresTool: "cargo",
+    timeoutMs: RUST_CASE_TIMEOUT_MS,
+    config: {
+      language: "rust",
+      framework: "none",
+      frontend: "none",
+      orm: "none",
+      migrations: "none",
+      database: "none",
+      packageManager: "cargo",
+    },
+  },
 ];
 
 function hostPythonVersion(): string | undefined {
+  if (Bun.which("python") === null) return undefined;
   const result = Bun.spawnSync(["python", "--version"]);
   if (!result.success) return undefined;
   const output = `${result.stdout.toString()}${result.stderr.toString()}`.trim();
@@ -548,6 +635,11 @@ describe.skipIf(process.env.BTS_BOOT !== "1")("boot matrix", () => {
                 result.status,
                 `${probe.method} ${probe.path} -> ${result.status} (expected ${probe.expectStatus})\nbody: ${result.body}\n${serverLog}`,
               ).toBe(probe.expectStatus);
+              if (probe.expectBodyIncludes !== undefined) {
+                expect(result.body, `${probe.method} ${probe.path} body`).toContain(
+                  probe.expectBodyIncludes,
+                );
+              }
             }
           } finally {
             await killProcessTree(subprocess.pid, detached);
@@ -560,7 +652,7 @@ describe.skipIf(process.env.BTS_BOOT !== "1")("boot matrix", () => {
           await rm(scaffoldDir, { recursive: true, force: true }).catch(() => {});
         }
       },
-      CASE_TIMEOUT_MS,
+      bootCase.timeoutMs ?? CASE_TIMEOUT_MS,
     );
   });
 });

@@ -174,9 +174,6 @@ function writeDefaultReadme(
     }
     steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, runCommand(config));
   }
-  if (config.language === "rust" && config.addons.includes("clippy")) {
-    steps.push("# Lint", "cargo clippy --all-targets -- -D warnings");
-  }
 
   const apiDocs = isBare
     ? "Bare project — no API scaffolded yet. Start building under `src/`."
@@ -225,13 +222,9 @@ ${
 }
 
 function rustApiDocs(config: ProjectConfig): string {
-  const health = '- `GET /health` returns `{"status":"ok"}`.';
-  if (config.orm === "none") return health;
-  return `${health}
-- \`GET /api/v1/items\` lists items, newest first.
-- \`POST /api/v1/items\` with \`{"name": "..."}\` creates one (201), or returns 400 with \`{"error": "..."}\`.
-
-The \`items\` table is created on startup if it doesn't exist.`;
+  const routes = ["- `GET /health`"];
+  if (config.orm !== "none") routes.push("- `GET /api/v1/items`", "- `POST /api/v1/items`");
+  return routes.join("\n");
 }
 
 function installCommand(config: ProjectConfig): string {
