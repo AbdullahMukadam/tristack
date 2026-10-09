@@ -160,6 +160,9 @@ function writeDefaultReadme(
   const isBare = config.framework === "none";
 
   const steps: string[] = ["# 1. Install dependencies", installCommand(config)];
+  if (runCommand(config).startsWith("cargo watch")) {
+    steps.push("cargo install cargo-watch");
+  }
   if (isBare) {
     if (config.language === "python") {
       steps.push("# 2. Run the sample script", bareRunCommand(config));
@@ -169,25 +172,22 @@ function writeDefaultReadme(
     if (migrationSteps.length > 0) {
       steps.push(`# 2. ${migrationSteps[0]}`, ...migrationSteps.slice(1));
     }
-    const devServerCommand =
-      config.language === "rust" && config.addons.includes("cargo-watch")
-        ? `cargo install cargo-watch\n${runCommand(config)}`
-        : runCommand(config);
-    steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, devServerCommand);
+    steps.push(`# ${migrationSteps.length > 0 ? 3 : 2}. Start the dev server`, runCommand(config));
+  }
+  if (config.language === "rust" && config.addons.includes("clippy")) {
+    steps.push("# Lint", "cargo clippy --all-targets -- -D warnings");
   }
 
   const apiDocs = isBare
     ? "Bare project — no API scaffolded yet. Start building under `src/`."
     : config.language === "rust"
-      ? config.framework === "loco"
-        ? "A minimal Loco entrypoint is scaffolded. Generate a full Rails-like app with `cargo loco new`."
-        : 'A `/health` endpoint is exposed and returns `{"status":"ok"}`.'
+      ? rustApiDocs(config)
       : "When the dev server is running, interactive API docs are available at `/docs`.";
 
   const webDocs = {
     python: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/items\` — items fragment (the canonical example; only present when an ORM is configured)\n- \`/api/v1/items\` — the JSON API, unchanged\n`,
     go: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/items\` — items fragment (the canonical example; only present when an ORM is configured)\n- \`/health\` and the JSON API routes, unchanged\n`,
-    rust: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/now\` — server-time fragment (the canonical example, ready to swap for real data)\n`,
+    rust: `\n## Web\n\nThe app server-renders an HTMX frontend alongside the API:\n\n- \`/\` — home page (loads an HTML fragment over htmx)\n- \`/web/now\` — server-time fragment\n${config.orm !== "none" ? "- `/web/items` — items fragment (the canonical example)\n" : ""}`,
   } satisfies Partial<Record<Language, string>>;
 
   const content = `# ${config.projectName}
@@ -224,6 +224,16 @@ ${
   vfs.writeFile("README.md", content);
 }
 
+function rustApiDocs(config: ProjectConfig): string {
+  const health = '- `GET /health` returns `{"status":"ok"}`.';
+  if (config.orm === "none") return health;
+  return `${health}
+- \`GET /api/v1/items\` lists items, newest first.
+- \`POST /api/v1/items\` with \`{"name": "..."}\` creates one (201), or returns 400 with \`{"error": "..."}\`.
+
+The \`items\` table is created on startup if it doesn't exist.`;
+}
+
 function installCommand(config: ProjectConfig): string {
   return getRuntimeProfile(config).install.label;
 }
@@ -237,9 +247,7 @@ function migrationsSteps(config: ProjectConfig): string[] {
     return ["Run database migrations", goMigrationsCommand(config)];
   }
   if (config.language === "rust") {
-    return config.database === "none"
-      ? []
-      : ["Run database migrations", "# no migrations configured"];
+    return [];
   }
   if (config.database === "none") {
     return [];

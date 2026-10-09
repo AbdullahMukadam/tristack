@@ -5,6 +5,11 @@ import type { ORM } from "@tristack/types";
 import { createVirtual } from "../src/index";
 import { collectFiles } from "./setup";
 
+function withDatabaseName(db: string | undefined): string {
+  const name = /const DATABASE_NAME: &str = "(.*)";/.exec(db ?? "")?.[1] ?? "";
+  return (db ?? "").replaceAll("{DATABASE_NAME}", name);
+}
+
 describe("Axum generated project", () => {
   for (const frontend of ["none", "htmx"] as const) {
     for (const orm of ["none", "seaorm", "diesel", "sqlx-rust"] as const) {
@@ -49,7 +54,7 @@ describe("Axum generated project", () => {
       const files = collectFiles(result.value.root, result.value.root.path);
       const expected = orm === "diesel" ? "axum_example.db" : "sqlite://axum_example.db?mode=rwc";
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expected}`);
-      expect(files.get("src/db.rs")).toContain(`"${expected}"`);
+      expect(withDatabaseName(files.get("src/db.rs"))).toContain(`"${expected}"`);
     });
 
     it(`${orm} uses a matching MySQL URL in env and connection fallback with 127.0.0.1`, async () => {
@@ -67,7 +72,7 @@ describe("Axum generated project", () => {
       const files = collectFiles(result.value.root, result.value.root.path);
       const expected = "mysql://root:password@127.0.0.1:3306/axum_example";
       expect(files.get(".env.example")).toContain(`DATABASE_URL=${expected}`);
-      expect(files.get("src/db.rs")).toContain(`"${expected}"`);
+      expect(withDatabaseName(files.get("src/db.rs"))).toContain(`"${expected}"`);
     });
   }
 });
@@ -110,9 +115,11 @@ describe("Rust Docker addon", () => {
         expect(dockerfile).toContain(database === "postgres" ? "libpq5" : "libmariadb3");
       } else {
         expect(compose).not.toContain("  db:");
-        expect(compose).not.toContain("volumes:");
         if (database === "sqlite") {
-          expect(compose).toContain("DATABASE_URL: docker_example.db");
+          expect(compose).toContain("      - appdata:/data");
+          expect(dockerfile).toContain("ENV DATABASE_URL=/data/docker_example.db");
+        } else {
+          expect(compose).not.toContain("volumes:");
         }
       }
     });
@@ -132,8 +139,8 @@ describe("Rust Docker addon", () => {
       });
       if (result.isErr()) throw result.error;
       const files = collectFiles(result.value.root, result.value.root.path);
-      expect(files.get("docker-compose.yml")).toContain(
-        "DATABASE_URL: sqlite://docker_example.db?mode=rwc",
+      expect(files.get("Dockerfile")).toContain(
+        "ENV DATABASE_URL=sqlite:///data/docker_example.db?mode=rwc",
       );
     });
   }

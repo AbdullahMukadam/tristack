@@ -1,0 +1,31 @@
+{{#if (ne orm "none")}}
+use rocket::http::Status;
+{{/if}}
+use rocket::response::content::RawHtml;
+use rocket::State;
+
+{{#if (ne orm "none")}}
+use crate::service;
+{{/if}}
+use crate::views;
+use crate::AppState;
+
+#[get("/")]
+pub fn index(state: &State<AppState>) -> RawHtml<String> {
+    RawHtml(views::index(&state.app_name))
+}
+
+#[get("/web/now")]
+pub fn now() -> RawHtml<String> {
+    RawHtml(views::now())
+}
+{{#if (ne orm "none")}}
+
+#[get("/web/items")]
+pub async fn items(state: &State<AppState>) -> Result<RawHtml<String>, (Status, String)> {
+    service::list_items(&state.db)
+        .await
+        .map(|items| RawHtml(views::items(&items)))
+        .map_err(|err| (Status::InternalServerError, err.to_string()))
+}
+{{/if}}

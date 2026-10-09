@@ -53,7 +53,7 @@ Per-language dimensions defined in `packages/types/src/constants.ts`:
 
 - **Python**: frameworks `fastapi, litestar, django, flask, none`; ORMs `sqlmodel, sqlalchemy, tortoise, none`; migrations `alembic, none`; package managers `uv, poetry, pip`; addons `docker, ruff, mypy, pytest, github-actions, none`; frontends `htmx, none`.
 - **Go** (Phase 2): frameworks `gin, fiber, echo, chi, stdlib, none`; ORMs `sqlc, gorm, sqlx, none`; migrations `goose, golang-migrate, none`; addons `docker, air, golangci-lint, github-actions, none`; frontends `htmx, none`.
-- **Rust** (Phase 3): frameworks `axum, actix-web, rocket, warp, salvo, loco, none`; ORMs `seaorm, diesel, sqlx-rust, none`; migrations `none`; addons `docker, cargo-watch, clippy, github-actions, none`; frontends `htmx, none`.
+- **Rust** (Phase 3): frameworks `axum, actix-web, rocket, warp, salvo, none`; ORMs `seaorm, diesel, sqlx-rust, none`; migrations `none`; addons `docker, cargo-watch, clippy, github-actions, none`; frontends `htmx, none`.
 
 Compatibility rules between a dimension and the Core Stack are declared in the shared type layer and enforced by CLI validation, silent prompts, and the web Stack Builder compatibility engine. Example rules: Django brings its own ORM/migrations; Tortoise has no Alembic support; Tortoise does not run under Flask; no-framework projects are bare.
 

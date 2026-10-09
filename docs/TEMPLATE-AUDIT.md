@@ -178,8 +178,10 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
   - **Fixed 2026-10-07** in both Rocket `main.rs` files (API and HTMX). Confirmed in WSL: the old output fails with `` `Result<_, _>` is not a future ``. The new output builds with Diesel on SQLite, Postgres and MySQL.
 - [x] **RS-3 Rocket + HTMX doesn't compile.** `rocket::response::content::Html` is `RawHtml` in Rocket 0.5.
   - **Fixed 2026-10-07** in both Rocket `main.rs` files (API and HTMX). Confirmed in WSL: the old output fails with `unresolved import rocket::response::content::Html`. With `RawHtml`, `/` returns 200 and `/web/now` renders its partial.
-- [ ] **RS-4 Loco doesn't compile and isn't Loco.** `#[tokio::main]` is used with no `tokio` dependency. `loco-rs = "0.4"` is years old. `main` never uses Loco. Either build a real Loco app or drop the option.
-- [ ] **RS-5 CI workflow is invalid.** In `addons/github-actions`, `components: [rustfmt, clippy]` is a YAML list; action inputs must be strings (`components: rustfmt, clippy`).
+- [x] **RS-4 Loco doesn't compile and isn't Loco.** `#[tokio::main]` is used with no `tokio` dependency. `loco-rs = "0.4"` is years old. `main` never uses Loco. Either build a real Loco app or drop the option.
+  - **Fixed 2026-10-08 by dropping Loco.** A real Loco app is its own generator (`cargo loco new`, with its own layout and CLI), so the stub went. Removed it from the types, CLI prompt and validation, template generator, web Stack Builder and docs. `--framework loco` now fails with "Allowed choices are … salvo, none" and creates nothing; an old builder link with `fw=loco` falls back to the default framework.
+- [x] **RS-5 CI workflow is invalid.** In `addons/github-actions`, `components: [rustfmt, clippy]` is a YAML list; action inputs must be strings (`components: rustfmt, clippy`).
+  - **Fixed in PR #12.** The generated workflow passes actionlint; the old list form fails it (`expected scalar node for string value`). Every CI step passes on Axum and Actix projects with all addons.
 
 ### P1
 
@@ -190,26 +192,36 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
   - sqlx doesn't create a missing file.
   - Use `sqlite://slug.db?mode=rwc` (and match it in `env.example`).
   - **Fixed in PR #7.** The defaults live in `orm/*/src/db.rs`, so every framework gets them. SeaORM and sqlx use `sqlite://slug.db?mode=rwc`; Diesel keeps a plain path. `env.example` and docker-compose match.
-- [ ] **RS-8 Database errors are swallowed.** Every `main.rs` connects, logs `database not ready`, drops the pool, and serves anyway. Fail fast and keep the pool in app state.
-- [ ] **RS-9 Dockerfile:**
+- [x] **RS-8 Database errors are swallowed.** Every `main.rs` connects, logs `database not ready`, drops the pool, and serves anyway. Fail fast and keep the pool in app state.
+  - **Fixed 2026-10-08.** Every framework's `main.rs` now calls `db::connect().await`, and on failure prints `database not ready: <error>` and exits with status 1. The pool lives in `AppState` and the items handlers use it. Confirmed in WSL: with the database unreachable, sqlx/Postgres, SeaORM/MySQL and Diesel/Postgres projects all exit 1 with the message instead of serving.
+- [x] **RS-9 Dockerfile:**
   - `rust:1.80` is likely too old for current crate MSRVs (there's no `Cargo.lock`).
   - The "cache" step builds twice and caches nothing.
   - The `debian-slim` runtime lacks `libpq5` and `libmysqlclient` for Diesel.
   - It runs as root.
   - _Partly fixed in PR #7:_ `rust:1-slim-bookworm`, a single build, and `libpq5`/`libmariadb3` in the runtime for Diesel. It still runs as root.
-- [ ] **RS-10 `cargo fmt --check` and clippy fail** on generated code: unsorted `use` lists in actix, and an unused `get` import that breaks `clippy -D warnings`.
-  - _Axum and Actix Web fixed in PRs #7 and #10_ (fmt and `clippy -D warnings` clean in WSL). _Rocket fixed 2026-10-07:_ the one-line `launch()` chain failed rustfmt, and `main() -> Result<(), rocket::Error>` failed clippy (`result_large_err`, the error is 224 bytes). Rocket now uses its own `#[launch]`. Ten generated projects (API and HTMX × none, SeaORM, Diesel, sqlx on SQLite; Diesel on Postgres and MySQL) pass build, test, `fmt --check` and `clippy -D warnings`. Warp, Salvo and Loco are unchecked.
+  - **Fixed 2026-10-08:** the runtime image runs as a system user `app` (uid 10001). SQLite projects keep their database in a `/data` volume owned by that user (`ENV DATABASE_URL` points there, and docker-compose mounts `appdata:/data`), because the non-root user can't write to `/app`. Not built: Docker isn't installed on this machine.
+- [x] **RS-10 `cargo fmt --check` and clippy fail** on generated code: unsorted `use` lists in actix, and an unused `get` import that breaks `clippy -D warnings`.
+  - _Axum and Actix Web fixed in PRs #7 and #10_ (fmt and `clippy -D warnings` clean in WSL). _Rocket fixed 2026-10-07:_ the one-line `launch()` chain failed rustfmt, and `main() -> Result<(), rocket::Error>` failed clippy (`result_large_err`, the error is 224 bytes). Rocket now uses its own `#[launch]`. Ten generated projects (API and HTMX × none, SeaORM, Diesel, sqlx on SQLite; Diesel on Postgres and MySQL) pass build, test, `fmt --check` and `clippy -D warnings`. Warp and Salvo are unchecked.
+  - **Fixed 2026-10-08 for Warp and Salvo too**, as part of the RS-11 rewrite. Every generated project in the WSL matrix passes `cargo fmt --check` and `cargo clippy --all-targets -- -D warnings` (see RS-11). Known limit: a project name of roughly 70+ characters makes rustfmt wrap the string constants in `config.rs` and `db.rs`; `config.rs` already behaved that way.
 
 ### P2
 
-- [ ] **RS-11 No items Example.** Rust only serves `/health` (plus `/web/now`). This violates template-architecture §5 ("one canonical Example"). It's the deferred `error.rs`/`state.rs`/`routes/` work in §7.
-- [ ] **RS-12 Health content type.** Axum, Rocket, Salvo, and Warp return the JSON string as `text/plain`; use the framework's JSON responder.
-- [ ] **RS-13 Inconsistencies:**
+- [x] **RS-11 No items Example.** Rust only serves `/health` (plus `/web/now`). This violates template-architecture §5 ("one canonical Example"). It's the deferred `error.rs`/`state.rs`/`routes/` work in §7.
+  - **Fixed 2026-10-08.** ORM projects serve `GET /api/v1/items` (newest first) and `POST /api/v1/items` (201; 400 with `{"error": ...}` for a bad body or an empty/over-200-character name), matching Go. HTMX + ORM projects add `/web/items`, which the home page loads. Layout (template-architecture §1): `rust/items/` holds the framework-agnostic `models.rs` and `service.rs`; every ORM's `db.rs` has the same async `Db`/`Error`/`connect`/`insert_item`/`list_items` API (Diesel runs on an r2d2 pool through `spawn_blocking`); each framework has one `main.rs` plus `api.rs` and `pages.rs`. The separate HTMX `main.rs` copies (`frontend/htmx/framework/*`) are gone, so the two variants can't drift any more. `connect()` creates the `items` table if it is missing.
+  - Verified in WSL: 5 frameworks × API/HTMX × no ORM/SeaORM/Diesel/sqlx on SQLite (40 projects), plus two with every addon and a bare project, all build, pass `cargo test`, `fmt --check` and `clippy -D warnings`, and answer every probe (`/health`, GET/POST items, 400 for a bad body and an empty name, the new item in the list, `/`, `/web/now`, `/web/items`). Each ORM also builds on Postgres and MySQL, and ran against Neon Postgres and MariaDB 11.4: POST 201, GET returns the items newest first with the same microsecond `created_at`.
+  - Found while verifying: (1) sqlx without a TLS feature couldn't connect to any Postgres that requires SSL (Neon: `TLS upgrade required by connect options but SQLx was built without TLS support`); sqlx now enables `tls-rustls` for Postgres and MySQL. (2) Diesel's SQLite pool had no busy timeout: 27 of 30 concurrent POSTs failed with `database is locked`. A connection customizer now sets `PRAGMA busy_timeout = 5000`, and 30 of 30 succeed on every ORM. (3) SeaORM's `create_table_from_entity` made a second-precision `timestamp` column on MySQL; it now uses the same `CREATE TABLE` SQL as the other ORMs (`DATETIME(6)` on MySQL).
+- [x] **RS-12 Health content type.** Axum, Rocket, Salvo, and Warp return the JSON string as `text/plain`; use the framework's JSON responder.
+  - **Fixed 2026-10-08.** Every framework returns `/health` through its JSON responder (`axum::Json`, `HttpResponse::json`, Rocket's `Json`, `warp::reply::json`, Salvo's `Json`) with `serde_json::json!`.
+- [x] **RS-13 Inconsistencies:**
   - Salvo `index` reads `APP_NAME` directly instead of using `Config`.
   - Salvo has no test.
   - Warp `path("health")` has no `end()`.
   - `serde`/`serde_json` are unused dependencies.
-- [ ] **RS-14 Empty addons.** `cargo-watch` and `clippy` produce no files (clippy only appears as a CI step).
+  - **Fixed 2026-10-08.** Salvo's `index` reads the app name from `AppState` (built from `Config`); Salvo has a health test (`salvo::test::TestClient`, `test` feature as a dev-dependency); Warp uses `warp::path!("health")`, which matches the end of the path; `serde` is only a dependency when an ORM is selected, and `serde_json` is used by every health handler.
+- [x] **RS-14 Empty addons.** `cargo-watch` and `clippy` produce no files (clippy only appears as a CI step).
+  - _Partly fixed in PR #12:_ `cargo-watch` adds `cargo install cargo-watch` to the README, but the CLI's next-steps hint still prints only `cargo watch -x run`. `clippy` adds `[lints.clippy] all = { level = "warn", priority = -1 }`, which is clippy's default, so it changes nothing yet.
+  - **Fixed 2026-10-08.** `clippy` now adds `dbg_macro`, `todo` and `unwrap_used` warnings to `[lints.clippy]`, a `clippy.toml` with `allow-unwrap-in-tests = true`, and a lint step in the README. `cargo-watch` puts `cargo install cargo-watch` in the README's install step and in the CLI's next-steps hint. Both are driven by the runtime profile's run command, so a bare project (which runs `cargo run`) doesn't get it.
 
 ---
 
@@ -226,7 +238,7 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 - [ ] **D-1** ROADMAP Phase 1 says "shipped", and its exit criterion is phrased as universal, but only SQLite was ever booted (see X-3, PY-6, PY-7).
 - [x] **D-2** (fixed 2026-10-03 with GO-2) ROADMAP "Go boot coverage" row 3 (`EnsureSchema` bootstrap) is listed as covered, but the working-tree code doesn't compile (GO-2).
 - [x] **D-3** (fixed 2026-10-02: the PRD says lockfile-reproducible, per the PY-15 decision) PRD §1 and §6 promise "dependency-pinned" scaffolds; uv and pip output is unpinned (PY-15).
-- [ ] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11). _Go part fixed 2026-10-03 (GO-15); Rust is still open._
-- [ ] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go part was fixed 2026-10-04 (goose `migrations/`, golang-migrate `db/migrations/`); the Rust Askama part is still open._
+- [x] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11). _Go part fixed 2026-10-03 (GO-15); Rust fixed 2026-10-08 (RS-11)._
+- [x] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go part was fixed 2026-10-04 (goose `migrations/`, golang-migrate `db/migrations/`); the Rust part was fixed 2026-10-08 (§1 shows the real Rust layout and §4 names Askama with the project-root `templates/` dir)._
 - [ ] **D-6** `docs/agents/issue-tracker.md` points to `AbdullahMukadam/tristack`; AGENTS.md says `AmanVarshney01/create-better-t-stack`. Pick one.
 - [x] **D-7** ARCHITECTURE §1 still mentions a `create-tristack` command; AGENTS.md says the CLI is only `tristack` / `uvx tristack`. _Fixed 2026-10-04._

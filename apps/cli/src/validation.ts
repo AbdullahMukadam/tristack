@@ -197,15 +197,6 @@ function validateFrameworkRules(config: Partial<ProjectConfig>): ValidationResul
       }),
     );
   }
-  if (config.framework === "loco" && config.frontend === "htmx") {
-    return Result.err(
-      new ValidationError({
-        message: `The Loco interface does not support the HTMX frontend yet — use one of axum, actix-web, rocket, warp, or salvo (or set frontend to "none").`,
-        field: "frontend",
-        value: config.frontend,
-      }),
-    );
-  }
   return Result.ok(undefined);
 }
 

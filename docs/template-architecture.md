@@ -65,20 +65,20 @@ Go tests are co-located next to the code they test (`foo_test.go` beside `foo.go
 Cargo.toml  README.md  .gitignore  .dockerignore  env.example
 Dockerfile  docker-compose.yml
 src/
-  main.rs                      # entrypoint — slot: framework
+  main.rs                      # entrypoint, AppState, /health, route wiring — slot: framework
   config.rs                    # settings — slot: core (build once, reuse)
-  error.rs                     # shared error type — slot: core
-  state.rs                     # app state — slot: framework (axum) / core
-  db.rs                        # slot: orm
-  routes/                      # slot: framework (mod.rs + health.rs + items.rs)
-  models/                      # slot: orm
-  services/                    # slot: core
+  api.rs                       # /api/v1/items handlers — slot: framework (ORM projects only)
+  pages.rs                     # htmx page handlers — slot: framework (htmx projects only)
+  models.rs                    # Item — slot: items (ORM projects only)
+  service.rs                   # validation + ServiceError — slot: items (ORM projects only)
+  db.rs                        # connect (creates the items table), insert, list — slot: orm
+  views.rs                     # Askama template structs — slot: frontend/htmx/common
+templates/                     # Askama templates (index.html, now.html, items.html)
   auth/                        # new: auth libraries
   workers/                     # new: task queues
-tests/                         # integration tests
 ```
 
-Rust core ships `src/config.rs` (env settings, shared by all frameworks since they already depend on `dotenvy`). The remaining skeleton — `error.rs`, `state.rs`, `routes/`, `models/`, `services/` — is framework- or ORM-dependent by nature, so it is folded in when the first route/auth/service work lands rather than forced now; do not scatter modules into `main.rs` when a new framework or addon needs a home.
+Rust core ships `src/config.rs`. ORM projects get the canonical items Example: `models.rs` and `service.rs` (the `rust/items` tree) are framework-agnostic, every `db.rs` exposes the same async `Db`/`Error`/`connect`/`insert_item`/`list_items` API (Diesel runs on `spawn_blocking`), and each framework only maps `ServiceError` to a status in `api.rs`. `connect()` creates the `items` table when it is missing, and `main.rs` exits with `database not ready` if it fails. A framework has a single `main.rs` for both frontends; the htmx variant adds `pages.rs`, so there is no separate htmx copy to drift.
 
 ## 2. Template directory layout
 
@@ -106,7 +106,7 @@ Copy order within a language handler: `base` → `core` → `framework` → `orm
 | Layer               | May import the web framework | Must own                                                                                     | Must never duplicate                            |
 | ------------------- | ---------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | `base`              | no                           | language plumbing (manifest, env, gitignore, config settings)                                | business code, any third-party framework import |
-| `core`              | no                           | framework-agnostic code: Python `schemas/`/`services/`, Rust `config.rs`/`error.rs`/services | framework imports                               |
+| `core`              | no                           | framework-agnostic code: Python `schemas/`/`services/`, Rust `config.rs` | framework imports                               |
 | `framework/<fw>`    | yes                          | entrypoint, routing/wiring, middleware, exceptions                                           | schemas/services/models (belong to core/orm)    |
 | `orm/<orm>`         | no                           | session/engine, models, repositories                                                         | routes, schemas                                 |
 | `migrations/<mig>`  | no                           | migration tooling only                                                                       | anything else                                   |
@@ -114,7 +114,7 @@ Copy order within a language handler: `base` → `core` → `framework` → `orm
 
 - **Python:** the `framework/` trees host only what differs (`main.py`, `api/`, `middleware.py`, `exceptions.py`, and the items route); the framework-agnostic `src/schemas/` and `src/services/` live once in `python/core/` and are shared by FastAPI, Litestar, and Flask.
 - **Go:** framework trees are thin (`cmd/api/main.go` + `internal/handler/handler.go`); the shared items service Example lives once in `go/core/internal/service/` (base holds only plumbing).
-- **Rust:** core owns `src/config.rs` (all frameworks share it and read settings via `config::Config::from_env()`); framework trees only wire up `main.rs` and routes. Deeper skeleton (`error.rs`, `services/`) lands with the first route/auth/service work.
+- **Rust:** core owns `src/config.rs` (all frameworks share it and read settings via `config::Config::from_env()`); framework trees only wire up `main.rs`, `api.rs` and `pages.rs`. The framework-agnostic items Example (`models.rs`, `service.rs`) lives in `rust/items` and is copied only for ORM projects.
 
 ## 4. New dimensions (auth, frontend, jobs, observability, docs)
 
@@ -122,7 +122,7 @@ Copy order within a language handler: `base` → `core` → `framework` → `orm
 - Every file it contributes must target a documented slot from section 1:
   - Python auth → `src/core/auth.py`; Go auth → `internal/auth/`; Rust auth → `src/auth/`.
   - Task queues → `src/jobs/`, `internal/jobs/`, `src/workers/`.
-  - Server-rendered frontends (htmx/templ) → Go `internal/web/` + `static/`; Python `static/` + `src/templates/` (Jinja2); Rust under the engine's expected dir (`templates/` for Tera/Maud) — always confirm the engine's actual layout.
+  - Server-rendered frontends (htmx/templ) → Go `internal/web/` + `static/`; Python `static/` + `src/templates/` (Jinja2); Rust Askama templates in the project-root `templates/` dir with the structs in `src/views.rs` — always confirm the engine's actual layout.
   - Observability → a `logging`/`tracing` file in the language's config area.
 - Compatibility rules between a library and the Core Stack (language, framework, orm, database) are declared in the shared type layer, enforced by:
   - `apps/cli/src/validation.ts` (`validateResolvedConfigCompatibility`),
@@ -149,7 +149,5 @@ Copy order within a language handler: `base` → `core` → `framework` → `orm
 - Run `bunx tsc --noEmit` in `apps/cli` and `apps/web`, `bun run check` at the root, and `bun run test` in `apps/cli` before finishing.
 
 ## 7. Known tech debt (fix when touching the area)
-
-- Rust's deeper `core` skeleton is intentionally partial: `error.rs`, `state.rs`, `routes/`, `models/`, `services/` are framework-/ORM-dependent and are added as part of the first Rust route/auth/service work. Do not grow `main.rs` until then.
 
 > Resolved: the dead `copyDb` call in `python.ts` was removed (database handling lives in the base `env.example`); the shared Python `schemas/`/`services/` plus Go `internal/service` Example moved out of per-framework trees into `python/core/` and `go/core/` respectively; and the Rust frameworks no longer duplicate inline `PORT`/`APP_NAME` reading — they share `rust/core/src/config.rs`.

@@ -189,6 +189,6 @@ describe("getRuntimeProfile", () => {
     });
     expect(runtime.install.label).toBe("cargo build");
     expect(runtime.run({ port: 4000 }).env).toEqual({ PORT: "4000" });
-    expect(runtime.probes.map((p) => p.path)).toEqual(["/health", "/web/now"]);
+    expect(runtime.probes.map((p) => p.path)).toEqual(["/health", "/", "/web/now"]);
   });
 });

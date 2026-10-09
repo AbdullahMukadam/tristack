@@ -1,36 +1,97 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer};
+use serde_json::json;
 
+{{#if (ne orm "none")}}
+mod api;
+{{/if}}
 mod config;
 {{#if (ne orm "none")}}
 mod db;
+mod models;
 {{/if}}
+{{#if (eq frontend "htmx")}}
+mod pages;
+{{/if}}
+{{#if (ne orm "none")}}
+mod service;
+{{/if}}
+{{#if (eq frontend "htmx")}}
+mod views;
+{{/if}}
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+
+#[derive(Clone)]
+pub struct AppState {
+{{#if (eq frontend "htmx")}}
+    pub app_name: String,
+{{/if}}
+{{#if (ne orm "none")}}
+    pub db: db::Db,
+{{/if}}
+}
+{{/if}}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let app_config = config::Config::from_env();
-
 {{#if (ne orm "none")}}
-    {{#if (eq orm "diesel")}}
-    if let Err(err) = db::connect() {
-    {{else}}
-    if let Err(err) = db::connect().await {
-    {{/if}}
+    let db = db::connect().await.unwrap_or_else(|err| {
         eprintln!("database not ready: {err}");
-    }
+        std::process::exit(1);
+    });
 {{/if}}
     let addr = format!("0.0.0.0:{}", app_config.port);
-
     println!("{} listening on {}", app_config.app_name, addr);
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+{{#if (eq frontend "htmx")}}
+    let state = AppState {
+        app_name: app_config.app_name,
+{{#if (ne orm "none")}}
+        db,
+{{/if}}
+    };
+{{else}}
+    let state = AppState { db };
+{{/if}}
+{{/if}}
 
-    HttpServer::new(|| App::new().route("/health", web::get().to(health)))
+{{#if (or (ne orm "none") (eq frontend "htmx"))}}
+    HttpServer::new(move || {
+        App::new()
+            .app_data(web::Data::new(state.clone()))
+            .configure(routes)
+    })
+    .bind(addr)?
+    .run()
+    .await
+{{else}}
+    HttpServer::new(|| App::new().configure(routes))
         .bind(addr)?
         .run()
         .await
+{{/if}}
 }
 
-async fn health() -> impl Responder {
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .body("{\"status\":\"ok\"}")
+fn routes(cfg: &mut web::ServiceConfig) {
+    cfg.route("/health", web::get().to(health));
+{{#if (ne orm "none")}}
+    cfg.service(
+        web::resource("/api/v1/items")
+            .route(web::get().to(api::list_items))
+            .route(web::post().to(api::create_item)),
+    );
+{{/if}}
+{{#if (eq frontend "htmx")}}
+    cfg.route("/", web::get().to(pages::index));
+    cfg.route("/web/now", web::get().to(pages::now));
+{{/if}}
+{{#if (and (eq frontend "htmx") (ne orm "none"))}}
+    cfg.route("/web/items", web::get().to(pages::items));
+{{/if}}
+}
+
+async fn health() -> HttpResponse {
+    HttpResponse::Ok().json(json!({ "status": "ok" }))
 }
 
 #[cfg(test)]

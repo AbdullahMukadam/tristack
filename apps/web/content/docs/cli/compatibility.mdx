@@ -18,7 +18,7 @@ Each language has its own option sets (`packages/types`), so a Go/Rust value can
 
 | Category         | Python                                                       | Go                                                         | Rust                                                        |
 | ---------------- | ------------------------------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------- |
-| `framework`      | `fastapi`, `litestar`, `django`, `flask`                     | `gin`, `fiber`, `echo`, `chi`, `stdlib`                    | `axum`, `actix-web`, `rocket`, `warp`, `salvo`, `loco`      |
+| `framework`      | `fastapi`, `litestar`, `django`, `flask`                     | `gin`, `fiber`, `echo`, `chi`, `stdlib`                    | `axum`, `actix-web`, `rocket`, `warp`, `salvo`              |
 | `frontend`       | `htmx`, `none`                                               | `htmx`, `none`                                             | `htmx`, `none`                                              |
 | `orm`            | `sqlmodel`, `sqlalchemy`, `tortoise`, `none`                 | `sqlc`, `gorm`, `sqlx`, `none`                             | `seaorm`, `diesel`, `sqlx-rust`, `none`                     |
 | `migrations`     | `alembic`, `none`                                            | `goose`, `golang-migrate`, `none`                          | `none`                                                      |
@@ -33,7 +33,6 @@ Each language has its own option sets (`packages/types`), so a Go/Rust value can
 - `framework` not in the language's set → error, e.g. `--language python --framework gin`
 - `frontend` not in the language's set → error
 - `frontend htmx` with `framework none` → error (HTMX needs a backend to serve the rendered pages)
-- `frontend htmx` with `framework loco` (Rust) → error (Loco doesn't support HTMX yet)
 - `orm` not in the language's set → error, e.g. `--language python --orm seaorm`
 - `migrations` not in the language's set → error, e.g. `--language python --migrations goose`
 - `orm tortoise` with `migrations alembic` → error (Alembic only supports SQLAlchemy-based ORMs)
@@ -77,6 +76,6 @@ The CLI validates resolved configs in this order:
 
 ## Roadmap
 
-Cross-option rules are planned alongside each language's rollout — for example Django bundling its own ORM and migrations (hiding those prompts entirely), Loco narrowing Rust ORM choices, and Chi/stdlib surfacing assemble-it-yourself addons more prominently.
+Cross-option rules are planned alongside each language's rollout — for example Django bundling its own ORM and migrations (hiding those prompts entirely) and Chi/stdlib surfacing assemble-it-yourself addons more prominently.
 
 Understanding these rules helps you create valid configurations and troubleshoot issues when the CLI reports compatibility errors.

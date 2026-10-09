@@ -1,0 +1,50 @@
+{{#if (ne orm "none")}}
+use std::convert::Infallible;
+
+use warp::http::StatusCode;
+{{/if}}
+use warp::reply::{self, Response};
+use warp::{Filter, Rejection, Reply};
+
+{{#if (ne orm "none")}}
+use crate::service;
+{{/if}}
+use crate::views;
+use crate::AppState;
+
+pub fn routes(state: AppState) -> impl Filter<Extract = (Response,), Error = Rejection> + Clone {
+{{#if (ne orm "none")}}
+    let with_state = warp::any().map(move || state.clone());
+    let index = warp::path::end()
+        .and(warp::get())
+        .and(with_state.clone())
+        .map(|state: AppState| reply::html(views::index(&state.app_name)).into_response());
+{{else}}
+    let index = warp::path::end()
+        .and(warp::get())
+        .map(move || reply::html(views::index(&state.app_name)).into_response());
+{{/if}}
+    let now = warp::path!("web" / "now")
+        .and(warp::get())
+        .map(|| reply::html(views::now()).into_response());
+{{#if (ne orm "none")}}
+    let items = warp::path!("web" / "items")
+        .and(warp::get())
+        .and(with_state)
+        .and_then(items);
+    index.or(now).unify().or(items).unify()
+{{else}}
+    index.or(now).unify()
+{{/if}}
+}
+{{#if (ne orm "none")}}
+
+async fn items(state: AppState) -> Result<Response, Infallible> {
+    Ok(match service::list_items(&state.db).await {
+        Ok(items) => reply::html(views::items(&items)).into_response(),
+        Err(err) => {
+            reply::with_status(err.to_string(), StatusCode::INTERNAL_SERVER_ERROR).into_response()
+        }
+    })
+}
+{{/if}}

@@ -1,45 +1,65 @@
-use sqlx::Error;
+use sqlx::Row;
 
+use crate::models::Item;
+
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+
+const DATABASE_NAME: &str = "{{project_slug}}";
 {{#if (eq database "sqlite")}}
-use sqlx::SqlitePool;
+pub type Db = sqlx::SqlitePool;
 
-pub type OrmPool = SqlitePool;
-
-pub async fn connect() -> Result<OrmPool, Error> {
-    SqlitePool::connect(&database_url()).await
-}
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMP NOT NULL)";
+const INSERT_ITEM: &str = "INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)";
 {{else if (eq database "postgres")}}
-use sqlx::PgPool;
+pub type Db = sqlx::PgPool;
 
-pub type OrmPool = PgPool;
-
-pub async fn connect() -> Result<OrmPool, Error> {
-    PgPool::connect(&database_url()).await
-}
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMPTZ NOT NULL)";
+const INSERT_ITEM: &str = "INSERT INTO items (id, name, created_at) VALUES ($1, $2, $3)";
 {{else if (eq database "mysql")}}
-use sqlx::MySqlPool;
+pub type Db = sqlx::MySqlPool;
 
-pub type OrmPool = MySqlPool;
-
-pub async fn connect() -> Result<OrmPool, Error> {
-    MySqlPool::connect(&database_url()).await
-}
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at DATETIME(6) NOT NULL)";
+const INSERT_ITEM: &str = "INSERT INTO items (id, name, created_at) VALUES (?, ?, ?)";
 {{/if}}
+
+pub async fn connect() -> Result<Db, Error> {
+    let db = Db::connect(&database_url()).await?;
+    sqlx::query(CREATE_ITEMS).execute(&db).await?;
+    Ok(db)
+}
+
+pub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {
+    sqlx::query(INSERT_ITEM)
+        .bind(&item.id)
+        .bind(&item.name)
+        .bind(item.created_at)
+        .execute(db)
+        .await?;
+    Ok(())
+}
+
+pub async fn list_items(db: &Db) -> Result<Vec<Item>, Error> {
+    let rows = sqlx::query("SELECT id, name, created_at FROM items ORDER BY created_at DESC")
+        .fetch_all(db)
+        .await?;
+    rows.iter()
+        .map(|row| {
+            Ok(Item {
+                id: row.try_get("id")?,
+                name: row.try_get("name")?,
+                created_at: row.try_get("created_at")?,
+            })
+        })
+        .collect()
+}
 
 fn database_url() -> String {
-    std::env::var("DATABASE_URL").unwrap_or_else(|_| String::from(database_default()))
-}
-
+    std::env::var("DATABASE_URL")
 {{#if (eq database "sqlite")}}
-fn database_default() -> &'static str {
-    "sqlite://{{project_slug}}.db?mode=rwc"
-}
+        .unwrap_or_else(|_| format!("sqlite://{DATABASE_NAME}.db?mode=rwc"))
 {{else if (eq database "postgres")}}
-fn database_default() -> &'static str {
-    "postgres://postgres:postgres@localhost:5432/{{project_slug}}"
-}
+        .unwrap_or_else(|_| format!("postgres://postgres:postgres@localhost:5432/{DATABASE_NAME}"))
 {{else if (eq database "mysql")}}
-fn database_default() -> &'static str {
-    "mysql://root:password@127.0.0.1:3306/{{project_slug}}"
-}
+        .unwrap_or_else(|_| format!("mysql://root:password@127.0.0.1:3306/{DATABASE_NAME}"))
 {{/if}}
+}

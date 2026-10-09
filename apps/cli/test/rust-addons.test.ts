@@ -152,7 +152,9 @@ describe("Rust addons emission and behavior", () => {
 
           const readme = files.get("README.md")!;
           expect(readme).toBeDefined();
-          expect(readme).toContain("cargo install cargo-watch\ncargo watch -x run");
+          expect(readme).toContain(
+            "cargo build\n\ncargo install cargo-watch\n\n# 2. Start the dev server\n\ncargo watch -x run",
+          );
 
           expect(files.get("Cargo.toml")!).not.toContain("[lints.clippy]");
           expect(files.has(".github/workflows/ci.yml")).toBe(false);
@@ -220,6 +222,8 @@ describe("Rust addons emission and behavior", () => {
             // Clippy
             const cargoToml = files.get("Cargo.toml")!;
             expect(cargoToml).toContain('[lints.clippy]\nall = { level = "warn", priority = -1 }');
+            expect(cargoToml).toContain('unwrap_used = "warn"');
+            expect(files.get("clippy.toml")).toBe("allow-unwrap-in-tests = true\n");
             expect(cargoToml.endsWith("\n")).toBe(true);
 
             // ORM-specific dependencies
@@ -228,13 +232,15 @@ describe("Rust addons emission and behavior", () => {
                 'sea-orm = { version = "1", features = ["sqlx-sqlite", "runtime-tokio-rustls"] }',
               );
             } else if (orm === "diesel") {
-              expect(cargoToml).toContain('diesel = { version = "2", features = ["sqlite"] }');
+              expect(cargoToml).toContain(
+                'diesel = { version = "2", features = ["sqlite", "r2d2", "chrono"] }',
+              );
               expect(cargoToml).toContain(
                 'libsqlite3-sys = { version = "0.32", features = ["bundled"] }',
               );
             } else if (orm === "sqlx-rust") {
               expect(cargoToml).toContain(
-                'sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }',
+                'sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "chrono"] }',
               );
             }
 
@@ -243,10 +249,31 @@ describe("Rust addons emission and behavior", () => {
 
             // Cargo-watch in README
             const readme = files.get("README.md")!;
-            expect(readme).toContain("cargo install cargo-watch\ncargo watch -x run");
+            expect(readme).toContain(
+              "cargo build\n\ncargo install cargo-watch\n\n# 2. Start the dev server\n\ncargo watch -x run",
+            );
           });
         }
       });
     }
   }
+});
+
+describe("Rust cargo-watch on a bare project", () => {
+  it("does not ask to install cargo-watch when the project runs with cargo run", async () => {
+    const result = await createVirtual({
+      projectName: "bare-app",
+      language: "rust",
+      framework: "none",
+      frontend: "none",
+      orm: "none",
+      database: "none",
+      migrations: "none",
+      packageManager: "cargo",
+      addons: ["cargo-watch"],
+    });
+    if (result.isErr()) throw result.error;
+    const readme = collectFiles(result.value.root, result.value.root.path).get("README.md")!;
+    expect(readme).not.toContain("cargo install cargo-watch");
+  });
 });

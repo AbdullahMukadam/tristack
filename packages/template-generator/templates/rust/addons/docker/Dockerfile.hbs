@@ -13,7 +13,13 @@ RUN cargo build --release
 FROM debian:bookworm-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates{{#if (eq orm "diesel")}}{{#if (eq database "postgres")}} libpq5{{else if (eq database "mysql")}} libmariadb3{{/if}}{{/if}} && rm -rf /var/lib/apt/lists/*
+RUN useradd --system --uid 10001 --no-create-home app{{#if (eq database "sqlite")}} && mkdir /data && chown app /data{{/if}}
 COPY --from=builder /app/target/release/{{project_slug}} /usr/local/bin/{{project_slug}}
+{{#if (eq database "sqlite")}}
+ENV DATABASE_URL={{#if (eq orm "diesel")}}/data/{{project_slug}}.db{{else}}sqlite:///data/{{project_slug}}.db?mode=rwc{{/if}}
+VOLUME /data
+{{/if}}
+USER app
 
 EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/{{project_slug}}"]

@@ -20,7 +20,6 @@ export const dependencyVersionMap = {
     rocket: { rocket: true },
     warp: { warp: true, tokio: true },
     salvo: { salvo: true, tokio: true },
-    loco: { "loco-rs": true },
     none: {},
   } satisfies Record<Framework, Record<string, boolean>>,
   orm: {

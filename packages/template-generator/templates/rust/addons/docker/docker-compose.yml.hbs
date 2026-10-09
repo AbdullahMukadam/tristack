@@ -1,8 +1,10 @@
 services:
   app:
     build: .
+{{#if (ne framework "none")}}
     ports:
       - "8000:8000"
+{{/if}}
     environment:
       APP_NAME: {{project_slug}}
       PORT: "8000"
@@ -17,7 +19,8 @@ services:
       db:
         condition: service_healthy
 {{else if (eq database "sqlite")}}
-      DATABASE_URL: {{#if (eq orm "diesel")}}{{project_slug}}.db{{else}}sqlite://{{project_slug}}.db?mode=rwc{{/if}}
+    volumes:
+      - appdata:/data
 {{/if}}
 {{#if (eq database "postgres")}}
   db:
@@ -58,4 +61,7 @@ volumes:
 {{else if (eq database "mysql")}}
 volumes:
   mysqldata:
+{{else if (eq database "sqlite")}}
+volumes:
+  appdata:
 {{/if}}

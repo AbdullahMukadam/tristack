@@ -1,0 +1,21 @@
+{% if items.is_empty() %}
+<p>No items yet. Create one with <code>POST /api/v1/items</code>.</p>
+{% else %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>\{{ item.name }}</td>
+            <td>\{{ item.created_at.format("%Y-%m-%d %H:%M") }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<button hx-get="/web/items" hx-target="#items" hx-swap="innerHTML">Refresh</button>

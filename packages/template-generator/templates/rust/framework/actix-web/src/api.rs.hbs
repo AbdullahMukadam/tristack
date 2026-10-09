@@ -1,0 +1,27 @@
+use actix_web::{web, HttpResponse};
+use serde_json::json;
+
+use crate::service::{self, ServiceError};
+use crate::AppState;
+
+pub async fn list_items(state: web::Data<AppState>) -> HttpResponse {
+    match service::list_items(&state.db).await {
+        Ok(items) => HttpResponse::Ok().json(items),
+        Err(err) => error_response(&err),
+    }
+}
+
+pub async fn create_item(state: web::Data<AppState>, body: web::Bytes) -> HttpResponse {
+    match service::create_item(&state.db, &body).await {
+        Ok(item) => HttpResponse::Created().json(item),
+        Err(err) => error_response(&err),
+    }
+}
+
+fn error_response(err: &ServiceError) -> HttpResponse {
+    let mut response = match err {
+        ServiceError::BadRequest(_) => HttpResponse::BadRequest(),
+        ServiceError::Internal(_) => HttpResponse::InternalServerError(),
+    };
+    response.json(json!({ "error": err.to_string() }))
+}
