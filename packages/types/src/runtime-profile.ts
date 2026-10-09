@@ -13,6 +13,7 @@ export type Probe = {
   path: string;
   expectStatus: number;
   body?: unknown;
+  expectBodyIncludes?: string;
 };
 
 export type RunOptions = {
@@ -259,6 +260,7 @@ function rustProbes(config: ProjectConfig): Probe[] {
     probes.push(
       { method: "GET", path: "/api/v1/items", expectStatus: 200 },
       { method: "POST", path: "/api/v1/items", expectStatus: 201, body: { name: "boot-check" } },
+      { method: "GET", path: "/api/v1/items", expectStatus: 200, expectBodyIncludes: "boot-check" },
     );
   }
   if (config.frontend === "htmx") {

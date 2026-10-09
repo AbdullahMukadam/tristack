@@ -221,7 +221,7 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
   - **Fixed 2026-10-08.** Salvo's `index` reads the app name from `AppState` (built from `Config`); Salvo has a health test (`salvo::test::TestClient`, `test` feature as a dev-dependency); Warp uses `warp::path!("health")`, which matches the end of the path; `serde` is only a dependency when an ORM is selected, and `serde_json` is used by every health handler.
 - [x] **RS-14 Empty addons.** `cargo-watch` and `clippy` produce no files (clippy only appears as a CI step).
   - _Partly fixed in PR #12:_ `cargo-watch` adds `cargo install cargo-watch` to the README, but the CLI's next-steps hint still prints only `cargo watch -x run`. `clippy` adds `[lints.clippy] all = { level = "warn", priority = -1 }`, which is clippy's default, so it changes nothing yet.
-  - **Fixed 2026-10-08.** `clippy` now adds `dbg_macro`, `todo` and `unwrap_used` warnings to `[lints.clippy]`, a `clippy.toml` with `allow-unwrap-in-tests = true`, and a lint step in the README. `cargo-watch` puts `cargo install cargo-watch` in the README's install step and in the CLI's next-steps hint. Both are driven by the runtime profile's run command, so a bare project (which runs `cargo run`) doesn't get it.
+  - **Fixed 2026-10-08.** `clippy` now adds `dbg_macro`, `todo` and `unwrap_used` warnings to `[lints.clippy]` and a `clippy.toml` with `allow-unwrap-in-tests = true`. `cargo-watch` puts `cargo install cargo-watch` in the README's install step and in the CLI's next-steps hint. Both are driven by the runtime profile's run command, so a bare project (which runs `cargo run`) doesn't get it.
 
 ---
 
