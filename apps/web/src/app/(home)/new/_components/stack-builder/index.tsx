@@ -149,7 +149,7 @@ export function StackBuilder() {
               onSelect={handleTechSelect}
             />
           ) : (
-            <div className="h-[70vh] min-h-[28rem] py-4">
+            <div className="h-[calc(100svh-9rem)] min-h-[36rem] py-4">
               <PreviewPanel
                 stack={effectiveStack}
                 selectedFilePath={selectedFile}

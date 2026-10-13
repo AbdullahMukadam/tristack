@@ -67,6 +67,9 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
 
       if (requestId !== requestIdRef.current) return;
 
+      if (!response.headers.get("content-type")?.includes("application/json")) {
+        throw new Error(`Preview is unavailable right now (HTTP ${response.status}).`);
+      }
       const data: PreviewResponse = await response.json();
 
       if (requestId !== requestIdRef.current) return;
@@ -153,10 +156,17 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
 
   if (error && !tree) {
     return (
-      <div className="flex h-full items-center justify-center rounded-md border bg-fd-background">
+      <div className="flex h-full flex-col items-center justify-center gap-3 rounded-md border bg-fd-background">
         <p className="rounded-md border border-destructive px-3 py-2 text-sm text-destructive">
           {error}
         </p>
+        <button
+          type="button"
+          onClick={() => fetchPreview()}
+          className="builder-focus-ring rounded-md border px-3 py-1.5 text-xs font-medium text-fd-muted-foreground transition-colors hover:text-fd-foreground"
+        >
+          Retry
+        </button>
       </div>
     );
   }
