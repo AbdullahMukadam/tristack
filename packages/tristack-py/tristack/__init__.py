@@ -1,6 +1,6 @@
 """TriStack — Scaffold backend projects in Python, Go, and Rust."""
 
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 
 import os
 import sys
