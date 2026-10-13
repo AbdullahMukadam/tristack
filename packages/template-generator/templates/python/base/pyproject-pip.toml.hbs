@@ -26,6 +26,7 @@ dependencies = [
 {{else if (eq framework "django")}}
 {{else if (eq orm "sqlmodel")}}
     "sqlmodel",
+    "sqlalchemy[asyncio]",
 {{else if (eq orm "sqlalchemy")}}
     "sqlalchemy[asyncio]",
 {{else if (eq orm "tortoise")}}

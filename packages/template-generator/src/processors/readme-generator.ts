@@ -56,7 +56,7 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
   setup.push(runLabel, goRunCommand(config));
 
   const common: string[] = [
-    "go test -race ./...                    # run all tests",
+    "go test ./...                          # run all tests",
     "go vet ./...                           # static analysis",
     "gofmt -l .                             # check formatting",
   ];

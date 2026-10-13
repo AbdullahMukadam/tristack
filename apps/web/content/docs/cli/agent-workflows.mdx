@@ -18,7 +18,7 @@ If you are automating the CLI from an LLM, CI job, or another tool, start here i
 Create a project from a single JSON payload instead of many flags.
 
 ```bash
-uvx tristack create-json --input '{
+uvx tristack create-json --json '{
   "projectName": "my-api",
   "language": "python",
   "framework": "fastapi",
@@ -52,7 +52,7 @@ Use `--dry-run` (or `dryRun: true`) to validate inputs and target directories wi
 
 ```bash
 uvx tristack --yes --dry-run
-uvx tristack create-json --input '{
+uvx tristack create-json --json '{
   "projectName": "my-api",
   "yes": true,
   "dryRun": true

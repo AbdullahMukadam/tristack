@@ -121,6 +121,17 @@ export function getAddonsForLanguage(language: Language): readonly Addons[] {
   }
 }
 
+export function getPackageManagersForLanguage(language: Language): readonly PackageManager[] {
+  switch (language) {
+    case "python":
+      return PYTHON_PACKAGE_MANAGERS;
+    case "go":
+      return GO_PACKAGE_MANAGERS;
+    case "rust":
+      return RUST_PACKAGE_MANAGERS;
+  }
+}
+
 export function getFrontendsForLanguage(language: Language): readonly Frontend[] {
   switch (language) {
     case "python":

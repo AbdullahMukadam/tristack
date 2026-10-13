@@ -232,7 +232,7 @@ async function createProjectHandlerInternal(
       }
       const flagConfig = flagConfigResult.value;
       config = {
-        ...applyFlagDefaults(getDefaultConfig(), flagConfig),
+        ...applyFlagDefaults(getDefaultConfig(flagConfig.language), flagConfig),
         projectName: finalBaseName,
         projectDir: finalResolvedPath,
         relativePath: finalPathInput,
@@ -249,9 +249,7 @@ async function createProjectHandlerInternal(
       const gathered = yield* Result.await(
         Result.tryPromise({
           try: async () =>
-            gatherConfig(flagConfig, finalBaseName, finalResolvedPath, finalPathInput, {
-              skipCompatibilityChecks: originalInput.yolo,
-            }),
+            gatherConfig(flagConfig, finalBaseName, finalResolvedPath, finalPathInput),
           catch: (cause: unknown) => {
             if (cause instanceof UserCancelledError) return cause;
             return new CLIError({

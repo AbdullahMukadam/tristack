@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import type { ProjectConfig } from "./types";
+import type { Language, ProjectConfig } from "./types";
 import { getUserPkgManager } from "./utils/get-package-manager";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,8 +23,35 @@ export const DEFAULT_CONFIG_BASE = {
   packageManager: "uv",
 } as const;
 
-export function getDefaultConfig(): ProjectConfig {
-  return {
+const LANGUAGE_STACK_DEFAULTS = {
+  go: {
+    framework: "gin",
+    frontend: "none",
+    orm: "sqlc",
+    migrations: "goose",
+    database: "sqlite",
+    packageManager: "go",
+    addons: ["docker"],
+  },
+  rust: {
+    framework: "axum",
+    frontend: "none",
+    orm: "seaorm",
+    migrations: "none",
+    database: "sqlite",
+    packageManager: "cargo",
+    addons: ["docker"],
+  },
+} satisfies Record<
+  Exclude<Language, "python">,
+  Pick<
+    ProjectConfig,
+    "framework" | "frontend" | "orm" | "migrations" | "database" | "packageManager" | "addons"
+  >
+>;
+
+export function getDefaultConfig(language: Language = DEFAULT_CONFIG_BASE.language): ProjectConfig {
+  const config: ProjectConfig = {
     ...DEFAULT_CONFIG_BASE,
     projectName: DEFAULT_CONFIG_BASE.projectName,
     projectDir: path.resolve(process.cwd(), DEFAULT_CONFIG_BASE.projectName),
@@ -40,6 +67,9 @@ export function getDefaultConfig(): ProjectConfig {
     git: DEFAULT_CONFIG_BASE.git,
     install: DEFAULT_CONFIG_BASE.install,
   };
+  if (language === "python") return config;
+  const stack = LANGUAGE_STACK_DEFAULTS[language];
+  return { ...config, ...stack, language, addons: [...stack.addons] };
 }
 
 export const DEFAULT_CONFIG = getDefaultConfig();

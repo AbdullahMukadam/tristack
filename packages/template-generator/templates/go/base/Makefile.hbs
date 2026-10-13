@@ -23,7 +23,7 @@ fmt:
 {{#if (eq orm "sqlc")}}
 
 generate:
-	go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate
+	CGO_ENABLED=0 go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate
 {{/if}}
 
 {{#if (eq migrations "goose")}}

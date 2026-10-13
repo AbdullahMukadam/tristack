@@ -1,8 +1,10 @@
 import {
+  getAddonsForLanguage,
   getFrameworksForLanguage,
   getFrontendsForLanguage,
   getMigrationsForLanguage,
   getOrmsForLanguage,
+  getPackageManagersForLanguage,
   ProjectNameSchema,
 } from "@tristack/types";
 import { Result } from "better-result";
@@ -95,6 +97,31 @@ export function validatePerLanguageValues(config: Partial<ProjectConfig>): Valid
         message: `Frontend "${config.frontend}" is not available for the "${config.language}" language.`,
         field: "frontend",
         value: config.frontend,
+      }),
+    );
+  }
+
+  if (
+    config.packageManager &&
+    !getPackageManagersForLanguage(config.language).includes(config.packageManager)
+  ) {
+    return Result.err(
+      new ValidationError({
+        message: `Package manager "${config.packageManager}" is not available for the "${config.language}" language.`,
+        field: "packageManager",
+        value: config.packageManager,
+      }),
+    );
+  }
+
+  const validAddons = getAddonsForLanguage(config.language);
+  const invalidAddon = config.addons?.find((addon) => !validAddons.includes(addon));
+  if (invalidAddon) {
+    return Result.err(
+      new ValidationError({
+        message: `Addon "${invalidAddon}" is not available for the "${config.language}" language.`,
+        field: "addons",
+        value: invalidAddon,
       }),
     );
   }
