@@ -74,7 +74,7 @@ export function getDefaultConfig(language: Language = DEFAULT_CONFIG_BASE.langua
 
 export const DEFAULT_CONFIG = getDefaultConfig();
 
-export const CLI_VERSION = "1.0.7";
+export const CLI_VERSION = "1.0.8";
 
 export const LANGUAGE_LABELS = {
   python: "Python",
