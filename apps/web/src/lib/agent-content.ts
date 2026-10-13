@@ -177,8 +177,8 @@ uvx tristack my-api --yes
 
 ## Agent interfaces
 
-- JSON project creation: \`tristack create-json --input '{...}'\`
-- Dry-run validation: \`tristack create-json --input '{"projectName":"my-api","dryRun":true}'\`
+- JSON project creation: \`tristack create-json --json '{...}'\`
+- Dry-run validation: \`tristack create-json --json '{"projectName":"my-api","dryRun":true}'\`
 - [Agent workflow guide](${SITE_URL}/docs/cli/agent-workflows.mdx)
 
 ## Documentation

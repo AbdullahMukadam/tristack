@@ -9,7 +9,7 @@ function goRunCommand(config: ProjectConfig): string {
 }
 
 function goSqlcGenerateCommand(): string {
-  return "go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate";
+  return "CGO_ENABLED=0 go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0 generate";
 }
 
 function goMigrationsCommand(config: ProjectConfig): string {
@@ -56,7 +56,8 @@ function writeGoReadme(vfs: VirtualFileSystem, config: ProjectConfig): void {
   setup.push(runLabel, goRunCommand(config));
 
   const common: string[] = [
-    "go test -race ./...                    # run all tests",
+    "go test ./...                          # run all tests",
+    "go test -race ./...                    # with the race detector (needs a C compiler, gcc)",
     "go vet ./...                           # static analysis",
     "gofmt -l .                             # check formatting",
   ];

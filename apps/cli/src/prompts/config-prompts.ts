@@ -1,4 +1,4 @@
-import { DEFAULT_CONFIG } from "../constants";
+import { DEFAULT_CONFIG, getDefaultConfig } from "../constants";
 import type {
   Addons,
   Database,
@@ -42,31 +42,29 @@ export async function gatherConfig(
   projectName: string,
   projectDir: string,
   relativePath: string,
-  options: { skipCompatibilityChecks?: boolean } = {},
 ) {
   if (isSilent()) {
-    const fw = flags.framework ?? DEFAULT_CONFIG.framework;
+    const defaults = getDefaultConfig(flags.language);
+    const fw = flags.framework ?? defaults.framework;
     const djangoMode = fw === "django";
     const bareMode = fw === "none";
-    const orm = djangoMode || bareMode ? "none" : (flags.orm ?? DEFAULT_CONFIG.orm);
+    const orm = djangoMode || bareMode ? "none" : (flags.orm ?? defaults.orm);
     const tortoiseMode = orm === "tortoise";
     return {
       projectName,
       projectDir,
       relativePath,
-      language: flags.language ?? DEFAULT_CONFIG.language,
+      language: defaults.language,
       framework: fw,
-      frontend: flags.frontend ?? DEFAULT_CONFIG.frontend,
+      frontend: flags.frontend ?? defaults.frontend,
       orm,
       migrations:
-        djangoMode || bareMode || tortoiseMode
-          ? "none"
-          : (flags.migrations ?? DEFAULT_CONFIG.migrations),
-      database: bareMode ? "none" : (flags.database ?? DEFAULT_CONFIG.database),
-      packageManager: flags.packageManager ?? DEFAULT_CONFIG.packageManager,
-      addons: flags.addons ?? [...DEFAULT_CONFIG.addons],
-      git: flags.git ?? DEFAULT_CONFIG.git,
-      install: flags.install ?? DEFAULT_CONFIG.install,
+        djangoMode || bareMode || tortoiseMode ? "none" : (flags.migrations ?? defaults.migrations),
+      database: bareMode ? "none" : (flags.database ?? defaults.database),
+      packageManager: flags.packageManager ?? defaults.packageManager,
+      addons: flags.addons ?? defaults.addons,
+      git: flags.git ?? defaults.git,
+      install: flags.install ?? defaults.install,
     };
   }
 
@@ -123,7 +121,7 @@ export async function gatherConfig(
       install: ({ previousAnswer }) => getInstallChoice(flags.install, previousAnswer),
     },
     {
-      preselected: options.skipCompatibilityChecks ? flags : undefined,
+      preselected: flags,
       sections: [
         {
           label: "Stack",

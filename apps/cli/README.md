@@ -78,10 +78,10 @@ Options:
 
 ```bash
 # Raw JSON payload input (agent-friendly)
-uvx tristack create-json --input '{"projectName":"my-api","language":"python","framework":"fastapi","orm":"sqlmodel","migrations":"alembic","database":"postgres","packageManager":"uv","addons":["docker","pytest"],"git":true,"install":false}'
+uvx tristack create-json --json '{"projectName":"my-api","language":"python","framework":"fastapi","orm":"sqlmodel","migrations":"alembic","database":"postgres","packageManager":"uv","addons":["docker","pytest"],"git":true,"install":false}'
 
 # Dry-run validation
-uvx tristack create-json --input '{"projectName":"my-api","dryRun":true}'
+uvx tristack create-json --json '{"projectName":"my-api","dryRun":true}'
 ```
 
 The payload is validated against `CreateInputSchema` — the same schema that backs `--yes`. See the [Agent Workflows](https://tristack.space/docs/cli/agent-workflows) docs for details.

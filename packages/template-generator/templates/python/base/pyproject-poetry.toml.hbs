@@ -42,6 +42,7 @@ psycopg = { extras = ["binary"], version = "^3.2" }
 {{else if (eq framework "django")}}
 {{else if (eq orm "sqlmodel")}}
 sqlmodel = ">=0.0.27,<0.1"
+sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
 {{else if (eq orm "sqlalchemy")}}
 sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
 {{else if (eq orm "tortoise")}}
