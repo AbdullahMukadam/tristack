@@ -40,29 +40,8 @@ describe("sqlmodel projects can use async SQLAlchemy", () => {
   }
 });
 
-describe("go README test commands", () => {
-  it("lists a plain go test before the race detector", async () => {
-    const result = await createVirtual({
-      language: "go",
-      framework: "gin",
-      orm: "none",
-      migrations: "none",
-      database: "none",
-      packageManager: "go",
-      addons: [],
-    });
-    if (result.isErr()) throw result.error;
-
-    const readme = findFile(result.value.root, "README.md") ?? "";
-    const plain = readme.search(/^go test \.\/\.\.\. /m);
-    const race = readme.search(/^go test -race \.\/\.\.\. .*C compiler/m);
-    expect(plain).toBeGreaterThan(-1);
-    expect(race).toBeGreaterThan(plain);
-  });
-});
-
-describe("sqlc generation does not need a C compiler", () => {
-  it("README and Makefile run sqlc with CGO_ENABLED=0", async () => {
+describe("go setup commands work without a C compiler", () => {
+  it("README uses plain go test and a shell-neutral sqlc command; Makefile disables cgo", async () => {
     const result = await createVirtual({
       language: "go",
       framework: "gin",
@@ -75,13 +54,16 @@ describe("sqlc generation does not need a C compiler", () => {
     if (result.isErr()) throw result.error;
 
     const sqlcRun = /^.*go run github\.com\/sqlc-dev\/sqlc\/cmd\/sqlc@\S+ generate.*$/gm;
-    for (const name of ["README.md", "Makefile"]) {
-      const content = findFile(result.value.root, name);
-      const lines = content?.match(sqlcRun) ?? [];
-      expect(lines.length).toBeGreaterThan(0);
-      for (const line of lines) {
-        expect(line).toContain("CGO_ENABLED=0 go run");
-      }
-    }
+    const readme = findFile(result.value.root, "README.md") ?? "";
+    expect(readme).toMatch(/^go test \.\/\.\.\. /m);
+    expect(readme).not.toContain("go test -race");
+    const readmeSqlc = readme.match(sqlcRun) ?? [];
+    expect(readmeSqlc.length).toBeGreaterThan(0);
+    for (const line of readmeSqlc) expect(line).toStartWith("go run");
+
+    const makefile = findFile(result.value.root, "Makefile") ?? "";
+    const makeSqlc = makefile.match(sqlcRun) ?? [];
+    expect(makeSqlc.length).toBeGreaterThan(0);
+    for (const line of makeSqlc) expect(line.trim()).toStartWith("CGO_ENABLED=0 go run");
   });
 });

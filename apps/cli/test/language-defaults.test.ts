@@ -37,6 +37,20 @@ describe("language-aware defaults", () => {
     expect(getDefaultConfig().framework).toBe("fastapi");
   });
 
+  for (const [field, value, message] of [
+    ["packageManager", "go", 'Package manager "go" is not available for the "python" language.'],
+    ["addons", ["air"], 'Addon "air" is not available for the "python" language.'],
+  ] as const) {
+    it(`rejects a ${field} from another language`, async () => {
+      const result = await createProjectHandler(
+        { projectName: `mismatch-${field}`, language: "python", [field]: value, dryRun: true },
+        { silent: true },
+      );
+      expect(result?.success).toBe(false);
+      expect(result?.error).toBe(message);
+    });
+  }
+
   for (const [language, framework] of [
     ["go", "gin"],
     ["rust", "axum"],
