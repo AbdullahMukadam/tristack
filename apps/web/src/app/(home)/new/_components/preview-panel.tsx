@@ -180,7 +180,7 @@ export function PreviewPanel({ stack, selectedFilePath, onSelectFile }: PreviewP
   }
 
   return (
-    <div className="@container flex h-full flex-col overflow-hidden rounded-md border bg-fd-background">
+    <div className="thin-scrollbar @container flex h-full flex-col overflow-hidden rounded-md border bg-fd-background">
       {/* Stats bar */}
       <div className="@lg:gap-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-b px-3 py-2">
         {/* Back button when the panel is too narrow for the split view */}

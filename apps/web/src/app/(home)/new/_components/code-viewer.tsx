@@ -101,7 +101,7 @@ export const CodeViewer = memo(function CodeViewer({
           </CodeBlockFiles>
           <CodeBlockCopyButton />
         </CodeBlockHeader>
-        <CodeBlockBody className="flex-1 overflow-auto [&_.shiki]:bg-fd-background! dark:[&_.shiki]:bg-fd-background! bg-fd-background">
+        <CodeBlockBody className="flex-1 overflow-auto [&_code]:overflow-visible! [&_pre]:overflow-visible! [&_.shiki]:bg-fd-background! dark:[&_.shiki]:bg-fd-background! bg-fd-background">
           {(item) => (
             <CodeBlockItem key={item.language} value={item.language}>
               <CodeBlockContent

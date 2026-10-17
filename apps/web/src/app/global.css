@@ -67,6 +67,12 @@
   scrollbar-width: none;
 }
 
+.thin-scrollbar,
+.thin-scrollbar * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
