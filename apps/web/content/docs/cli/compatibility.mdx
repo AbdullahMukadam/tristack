@@ -76,6 +76,6 @@ The CLI validates resolved configs in this order:
 
 ## Roadmap
 
-Cross-option rules are planned alongside each language's rollout — for example Django bundling its own ORM and migrations (hiding those prompts entirely) and Chi/stdlib surfacing assemble-it-yourself addons more prominently.
+Cross-option rules ship with each language and are enforced today — for example Django bundles its own ORM and migrations (hiding those prompts), Alembic only supports SQLAlchemy-based ORMs, and an ORM requires a database. Future dimensions (new frontends, auth, observability) will follow the same pattern: declared in the shared type layer, enforced by the CLI, prompts, and Stack Builder together.
 
 Understanding these rules helps you create valid configurations and troubleshoot issues when the CLI reports compatibility errors.

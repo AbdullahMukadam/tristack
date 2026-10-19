@@ -9,8 +9,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { SectionTitle } from "./section-header";
-
 const faqs = [
   {
     value: "what-is-tristack",
@@ -22,7 +20,7 @@ const faqs = [
     value: "which-languages",
     question: "Which languages and frameworks are supported?",
     answer:
-      "Python is the first and most complete target today. Go and Rust are on the roadmap — the CLI already knows how to run for each, and maturing framework support lands milestone by milestone.",
+      "All three are shipped. Python — FastAPI, Litestar, Django, Flask. Go — Gin, Fiber, Echo, Chi, stdlib. Rust — Axum, Actix-Web, Rocket, Warp, Salvo.",
   },
   {
     value: "builder-install",

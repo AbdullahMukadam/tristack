@@ -4,7 +4,7 @@ Phased plan across languages. Status legend: **Done** · **In progress** · **Pl
 
 Feature planning flow: **GitHub Issue (proposal)** → **ADR (decision)** → **PRD section (requirements)** → **JOURNAL entry (shipped)**.
 
-> **Template quality audit (2026-10-02):** open P0/P1 defects in all three languages, tracked in `docs/TEMPLATE-AUDIT.md`. Work order: Python → Go → Rust. Phase exit criteria are not met until that language's P0/P1 items are closed.
+> **Template quality audit (2026-10-02):** the P0/P1 defects found in all three languages are closed (see `docs/TEMPLATE-AUDIT.md`). Remaining open items are verification gaps, not shipping defects: PY-6 (real MySQL run), PY-31 (documented limitation), X-1 (Compose probe replays) and X-3 (database coverage in CI).
 
 ## Phase 1 — Python (shipped)
 
@@ -17,20 +17,20 @@ Feature planning flow: **GitHub Issue (proposal)** → **ADR (decision)** → **
 - [x] ORM/framework-aware README generation (migrate vs auto-create vs Django `manage.py migrate`).
 - [x] Distribution: `uvx tristack`, pip/pipx, uv tool.
 
-Exit: fresh scaffold installs, boots, and serves `/health`, `/api/v1/items`, `/web/items`.
+Exit: fresh scaffold installs, boots, and serves `/health`, `/api/v1/items`, `/web/items`. Verified by the Python Matrix Smoke slice on SQLite plus manual Neon Postgres runs (PY-4/PY-7); the MySQL variants are the PY-6 open item.
 
-## Phase 2 — Go (in progress)
+## Phase 2 — Go (shipped)
 
-- [ ] Curl/PowerShell installers for the `tristack` binary (asset naming verified: `tristack-windows-x64.exe.zip`).
-- [ ] Template parity across frameworks: Gin, Fiber, Echo, Chi, stdlib (plus `none`).
-- [ ] ORMs: GORM, SQLC, SQLx (plus `none`).
-- [ ] Migrations: goose, golang-migrate, `none`.
-- [ ] Addons: docker, air, golangci-lint, github-actions.
-- [ ] htmx frontend layer (`/web/items`).
+- [x] Curl/PowerShell installers for the `tristack` binary (asset naming verified: `tristack-windows-x64.exe.zip`).
+- [x] Template parity across frameworks: Gin, Fiber, Echo, Chi, stdlib (plus `none`).
+- [x] ORMs: GORM, SQLC, SQLx (plus `none`).
+- [x] Migrations: goose, golang-migrate, `none`.
+- [x] Addons: docker, air, golangci-lint, github-actions.
+- [x] htmx frontend layer (`/web/items`).
 
-Exit: every option combination above scaffolds, builds (`go build ./cmd/api`), and serves the documented routes. Gate on the known pre-existing Go/Rust framework stub gaps in `packages/template-generator/src/utils/add-deps.ts:13` being resolved in-scope.
+Exit: every option combination above scaffolds, builds (`go build ./cmd/api`), and serves the documented routes. Satisfied as of the template quality audit (2026-10-03/04): 13 Go boot cases pass and the `add-deps.ts` framework-stub gap is closed.
 
-## Phase 3 — Rust (planned)
+## Phase 3 — Rust (shipped)
 
 - [x] Template parity across frameworks: Axum, Actix-Web, Rocket, Warp, Salvo (plus `none`).
 - [x] ORMs: SeaORM, Diesel, SQLx (plus `none`).
@@ -38,7 +38,7 @@ Exit: every option combination above scaffolds, builds (`go build ./cmd/api`), a
 - [x] Addons: docker, cargo-watch, clippy, github-actions.
 - [x] htmx frontend layer (`/web/now` server-time fragment, plus `/web/items` with an ORM).
 
-Exit: every combination above scaffolds, builds (`cargo build`), and serves the documented routes.
+Exit: every combination above scaffolds, builds (`cargo build`), and serves the documented routes. Satisfied as of RS-11 (2026-10-08): 40 generated Rust projects verified in WSL, and every ORM additionally ran against Neon Postgres and MariaDB 11 by hand. Shipping those runs as persistent boot cases is the open Rust part of B4.
 
 ## Boot verification
 
@@ -46,8 +46,8 @@ Boot verification is the phase plan for proving a scaffolded project actually **
 
 - [x] **B1 — shared runtime profile**: `getRuntimeProfile(config)` exposing `install`, `prepare`, `run`, `probes`, and `oneshot` kind, exported from `packages/types` and consumed by `readme-generator.ts`, `create-project.ts`, and `install-dependencies.ts`. Covered by `apps/cli/test/runtime-profile.test.ts`.
 - [x] **B2 — Python Matrix Smoke**: `apps/cli/test/boot-matrix.test.ts` runs the **Matrix Smoke** tier over Python Core Stack combinations — generate → **Filesystem Scaffolding** → install → prepare → run → probe → kill process tree. Gate with `BTS_BOOT=1` so it never slows the **Default Suite**.
-- [~] **B3 — Go slice + CI promotion**: Go cases are added to the same harness (see the coverage table below) and the Go template defects they exposed are fixed. Promotion to regular CI and the Rust slice are still open.
-- [ ] **B4 — CI + Rust Matrix Job**: promote Matrix Smoke to regular CI, then extend the harness to the Rust **Exhaustive Matrix** (separate job, toolchain-gated).
+- [x] **B3 — Go + Rust slices on the shared harness**: Go and Rust boot cases run in the same Matrix Smoke (Go slice detailed below) and the template defects they exposed are fixed.
+- [ ] **B4 — CI promotion + Rust Matrix Job**: run Matrix Smoke (with Postgres/MySQL service containers) in regular CI, then extend the harness to the Rust **Exhaustive Matrix** (separate job, toolchain-gated).
 
 Current Python Matrix Smoke slice (11 cases): FastAPI SQLModel/SQLAlchemy/Tortoise with Alembic and with `none` plus htmx; Litestar SQLModel + Tortoise; Flask SQLAlchemy; Django; bare Python `none`; plus a `pip` and a `poetry` case. Cases declare `requiresTool` / `requiresPython` and **skip with a logged reason** when the host toolchain is absent (e.g. `poetry not installed`, `python 3.11 < 3.12`) rather than failing.
 
@@ -86,4 +86,6 @@ Exit: every Matrix Smoke case installs, boots, and returns the expected status f
 ## Progress notes
 
 - Phase 1 shipped as of v0.1.x; subsequent fixes landed in the templates (Tortoise ORM context scoping, Windows `tzdata`, Pydantic v2 UUID→str, README migration steps, Django/Litestar run commands, Windows installer asset naming).
+- Phase 2 shipped as of the boot-matrix work (2026-10-01 to 2026-10-04): all Go P0/P1/P2 audit items closed, 13 Go boot cases added, and the pre-existing `add-deps.ts` stub gap resolved.
+- Phase 3 shipped across PRs #7, #10, #12 and the 2026-10-07/08 fixes: the canonical items Example landed for every framework/ORM, warp and salvo included, and 40+ Rust boot cases were verified in WSL.
 - See `docs/JOURNAL.md` for the gotchas logged along the way.

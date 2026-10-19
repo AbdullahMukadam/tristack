@@ -84,7 +84,7 @@ This repo is a Bun + Turborepo monorepo.
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues for `AmanVarshney01/create-better-t-stack` using the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues are tracked in GitHub Issues for `AbdullahMukadam/tristack` using the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

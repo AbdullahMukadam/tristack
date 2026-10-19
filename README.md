@@ -2,7 +2,7 @@
 
 A modern CLI for scaffolding backend projects across **Python, Go, and Rust** — roll your own stack.
 
-The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fiber, Echo, Chi, stdlib), and **Rust** (Axum, Actix-Web, Rocket, Warp) backends — all in the same binary. The Python path is fully shipped (`uvx tristack`); the Go/Rust installers (curl/PowerShell) and full per-language parity are on the roadmap.
+The CLI scaffolds **Python** (FastAPI, Litestar, Django, Flask), **Go** (Gin, Fiber, Echo, Chi, stdlib), and **Rust** (Axum, Actix-Web, Rocket, Warp, Salvo) backends — all in the same binary. All three language paths are shipped: Python via `uvx tristack`, Go and Rust via the curl/PowerShell installers.
 
 > **Built as a fork of [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack) (MIT licensed)** — the prompt UX framework, virtual file-system template engine, and Stack Builder web UI are adapted from the original project, extended to scaffold Python, Go, and Rust stacks instead of TypeScript/JavaScript.
 
@@ -53,7 +53,7 @@ curl -fsSL https://tristack.space/install.sh | bash
 
 ## Features
 
-- **Languages**: Python — FastAPI, Litestar, Django, Flask. Go — Gin, Fiber, Echo, Chi, stdlib. Rust — Axum, Actix-Web, Rocket, Warp.
+- **Languages**: Python — FastAPI, Litestar, Django, Flask. Go — Gin, Fiber, Echo, Chi, stdlib. Rust — Axum, Actix-Web, Rocket, Warp, Salvo.
 - **ORM**: Python: SQLModel (default), SQLAlchemy, Tortoise, or none · Go: GORM, SQLC, SQLx, or none · Rust: SeaORM, Diesel, SQLx, or none
 - **Migrations**: Python: Alembic (default) or none · Go: Goose, golang-migrate, or none · Rust: none
 - **Databases**: SQLite (default), PostgreSQL, MySQL, or none

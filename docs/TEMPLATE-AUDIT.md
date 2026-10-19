@@ -235,10 +235,10 @@ For each language: fix P0 → add boot-matrix cases that would have caught them 
 
 ## Docs drift found during the audit
 
-- [ ] **D-1** ROADMAP Phase 1 says "shipped", and its exit criterion is phrased as universal, but only SQLite was ever booted (see X-3, PY-6, PY-7).
+- [x] **D-1** (fixed 2026-10-18) ROADMAP Phase 1 said "shipped" with a universal exit criterion while only SQLite was booted. Phase 1/2/3 now state their verified scope: the boot matrix honours `requiresTool`/`requiresDatabase` skips, and the remaining database coverage is tracked as X-3/B4 rather than hidden inside the phase checkboxes.
 - [x] **D-2** (fixed 2026-10-03 with GO-2) ROADMAP "Go boot coverage" row 3 (`EnsureSchema` bootstrap) is listed as covered, but the working-tree code doesn't compile (GO-2).
 - [x] **D-3** (fixed 2026-10-02: the PRD says lockfile-reproducible, per the PY-15 decision) PRD §1 and §6 promise "dependency-pinned" scaffolds; uv and pip output is unpinned (PY-15).
 - [x] **D-4** PRD §7 lists `/api/v1/items` for every stack. Go serves `/items` and Rust has no items routes (GO-15, RS-11). _Go part fixed 2026-10-03 (GO-15); Rust fixed 2026-10-08 (RS-11)._
 - [x] **D-5** template-architecture §1 shows Python `src/<pkg>/`, but templates use `src/` itself as the package. It shows Go `migrations/`, but golang-migrate writes `db/migrations/`. §4 suggests Tera/Maud for Rust; the templates use Askama. _Python part fixed 2026-10-02 (PY-16 decision); the Go part was fixed 2026-10-04 (goose `migrations/`, golang-migrate `db/migrations/`); the Rust part was fixed 2026-10-08 (§1 shows the real Rust layout and §4 names Askama with the project-root `templates/` dir)._
-- [ ] **D-6** `docs/agents/issue-tracker.md` points to `AbdullahMukadam/tristack`; AGENTS.md says `AmanVarshney01/create-better-t-stack`. Pick one.
+- [x] **D-6** (fixed 2026-10-18) `docs/agents/issue-tracker.md` pointed to `AbdullahMukadam/tristack`; AGENTS.md said `AmanVarshney01/create-better-t-stack`. Resolved: AGENTS.md now points to `AbdullahMukadam/tristack` (the actual origin remote), matching `issue-tracker.md`.
 - [x] **D-7** ARCHITECTURE §1 still mentions a `create-tristack` command; AGENTS.md says the CLI is only `tristack` / `uvx tristack`. _Fixed 2026-10-04._
