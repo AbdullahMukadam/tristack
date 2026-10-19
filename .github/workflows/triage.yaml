@@ -1,0 +1,54 @@
+name: Triage
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: Issue number to triage
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: triage-${{ inputs.issue || github.event.issue.number }}
+
+jobs:
+  triage:
+    name: Triage issue
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: .github/triage-bot
+    steps:
+      - name: Checkout bot
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/triage-bot
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .github/triage-bot/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Triage
+        run: npm start
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue || github.event.issue.number }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TRIAGE_USER: ${{ vars.TRIAGE_USER }}
+          INTENTLOCK_URL: ${{ secrets.INTENTLOCK_URL }}
+          INTENTLOCK_API_KEY: ${{ secrets.INTENTLOCK_API_KEY }}
+          LLM_PROVIDER: openai-compatible
+          LLM_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
+          LLM_MODEL: gemini-3.5-flash-lite
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
