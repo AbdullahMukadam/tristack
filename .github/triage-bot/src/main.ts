@@ -14,7 +14,14 @@ const Env = z.object({
 });
 
 const env = Env.parse(process.env);
-const gate = new HybridGate({ baseUrl: env.INTENTLOCK_URL, apiKey: env.INTENTLOCK_API_KEY });
+const gate = new HybridGate({
+  baseUrl: env.INTENTLOCK_URL,
+  apiKey: env.INTENTLOCK_API_KEY,
+  onError: (err) =>
+    console.log(
+      `::warning::Intentlock: ${err instanceof Error ? (err.stack ?? err.message) : err}`,
+    ),
+});
 
 const outcome = await triageIssue({
   provider: providerFromEnv(),
