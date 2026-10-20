@@ -1,6 +1,8 @@
 name: Triage
 
 on:
+  issues:
+    types: [opened]
   workflow_dispatch:
     inputs:
       issue:

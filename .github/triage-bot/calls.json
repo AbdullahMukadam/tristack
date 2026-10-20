@@ -1,0 +1,46 @@
+[
+  {
+    "call": {
+      "tool": "github_add_label",
+      "args": { "repo": "AbdullahMukadam/tristack", "number": 1, "label": "bug" },
+      "callId": "1"
+    },
+    "user": { "email": "triage-bot@example.com", "role": "member" },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "github_add_label",
+      "args": {
+        "repo": "AbdullahMukadam/tristack",
+        "number": 1,
+        "label": "approved-by-maintainer"
+      },
+      "callId": "2"
+    },
+    "user": { "email": "triage-bot@example.com", "role": "member" },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "github_get_issue",
+      "args": { "repo": "AbdullahMukadam/private-notes", "number": 1 },
+      "callId": "3"
+    },
+    "user": { "email": "triage-bot@example.com", "role": "member" },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "github_post_comment",
+      "args": {
+        "repo": "AbdullahMukadam/tristack",
+        "number": 1,
+        "body": "Thanks! Which tristack --version?"
+      },
+      "callId": "4"
+    },
+    "user": { "email": "triage-bot@example.com", "role": "member" },
+    "inPlan": true
+  }
+]
