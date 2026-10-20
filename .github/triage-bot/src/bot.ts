@@ -1,5 +1,6 @@
 import {
   createGuard,
+  PlanSource,
   defineTool,
   type GuardEvent,
   type GuardTool,
@@ -175,6 +176,22 @@ export interface TriageOptions {
 
 export type TriageOutcome = { ok: true; result: RunResult } | { ok: false; error: string };
 
+export function triagePlan(repo: string, issue: number) {
+  const scope = { repo: { eq: repo } };
+  const issueScope = { ...scope, number: { eq: issue } };
+  return [
+    { tool: "github_get_issue", args: issueScope, maxCalls: 2, required: true },
+    { tool: "github_list_labels", args: scope, maxCalls: 1 },
+    { tool: "github_search_issues", args: scope, maxCalls: 3 },
+    {
+      tool: "github_add_label",
+      args: { ...issueScope, label: { in: [...LABELS] } },
+      maxCalls: 4,
+    },
+    { tool: "github_post_comment", args: issueScope, maxCalls: 1 },
+  ];
+}
+
 export async function triageIssue(opts: TriageOptions): Promise<TriageOutcome> {
   try {
     const guard = createGuard({
@@ -182,12 +199,14 @@ export async function triageIssue(opts: TriageOptions): Promise<TriageOutcome> {
       gate: opts.gate,
       ...toolset(triageTools(opts.gh)),
       system: SYSTEM,
+      planSource: PlanSource.EXPLICIT,
       holdTimeoutMs: opts.holdTimeoutMs ?? HOLD_TIMEOUT_MS,
       ...(opts.onEvent && { onEvent: opts.onEvent }),
     });
     const result = await guard.run({
       user: opts.user,
       task: `Triage issue #${opts.issue} in ${opts.repo}`,
+      steps: triagePlan(opts.repo, opts.issue),
     });
     return { ok: true, result };
   } catch (err) {
