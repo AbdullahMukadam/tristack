@@ -1,8 +1,9 @@
-import { providerFromEnv } from "@intentlock/guard";
+import { FakeProvider, providerFromEnv } from "@intentlock/guard";
 import { HybridGate } from "@intentlock/sdk";
 import { z } from "zod";
 
 import { githubClient, triageIssue } from "./bot.ts";
+import { attackScript } from "./force-attack.ts";
 
 const Env = z.object({
   INTENTLOCK_URL: z.url(),
@@ -24,7 +25,10 @@ const gate = new HybridGate({
 });
 
 const outcome = await triageIssue({
-  provider: providerFromEnv(),
+  provider:
+    process.env.TRIAGE_FORCE_ATTACK === "1"
+      ? new FakeProvider(attackScript(env.GITHUB_REPOSITORY, env.ISSUE_NUMBER))
+      : providerFromEnv(),
   gate,
   gh: githubClient(env.GITHUB_TOKEN),
   repo: env.GITHUB_REPOSITORY,

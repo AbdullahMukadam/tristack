@@ -9,6 +9,10 @@ on:
         description: Issue number to triage
         required: true
         type: number
+      force_attack:
+        description: Replace the model with a script that makes off-plan calls
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -46,6 +50,7 @@ jobs:
         run: npm start
         env:
           ISSUE_NUMBER: ${{ inputs.issue || github.event.issue.number }}
+          TRIAGE_FORCE_ATTACK: ${{ inputs.force_attack && '1' || '' }}
           GITHUB_TOKEN: ${{ github.token }}
           TRIAGE_USER: ${{ vars.TRIAGE_USER }}
           INTENTLOCK_URL: ${{ secrets.INTENTLOCK_URL }}
