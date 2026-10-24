@@ -9,17 +9,19 @@ on:
         description: Issue number to triage
         required: true
         type: number
+  repository_dispatch:
+    types: [intentlock-hold-resolved]
 
 permissions:
   contents: read
   issues: write
 
 concurrency:
-  group: triage-${{ inputs.issue || github.event.issue.number }}
+  group: triage-${{ github.event.client_payload.planId && format('plan-{0}', github.event.client_payload.planId) || inputs.issue || github.event.issue.number }}
 
 jobs:
   triage:
-    name: Triage issue
+    name: ${{ github.event_name == 'repository_dispatch' && 'Resume triage' || 'Triage issue' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     defaults:
@@ -46,10 +48,17 @@ jobs:
         run: npm start
         env:
           ISSUE_NUMBER: ${{ inputs.issue || github.event.issue.number }}
+          TRIAGE_RESUME_PLAN: ${{ github.event.client_payload.planId }}
           GITHUB_TOKEN: ${{ github.token }}
           TRIAGE_USER: ${{ vars.TRIAGE_USER }}
           INTENTLOCK_URL: ${{ secrets.INTENTLOCK_URL }}
           INTENTLOCK_API_KEY: ${{ secrets.INTENTLOCK_API_KEY }}
+          CHECKPOINT_S3_ENDPOINT: ${{ vars.CHECKPOINT_S3_ENDPOINT }}
+          CHECKPOINT_S3_REGION: ${{ vars.CHECKPOINT_S3_REGION }}
+          CHECKPOINT_S3_BUCKET: ${{ vars.CHECKPOINT_S3_BUCKET }}
+          CHECKPOINT_S3_ACCESS_KEY_ID: ${{ secrets.CHECKPOINT_S3_ACCESS_KEY_ID }}
+          CHECKPOINT_S3_SECRET_ACCESS_KEY: ${{ secrets.CHECKPOINT_S3_SECRET_ACCESS_KEY }}
+          CHECKPOINT_KEY: ${{ secrets.CHECKPOINT_KEY }}
           LLM_PROVIDER: openai-compatible
           LLM_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
           LLM_MODEL: gemini-3.5-flash-lite
