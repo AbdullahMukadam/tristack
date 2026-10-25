@@ -6,7 +6,20 @@ import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import Providers from "@/components/providers";
-import { REPOSITORY_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SUPPORT_EMAIL } from "@/lib/site";
+import {
+  AUTHOR_NAME,
+  REPOSITORY_URL,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_OG_IMAGE,
+  SITE_OG_IMAGE_ALT,
+  SITE_TAGLINE,
+  SITE_URL,
+  SUPPORT_EMAIL,
+  X_HANDLE,
+  X_PROFILE_URL,
+} from "@/lib/site";
 
 import "./global.css";
 import { cn } from "@/lib/utils";
@@ -21,8 +34,6 @@ const gambarino = localFont({
   display: "swap",
 });
 
-const ogImage = `${SITE_URL}/og/site/home.png`;
-
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -32,7 +43,7 @@ const structuredData = {
       name: SITE_NAME,
       url: SITE_URL,
       logo: `${SITE_URL}/favicons/android-chrome-512x512.png`,
-      sameAs: [REPOSITORY_URL, "https://x.com/abd_mukadam"],
+      sameAs: [REPOSITORY_URL, X_PROFILE_URL],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "project support",
@@ -45,9 +56,11 @@ const structuredData = {
       "@id": `${SITE_URL}/#software`,
       "@type": "SoftwareApplication",
       name: SITE_NAME,
-      alternateName: "create-tristack",
+      alternateName: ["tristack", "uvx tristack"],
       description: SITE_DESCRIPTION,
       url: SITE_URL,
+      image: `${SITE_URL}${SITE_OG_IMAGE}`,
+      keywords: SITE_KEYWORDS.join(", "),
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Linux, macOS, Windows",
       isAccessibleForFree: true,
@@ -66,7 +79,17 @@ const structuredData = {
         "Interactive and non-interactive project scaffolding",
         "JSON-first commands for coding agents and automation",
         "Reproducible tristack.jsonc configuration",
+        "Python: FastAPI, Django, Flask, Litestar with SQLAlchemy, SQLModel or Tortoise",
+        "Go: Gin, Echo, Fiber, Chi or net/http with GORM, sqlc or sqlx",
+        "Rust: Axum, Actix Web, Rocket, Salvo or Warp with SeaORM, Diesel or SQLx",
+        "PostgreSQL, MySQL and SQLite with migrations",
+        "Docker, GitHub Actions and linting addons",
       ],
+      author: {
+        "@type": "Person",
+        name: AUTHOR_NAME,
+        url: X_PROFILE_URL,
+      },
       sameAs: [REPOSITORY_URL],
     },
     {
@@ -83,39 +106,36 @@ const structuredData = {
 };
 
 export const metadata: Metadata = {
-  title: SITE_NAME,
+  title: {
+    default: `${SITE_NAME}: ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`,
+  },
   description: SITE_DESCRIPTION,
-  keywords: [
-    "project scaffolding",
-    "boilerplate",
-    "Python",
-    "Go",
-    "Rust",
-    "CLI",
-    "stack builder",
-    "TriStack",
-    "create-tristack",
-  ],
-  authors: [{ name: "TriStack Team" }],
-  creator: "TriStack",
-  publisher: "TriStack",
+  applicationName: SITE_NAME,
+  keywords: SITE_KEYWORDS,
+  authors: [{ name: AUTHOR_NAME, url: X_PROFILE_URL }],
+  creator: AUTHOR_NAME,
+  publisher: SITE_NAME,
   formatDetection: {
     email: false,
     telephone: false,
   },
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/manifest.webmanifest",
   openGraph: {
-    title: SITE_NAME,
+    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
     images: [
       {
-        url: ogImage,
+        url: SITE_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "TriStack",
+        alt: SITE_OG_IMAGE_ALT,
       },
     ],
     locale: "en_US",
@@ -123,9 +143,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_NAME,
+    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
-    images: [ogImage],
+    site: X_HANDLE,
+    creator: X_HANDLE,
+    images: [SITE_OG_IMAGE],
   },
   robots: {
     index: true,
@@ -154,6 +176,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1.0,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0d0d" },
+  ],
 };
 
 export default function Layout({ children }: { children: ReactNode }) {

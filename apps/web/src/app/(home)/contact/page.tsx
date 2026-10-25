@@ -4,25 +4,19 @@ import { Mail } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { REPOSITORY_URL, SITE_URL, SUPPORT_EMAIL } from "@/lib/site";
+import { createPageMetadata } from "@/lib/metadata";
+import { REPOSITORY_URL, SUPPORT_EMAIL } from "@/lib/site";
 
 import { TrustPage, TrustSection, trustPageLinkClass } from "../_components/trust-page";
 
 const description =
   "Where to ask questions, report bugs, request features, or contact the project.";
 
-export const metadata: Metadata = {
-  title: "Contact - TriStack",
+export const metadata: Metadata = createPageMetadata({
+  title: "Contact",
   description,
-  alternates: {
-    canonical: "/contact",
-  },
-  openGraph: {
-    title: "Contact - TriStack",
-    description,
-    url: `${SITE_URL}/contact`,
-  },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

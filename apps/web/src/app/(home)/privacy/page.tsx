@@ -4,25 +4,19 @@ import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { SITE_URL, SUPPORT_EMAIL } from "@/lib/site";
+import { createPageMetadata } from "@/lib/metadata";
+import { SUPPORT_EMAIL } from "@/lib/site";
 
 import { TrustPage, TrustSection, trustPageLinkClass } from "../_components/trust-page";
 
 const description =
   "What the TriStack website and CLI collect, why it is used, and how to opt out.";
 
-export const metadata: Metadata = {
-  title: "Privacy - TriStack",
+export const metadata: Metadata = createPageMetadata({
+  title: "Privacy",
   description,
-  alternates: {
-    canonical: "/privacy",
-  },
-  openGraph: {
-    title: "Privacy - TriStack",
-    description,
-    url: `${SITE_URL}/privacy`,
-  },
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

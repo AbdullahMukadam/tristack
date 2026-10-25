@@ -9,6 +9,8 @@ import { notFound } from "next/navigation";
 import { SectionDivider } from "@/app/(home)/_components/landing/section-divider";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 import { getDocumentationMarkdownUrl } from "@/lib/agent-content";
+import { createPageMetadata } from "@/lib/metadata";
+import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import { getPageImage, source } from "@/lib/source";
 
 export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
@@ -18,9 +20,30 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
 
   const MDX = page.data.body;
   const markdownUrl = getDocumentationMarkdownUrl(page.url);
+  const breadcrumbs = [
+    { name: "Home", url: SITE_URL },
+    { name: "Docs", url: `${SITE_URL}/docs` },
+    ...(page.url === "/docs" ? [] : [{ name: page.data.title, url: `${SITE_URL}${page.url}` }]),
+  ];
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
 
   return (
     <DocsPage toc={page.data.toc} tableOfContent={{ style: "clerk" }} full={page.data.full}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replaceAll("<", "\\u003c"),
+        }}
+      />
       <div className="flex flex-col gap-2">
         <div>
           <DocsTitle className="text-3xl font-bold tracking-tight text-fd-foreground sm:text-4xl">
@@ -87,28 +110,21 @@ export async function generateMetadata({
   const page = source.getPage(slug);
   if (!page) notFound();
 
-  const image = getPageImage(page);
+  const metadata = createPageMetadata({
+    title: page.data.title,
+    description: page.data.description ?? SITE_DESCRIPTION,
+    path: page.url,
+    image: getPageImage(page).url,
+    type: "article",
+  });
 
   return {
-    title: page.data.title,
-    description: page.data.description,
+    ...metadata,
     alternates: {
-      canonical: page.url,
+      ...metadata.alternates,
       types: {
         "text/markdown": getDocumentationMarkdownUrl(page.url),
       },
-    },
-    openGraph: {
-      title: page.data.title,
-      description: page.data.description,
-      type: "article",
-      images: image.url,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: page.data.title,
-      description: page.data.description,
-      images: image.url,
     },
   };
 }

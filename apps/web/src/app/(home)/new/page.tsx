@@ -1,36 +1,16 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { SITE_URL } from "@/lib/site";
+import { createPageMetadata } from "@/lib/metadata";
 
 import { StackBuilder } from "./_components/stack-builder";
 
-export const metadata: Metadata = {
-  title: "Stack Builder - TriStack",
-  description: "Interactive Ui to roll your own stack",
-  alternates: {
-    canonical: "/new",
-  },
-  openGraph: {
-    title: "Stack Builder - TriStack",
-    description: "Interactive Ui to roll your own stack",
-    url: `${SITE_URL}/new`,
-    images: [
-      {
-        url: `${SITE_URL}/og/site/new.png`,
-        width: 1200,
-        height: 630,
-        alt: "TriStack Stack Builder",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Stack Builder - TriStack",
-    description: "Interactive Ui to roll your own stack",
-    images: [`${SITE_URL}/og/site/new.png`],
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Stack builder",
+  description:
+    "Build your Python, Go, or Rust stack visually. Pick a framework, ORM, database, and addons, then copy a ready-to-run TriStack command.",
+  path: "/new",
+});
 
 export default function FullScreenStackBuilder() {
   return (

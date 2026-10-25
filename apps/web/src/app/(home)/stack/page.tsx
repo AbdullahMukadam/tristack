@@ -18,7 +18,8 @@ interface StackPageProps {
 export async function generateMetadata({ searchParams }: StackPageProps): Promise<Metadata> {
   const params = await loadStackParams(searchParams);
   const projectName = params.projectName || "my-tristack-app";
-  const title = `${projectName} – TriStack`;
+  const title = `${projectName} stack`;
+  const socialTitle = `${title} | TriStack`;
   const description = generateStackSummary(params);
   const ogImage = generateStackOgImageUrl(params, SITE_URL);
   return {
@@ -28,7 +29,7 @@ export async function generateMetadata({ searchParams }: StackPageProps): Promis
       canonical: serializeStackParams("/stack", params),
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: generateStackSharingUrl(params),
       images: [
@@ -42,7 +43,7 @@ export async function generateMetadata({ searchParams }: StackPageProps): Promis
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description,
       images: [ogImage],
     },

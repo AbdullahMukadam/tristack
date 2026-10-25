@@ -4,25 +4,19 @@ import { Info } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { REPOSITORY_URL, SITE_URL } from "@/lib/site";
+import { createPageMetadata } from "@/lib/metadata";
+import { REPOSITORY_URL } from "@/lib/site";
 
 import { TrustPage, TrustSection, trustPageLinkClass } from "../_components/trust-page";
 
 const description =
   "How TriStack helps developers and coding agents create modern applications across languages.";
 
-export const metadata: Metadata = {
-  title: "About - TriStack",
+export const metadata: Metadata = createPageMetadata({
+  title: "About",
   description,
-  alternates: {
-    canonical: "/about",
-  },
-  openGraph: {
-    title: "About - TriStack",
-    description,
-    url: `${SITE_URL}/about`,
-  },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
