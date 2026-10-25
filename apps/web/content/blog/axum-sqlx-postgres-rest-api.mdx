@@ -1,0 +1,227 @@
+---
+title: "Build a REST API in Rust with Axum, SQLx and Postgres"
+description: "A small, production-minded Axum 0.8 project with SQLx, PostgreSQL, input validation, clean error responses, tests and a Docker image, explained step by step."
+author:
+  name: Abdullah Mukadam
+  url: https://x.com/abd_mukadam
+date: 2026-10-25
+tags: [Rust, Axum, SQLx, PostgreSQL, Docker]
+---
+
+Axum has become the default choice for web services in Rust. It's built on Tokio and Tower, has no macros for routing, and plays well with SQLx for type-safe database access. This post builds a small but realistic REST API with **Axum 0.8**, **SQLx 0.8** and **PostgreSQL**, and explains each piece.
+
+You can type it out as you read, or generate the finished project in one command:
+
+```bash
+tristack my-api --language rust --framework axum --orm sqlx-rust --database postgres --migrations none --frontend none --package-manager cargo --addons clippy,docker
+```
+
+Install the CLI first with `curl -fsSL https://tristack.space/install.sh | bash` (or `irm https://tristack.space/install.ps1 | iex` on Windows). All the code below is what that command generates.
+
+## The layout
+
+```text
+my-api/
+├── src/
+│   ├── main.rs      # router, state, server
+│   ├── config.rs    # environment variables
+│   ├── db.rs        # pool and queries
+│   ├── models.rs    # data types
+│   ├── service.rs   # validation and business rules
+│   └── api.rs       # HTTP handlers
+├── Cargo.toml
+├── clippy.toml
+├── Dockerfile
+├── docker-compose.yml
+└── .env.example
+```
+
+As in most backend layouts, each module has one job: `api` speaks HTTP, `service` decides what's allowed, and `db` talks to Postgres. Handlers never run SQL, and queries never see a request.
+
+## Dependencies
+
+```toml title="Cargo.toml"
+[dependencies]
+dotenvy = "0.15"
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono"] }
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+dbg_macro = "warn"
+todo = "warn"
+unwrap_used = "warn"
+```
+
+`tls-rustls` avoids linking OpenSSL, which keeps Docker builds simple. The `[lints.clippy]` table makes `unwrap()` a warning, which nudges you to handle errors instead of panicking in production.
+
+## Shared state and the router
+
+The connection pool goes into an `AppState` that every handler can extract. If the database isn't reachable at startup, the app exits with a clear message instead of serving errors.
+
+```rust title="src/main.rs"
+#[derive(Clone)]
+pub struct AppState {
+    pub db: db::Db,
+}
+
+#[tokio::main]
+async fn main() {
+    let app_config = config::Config::from_env();
+    let db = db::connect().await.unwrap_or_else(|err| {
+        eprintln!("database not ready: {err}");
+        std::process::exit(1);
+    });
+    let addr = format!("0.0.0.0:{}", app_config.port);
+    println!("{} listening on {}", app_config.app_name, addr);
+
+    let state = AppState { db };
+
+    let router = Router::new()
+        .route("/api/v1/items", get(api::list_items).post(api::create_item))
+        .with_state(state)
+        .route("/health", get(health));
+
+    let listener = tokio::net::TcpListener::bind(&addr)
+        .await
+        .expect("failed to bind");
+    axum::serve(listener, router).await.expect("server error");
+}
+```
+
+`/health` is added after `.with_state`, so it doesn't need the database. That's what you want for a liveness probe.
+
+## Talking to Postgres with SQLx
+
+`sqlx::PgPool` is the pool type. On connect, the app makes sure the `items` table exists, then exposes small, typed query functions:
+
+```rust title="src/db.rs"
+pub type Db = sqlx::PgPool;
+
+const CREATE_ITEMS: &str = "CREATE TABLE IF NOT EXISTS items (id VARCHAR(36) PRIMARY KEY, name VARCHAR(200) NOT NULL, created_at TIMESTAMPTZ NOT NULL)";
+const INSERT_ITEM: &str = "INSERT INTO items (id, name, created_at) VALUES ($1, $2, $3)";
+
+pub async fn connect() -> Result<Db, Error> {
+    let db = Db::connect(&database_url()).await?;
+    sqlx::query(CREATE_ITEMS).execute(&db).await?;
+    Ok(db)
+}
+
+pub async fn insert_item(db: &Db, item: &Item) -> Result<(), Error> {
+    sqlx::query(INSERT_ITEM)
+        .bind(&item.id)
+        .bind(&item.name)
+        .bind(item.created_at)
+        .execute(db)
+        .await?;
+    Ok(())
+}
+```
+
+Values are always passed with `.bind()`, never formatted into the SQL string, so there's no room for SQL injection.
+
+These are runtime-checked queries (`sqlx::query`), not the compile-time `query!` macro. That means `cargo build` works without a live database, which keeps CI and Docker builds simple. If you'd rather have compile-time checking, switch to `query!` and use `cargo sqlx prepare` to commit the query metadata.
+
+`CREATE TABLE IF NOT EXISTS` is fine for a first table. Once your schema starts changing, move to versioned migrations with `sqlx migrate add` and run them on startup with `sqlx::migrate!()`.
+
+## Validation in the service layer
+
+Handlers receive raw bytes and hand them to the service. The service parses JSON, validates it, and returns a typed error:
+
+```rust title="src/service.rs"
+pub async fn create_item(db: &Db, body: &[u8]) -> Result<Item, ServiceError> {
+    let input: NewItem = serde_json::from_slice(body)
+        .map_err(|_| ServiceError::BadRequest("invalid request body".to_string()))?;
+    validate_name(&input.name)?;
+    let item = Item {
+        id: Uuid::new_v4().to_string(),
+        name: input.name,
+        created_at: Utc::now().trunc_subsecs(6),
+    };
+    db::insert_item(db, &item)
+        .await
+        .map_err(|err| internal("could not create item", &err))?;
+    Ok(item)
+}
+```
+
+`trunc_subsecs(6)` rounds the timestamp to microseconds, which is Postgres's precision. The value the API returns then matches what a later `GET` reads back.
+
+Internal errors are logged with their details, but the client only sees a generic message such as `"could not create item"`. Database errors never leak into responses.
+
+## Turning errors into HTTP responses
+
+`api.rs` maps each `ServiceError` variant to a status code in one place:
+
+```rust title="src/api.rs"
+pub async fn create_item(State(state): State<AppState>, body: Bytes) -> Response {
+    match service::create_item(&state.db, &body).await {
+        Ok(item) => (StatusCode::CREATED, Json(item)).into_response(),
+        Err(err) => error_response(&err),
+    }
+}
+
+fn error_response(err: &ServiceError) -> Response {
+    let status = match err {
+        ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,
+        ServiceError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    };
+    (status, Json(json!({ "error": err.to_string() }))).into_response()
+}
+```
+
+Every error has the same JSON shape, `{"error": "..."}`, which makes life easier for frontend code.
+
+## Run it
+
+Start Postgres (the generated `docker-compose.yml` includes one), then:
+
+```bash
+cd my-api
+cp .env.example .env
+cargo run
+```
+
+```bash
+curl -X POST localhost:8000/api/v1/items -H "content-type: application/json" -d '{"name": "first item"}'
+curl localhost:8000/api/v1/items
+```
+
+```json
+[
+  {
+    "id": "9140bf9e-7c69-4e5f-860d-3849538e156a",
+    "name": "first item",
+    "created_at": "2026-10-25T11:11:11.091167Z"
+  }
+]
+```
+
+An empty name is rejected:
+
+```json
+{ "error": "invalid input: name must not be empty" }
+```
+
+## Tests, lints and Docker
+
+The validation rules have unit tests that don't need a database, so `cargo test` runs anywhere:
+
+```bash
+cargo test
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
+```
+
+The Dockerfile is a two-stage build: compile with `rust:1-slim-bookworm`, then copy only the binary into `debian:bookworm-slim` and run it as a non-root user. The final image contains no compiler or source code.
+
+## Wrapping up
+
+That's a complete Axum service: shared state, a SQLx pool, validation, consistent errors, tests and a container image, in six small files. To try the same API with Actix Web, Rocket, Salvo or Warp, or with SeaORM or Diesel instead of SQLx, pick them in the [stack builder](/new). The [Rust quick start](/docs/guides/rust-quick-start) lists every option.

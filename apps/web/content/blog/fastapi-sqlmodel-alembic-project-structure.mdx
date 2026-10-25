@@ -1,0 +1,241 @@
+---
+title: "FastAPI project structure with SQLModel, Alembic and Postgres"
+description: "A production-ready FastAPI layout with async SQLModel, Alembic migrations, PostgreSQL, Ruff and pytest, explained file by file and generated in one command."
+author:
+  name: Abdullah Mukadam
+  url: https://x.com/abd_mukadam
+date: 2026-10-25
+tags: [Python, FastAPI, SQLModel, Alembic, PostgreSQL]
+---
+
+Most FastAPI tutorials stop at a single `main.py`. That works for a demo, but as soon as you add a database, migrations and tests, you need to decide where everything lives. This post walks through a layout that scales well, using **FastAPI**, **SQLModel** (async), **Alembic** and **PostgreSQL**, plus **Ruff** and **pytest**.
+
+You can build it by hand by following along, or generate the whole thing with one command:
+
+```bash
+uvx tristack my-api --language python --framework fastapi --orm sqlmodel --migrations alembic --database postgres --frontend none --package-manager uv --addons ruff,pytest,docker
+```
+
+Every file shown below is exactly what that command generates.
+
+## The layout
+
+```text
+my-api/
+├── src/
+│   ├── main.py            # app factory and lifespan
+│   ├── config.py          # settings from environment variables
+│   ├── db.py              # async engine and session dependency
+│   ├── models.py          # SQLModel tables
+│   ├── schemas/           # request and response models
+│   ├── repositories/      # database queries
+│   ├── services/          # business logic
+│   └── api/
+│       ├── router.py      # /health and version mounting
+│       └── v1/routes/     # one module per resource
+├── migrations/            # Alembic environment and versions
+├── tests/
+├── alembic.ini
+├── pyproject.toml
+├── docker-compose.yml
+└── env.example
+```
+
+The idea is simple: each layer only talks to the one below it. Routes handle HTTP, services hold business rules, repositories run queries, and models describe tables. When you add a resource, you add one file per layer instead of growing a single module.
+
+## Settings with pydantic-settings
+
+Configuration comes from environment variables, with a `.env` file for local development. `lru_cache` makes sure the settings are only parsed once.
+
+```python title="src/config.py"
+from functools import lru_cache
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+DATABASE_NAME = "my_api"
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    app_name: str = "my-api"
+    debug: bool = False
+    cors_origins: list[str] = ["http://localhost:3000"]
+    database_url: str = f"postgresql+asyncpg://postgres:postgres@localhost:5432/{DATABASE_NAME}"
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
+```
+
+## An async database session
+
+SQLModel sits on top of SQLAlchemy, so the async engine is plain SQLAlchemy with the `asyncpg` driver. `get_session` is a FastAPI dependency that opens a session per request and closes it afterwards.
+
+```python title="src/db.py"
+from collections.abc import AsyncIterator
+
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlmodel.ext.asyncio.session import AsyncSession as AsyncSession
+
+from .config import get_settings
+
+settings = get_settings()
+
+engine = create_async_engine(settings.database_url, echo=settings.debug)
+SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+async def get_session() -> AsyncIterator[AsyncSession]:
+    async with SessionLocal() as session:
+        yield session
+
+
+async def close_db() -> None:
+    await engine.dispose()
+```
+
+`expire_on_commit=False` matters in async code: without it, reading an attribute after `commit()` would trigger a lazy load, which fails outside a running query.
+
+## Tables vs schemas
+
+SQLModel lets one class be both a table and a Pydantic model. It's tempting to use it for everything, but keeping **tables** (`models.py`) separate from **API schemas** (`schemas/`) means you can change what clients send and see without touching the database.
+
+```python title="src/models.py"
+class Item(SQLModel, table=True):
+    id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True, max_length=36)
+    name: str = Field(max_length=255)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
+```
+
+```python title="src/schemas/items.py"
+class ItemCreate(BaseModel):
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200)]
+
+
+class ItemResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    name: str
+    created_at: datetime
+```
+
+Validation lives in the input schema, so an empty name is rejected with a `422` before any database work happens.
+
+## Repository, service, route
+
+The repository is the only place that writes SQL (through SQLModel's `select`):
+
+```python title="src/repositories/items.py"
+async def list_items(session: AsyncSession) -> list[ItemResponse]:
+    result = await session.exec(select(Item).order_by(col(Item.created_at).desc()))
+    items = result.all()
+    return [ItemResponse.model_validate(i) for i in items]
+```
+
+The route stays thin. It declares the session dependency once with `Annotated`, then delegates to the service:
+
+```python title="src/api/v1/routes/items.py"
+SessionDep = Annotated[AsyncSession, Depends(get_session)]
+
+
+@router.get("/", response_model=list[ItemResponse])
+async def list_items_endpoint(session: SessionDep) -> list[ItemResponse]:
+    return await list_items(session)
+
+
+@router.post("/", response_model=ItemResponse, status_code=201)
+async def create_item_endpoint(payload: ItemCreate, session: SessionDep) -> ItemResponse:
+    return await create_item(session, payload)
+```
+
+Versioning is handled by mounting: `api/router.py` serves `/health` and includes the v1 router under `/api/v1`, so a future `/api/v2` is a new folder rather than a rewrite.
+
+## Alembic with an async engine
+
+Alembic's default template is synchronous. With `asyncpg` you need an async `env.py` that runs migrations inside `connection.run_sync`. It reads the same `DATABASE_URL` as the app, so there's only one place to configure the connection:
+
+```python title="migrations/env.py"
+target_metadata = Item.metadata
+
+settings = get_settings()
+
+
+async def run_async_migrations() -> None:
+    configuration = config.get_section(config.config_ini_section, {})
+    configuration["sqlalchemy.url"] = settings.database_url
+
+    connectable = async_engine_from_config(
+        configuration,
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
+
+    await connectable.dispose()
+```
+
+`compare_type=True` is also set, so autogenerate notices column type changes and not just new tables.
+
+## Run it
+
+Start Postgres (the generated `docker-compose.yml` includes a `postgres:16` service), then:
+
+```bash
+cd my-api
+cp env.example .env
+uv sync
+uv run alembic revision --autogenerate -m "initial"
+uv run alembic upgrade head
+uv run uvicorn src.main:app --reload
+```
+
+Alembic detects the `item` table and writes the first migration. Tidy the generated file with Ruff, then run the checks:
+
+```bash
+uv run ruff check --fix .
+uv run ruff format .
+uv run pytest
+```
+
+Try the API:
+
+```bash
+curl -X POST localhost:8000/api/v1/items/ -H "content-type: application/json" -d '{"name": "first item"}'
+curl localhost:8000/api/v1/items/
+```
+
+```json
+[
+  {
+    "id": "87d79c94-d1ab-4e66-9f17-ba7e1a4e85f8",
+    "name": "first item",
+    "created_at": "2026-10-25T10:59:18.779344Z"
+  }
+]
+```
+
+Interactive docs are at [localhost:8000/docs](http://localhost:8000/docs).
+
+## Adding a new resource
+
+To add, say, `users`:
+
+1. Add a `User` table to `models.py`.
+2. Add `UserCreate` and `UserResponse` to `schemas/users.py`.
+3. Add `repositories/users.py` and `services/users.py`.
+4. Add `api/v1/routes/users.py` and include it in `api/v1/router.py`.
+5. Run `uv run alembic revision --autogenerate -m "add users"`.
+
+Each step touches one small file, and nothing else in the app has to change.
+
+## Wrapping up
+
+This layout keeps FastAPI apps easy to grow: settings in one place, async sessions per request, and Alembic migrations that share the app's config. If you'd rather start from Django, Flask or Litestar, or swap SQLModel for SQLAlchemy or Tortoise, pick them in the [stack builder](/new) and copy the command. The [Python quick start](/docs/guides/python-quick-start) covers every option.

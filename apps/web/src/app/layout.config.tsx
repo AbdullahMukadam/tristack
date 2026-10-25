@@ -18,6 +18,11 @@ export const links: LinkItemType[] = [
     active: "nested-url",
   },
   {
+    text: "Blog",
+    url: "/blog",
+    active: "nested-url",
+  },
+  {
     text: "Builder",
     url: "/new",
   },

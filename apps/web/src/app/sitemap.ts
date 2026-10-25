@@ -3,12 +3,13 @@ export const dynamic = "force-static";
 import type { MetadataRoute } from "next";
 
 import { SITE_URL } from "@/lib/site";
-import { source } from "@/lib/source";
+import { getBlogPosts, source } from "@/lib/source";
 
 const staticPages = [
   { path: "/", priority: 1 },
   { path: "/new", priority: 0.9 },
   { path: "/docs", priority: 0.9 },
+  { path: "/blog", priority: 0.8 },
   { path: "/stack", priority: 0.7 },
   { path: "/sponsors", priority: 0.5 },
   { path: "/about", priority: 0.5 },
@@ -28,6 +29,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     }));
 
+  const blogPosts = getBlogPosts().map((post) => ({
+    url: `${SITE_URL}${post.url}`,
+    lastModified: new Date(post.data.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...staticPages.map(({ path, priority }) => ({
       url: new URL(path, SITE_URL).toString(),
@@ -36,5 +44,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority,
     })),
     ...docsPages,
+    ...blogPosts,
   ];
 }
