@@ -18,6 +18,7 @@ import { BrandButton } from "./round-button";
 
 const navLinks = [
   { href: "/docs", label: "Docs" },
+  { href: "/blog", label: "Blog" },
   { href: "/new", label: "Builder" },
   { href: "/sponsors", label: "Sponsors" },
 ];

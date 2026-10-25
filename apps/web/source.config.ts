@@ -22,6 +22,24 @@ export const docs = defineDocs({
   },
 });
 
+export const blog = defineDocs({
+  dir: "content/blog",
+  docs: {
+    schema: frontmatterSchema.extend({
+      description: z.string(),
+      author: z.object({
+        name: z.string(),
+        url: z.string().url().optional(),
+      }),
+      date: z.string().date(),
+      tags: z.array(z.string()).default([]),
+    }),
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     remarkNpmOptions: {
