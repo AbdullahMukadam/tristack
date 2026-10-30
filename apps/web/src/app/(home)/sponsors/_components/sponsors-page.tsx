@@ -310,8 +310,6 @@ export function SponsorsPage({ sponsorsData }: { sponsorsData: SponsorsData }) {
                 </h3>
                 <p className="mx-auto max-w-lg text-base text-fd-muted-foreground">
                   Sponsorship directly funds ongoing development, infrastructure, and maintenance.
-                  One-time sponsorships count too: every $100 one-time equals a month of special
-                  placement.
                 </p>
               </div>
 

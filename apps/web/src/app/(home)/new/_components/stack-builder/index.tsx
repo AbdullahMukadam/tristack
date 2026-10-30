@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Plus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { type ReactNode, startTransition, useState } from "react";
 
@@ -112,10 +113,40 @@ export function StackBuilder() {
       <SectionDivider />
 
       <div className="space-y-4 px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
-          Build Your{" "}
-          <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Stack</span>.
-        </h1>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
+            Build Your{" "}
+            <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Stack</span>.
+          </h1>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="text-fd-muted-foreground">Powered by</span>
+            <a
+              href="https://www.rtecn.space/?ref=tristack"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="builder-focus-ring flex items-center gap-2 rounded-md font-medium transition-opacity hover:opacity-80"
+            >
+              <Image
+                src="https://www.rtecn.space/favicon.svg"
+                alt=""
+                width={24}
+                height={24}
+                className="size-6 rounded"
+                unoptimized
+              />
+              editorcn
+            </a>
+            <Link
+              href="/sponsors"
+              className="builder-focus-ring flex items-center gap-2 rounded-md text-fd-muted-foreground transition-colors hover:text-fd-foreground"
+            >
+              <span className="flex size-6 items-center justify-center rounded border border-dashed">
+                <Plus className="size-4" />
+              </span>
+              Your logo
+            </Link>
+          </div>
+        </div>
         <ActionButtons
           onReset={resetStack}
           onRandom={getRandomStack}
