@@ -17,6 +17,17 @@ describe("framework landing pages", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  test("every framework has its own copy and keeps its chosen ORM", () => {
+    const whys = new Set<string>();
+    for (const page of FRAMEWORK_PAGES) {
+      expect(page.details, page.id).toBeDefined();
+      expect(page.details?.goodFor.length, page.id).toBeGreaterThan(0);
+      whys.add(page.details?.why ?? "");
+      expect(getFrameworkStack(page).orm, page.id).toBe(page.details?.stack.orm ?? "");
+    }
+    expect(whys.size).toBe(FRAMEWORK_PAGES.length);
+  });
+
   for (const page of FRAMEWORK_PAGES) {
     test(`${page.id} generates a runnable project`, async () => {
       const stack = getFrameworkStack(page);
