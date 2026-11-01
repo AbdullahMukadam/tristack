@@ -53,3 +53,11 @@ templates-binary
 opensrc/
 .scratch-docker-smoke/
 .scratch-vercel-smoke/
+
+# Internal notes (kept locally, not published)
+docs/JOURNAL.md
+docs/ROADMAP.md
+docs/PRD.md
+docs/TEMPLATE-AUDIT.md
+docs/CONTEXT.md
+docs/agents/

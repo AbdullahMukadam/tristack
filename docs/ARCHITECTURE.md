@@ -74,7 +74,7 @@ tristack.jsonc (reproducible command)
 
 ## 4. Testing tiers
 
-See `docs/CONTEXT.md` and `docs/adr/0001-use-tiered-matrix-testing-for-cli-stack-coverage.md`.
+See `docs/adr/0001-use-tiered-matrix-testing-for-cli-stack-coverage.md`.
 
 - **Default Suite**: fast unit/integration/regression tests run during development (`bun test` in `apps/cli`, `bun test` in `apps/web`).
 - **Matrix Smoke**: representative slice in regular CI.
@@ -91,8 +91,4 @@ See `docs/CONTEXT.md` and `docs/adr/0001-use-tiered-matrix-testing-for-cli-stack
 - `docs/template-architecture.md` — template tree, canonical layouts, layering rules.
 - `docs/adr/0001-…` — tiered matrix testing.
 - `docs/adr/0002-…` — canonical template layout and project structure.
-- `docs/PRD.md` — product requirements.
-- `docs/ROADMAP.md` — phased build plan.
-- `docs/JOURNAL.md` — gotchas and progress log.
 - `docs/HOW-IT-WORKS.md` — plain walkthrough of the CLI flow, the generator, and the web app layout.
-- `docs/TEMPLATE-AUDIT.md` — per-language template defect checklist (P0/P1/P2).

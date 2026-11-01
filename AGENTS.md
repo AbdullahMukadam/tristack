@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-> **Brand identity:** TriStack (not Better-T-Stack). The project is a fork of Better-T-Stack. The CLI command is `tristack` / `uvx tristack`, not `create-better-t-stack`. See `docs/agents/domain.md`.
+> **Brand identity:** TriStack (not Better-T-Stack). The project is a fork of Better-T-Stack. The CLI command is `tristack` / `uvx tristack`, not `create-better-t-stack`.
 
 ## Project Structure & Module Organization
 
@@ -84,12 +84,8 @@ This repo is a Bun + Turborepo monorepo.
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues for `AbdullahMukadam/tristack` using the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues are tracked in GitHub Issues for `AbdullahMukadam/tristack` using the `gh` CLI.
 
 ### Triage labels
 
-The canonical triage roles map directly to same-named GitHub labels. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-This repo uses a single-context domain doc layout. See `docs/agents/domain.md`.
+The canonical triage roles map directly to same-named GitHub labels.
