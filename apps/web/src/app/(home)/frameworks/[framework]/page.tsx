@@ -109,6 +109,18 @@ export default async function FrameworkPage(props: PageProps<"/frameworks/[frame
 
       <div className="grid border-t lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
         <div className="flex min-w-0 flex-col gap-8 px-4 py-6 sm:px-6">
+          {page.details && (
+            <section className="flex flex-col gap-3">
+              <Label>Why {page.name}</Label>
+              <p className="text-sm leading-relaxed text-fd-muted-foreground">{page.details.why}</p>
+              <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-fd-muted-foreground">
+                {page.details.goodFor.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section className="flex flex-col gap-3">
             <Label>Create the project</Label>
             <CodeBlock className="my-0">
