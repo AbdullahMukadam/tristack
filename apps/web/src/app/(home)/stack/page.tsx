@@ -22,12 +22,14 @@ export async function generateMetadata({ searchParams }: StackPageProps): Promis
   const socialTitle = `${title} | TriStack`;
   const description = generateStackSummary(params);
   const ogImage = generateStackOgImageUrl(params, SITE_URL);
+  const hasParams = serializeStackParams("/stack", params) !== "/stack";
   return {
     title,
     description,
     alternates: {
-      canonical: serializeStackParams("/stack", params),
+      canonical: "/stack",
     },
+    robots: hasParams ? { index: false, follow: true } : undefined,
     openGraph: {
       title: socialTitle,
       description,

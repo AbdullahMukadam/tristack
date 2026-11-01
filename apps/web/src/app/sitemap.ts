@@ -2,12 +2,15 @@ export const dynamic = "force-static";
 
 import type { MetadataRoute } from "next";
 
+import { FRAMEWORK_PAGES } from "@/lib/framework-pages";
 import { SITE_URL } from "@/lib/site";
 import { getBlogPosts, source } from "@/lib/source";
 
 const staticPages = [
   { path: "/", priority: 1 },
   { path: "/new", priority: 0.9 },
+  { path: "/frameworks", priority: 0.8 },
+  ...FRAMEWORK_PAGES.map((page) => ({ path: `/frameworks/${page.id}`, priority: 0.8 })),
   { path: "/docs", priority: 0.9 },
   { path: "/blog", priority: 0.8 },
   { path: "/stack", priority: 0.7 },
@@ -18,13 +21,11 @@ const staticPages = [
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
   const docsPages = source
     .getPages()
     .filter((page) => page.url !== "/docs")
     .map((page) => ({
       url: `${SITE_URL}${page.url}`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
@@ -39,7 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticPages.map(({ path, priority }) => ({
       url: new URL(path, SITE_URL).toString(),
-      lastModified,
       changeFrequency: "weekly" as const,
       priority,
     })),

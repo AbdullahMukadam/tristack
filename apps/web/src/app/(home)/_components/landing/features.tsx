@@ -35,10 +35,10 @@ export function Features() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center"
       >
-        <h1 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
+        <h2 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
           Build Your
           <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]"> Stack</span>.
-        </h1>
+        </h2>
         <p className="max-w-xl text-sm leading-relaxed text-fd-muted-foreground sm:text-base">
           Everything you need to go from idea to running project in seconds.
         </p>
