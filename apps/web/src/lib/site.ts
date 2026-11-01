@@ -2,7 +2,7 @@ export const SITE_NAME = "TriStack";
 export const SITE_URL = "https://tristack.space";
 export const SITE_TAGLINE = "Scaffold Python, Go & Rust projects in seconds";
 export const SITE_DESCRIPTION =
-  "TriStack is an open-source CLI that scaffolds production-ready Python, Go, and Rust projects. Pick your framework, ORM, database, and migrations, then ship with best-practice defaults and zero lock-in.";
+  "Open-source CLI that scaffolds production-ready Python, Go, and Rust projects. Pick your framework, ORM, and database, then ship with zero lock-in.";
 export const SITE_OG_IMAGE = "/og.jpg";
 export const SITE_OG_IMAGE_ALT =
   "TriStack: your stack, scaffolded in seconds for Python, Go, and Rust";

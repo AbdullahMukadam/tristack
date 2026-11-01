@@ -14,8 +14,11 @@ export function Hero() {
         </Link>
 
         <h1 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
-          Your <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Stack</span>,
-          Scaffolds in Seconds.
+          Scaffold{" "}
+          <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">
+            Python, Go & Rust
+          </span>{" "}
+          Projects in Seconds.
         </h1>
 
         <p className="max-w-2xl text-base leading-relaxed text-fd-muted-foreground sm:text-lg">

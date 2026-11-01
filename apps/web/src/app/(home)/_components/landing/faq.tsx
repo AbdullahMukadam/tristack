@@ -52,13 +52,13 @@ export function Faq() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center"
       >
-        <h1 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
+        <h2 className="text-center text-3xl font-sans gambarino font-normal tracking-tight sm:text-5xl md:text-6xl">
           Frequently{" "}
           <span className="text-brand [text-shadow:0_0_14px_var(--brand-glow)]">Asked </span>
           Questions.
-        </h1>
+        </h2>
         <p className="max-w-xl text-sm leading-relaxed text-fd-muted-foreground sm:text-base">
-          Here are answers to some of the most common questions about our platform.
+          Answers to common questions about TriStack, the scaffolding CLI for Python, Go, and Rust.
         </p>
       </motion.div>
 

@@ -30,6 +30,7 @@ const columns: LinkColumn[] = [
     links: [
       { label: "Docs", href: "/docs" },
       { label: "Stack Builder", href: "/new" },
+      { label: "Frameworks", href: "/frameworks" },
       { label: "Agent workflows", href: "/docs/cli/agent-workflows" },
       { label: "GitHub", href: REPOSITORY_URL, external: true },
     ],

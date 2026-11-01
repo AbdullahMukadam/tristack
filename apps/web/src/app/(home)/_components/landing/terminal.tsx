@@ -11,12 +11,11 @@ function Terminal() {
   return (
     <div className="relative p-4 rounded-2xl col-span-full z-2 overflow-hidden md:p-8">
       <Image
-        src={"/cli-2.png"}
+        src={"/cli-2.webp"}
         alt=""
         className="absolute inset-0 w-full h-full object-cover -z-10"
         fill
-        sizes="(max-width: 768px) 100vw, 800px"
-        priority
+        unoptimized
       />
       <div className="mx-auto w-full max-w-[800px] p-2 bg-fd-card text-fd-card-foreground border rounded-2xl shadow-lg">
         <div className="relative bg-fd-secondary rounded-xl mt-2 border shadow-md">
